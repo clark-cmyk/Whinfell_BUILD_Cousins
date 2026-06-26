@@ -111,7 +111,32 @@
       font-size: 11px;
     }
     .pane-body { flex: 1; position: relative; min-height: 0; }
-    .pane-body iframe { width: 100%; height: 100%; border: none; background: #000; }
+    .pane-body iframe {
+      width: 100%; height: 100%; border: none; background: #0a0e14;
+      opacity: 1; transition: opacity 0.3s;
+    }
+    .pane-body iframe.loading { opacity: 0.3; }
+    .pane-loading {
+      display: none;
+      position: absolute;
+      inset: 0;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: rgba(15, 20, 25, 0.92);
+      z-index: 2;
+    }
+    .pane-loading.show { display: flex; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .pane-loading span { font-size: 12px; color: var(--muted); font-weight: 500; }
     .embed-fallback {
       display: none;
       position: absolute;
@@ -119,13 +144,51 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      background: var(--surface);
-      padding: 24px;
+      gap: 16px;
+      background: rgba(26, 35, 50, 0.97);
+      padding: 28px 32px;
       text-align: center;
+      z-index: 3;
+      border: 1px solid var(--border);
     }
     .embed-fallback.show { display: flex; }
-    .embed-fallback p { font-size: 13px; color: var(--muted); max-width: 320px; line-height: 1.5; }
+    .embed-fallback .fallback-icon { font-size: 28px; opacity: 0.7; }
+    .embed-fallback h3 { font-size: 15px; font-weight: 700; color: var(--text); }
+    .embed-fallback p { font-size: 12px; color: var(--muted); max-width: 400px; line-height: 1.6; }
+    .embed-fallback .fallback-steps {
+      font-size: 11px; color: var(--amber); max-width: 420px;
+      line-height: 1.55; text-align: left;
+      background: var(--bg); padding: 12px 14px; border-radius: 8px;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+    }
+    .btn-live {
+      background: linear-gradient(180deg, #3d8bfd 0%, #1d5fbf 100%);
+      border: 1px solid #5ca0ff;
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(61, 139, 253, 0.4);
+      min-width: 240px;
+    }
+    .btn-live:hover { filter: brightness(1.12); transform: translateY(-1px); }
+    .btn-dismiss {
+      font-size: 11px; color: var(--muted); background: none; border: none;
+      cursor: pointer; text-decoration: underline; margin-top: 4px;
+    }
+    .btn-dismiss:hover { color: var(--accent); }
+    .btn-live-sm {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 5px;
+    }
+    .btn-live-sm:hover { background: var(--accent); }
 
     /* Bottom utility */
     .utility {
@@ -332,7 +395,7 @@
 <header>
   <div>
     <h1>Whinfell Operator Dashboard</h1>
-    <div class="meta">C4.5 v1.0 · Daily cockpit · Signed Off June 26, 2026 · Primary desk operations tool</div>
+    <div class="meta">C4.5 v0.4 · Graceful iframe fallback · Bottom utilities always active</div>
   </div>
   <div class="header-actions">
     <button class="btn btn-refresh" id="btnRefreshAll" title="Reload Koyfin + Barchart panes">↻ Refresh All Panes</button>
@@ -378,30 +441,56 @@
   <div class="pane" id="paneLeft">
     <div class="pane-header">
       <label>Koyfin</label>
-      <span style="flex:1;font-size:11px;color:var(--muted)">Using saved default URL · edit above ↑</span>
-      <button class="btn" data-open="urlKoyfin">Open ↗</button>
+      <span style="flex:1;font-size:11px;color:var(--muted)">Saved default URL · edit above ↑</span>
+      <button class="btn-live-sm" data-open="urlKoyfin">Open Live Koyfin ↗</button>
     </div>
     <div class="pane-zone-hint">Transmission Banner · Whinfell Score · Credit Inputs · Normalized Performance</div>
-    <div class="pane-body">
-      <iframe id="frameKoyfin" title="Koyfin Whinfell Transmission Map" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    <div class="pane-body" id="paneBodyKoyfin">
+      <iframe id="frameKoyfin" title="Koyfin Whinfell Transmission Map" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <div class="pane-loading" id="loadingKoyfin">
+        <div class="spinner"></div>
+        <span>Loading Koyfin workspace…</span>
+      </div>
       <div class="embed-fallback" id="fallbackKoyfin">
-        <p>Koyfin may block embedding. Click below to open your workspace in a new tab, then keep this dashboard open for prompts and risk tracking.</p>
-        <button class="btn btn-primary" data-open="urlKoyfin">Open Koyfin Workspace ↗</button>
+        <div class="fallback-icon">📊</div>
+        <h3>Koyfin — Live View Recommended</h3>
+        <p>Koyfin blocks most iframe embedding for security. This is normal — not a bug in your dashboard.</p>
+        <div class="fallback-steps">
+          <strong>How to operate:</strong><br>
+          1. Click <strong>Open Live Koyfin</strong> below → dedicated browser tab<br>
+          2. Keep this dashboard open for prompts, workflow &amp; Gross Risk<br>
+          3. Use side-by-side windows or a second monitor for full cockpit
+        </div>
+        <button class="btn-live" data-open="urlKoyfin">Open Live Koyfin ↗</button>
+        <button class="btn-dismiss" data-dismiss="fallbackKoyfin">Dashboard visible in pane — dismiss overlay</button>
       </div>
     </div>
   </div>
   <div class="pane" id="paneRight">
     <div class="pane-header">
       <label>Barchart</label>
-      <span style="flex:1;font-size:11px;color:var(--muted)">Using saved default URL · edit above ↑</span>
-      <button class="btn" data-open="urlBarchart">Open ↗</button>
+      <span style="flex:1;font-size:11px;color:var(--muted)">Saved default URL · edit above ↑</span>
+      <button class="btn-live-sm" data-open="urlBarchart">Open Live Barchart ↗</button>
     </div>
     <div class="pane-zone-hint">Futures Leadership · Basis &amp; Term Structure · Basis Trade Conditions</div>
-    <div class="pane-body">
-      <iframe id="frameBarchart" title="Barchart Futures and Basis" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+    <div class="pane-body" id="paneBodyBarchart">
+      <iframe id="frameBarchart" title="Barchart Futures and Basis" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"></iframe>
+      <div class="pane-loading" id="loadingBarchart">
+        <div class="spinner"></div>
+        <span>Loading Barchart futures view…</span>
+      </div>
       <div class="embed-fallback" id="fallbackBarchart">
-        <p>Barchart may block embedding. Open futures view in a new tab alongside this dashboard.</p>
-        <button class="btn btn-primary" data-open="urlBarchart">Open Barchart ↗</button>
+        <div class="fallback-icon">📈</div>
+        <h3>Barchart — Live View Recommended</h3>
+        <p>Barchart typically blocks iframe embedding. Use a dedicated tab for futures and basis execution.</p>
+        <div class="fallback-steps">
+          <strong>How to operate:</strong><br>
+          1. Click <strong>Open Live Barchart</strong> below → dedicated browser tab<br>
+          2. Keep this dashboard open for prompts, workflow &amp; Gross Risk<br>
+          3. Arrange Koyfin + Barchart tabs alongside this cockpit
+        </div>
+        <button class="btn-live" data-open="urlBarchart">Open Live Barchart ↗</button>
+        <button class="btn-dismiss" data-dismiss="fallbackBarchart">Dashboard visible in pane — dismiss overlay</button>
       </div>
     </div>
   </div>
@@ -499,7 +588,8 @@
           <li>Each morning: open this HTML file → click <strong>↻ Refresh All Panes</strong> for latest data.</li>
         </ol>
         <p style="margin-top:10px"><strong>Auto-refresh (optional):</strong> Enable the 5-minute checkbox to reload both panes automatically. Works when sites allow iframe embed; otherwise use Open ↗ tabs.</p>
-        <p style="margin-top:6px"><strong>Reference:</strong> Use Perplexity dashboard for visual reference; this local file is the primary daily cockpit.</p>
+        <p style="margin-top:6px"><strong>Graceful fallback (v0.4):</strong> If panes show overlay after 5s, click <strong>Open Live Koyfin/Barchart</strong>. Keep this dashboard open — bottom utilities (prompts, workflow, gross risk) always work.</p>
+        <p style="margin-top:6px"><strong>Reference:</strong> Perplexity = visual reference · this file = primary daily cockpit.</p>
       </div>
     </div>
 
@@ -507,9 +597,29 @@
 </section>
 
 <script>
-const STORAGE_KEY = 'whinfell_operator_dashboard_v3';
+const STORAGE_KEY = 'whinfell_operator_dashboard_v4';
 const AUTO_REFRESH_MS = 5 * 60 * 1000;
+const IFRAME_FAIL_TIMEOUT_MS = 5000;
 let autoRefreshTimer = null;
+
+const PANE_CONFIG = {
+  koyfin: {
+    frameId: 'frameKoyfin',
+    loadingId: 'loadingKoyfin',
+    fallbackId: 'fallbackKoyfin',
+    urlInputId: 'urlKoyfin',
+    timer: null,
+    loaded: false,
+  },
+  barchart: {
+    frameId: 'frameBarchart',
+    loadingId: 'loadingBarchart',
+    fallbackId: 'fallbackBarchart',
+    urlInputId: 'urlBarchart',
+    timer: null,
+    loaded: false,
+  },
+};
 
 const DEFAULTS = {
   urlKoyfin: 'https://app.koyfin.com/',
@@ -604,25 +714,52 @@ function applySettings(s) {
   }
 }
 
+function loadPane(key) {
+  const cfg = PANE_CONFIG[key];
+  const url = document.getElementById(cfg.urlInputId).value.trim();
+  const frame = document.getElementById(cfg.frameId);
+  const loading = document.getElementById(cfg.loadingId);
+  const fallback = document.getElementById(cfg.fallbackId);
+
+  if (cfg.timer) clearTimeout(cfg.timer);
+  cfg.loaded = false;
+
+  fallback.classList.remove('show');
+  loading.classList.add('show');
+  frame.classList.add('loading');
+
+  if (!url) {
+    loading.classList.remove('show');
+    frame.classList.remove('loading');
+    fallback.classList.add('show');
+    return;
+  }
+
+  const bust = (url.includes('?') ? '&' : '?') + '_r=' + Date.now();
+  frame.src = url + bust;
+
+  frame.onload = () => {
+    cfg.loaded = true;
+    loading.classList.remove('show');
+    frame.classList.remove('loading');
+  };
+
+  cfg.timer = setTimeout(() => {
+    loading.classList.remove('show');
+    frame.classList.remove('loading');
+    fallback.classList.add('show');
+  }, IFRAME_FAIL_TIMEOUT_MS);
+}
+
 function refreshAllPanes() {
-  document.getElementById('fallbackKoyfin').classList.remove('show');
-  document.getElementById('fallbackBarchart').classList.remove('show');
-  const kUrl = document.getElementById('urlKoyfin').value.trim();
-  const bUrl = document.getElementById('urlBarchart').value.trim();
-  const fk = document.getElementById('frameKoyfin');
-  const fb = document.getElementById('frameBarchart');
-  if (kUrl) fk.src = kUrl + (kUrl.includes('?') ? '&' : '?') + '_r=' + Date.now();
-  if (bUrl) fb.src = bUrl + (bUrl.includes('?') ? '&' : '?') + '_r=' + Date.now();
+  loadPane('koyfin');
+  loadPane('barchart');
   ['btnRefreshAll','btnRefreshAll2'].forEach(id => {
     const btn = document.getElementById(id);
     const orig = btn.textContent;
     btn.textContent = '↻ Refreshing…';
     setTimeout(() => btn.textContent = orig, 1200);
   });
-  setTimeout(() => {
-    document.getElementById('fallbackKoyfin').classList.add('show');
-    document.getElementById('fallbackBarchart').classList.add('show');
-  }, 2500);
 }
 
 function loadFrames() { refreshAllPanes(); }
@@ -705,6 +842,11 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 document.querySelectorAll('[data-open]').forEach(btn => {
   btn.addEventListener('click', () => openUrl(btn.dataset.open));
+});
+document.querySelectorAll('[data-dismiss]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById(btn.dataset.dismiss).classList.remove('show');
+  });
 });
 
 document.getElementById('btnRefreshAll').addEventListener('click', refreshAllPanes);
