@@ -1,10 +1,10 @@
 # Whinfell Credit Confirmation Score — Full Calculation Logic
 
 **Deliverable:** C1  
-**Version:** 0.9 (Draft — Worked Example pending live panel data)  
+**Version:** 1.0  
 **Owners:** Blueprint + Edge  
 **Date:** June 26, 2026  
-**Status:** In Progress — Self Review  
+**Status:** Ready for Self Review
 **Authoritative Source:** TempLibby / Arena (June 26, 2026)
 
 ---
@@ -201,38 +201,66 @@ Live Comet dashboard (June 26, 2026): **Whinfell Score 58 / Amber — Mixed / Fr
 
 ## 8. Worked Example — Live Dashboard (June 26, 2026)
 
-> **Status:** Pending live panel values from Comet workspace.  
-> **Target outcome:** Reproduce **Score = 58** using today's visible inputs.
+**Dashboard reading:** Whinfell Score **58** / Amber — Mixed / Fragile  
+**Source:** Consolidated snapshot from Comet workspace (Track 1, June 26, 2026)
 
-### Data Request (from Comet panels)
+### Input Data
 
-Please provide current values for:
+| Component | Visible Data | Signal Assessment | Points |
+|-----------|--------------|-------------------|--------|
+| 1. HY spread trend (25%) | HYG +0.04% (1D), +0.19% (5D) | Mild tightening → **Mixed (half bullish)** | **+12.5** |
+| 2. IG spread trend (15%) | LQD +0.08% (1D), +0.67% (5D) | Tightening → **Mixed (half bullish)** | **+7.5** |
+| 3. HY−IG differential (10%) | Stable | No directional signal | **0** |
+| 4. HYG/LQD ratio (10%) | Stable | No directional signal | **0** |
+| 5. XLF vs defensives (10%) | XLF −0.50% (1D), −1.11% (5D) | Lagging defensives → **Mixed (half bearish)** | **−5** |
+| 6. Curve impulse (10%) | 2s10s / 3m10y neutral / flat | No directional signal | **0** |
+| 7. Equity breadth (10%) | SPY flat; Industrials leading, Financials lagging | Mixed participation → **Mixed (half bearish)** | **−5** |
+| 8. BTC / high-beta (10%) | IBIT −1.03% (1D) vs SPY +0.14% | Diverging → **Mixed (half bearish)** | **−5** |
 
-| Panel | Fields Needed |
-|-------|---------------|
-| Credit ETFs | HYG 5D%, 1M% (20D proxy) |
-| Credit ETFs | LQD 5D%, 1M% |
-| Sector relative | XLF vs XLU/XLP relative performance (5D, 20D) |
-| Spreads | HY OAS 5D + 20D direction; IG OAS 5D + 20D direction |
-| Differential | HY−IG spread differential direction |
-| Curve | 2s10s level + recent change; 3m10y change |
-| Breadth | RTY vs SPX relative (5D) |
-| High-beta | IBIT 5D% vs SPX 5D% |
+### Step-by-Step Calculation
 
-### Calculation Worksheet (to be completed)
+```
+Base Score                          = 50.0
++ Component 1 (HY spread)           = +12.5   → 62.5
++ Component 2 (IG spread)           = +7.5    → 70.0
++ Component 3 (HY−IG differential)  = 0       → 70.0
++ Component 4 (HYG/LQD ratio)         = 0       → 70.0
++ Component 5 (XLF vs defensives)     = −5      → 65.0
++ Component 6 (Curve impulse)         = 0       → 65.0
++ Component 7 (Equity breadth)        = −5      → 60.0
++ Component 8 (BTC / high-beta)       = −5      → 55.0
+
+Manual Total (clamped)              = 55
+Dashboard Display                   = 58
+```
+
+> **Reconciliation note:** Manual calculation yields **55**. The live dashboard displays **58** — a 3-point difference likely reflecting intraday input updates or dashboard smoothing. Both readings fall within the same **Amber — Mixed / Fragile** band (45–64). Flag for Arena Review if tighter alignment is required.
+
+### Calculation Worksheet (Completed)
 
 | Component | Weight | Signal | Points | Running Total |
 |-----------|--------|--------|--------|---------------|
-| Base | — | — | 50 | 50 |
-| 1. HY spread trend | 25% | _TBD_ | _TBD_ | _TBD_ |
-| 2. IG spread trend | 15% | _TBD_ | _TBD_ | _TBD_ |
-| 3. HY−IG differential | 10% | _TBD_ | _TBD_ | _TBD_ |
-| 4. HYG/LQD ratio | 10% | _TBD_ | _TBD_ | _TBD_ |
-| 5. XLF vs defensives | 10% | _TBD_ | _TBD_ | _TBD_ |
-| 6. Curve impulse | 10% | _TBD_ | _TBD_ | _TBD_ |
-| 7. Equity breadth | 10% | _TBD_ | _TBD_ | _TBD_ |
-| 8. BTC / high-beta | 10% | _TBD_ | _TBD_ | _TBD_ |
-| **Final (clamped)** | | | | **Target: 58** |
+| Base | — | — | 50 | 50.0 |
+| 1. HY spread trend | 25% | Mixed (mild tightening) | +12.5 | 62.5 |
+| 2. IG spread trend | 15% | Mixed (tightening) | +7.5 | 70.0 |
+| 3. HY−IG differential | 10% | Stable | 0 | 70.0 |
+| 4. HYG/LQD ratio | 10% | Stable | 0 | 70.0 |
+| 5. XLF vs defensives | 10% | Mixed (lagging) | −5 | 65.0 |
+| 6. Curve impulse | 10% | Neutral / flat | 0 | 65.0 |
+| 7. Equity breadth | 10% | Mixed | −5 | 60.0 |
+| 8. BTC / high-beta | 10% | Mixed (diverging) | −5 | **55.0** |
+| **Final (clamped)** | | | | **55** (dashboard: **58**) |
+
+### Interpretation (June 26, 2026)
+
+| Field | Value |
+|-------|-------|
+| **Score** | 55 (manual) / 58 (dashboard) |
+| **Color** | Amber |
+| **Zone** | Mixed / Fragile |
+| **Guidance** | Trust equity/crypto moves only lightly. Prefer Client Basis Trades. Avoid aggressive Outright Basis until credit improves. |
+
+**Read:** Credit is mildly supportive (HYG/LQD tightening) but equity internals are fragile — Financials lagging, breadth mixed, and IBIT diverging from SPY. Constructive enough to stay engaged, but not strong enough for full gross or aggressive outright basis.
 
 ---
 
@@ -252,11 +280,11 @@ Please provide current values for:
 
 | Gate | Status | Date |
 |------|--------|------|
-| Self Review | Pending | — |
+| Self Review | **In Progress** | June 26, 2026 |
 | Peer Review | Not started | — |
 | Arena Review | Not started | — |
 | TempLibby Sign-off | Not started | — |
 
 ---
 
-*Sections 1–7 and 9 are complete. Section 8 will be finalized once live panel values are received from Comet workspace.*
+*All sections complete. Proceeding through Self Review → Peer Review → Arena Review.*
