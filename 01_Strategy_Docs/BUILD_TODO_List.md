@@ -8,11 +8,10 @@
 
 ## Current Status
 
-| # | Deliverable | Priority | Status | Owner | Target Date | Notes |
-|---|-------------|----------|--------|-------|-------------|-------|
-| C3 | Exact Series & Ticker Master List | **Medium** | **Arena Review (Active)** | Bridge | 2 days | Facilitated — Integration Dynamo + Macro Guardian; target sign-off today |
-| **C4.5** | Simple Local Split-Screen Operator Dashboard | **High** | **Peer Review (ready)** | Bridge + Edge + Forge Master + Clarity | 24–48h | v0.3 shipped — Peer on C3 sign-off → Arena (Integration Dynamo + Visual Vanguard + Forge Master) |
-| C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | 7 days | - |
+| # | Deliverable | Priority | Status | Owner | Target | Notes |
+|---|-------------|----------|--------|-------|--------|-------|
+| **C4.5** | Simple Local Split-Screen Operator Dashboard | **High** | **Arena Review** | Bridge + Edge + Forge Master + Clarity | 24h | Peer ✅ v0.3 submitted — Visual Vanguard + Forge Master + Integration Dynamo |
+| C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | 7 days | Unblocked post-C3 |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | 5 days | - |
 
 ---
@@ -21,14 +20,13 @@
 
 | # | Deliverable | Completed On | Notes |
 |---|-------------|--------------|-------|
-| Plan | BUILD Cousins Operating Plan v1.0 | June 26, 2026 | **Approved** — baseline for execution |
-| C1 | Whinfell Credit Confirmation Score – Full Calculation Logic | June 26, 2026 | **Signed Off** — `08_Deliverables/` |
-| C2 | Fallback Excel / Google Sheet Dashboard | June 26, 2026 | **Signed Off** — `08_Deliverables/C2_Whinfell_Credit_Score_Fallback.xlsx` |
+| Plan | BUILD Cousins Operating Plan v1.0 | June 26, 2026 | Approved |
+| C1 | Whinfell Credit Confirmation Score Logic | June 26, 2026 | Signed Off — `08_Deliverables/` |
+| C2 | Fallback Excel Dashboard | June 26, 2026 | Signed Off — `08_Deliverables/` |
+| C3 | Exact Series & Ticker Master List | June 26, 2026 | **Signed Off** — `08_Deliverables/C3_Whinfell_Series_Ticker_Master_List.md` |
 
 ---
 
 ## Notes
-- **June 26, 2026** — C2 Arena approved (Basis Avenger, Risk Warden, Forge Master). TempLibby sign-off complete.
-- **June 26, 2026** — C3 activated (Bridge). Elevated priority per Arena v1.1 feedback.
-- **June 26, 2026** — **C4.5 activated** (TempLibby gap filler). Local split-screen HTML dashboard — Bridge + Edge + Forge Master.
-- v1.1 backlog: C1 "How to Update Daily" section; Operating Plan Definition of Done.
+- **June 26, 2026** — C3 Arena approved & signed off (Integration Dynamo, Macro Guardian).
+- **June 26, 2026** — C4.5 Peer Review ✅ — submitted for Arena Review (24h target).
