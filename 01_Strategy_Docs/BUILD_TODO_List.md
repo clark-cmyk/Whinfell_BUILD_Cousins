@@ -34,7 +34,7 @@ open ~/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboar
 ```
 
 **Full path:** `/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboard.html`  
-**Ship commit:** `089ed8f`  
+**Ship commit:** `2e7d7f3`  
 **Note:** Old draft was `GROK_BUILD_Outputs/Whinfell_Split_Screen_Operator_Dashboard.html` — superseded. v0.4 iframe fallback superseded by v1.0 no-iframe architecture.
 
 ---
