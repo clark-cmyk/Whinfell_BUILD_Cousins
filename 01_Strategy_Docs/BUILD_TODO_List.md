@@ -23,7 +23,7 @@
 | C1 | Whinfell Credit Confirmation Score Logic | June 26, 2026 | `08_Deliverables/C1_*` |
 | C2 | Fallback Excel Dashboard | June 26, 2026 | `08_Deliverables/C2_*` |
 | C3 | Exact Series & Ticker Master List | June 26, 2026 | `08_Deliverables/C3_*` |
-| **C4.5** | Split-Screen Operator Dashboard | June 26, 2026 | v1.0 shipped · **v0.4 in review** (graceful iframe fallback) |
+| **C4.5** | Split-Screen Operator Dashboard | June 26, 2026 | v1.0 final ship — no-iframe control surface |
 
 ---
 
@@ -34,12 +34,12 @@ open ~/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboar
 ```
 
 **Full path:** `/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboard.html`  
-**Ship commit:** `1fe785b`  
-**Note:** Old draft was `GROK_BUILD_Outputs/Whinfell_Split_Screen_Operator_Dashboard.html` — superseded.
+**Ship commit:** `089ed8f`  
+**Note:** Old draft was `GROK_BUILD_Outputs/Whinfell_Split_Screen_Operator_Dashboard.html` — superseded. v0.4 iframe fallback superseded by v1.0 no-iframe architecture.
 
 ---
 
 ## Notes
 - **June 26, 2026** — Priority 1 complete: C1, C2, C3, C4.5 all signed off.
 - **June 26, 2026** — File path confirmed for TempLibby. v1.0 lives in `08_Deliverables/` only.
-- **June 26, 2026** — **C4.5 v0.4** — graceful iframe fallback (Comet pattern). Self Review → Peer → Quick Arena → ship today.
+- **June 26, 2026** — **C4.5 v1.0** — no-iframe control surface (TempLibby architecture decision). Fast-track Self → Peer → TempLibby approved.
