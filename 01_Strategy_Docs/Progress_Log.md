@@ -32,7 +32,7 @@
 
 ## Notes
 
-- **June 26, 2026** — C4.5 v1.0 final ship (`2e7d7f3`): no-iframe control surface. Fast-track Self → Peer → TempLibby approved.
+- **June 26, 2026** — C4.5 v1.0 final ship (`2e7d7f3`): no-iframe control surface. Self → Peer → Arena (VV + FM + ID) → TempLibby approved.
 - **June 26, 2026** — File path confirmed: `08_Deliverables/Whinfell_Operator_Dashboard.html` (not GROK_BUILD_Outputs).
 - **June 26, 2026** — Next: C4 (Prompt Testing), C5 (Quick Reference Card).
 - **June 26, 2026** — Architecture pivot: removed Koyfin/Barchart iframes; status panels + Open Live buttons + last-opened timestamps.
