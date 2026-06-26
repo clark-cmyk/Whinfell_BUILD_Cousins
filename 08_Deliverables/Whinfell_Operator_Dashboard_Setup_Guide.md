@@ -1,13 +1,13 @@
 # Whinfell Operator Dashboard — Setup Guide
 
-**Deliverable:** C4.5 + C4.6  
+**Deliverable:** C4.5 v1.1  
 **Main file:** `Whinfell_Operator_Dashboard.html`  
-**Version:** C4.6 Draft (WTM Action Layer)  
+**Version:** 1.1 (WTM Action Layer)  
 **Lead:** Bridge (Edge, Precision support)
 
 ---
 
-## Open Daily (Desk Command)
+## Open Daily
 
 ```bash
 open ~/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboard.html
@@ -15,85 +15,59 @@ open ~/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboar
 
 ---
 
-## What This Is
+## C4.5 v1.1 — WTM Action Layer
 
-**WTM decision and action layer** — no-iframe control surface with enforceable gates:
-
-| Zone | Width | Content |
-|------|-------|---------|
-| Left | ~60% | Koyfin status panel → **Open Live Koyfin** |
-| Right | ~40% | Barchart status panel → **Open Live Barchart** |
-| WTM Intake | Full | Transmission State, Score, Confidence, Desk Posture |
-| Decision Summary | Full | Auto-generated WTM action line |
-| Bottom tabs | Full | BTC module · WTM Prompts A–E · Gross Risk |
+| Zone | Content |
+|------|---------|
+| Left (~60%) | Koyfin status panel → Open Live Koyfin |
+| Right (~40%) | Barchart status + **BTC Options (L2)** + **Calendar Arb (L3)** cards |
+| WTM Intake | Score, Transmission State, Regime Tag, Gate Status (auto) |
+| Bottom tabs | 5-Min Workflow · WTM Prompts A–E · Gross Risk |
 
 ---
 
-## First-Time Setup (~2 min)
+## WTM Intake & Gate Logic
 
-1. Paste Koyfin + Barchart URLs → **Save Settings**
-2. Each morning: open Koyfin → fill **WTM Regime & Posture** panel
-3. Click **Open Live Koyfin** + **Open Live Barchart**
-4. Review **WTM Decision Summary** before any BTC action
+| Field | Source |
+|-------|--------|
+| Whinfell Score | Koyfin (0–100) |
+| Transmission State | Normal / Stressed / Disorderly / Crisis |
+| Regime Tag | Free text or preset (datalist) |
+| Gate Status | **Auto-calculated** |
 
----
+### Gate Rules
 
-## WTM Gate Rules (C4.6)
-
-| Whinfell Score | BTC Gate | Action |
-|----------------|----------|--------|
-| **&lt; 50** | **BLOCKED** | BTC options/calendar arb module disabled |
-| **50–64** | **CLIENT-ONLY** | Client basis structures only |
-| **65+** | **OUTRIGHT ALLOWED** | Outright BTC structures permitted if ArbScore supports |
-
----
-
-## BTC Options & Calendar Arb Module
-
-1. Open **BTC Options & Calendar Arb** tab
-2. Enter **Basis1** (near/front) and **Basis2** (far/back) in bps
-3. Review **ΔBasis**, **ArbScore**, and regime gate status
-4. Copy **Prompt ③b — BTC Calendar Arb Agent** when gate permits
-
-**ArbScore formula:** ΔBasis = Basis2 − Basis1 · ArbScore = clamp(50 + ΔBasis × 5, 0–100)
+| Score | Gate Status | Banner | BTC Cards |
+|-------|-------------|--------|-----------|
+| **&lt; 50** | NO NEW BTC RISK | Red | Disabled |
+| **50–64** | Tight Risk Band | Amber | Allowed — reduced sizing |
+| **≥ 65** | Allowed | Green | Full access |
 
 ---
 
-## 5-Minute Morning Workflow
+## BTC Cards (Right Pane — Barchart Area)
 
-| Min | Action |
-|-----|--------|
-| 1 | Open Koyfin → set WTM Regime & Posture |
-| 2 | Scan Liquidity, Rates, Credit (Koyfin tab) |
-| 3 | Barchart → Futures + Basis |
-| 4 | Check BTC gate → Run WTM Prompts A + B |
-| 5 | Update Gross Risk + review Decision Summary |
+1. **BTC Options Workflow (WTM Layer 2)** — copy Layer 2 prompt
+2. **BTC Calendar Arb Agent (WTM Layer 3)** — copy Layer 3 prompt
+
+Both cards show **BLOCKED** or **ALLOWED** from gate status.
 
 ---
 
-## WTM Prompts (A–E + ③b)
+## WTM Prompts A–E
 
-| Prompt | Purpose |
-|--------|---------|
-| **A** | Transmission + Score validation |
-| **B** | Credit Confirmation deep dive |
-| **C** | Futures leadership + Basis edge |
-| **D** | Gross risk posture decision |
-| **E** | Divergence check + shift handover |
-| **③b** | BTC Calendar Arb Agent (from BTC tab) |
+| Prompt | Title |
+|--------|-------|
+| A | WTM Transmission Read & Regime Classification |
+| B | WTM Posture & Gross-Risk Recommendation |
+| C | WTM Trade Evaluation & Ranking |
+| D | WTM Income Projection from Current Book |
+| E | WTM Divergence & Risk Compression |
 
-All prompts: click **Copy** → paste to agent.
+Click **Copy** on any prompt → paste to agent.
 
 ---
 
 ## Persistence
 
-All fields save via **Save Settings** to `localStorage` key `whinfell_operator_v2`. Migrates automatically from v1.
-
----
-
-## References
-
-- `08_Deliverables/C1_Whinfell_Credit_Confirmation_Score_Logic.md`
-- `08_Deliverables/C3_Whinfell_Series_Ticker_Master_List.md`
-- `08_Deliverables/C2_Whinfell_Credit_Score_Fallback.xlsx`
+**Save Settings** stores all fields to `localStorage` key `whinfell_operator_v1_1`. Migrates from v1/v2 automatically.

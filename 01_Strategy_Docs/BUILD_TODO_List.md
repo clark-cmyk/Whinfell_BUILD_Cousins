@@ -10,7 +10,7 @@
 
 | # | Deliverable | Priority | Status | Owner | Notes |
 |---|-------------|----------|--------|-------|-------|
-| **C4.6** | WTM Action Layer Upgrade | **High** | **Draft — Self Review** | Bridge + Edge + Precision | Intake, gates, BTC module, Prompts A–E |
+| **C4.5 v1.1** | WTM Action Layer Upgrade | **High** | **Implemented — Self Review** | Bridge + Edge + Precision | Intake, gates, BTC L2/L3 cards, Prompts A–E |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | Unblocked |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | - |
 
@@ -41,6 +41,6 @@ open ~/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboar
 ---
 
 ## Notes
-- **June 26, 2026** — **C4.6 tasked:** WTM intake + gate logic + BTC options/calendar arb. Target Self Review 1–2 days.
-- **June 26, 2026** — C4.5 v1.0 shipped to desk (`2e7d7f3`). C4.6 builds on same file.
+- **June 26, 2026** — **C4.5 v1.1 implemented:** WTM intake, gate banners, BTC L2/L3 cards under Barchart pane, Prompts A–E.
+- **June 26, 2026** — C4.5 v1.0 shipped to desk (`2e7d7f3`). v1.1 builds on same file.
 - **June 26, 2026** — Priority 1 complete: C1, C2, C3, C4.5 all signed off.
