@@ -10,8 +10,8 @@
 
 | # | Deliverable | Priority | Status | Owner | Target Date | Notes |
 |---|-------------|----------|--------|-------|-------------|-------|
-| C3 | Exact Series & Ticker Master List | **Medium** | **Arena Review** | Bridge | 2 days | Self + Peer passed — submitted to Integration Dynamo + Macro Guardian |
-| **C4.5** | Simple Local Split-Screen Operator Dashboard | **High** | **Self Review** | Bridge + Edge + Forge Master + Clarity | 2 days | Draft v1.0 in `08_Deliverables/Whinfell_Operator_Dashboard.html` |
+| C3 | Exact Series & Ticker Master List | **Medium** | **Arena Review (Active)** | Bridge | 2 days | Facilitated — Integration Dynamo + Macro Guardian; target sign-off today |
+| **C4.5** | Simple Local Split-Screen Operator Dashboard | **High** | **Self Review** | Bridge + Edge + Forge Master + Clarity | 2 days | v0.2 — default URL bar + localStorage; Peer Review after C3 sign-off |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | 7 days | - |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | 5 days | - |
 

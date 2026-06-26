@@ -2,7 +2,7 @@
 
 **Deliverable:** C4.5  
 **Main file:** `Whinfell_Operator_Dashboard.html`  
-**Version:** 1.0 (Draft)  
+**Version:** 0.2 (Draft)  
 **Lead:** Bridge (Edge, Forge Master, Clarity)  
 **Date:** June 26, 2026
 
@@ -33,10 +33,14 @@ open ~/Desktop/Whinfell_BUILD_Cousins/08_Deliverables/Whinfell_Operator_Dashboar
 
 ## First-Time Setup (~2 min)
 
-1. **Left pane** — paste your Koyfin Whinfell workspace URL  
-2. **Right pane** — confirm Barchart URL (default: major commodities futures)  
-3. Click **Save Settings** (persists in browser local storage)  
+1. In the **Preferred Default URLs** bar (top of page):
+   - Paste your **Koyfin Whinfell workspace URL**
+   - Paste your **Barchart futures / basis page URL**
+2. Click **Save Settings** — stores defaults in browser `localStorage` (loads automatically next open)
+3. Click **Reload Panes** if needed after saving
 4. If iframe is blocked → click **Open ↗** per pane; keep dashboard open for bottom utilities
+
+**v0.2:** Dedicated default URL fields + save timestamp + unsaved-changes indicator.
 
 ---
 

@@ -68,12 +68,14 @@ Deliverable restructured to facilitated kickoff spec:
 
 ---
 
-## Arena Review (Pending)
+## Arena Review
 
-**Reviewers:** Integration Dynamo + Macro Guardian  
+**Reviewers:** Integration Dynamo (Lead), Macro Guardian  
 **Facilitator:** TempLibby  
-**Status:** **Submitted — awaiting facilitation**  
-**Submitted:** June 26, 2026
+**Status:** **Active — facilitated now**  
+**Submitted:** June 26, 2026  
+**Activated:** June 26, 2026  
+**Target:** Sign-off today → proceed to C4
 
 ### Submission Package
 
