@@ -17,5 +17,6 @@
 ## Notes
 - **June 26, 2026** — Operating Plan v1.0 **approved** by TempLibby as baseline. Arena feedback (scope creep mitigation, Definition of Done, C3 priority) deferred to v1.1.
 - **June 26, 2026** — Team cleared for execution. C1 kickoff activated; work underway in `04_Score_Calculation/`.
+- **June 26, 2026** — Authoritative weighting table + interpretation bands received from Track 1. C1 draft v0.9 created; worked example pending live Comet panel values (target: reproduce Score 58).
 - BUILD Cousins maintain their own TODO list in `01_Strategy_Docs/BUILD_TODO_List.md`.
 - All work follows Self Review → Peer Review → Arena Review process.
