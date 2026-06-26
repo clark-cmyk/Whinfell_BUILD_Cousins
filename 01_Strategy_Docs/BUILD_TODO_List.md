@@ -10,8 +10,7 @@
 
 | # | Deliverable | Priority | Status | Owner | Target Date | Notes |
 |---|-------------|----------|--------|-------|-------------|-------|
-| C1 | Whinfell Credit Confirmation Score – Full Calculation Logic | **High** | **Arena Review** | Blueprint + Edge | 3 days | Self + Peer passed — submitted to Macro Guardian + Risk Warden |
-| C2 | Fallback Excel / Google Sheet Dashboard | High | Not Started | Edge + Safeguard | 4–5 days | Blocked on C1 logic |
+| C2 | Fallback Excel / Google Sheet Dashboard | **High** | **In Progress** | Edge + Safeguard | 4–5 days | Kickoff in `05_Fallback_Tools/` — uses approved C1 logic |
 | C3 | Exact Series & Ticker Master List | Medium | Not Started | Bridge | 2 days | Arena feedback: elevate priority in v1.1 |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | 7 days | - |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | 5 days | - |
@@ -22,12 +21,12 @@
 
 | # | Deliverable | Completed On | Notes |
 |---|-------------|--------------|-------|
-| Plan | BUILD Cousins Operating Plan v1.0 | June 26, 2026 | **Approved** — baseline for execution; v1.1 improvements tracked separately |
+| Plan | BUILD Cousins Operating Plan v1.0 | June 26, 2026 | **Approved** — baseline for execution |
+| C1 | Whinfell Credit Confirmation Score – Full Calculation Logic | June 26, 2026 | **Signed Off** — Arena approved v1.0; deliverable in `08_Deliverables/` |
 
 ---
 
 ## Notes
-- **June 26, 2026** — Operating Plan v1.0 approved. Execution cleared.
-- This list is maintained by the BUILD Cousins and updated after every Arena Review or major progress.
-- All deliverables must pass Self → Peer → Arena Review before being marked complete.
-- v1.1 improvements (scope creep mitigation, Definition of Done, C3 elevation) tracked separately — not blocking current work.
+- **June 26, 2026** — C1 Arena Review passed (Macro Guardian, Risk Warden, Integration Dynamo, Forge Master). TempLibby sign-off complete.
+- **June 26, 2026** — C2 activated. Same review gates apply.
+- v1.1 backlog: C1 "How to Update Daily" section; Operating Plan scope creep / Definition of Done / C3 elevation.
