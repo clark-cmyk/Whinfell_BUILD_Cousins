@@ -20,12 +20,14 @@ A clean Markdown table in `07_Reference_Materials/Whinfell_Series_Ticker_Master_
 
 | Column | Description |
 |--------|-------------|
-| Component | e.g., HY Spread, Equity Breadth, Basis Edge, Futures Leadership |
+| Component | e.g., HY Spread Trend, Equity Breadth, Basis Edge, Futures Leadership |
 | Primary Ticker/Series | Authoritative series identifier |
 | Fallback / Proxy | Next-best when primary unavailable |
-| Time Window | 5D, 20D, 1Y, etc. |
-| Koyfin / Barchart Source | Platform lookup path |
-| Maintenance Note | Update triggers, proxy rules, open items |
+| Preferred Time Window | 5D, 20D, 1Y, etc. |
+| Source (Koyfin / Barchart) | Platform lookup path |
+| Maintenance Note / Open Items | Update triggers, proxy rules, live workspace confirms |
+
+**Kickoff confirmed:** June 26, 2026 — Bridge lead. Deliverable on track; Arena Review submitted.
 
 ## Success Criteria
 

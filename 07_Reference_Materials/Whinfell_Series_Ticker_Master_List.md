@@ -17,7 +17,7 @@ Single source of truth for every ticker/series used in the Whinfell Transmission
 
 ## A. Whinfell Score Components (8)
 
-| Component | Primary Ticker/Series | Fallback / Proxy | Time Window | Koyfin / Barchart Source | Maintenance Note |
+| Component | Primary Ticker/Series | Fallback / Proxy | Preferred Time Window | Source (Koyfin / Barchart) | Maintenance Note / Open Items |
 |-----------|----------------------|------------------|-------------|--------------------------|------------------|
 | **HY Spread Trend** | `HY OAS` (ICE BofA US High Yield Index OAS) | `HYG` price return (1D, 5D, 1M) | 5D Δ, 20D Δ | Koyfin: search "HY OAS" · Barchart: `HYG` | Tightening = spread falling. Proxy at half-weight per C1 §5. Confirm exact Koyfin series ID from Comet. |
 | **IG Spread Trend** | `IG OAS` (ICE BofA US Corporate Index OAS) | `LQD` price return (1D, 5D, 1M) | 5D Δ, 20D Δ | Koyfin: search "IG OAS" · Barchart: `LQD` | Stable = ≤2 bp over 20D. Confirm exact Koyfin series ID from Comet. |
@@ -32,7 +32,7 @@ Single source of truth for every ticker/series used in the Whinfell Transmission
 
 ## B. Basis Edge Meter
 
-| Component | Primary Ticker/Series | Fallback / Proxy | Time Window | Koyfin / Barchart Source | Maintenance Note |
+| Component | Primary Ticker/Series | Fallback / Proxy | Preferred Time Window | Source (Koyfin / Barchart) | Maintenance Note / Open Items |
 |-----------|----------------------|------------------|-------------|--------------------------|------------------|
 | **Client Basis — Energy** | `CL` (WTI front month) vs cash/refinery margin context | `USO` ETF vs `CL` futures | 5D, 20D | Koyfin / Barchart: `CL1!` or `CL` | Basis Edge Meter right column. Client Basis favored when Score 45–79. |
 | **Client Basis — Refined Products** | `RB` (RBOB) − `CL` crack spread | `XLE` sector relative vs `SPY` | 5D | Koyfin / Barchart: `RB`, `CL` | Crack widening/narrowing for product basis context. |
@@ -43,7 +43,7 @@ Single source of truth for every ticker/series used in the Whinfell Transmission
 
 ## C. Futures Leadership
 
-| Component | Primary Ticker/Series | Fallback / Proxy | Time Window | Koyfin / Barchart Source | Maintenance Note |
+| Component | Primary Ticker/Series | Fallback / Proxy | Preferred Time Window | Source (Koyfin / Barchart) | Maintenance Note / Open Items |
 |-----------|----------------------|------------------|-------------|--------------------------|------------------|
 | **Equity Index Leadership** | `ES` (S&P 500 E-mini) vs `NQ` (Nasdaq) relative | `SPY` vs `QQQ` ETF | 1D, 5D | Koyfin / Barchart: `ES1!`, `NQ1!` | Leadership rotation signals risk appetite shift. |
 | **Small Cap Leadership** | `RTY` (Russell 2000 E-mini) vs `ES` | `IWM` vs `SPY` | 5D | Koyfin / Barchart: `RTY1!`, `ES1!` | Aligns with Equity Breadth component. Confirm Comet symbol. |
