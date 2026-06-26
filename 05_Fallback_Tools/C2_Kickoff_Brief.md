@@ -3,7 +3,7 @@
 **Task ID:** C2  
 **Priority:** 1 (High)  
 **Owners:** Edge + Safeguard  
-**Status:** In Progress  
+**Status:** Submitted for Arena Review
 **Activated:** June 26, 2026  
 **Dependency:** C1 v1.0 (Approved & Signed Off)
 
