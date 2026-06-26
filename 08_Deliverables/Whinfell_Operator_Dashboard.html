@@ -159,6 +159,7 @@
       display: flex; justify-content: space-between; align-items: center;
     }
     .prompt-card h3 { font-size: 13px; font-weight: 600; }
+    .prompt-card .prompt-desc { font-size: 10px; color: var(--muted); margin-top: 2px; font-weight: 400; }
     .prompt-card pre {
       font-size: 11px; line-height: 1.55; color: var(--muted);
       white-space: pre-wrap; background: var(--bg); padding: 10px;
@@ -409,46 +410,46 @@ Task:
 5) Output one-line action: EXECUTE / WATCH / BLOCKED with size and risks`;
 
 const PROMPTS = [
-  { id: 'A', title: 'WTM Transmission Read & Regime Classification', text: `WTM Prompt A — Transmission Read & Regime Classification
+  { id: 'A', title: 'WTM Transmission Read & Regime Classification', desc: 'Classify today\u2019s overall regime and key signals.', text: `Using the current Whinfell Transmission Map (regime banner, Whinfell Score, credit inputs, rates, breadth, futures leadership, and BTC/IBIT behavior), classify today\u2019s transmission state.
 
-Using current Koyfin Whinfell Transmission Map data:
-1) Read Transmission State Banner — classify as Normal / Stressed / Disorderly / Crisis
-2) Report Whinfell Score (0–100) and color zone (Green ≥65 / Amber 50–64 / Red <50)
-3) Assign Regime Tag describing cross-asset alignment (credit, equities, rates, crypto)
-4) State Gate Status implication: Allowed / Tight Risk Band / NO NEW BTC RISK
-5) One-sentence WTM regime summary for desk posture` },
-  { id: 'B', title: 'WTM Posture & Gross-Risk Recommendation', text: `WTM Prompt B — Posture & Gross-Risk Recommendation
+1. State: Risk-On, Fragile Risk-On, Neutral, Risk-Off, or Crisis.
+2. Whinfell Score and zone (Green / Amber / Red).
+3. Top 2 confirming signals and top 2 disconfirming signals.
+4. One-line desk posture recommendation and what would cause an upgrade or downgrade.
 
-Given WTM intake (Score, Transmission State, Regime Tag, Gate Status):
-1) Recommend desk gross posture: Full / Selective / Light / Defensive / Flat
-2) State max gross ceiling ($mm) for Book A and Book B combined
-3) Align basis preference (client vs outright) with gate status
-4) If Score < 50: mandate risk reduction — no new BTC exposure
-5) If Score 50–64: reduced sizing, client basis favored
-6) Output clear hold / add / reduce recommendation` },
-  { id: 'C', title: 'WTM Trade Evaluation & Ranking', text: `WTM Prompt C — Trade Evaluation & Ranking
+Be concise and transmission-focused.` },
+  { id: 'B', title: 'WTM Posture & Gross-Risk Recommendation', desc: 'Set daily gross risk and sizing.', text: `Using current Whinfell Score, transmission state, and desk posture, recommend gross risk and position sizing for today.
 
-Using Barchart futures/basis + Koyfin transmission data:
-1) List top 5 trade candidates (basis, futures, BTC structures) aligned with WTM regime
-2) Rank by edge quality and gate compatibility
-3) Flag trades that violate gate status (especially BTC if Score < 50)
-4) For each top-3 trade: structure, size band, invalidation level
-5) Output ranked trade list with EXECUTE / WATCH / PASS labels` },
-  { id: 'D', title: 'WTM Income Projection from Current Book', text: `WTM Prompt D — Income Projection from Current Book
+1. Recommended gross risk range (% of capital deployed).
+2. Max per-trade risk (% and dollar amount).
+3. Max concurrent trades.
+4. For a candidate trade (entry, stop, target, account size), calculate: contract/share count, notional, risk $, reward $, and R-multiple.
 
-Given current Book A/B positions and WTM regime:
-1) Project expected income/carry from existing basis and options book (next 5 trading days)
-2) Stress-test against Transmission State downgrade (Stressed → Disorderly)
-3) Identify income at risk if Whinfell Score drops below 50 or 65
-4) Recommend roll / reduce / hedge actions to protect projected income
-5) Output: base case income, downside case, and recommended adjustments` },
-  { id: 'E', title: 'WTM Divergence & Risk Compression', text: `WTM Prompt E — Divergence & Risk Compression
+Keep sizing conservative and aligned with the current Whinfell regime.` },
+  { id: 'C', title: 'WTM Trade Evaluation & Ranking', desc: 'Evaluate and rank candidate trades.', text: `Given a list of candidate trades (tickers, direction, setup), evaluate each through the Whinfell lens and rank them.
 
-1) Cross-check credit vs equities vs crypto (IBIT) vs Financials — identify top 3 divergences
-2) Which WTM signal should the desk trust when assets diverge?
-3) Recommend risk compression actions if divergences threaten transmission stability
-4) Update Regime Tag if classification has shifted intraday
-5) Handover note: Score, Transmission, Gate Status, gross risk, top watch items, prompts run` },
+For each trade:
+- Regime fit
+- Basis/term-structure alignment
+- Liquidity and edge
+- Transmission confirmation
+
+Output a ranked list: Core, Tactical, Watchlist, with one-line justification and WTM Trade Score (0\u2013100). Flag any trades that should be banned due to regime mismatch.` },
+  { id: 'D', title: 'WTM Income Projection from Current Book', desc: 'Project income scenarios.', text: `Using the current book (positions, sizes, key levels) and Whinfell regime, build projected income scenarios for the next session/week.
+
+1. Base, favorable, and adverse scenarios with estimated P&L ($ and % of capital).
+2. Key drivers (carry, basis, directional, convexity).
+3. One-line income posture statement.
+
+Be realistic and tie directly to the current Whinfell Score and transmission state.` },
+  { id: 'E', title: 'WTM Divergence & Risk Compression', desc: 'Diagnose divergences and recommend risk actions.', text: `When the tape diverges from Whinfell transmission signals, diagnose and recommend risk compression.
+
+1. Describe key divergences (credit vs equities, BTC vs SPY, futures vs regime, etc.).
+2. Classify as transient or regime-threatening.
+3. Recommend concrete actions: reduce gross, rotate, tighten stops, or exit.
+4. State what evidence would justify re-expanding risk.
+
+Be concise and action-oriented.` },
 ];
 
 const TICKERS = ['HYG','LQD','XLF','XLU','SPY','IWM','IBIT','CL','RB','ES','RTY','GC'];
@@ -598,8 +599,10 @@ function updateGrossTotal() {
 function renderPrompts() {
   document.getElementById('promptList').innerHTML = PROMPTS.map(p => `
     <div class="prompt-card">
-      <header><h3>Prompt ${p.id} – ${p.title}</h3>
-      <button class="btn copy-btn" data-text="${encodeURIComponent(p.text)}">Copy</button></header>
+      <header>
+        <div><h3>Prompt ${p.id} \u2013 ${p.title}</h3>${p.desc ? `<div class="prompt-desc">${p.desc}</div>` : ''}</div>
+        <button class="btn copy-btn" data-text="${encodeURIComponent(p.text)}">Copy</button>
+      </header>
       <pre>${p.text}</pre>
     </div>`).join('');
   document.querySelectorAll('.copy-btn').forEach(btn => {
