@@ -11,6 +11,7 @@
 | # | Deliverable | Priority | Status | Owner | Target Date | Notes |
 |---|-------------|----------|--------|-------|-------------|-------|
 | C3 | Exact Series & Ticker Master List | **Medium** | **Arena Review** | Bridge | 2 days | Self + Peer passed — submitted to Integration Dynamo + Macro Guardian |
+| **C4.5** | Simple Local Split-Screen Operator Dashboard | **High** | **In Progress** | Bridge + Edge + Forge Master | 2 days | Draft v0.1 in `GROK_BUILD_Outputs/` — Self Review next |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | 7 days | - |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | 5 days | - |
 
@@ -29,4 +30,5 @@
 ## Notes
 - **June 26, 2026** — C2 Arena approved (Basis Avenger, Risk Warden, Forge Master). TempLibby sign-off complete.
 - **June 26, 2026** — C3 activated (Bridge). Elevated priority per Arena v1.1 feedback.
+- **June 26, 2026** — **C4.5 activated** (TempLibby gap filler). Local split-screen HTML dashboard — Bridge + Edge + Forge Master.
 - v1.1 backlog: C1 "How to Update Daily" section; Operating Plan Definition of Done.
