@@ -11,7 +11,7 @@
 | C1 | Whinfell Credit Confirmation Score Calculation Logic | **Signed Off** | Blueprint + Edge | June 26, 2026 |
 | C2 | Fallback Excel / Google Sheet Dashboard | **Signed Off** | Edge + Safeguard | June 26, 2026 |
 | C3 | Exact Series & Ticker Master List | **Arena Review** | Bridge | June 26, 2026 |
-| C4.5 | Split-Screen Operator Dashboard | **Self Review** | Bridge + Edge + Forge Master + Clarity | June 26, 2026 |
+| C4.5 | Split-Screen Operator Dashboard | **Peer Review (queued)** | Bridge + Edge + Forge Master + Clarity | June 26, 2026 |
 | C4 | Test 6 Refined Agentic Prompts | Not Started | Precision | - |
 | C5 | Quick Reference Card (One-Pager) | Not Started | Hammer + Precision | - |
 
@@ -26,5 +26,6 @@
 - **June 26, 2026** — **C4.5 activated** (High priority gap filler). Draft v0.1: `GROK_BUILD_Outputs/Whinfell_Split_Screen_Operator_Dashboard.html` + setup guide.
 - **June 26, 2026** — C4.5 official kickoff (TempLibby). Draft v1.0 aligned to 60/40 layout → `08_Deliverables/`. **Self Review ready.**
 - **June 26, 2026** — C3 Arena Review **facilitated** (Integration Dynamo + Macro Guardian). C4.5 v0.2: default URL settings bar + localStorage per TempLibby clarification.
+- **June 26, 2026** — C4.5 Self Review ✅ (v0.2). TempLibby positive feedback on settings bar. URL fields kept flexible pending final Comet URLs. Peer Review queued post-C3.
 - BUILD Cousins maintain TODO list in `01_Strategy_Docs/BUILD_TODO_List.md`.
 - All work follows Self Review → Peer Review → Arena Review process.
