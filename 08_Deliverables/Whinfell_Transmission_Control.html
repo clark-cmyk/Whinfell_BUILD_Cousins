@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whinfell Transmission Control — Phase 0</title>
+  <title>Whinfell Transmission Control — Phase 1</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -11,15 +11,8 @@
         extend: {
           colors: {
             wtm: {
-              bg: '#0b0f14',
-              surface: '#141b24',
-              card: '#1a2332',
-              border: '#2a3548',
-              muted: '#8b9cb3',
-              accent: '#3d8bfd',
-              green: '#3dd68c',
-              amber: '#f5a623',
-              red: '#f56565',
+              bg: '#0b0f14', surface: '#141b24', card: '#1a2332', border: '#2a3548',
+              muted: '#8b9cb3', accent: '#3d8bfd', green: '#3dd68c', amber: '#f5a623', red: '#f56565',
             },
           },
           fontFamily: { sans: ['"Segoe UI"', 'system-ui', 'sans-serif'] },
@@ -28,253 +21,234 @@
     };
   </script>
   <style>
-    /* Minimal overrides — Tailwind handles layout; custom tokens for gate glow */
     .gate-glow-red { box-shadow: inset 0 -2px 0 0 #f56565, 0 0 24px rgba(245,101,101,0.12); }
     .gate-glow-amber { box-shadow: inset 0 -2px 0 0 #f5a623, 0 0 24px rgba(245,166,35,0.1); }
     .gate-glow-green { box-shadow: inset 0 -2px 0 0 #3dd68c, 0 0 24px rgba(61,221,140,0.1); }
     .card-blocked { opacity: 0.38; pointer-events: none; filter: grayscale(0.5); }
-    input[type=number]::-webkit-inner-spin-button { opacity: 0.4; }
+    .tab-active { color: #3d8bfd; border-bottom: 2px solid #3d8bfd; }
+    .panel-hidden { display: none; }
+    .tracer-bar { transition: width 0.3s ease, background-color 0.3s ease; }
   </style>
 </head>
-<body class="bg-wtm-bg text-slate-100 font-sans min-h-screen flex flex-col">
+<body class="bg-wtm-bg text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
 
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       HEADER — brand zone | control zone (separated)
-       ═══════════════════════════════════════════════════════════════════════ -->
   <header class="flex flex-col sm:flex-row sm:items-stretch border-b border-wtm-border bg-wtm-surface shrink-0">
-    <div class="flex-1 px-5 py-3.5 flex flex-col justify-center gap-0.5">
+    <div class="flex-1 px-5 py-3 flex flex-col justify-center gap-0.5">
       <div class="flex items-center gap-2.5 flex-wrap">
         <h1 class="text-[15px] font-semibold tracking-tight">Whinfell Transmission Control</h1>
-        <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 0</span>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 1 Draft</span>
       </div>
-      <p class="text-[11px] text-wtm-muted">Execution layer · Human-in-the-loop · High signal-to-noise</p>
+      <p class="text-[11px] text-wtm-muted">Execution layer · Prompts · Gross Risk · Signal Tracer</p>
     </div>
-    <div class="flex items-center gap-2 px-5 py-3 sm:border-l border-wtm-border bg-black/20 shrink-0 flex-wrap justify-end">
-      <span id="saveIndicator" class="text-[10px] text-wtm-muted mr-1">—</span>
-      <button id="btnImport" type="button"
-        class="text-xs px-3 py-1.5 rounded-md border border-wtm-border bg-wtm-card hover:bg-wtm-border transition-colors">
-        Import from Perplexity
-      </button>
-      <button id="btnSave" type="button"
-        class="text-xs px-3 py-1.5 rounded-md bg-wtm-accent/80 border border-wtm-accent hover:bg-wtm-accent font-medium transition-colors">
-        Save State
-      </button>
+    <div class="flex items-center gap-2 px-5 py-2.5 sm:border-l border-wtm-border bg-black/20 shrink-0 flex-wrap justify-end">
+      <span id="saveIndicator" class="text-[10px] text-wtm-muted">—</span>
+      <button id="btnImport" type="button" class="text-xs px-3 py-1.5 rounded-md border border-wtm-border bg-wtm-card hover:bg-wtm-border">Import from Perplexity</button>
+      <button id="btnSave" type="button" class="text-xs px-3 py-1.5 rounded-md bg-wtm-accent/80 border border-wtm-accent hover:bg-wtm-accent font-medium">Save State</button>
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       GATE BANNER — dominant, color-coded
-       ═══════════════════════════════════════════════════════════════════════ -->
-  <section id="gateBanner" class="shrink-0 px-5 py-4 text-center border-b border-wtm-border bg-wtm-surface gate-glow-amber transition-all duration-200">
+  <section id="gateBanner" class="shrink-0 px-5 py-3.5 text-center border-b border-wtm-border bg-wtm-surface gate-glow-amber transition-all">
     <div id="gateBannerTitle" class="text-lg font-extrabold tracking-wide uppercase">Enter Whinfell Score</div>
     <div id="gateBannerSub" class="text-[11px] text-wtm-muted mt-1 font-medium">WTM intake drives BTC module access</div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       WTM INTAKE — 4-column grid
-       ═══════════════════════════════════════════════════════════════════════ -->
-  <section class="shrink-0 px-5 py-4 border-b border-wtm-border bg-wtm-surface/60">
-    <div class="text-[10px] font-bold uppercase tracking-widest text-wtm-accent mb-3">WTM Intake</div>
+  <section class="shrink-0 px-5 py-3 border-b border-wtm-border bg-wtm-surface/60">
+    <div class="text-[10px] font-bold uppercase tracking-widest text-wtm-accent mb-2">WTM Intake</div>
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
       <label class="block">
-        <span class="text-[10px] font-semibold text-wtm-muted uppercase tracking-wide">Whinfell Score</span>
+        <span class="text-[10px] font-semibold text-wtm-muted uppercase">Whinfell Score</span>
         <div class="flex gap-2 mt-1">
-          <input id="whinfellScore" type="number" min="0" max="100" placeholder="58"
-            class="flex-1 bg-wtm-bg border border-wtm-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-wtm-accent" />
+          <input id="whinfellScore" type="number" min="0" max="100" placeholder="58" class="flex-1 bg-wtm-bg border border-wtm-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-wtm-accent" />
           <span id="scoreZoneChip" class="text-[9px] font-bold uppercase px-2 py-2 rounded border border-wtm-border text-wtm-muted self-center">—</span>
         </div>
       </label>
       <label class="block">
-        <span class="text-[10px] font-semibold text-wtm-muted uppercase tracking-wide">Transmission State</span>
+        <span class="text-[10px] font-semibold text-wtm-muted uppercase">Transmission State</span>
         <div class="flex gap-2 mt-1">
-          <select id="transmissionState"
-            class="flex-1 min-w-0 bg-wtm-bg border border-wtm-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-wtm-accent">
+          <select id="transmissionState" class="flex-1 min-w-0 bg-wtm-bg border border-wtm-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-wtm-accent">
             <option value="">— Select —</option>
             <option value="normal">Normal</option>
             <option value="stressed">Stressed</option>
             <option value="disorderly">Disorderly</option>
             <option value="crisis">Crisis</option>
           </select>
-          <span id="txChip" class="text-[9px] font-bold uppercase px-2 py-2 rounded border border-wtm-border text-wtm-muted self-center shrink-0">—</span>
+          <span id="txChip" class="text-[9px] font-bold uppercase px-2 py-2 rounded border border-wtm-border text-wtm-muted shrink-0 self-center">—</span>
         </div>
       </label>
       <label class="block">
-        <span class="text-[10px] font-semibold text-wtm-muted uppercase tracking-wide">Regime Tag</span>
-        <input id="regimeTag" type="text" list="regimePresets" placeholder="e.g. Fragile Risk-On"
-          class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-wtm-accent" />
+        <span class="text-[10px] font-semibold text-wtm-muted uppercase">Regime Tag</span>
+        <input id="regimeTag" type="text" list="regimePresets" placeholder="e.g. Fragile Risk-On" class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded-md px-3 py-2 text-sm focus:outline-none focus:border-wtm-accent" />
         <datalist id="regimePresets">
-          <option value="Risk-On / Constructive"></option>
-          <option value="Fragile Risk-On"></option>
-          <option value="Neutral / Range"></option>
-          <option value="Risk-Off / Compression"></option>
-          <option value="Crisis"></option>
+          <option value="Risk-On / Constructive"></option><option value="Fragile Risk-On"></option>
+          <option value="Neutral / Range"></option><option value="Risk-Off / Compression"></option><option value="Crisis"></option>
         </datalist>
       </label>
-      <div class="block">
-        <span class="text-[10px] font-semibold text-wtm-muted uppercase tracking-wide">Gate Status</span>
-        <div id="gateStatusChip" class="mt-1 min-h-[38px] flex items-center justify-center rounded-md border border-wtm-border bg-wtm-bg text-xs font-extrabold uppercase tracking-wider text-wtm-muted">
-          —
-        </div>
+      <div>
+        <span class="text-[10px] font-semibold text-wtm-muted uppercase">Gate Status</span>
+        <div id="gateStatusChip" class="mt-1 min-h-[38px] flex items-center justify-center rounded-md border border-wtm-border bg-wtm-bg text-xs font-extrabold uppercase text-wtm-muted">—</div>
       </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       URL BAR — saved quick-launch targets
-       ═══════════════════════════════════════════════════════════════════════ -->
-  <section class="shrink-0 px-5 py-3 border-b border-wtm-border bg-wtm-card/40">
-    <div class="text-[10px] font-bold uppercase tracking-widest text-wtm-muted mb-2">Data Sources (saved URLs)</div>
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-      <label class="block">
-        <span class="text-[10px] text-wtm-muted font-semibold">Koyfin Workspace</span>
-        <input id="urlKoyfin" type="url" placeholder="https://app.koyfin.com/…"
-          class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded-md px-3 py-1.5 text-[11px] text-blue-300 focus:outline-none focus:border-wtm-accent" />
-      </label>
-      <label class="block">
-        <span class="text-[10px] text-wtm-muted font-semibold">Barchart Futures / Basis</span>
-        <input id="urlBarchart" type="url" placeholder="https://www.barchart.com/…"
-          class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded-md px-3 py-1.5 text-[11px] text-blue-300 focus:outline-none focus:border-wtm-accent" />
-      </label>
+  <section class="shrink-0 px-5 py-2 border-b border-wtm-border bg-wtm-card/40">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+      <label class="block"><span class="text-[10px] text-wtm-muted font-semibold">Koyfin URL</span>
+        <input id="urlKoyfin" type="url" class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-3 py-1.5 text-[11px] text-blue-300 focus:outline-none focus:border-wtm-accent" /></label>
+      <label class="block"><span class="text-[10px] text-wtm-muted font-semibold">Barchart URL</span>
+        <input id="urlBarchart" type="url" class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-3 py-1.5 text-[11px] text-blue-300 focus:outline-none focus:border-wtm-accent" /></label>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════════════
-       MAIN GRID — 60/40 · Koyfin | Barchart + BTC module placeholders
-       ═══════════════════════════════════════════════════════════════════════ -->
   <main class="flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-5 gap-px bg-wtm-border overflow-hidden">
-    <!-- Koyfin column (~60%) -->
     <div class="xl:col-span-3 bg-wtm-bg flex flex-col min-h-0">
-      <div class="px-4 py-2.5 border-b border-wtm-border bg-wtm-surface shrink-0">
+      <div class="px-4 py-2 border-b border-wtm-border bg-wtm-surface shrink-0">
         <h2 class="text-[13px] font-bold">Koyfin — Transmission Map</h2>
-        <p class="text-[10px] text-wtm-muted">Read score + transmission → enter WTM intake above</p>
+        <p class="text-[10px] text-wtm-muted">Read data → enter intake · run Prompts A–E below</p>
       </div>
       <div class="flex-1 overflow-y-auto p-4">
         <div class="bg-wtm-card border border-wtm-border rounded-lg p-4 text-center">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-wtm-accent mb-2">Quick Launch</p>
-          <p id="urlDisplayKoyfin" class="text-[10px] text-blue-300/80 break-all bg-wtm-bg border border-wtm-border rounded px-2 py-1.5 mb-2 text-left italic text-wtm-muted">No URL saved</p>
-          <p class="text-[10px] text-wtm-muted mb-3">Last opened: <strong id="lastKoyfin" class="text-slate-200">Never</strong></p>
-          <button id="btnKoyfin" type="button"
-            class="w-full py-2.5 rounded-lg bg-gradient-to-b from-wtm-accent to-blue-700 border border-blue-400/50 text-sm font-bold hover:brightness-110 transition">
-            Open Koyfin ↗
-          </button>
+          <p id="urlDisplayKoyfin" class="text-[10px] break-all bg-wtm-bg border border-wtm-border rounded px-2 py-1.5 mb-2 text-left text-wtm-muted italic">No URL saved</p>
+          <p class="text-[10px] text-wtm-muted mb-2">Last: <strong id="lastKoyfin" class="text-slate-200">Never</strong></p>
+          <button id="btnKoyfin" type="button" class="w-full py-2 rounded-lg bg-gradient-to-b from-wtm-accent to-blue-700 border border-blue-400/50 text-sm font-bold hover:brightness-110">Open Koyfin ↗</button>
         </div>
       </div>
     </div>
-
-    <!-- Barchart + BTC modules (~40%) -->
     <div class="xl:col-span-2 bg-wtm-bg flex flex-col min-h-0">
-      <div class="px-4 py-2.5 border-b border-wtm-border bg-wtm-surface shrink-0">
+      <div class="px-4 py-2 border-b border-wtm-border bg-wtm-surface shrink-0">
         <h2 class="text-[13px] font-bold">Barchart + BTC Modules</h2>
-        <p class="text-[10px] text-wtm-muted">Execution view · Layer 2 &amp; 3 (Phase 0 placeholders)</p>
+        <p class="text-[10px] text-wtm-muted">Layer 2 &amp; 3 · gate-enforced</p>
       </div>
       <div class="flex-1 overflow-y-auto p-4 space-y-3">
-        <div class="bg-wtm-card border border-wtm-border rounded-lg p-4 text-center">
-          <p class="text-[10px] font-bold uppercase tracking-wider text-wtm-accent mb-2">Quick Launch</p>
-          <p id="urlDisplayBarchart" class="text-[10px] text-blue-300/80 break-all bg-wtm-bg border border-wtm-border rounded px-2 py-1.5 mb-2 text-left italic text-wtm-muted">No URL saved</p>
-          <p class="text-[10px] text-wtm-muted mb-3">Last opened: <strong id="lastBarchart" class="text-slate-200">Never</strong></p>
-          <button id="btnBarchart" type="button"
-            class="w-full py-2.5 rounded-lg bg-gradient-to-b from-wtm-accent to-blue-700 border border-blue-400/50 text-sm font-bold hover:brightness-110 transition">
-            Open Barchart ↗
-          </button>
+        <div class="bg-wtm-card border border-wtm-border rounded-lg p-3 text-center">
+          <p id="urlDisplayBarchart" class="text-[10px] break-all bg-wtm-bg border border-wtm-border rounded px-2 py-1 mb-2 text-left text-wtm-muted italic">No URL saved</p>
+          <p class="text-[10px] text-wtm-muted mb-2">Last: <strong id="lastBarchart" class="text-slate-200">Never</strong></p>
+          <button id="btnBarchart" type="button" class="w-full py-2 rounded-lg bg-gradient-to-b from-wtm-accent to-blue-700 text-sm font-bold hover:brightness-110">Open Barchart ↗</button>
         </div>
-
-        <!-- BTC Options — Layer 2 placeholder -->
-        <div id="cardBtcOptions" class="bg-wtm-card border border-wtm-border border-l-4 border-l-wtm-border rounded-lg p-4 transition-opacity">
-          <div class="flex justify-between items-start gap-2 mb-2">
-            <div>
-              <p class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent">WTM Layer 2</p>
-              <h3 class="text-sm font-bold">BTC Options Workflow</h3>
-            </div>
-            <span id="chipL2" class="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded border border-wtm-border text-wtm-muted shrink-0">—</span>
+        <div id="cardBtcOptions" class="bg-wtm-card border border-wtm-border border-l-4 border-l-wtm-border rounded-lg p-4">
+          <div class="flex justify-between gap-2 mb-2">
+            <div><p class="text-[9px] font-bold uppercase text-wtm-accent">Layer 2</p><h3 class="text-sm font-bold">BTC Options Workflow</h3></div>
+            <span id="chipL2" class="text-[10px] font-extrabold uppercase px-2 py-1 rounded border border-wtm-border text-wtm-muted shrink-0">—</span>
           </div>
-          <p class="text-[10px] text-wtm-muted leading-relaxed">Phase 0 placeholder — prompt copy &amp; workflow wiring in Phase 1.</p>
+          <p class="text-[10px] text-wtm-muted mb-3">Vol surface + structure evaluation. Gated by WTM intake.</p>
+          <button id="btnCopyL2" type="button" class="text-xs px-3 py-1.5 rounded border border-wtm-border bg-wtm-bg hover:bg-wtm-border w-full">Copy Layer 2 Prompt</button>
         </div>
-
-        <!-- Calendar Arb — Layer 3 placeholder -->
-        <div id="cardBtcCalendar" class="bg-wtm-card border border-wtm-border border-l-4 border-l-wtm-border rounded-lg p-4 transition-opacity">
-          <div class="flex justify-between items-start gap-2 mb-2">
-            <div>
-              <p class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent">WTM Layer 3</p>
-              <h3 class="text-sm font-bold">BTC Calendar Arb Agent</h3>
-            </div>
-            <span id="chipL3" class="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded border border-wtm-border text-wtm-muted shrink-0">—</span>
+        <div id="cardBtcCalendar" class="bg-wtm-card border border-wtm-border border-l-4 border-l-wtm-border rounded-lg p-4">
+          <div class="flex justify-between gap-2 mb-2">
+            <div><p class="text-[9px] font-bold uppercase text-wtm-accent">Layer 3</p><h3 class="text-sm font-bold">BTC Calendar Arb Agent</h3></div>
+            <span id="chipL3" class="text-[10px] font-extrabold uppercase px-2 py-1 rounded border border-wtm-border text-wtm-muted shrink-0">—</span>
           </div>
-          <p class="text-[10px] text-wtm-muted leading-relaxed">Phase 0 placeholder — arb helper &amp; agent prompt in Phase 1.</p>
+          <p class="text-[10px] text-wtm-muted mb-3">Calendar spread arb agent. Blocked when Score &lt; 50.</p>
+          <button id="btnCopyL3" type="button" class="text-xs px-3 py-1.5 rounded border border-wtm-border bg-wtm-bg hover:bg-wtm-border w-full">Copy Layer 3 Prompt</button>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- Import feedback toast -->
-  <div id="toast" class="fixed bottom-4 right-4 max-w-sm px-4 py-3 rounded-lg border border-wtm-border bg-wtm-card text-xs shadow-xl translate-y-20 opacity-0 transition-all duration-300 pointer-events-none z-50"></div>
+  <!-- Bottom utility: Prompts | Gross Risk | Signal Tracer -->
+  <section class="shrink-0 border-t border-wtm-border bg-wtm-surface flex flex-col max-h-[44vh] min-h-[200px]">
+    <div class="flex border-b border-wtm-border overflow-x-auto shrink-0" id="tabBar">
+      <button type="button" data-tab="prompts" class="tab-btn tab-active px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">WTM Prompts A–E</button>
+      <button type="button" data-tab="risk" class="tab-btn px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">Gross Risk</button>
+      <button type="button" data-tab="tracer" class="tab-btn px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">Signal Tracer</button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-4">
+      <div id="panel-prompts" class="space-y-2" data-panel="prompts"></div>
+      <div id="panel-risk" class="panel-hidden" data-panel="risk">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+          <label class="block"><span class="text-[10px] text-wtm-muted uppercase font-semibold">Book A ($mm)</span>
+            <input id="grossA" type="number" step="0.1" class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded px-3 py-2 text-sm" /></label>
+          <label class="block"><span class="text-[10px] text-wtm-muted uppercase font-semibold">Book B ($mm)</span>
+            <input id="grossB" type="number" step="0.1" class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded px-3 py-2 text-sm" /></label>
+          <label class="block"><span class="text-[10px] text-wtm-muted uppercase font-semibold">Total Gross</span>
+            <input id="grossTotal" type="text" readonly class="w-full mt-1 bg-wtm-card border border-wtm-border rounded px-3 py-2 text-sm text-wtm-accent font-bold" /></label>
+          <label class="block"><span class="text-[10px] text-wtm-muted uppercase font-semibold">Approved Posture</span>
+            <select id="posture" class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded px-3 py-2 text-sm">
+              <option value="">— Auto from Score —</option>
+              <option value="full">Full Gross (80+)</option>
+              <option value="selective">Selective (65–79)</option>
+              <option value="light">Light Gross (50–64)</option>
+              <option value="defensive">Defensive (&lt;50)</option>
+              <option value="flat">Flat / No New Risk</option>
+            </select></label>
+        </div>
+        <p id="postureHint" class="text-[10px] text-wtm-muted mb-2">Posture links to Whinfell Score zone and gate status.</p>
+        <label class="block"><span class="text-[10px] text-wtm-muted uppercase font-semibold">Handover / Watch Items</span>
+          <textarea id="handoverNote" rows="2" placeholder="Gate, regime, risks…" class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded px-3 py-2 text-sm resize-y"></textarea></label>
+      </div>
+      <div id="panel-tracer" class="panel-hidden" data-panel="tracer">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <p class="text-[10px] font-bold uppercase text-wtm-accent mb-2">Transmission Ladder — Tabular</p>
+            <table class="w-full text-[11px] border border-wtm-border rounded-lg overflow-hidden">
+              <thead class="bg-wtm-card text-wtm-muted uppercase text-[9px]"><tr><th class="text-left p-2">Stage</th><th class="text-left p-2">Status</th></tr></thead>
+              <tbody id="tracerTableBody" class="divide-y divide-wtm-border"></tbody>
+            </table>
+          </div>
+          <div>
+            <p class="text-[10px] font-bold uppercase text-wtm-accent mb-2">Snapshot — Visual</p>
+            <div class="bg-wtm-card border border-wtm-border rounded-lg p-4">
+              <div class="flex justify-between text-[10px] text-wtm-muted mb-1"><span>Whinfell Score</span><span id="tracerScoreLabel">—</span></div>
+              <div class="h-3 bg-wtm-bg rounded-full overflow-hidden border border-wtm-border mb-1 relative">
+                <div id="tracerScoreBar" class="h-full bg-wtm-accent tracer-bar" style="width:0%"></div>
+                <div class="absolute top-0 bottom-0 w-px bg-wtm-red/60" style="left:50%"></div>
+                <div class="absolute top-0 bottom-0 w-px bg-wtm-amber/60" style="left:65%"></div>
+              </div>
+              <div class="flex justify-between text-[8px] text-wtm-muted mb-4"><span>0</span><span>50</span><span>65</span><span>100</span></div>
+              <div id="tracerBars" class="space-y-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="fixed bottom-4 right-4 max-w-sm px-4 py-3 rounded-lg border border-wtm-border bg-wtm-card text-xs shadow-xl translate-y-20 opacity-0 transition-all z-50 pointer-events-none"></div>
 
 <script>
-/**
- * Whinfell Transmission Control — Phase 0
- * ───────────────────────────────────────
- * Modules: Storage · Gate · PerplexityParser · UI
- * Single-file · Tailwind CDN · vanilla JS
- */
+/** Whinfell Transmission Control — Phase 1 · Storage v1 */
 
-const STORAGE_KEY = 'whinfell_transmission_control_v0';
-
-const DEFAULTS = {
-  urlKoyfin: 'https://app.koyfin.com/',
-  urlBarchart: 'https://www.barchart.com/futures/major-commodities',
-};
+const STORAGE_KEY = 'whinfell_transmission_control_v1';
+const LEGACY_KEYS = ['whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
+const DEFAULTS = { urlKoyfin: 'https://app.koyfin.com/', urlBarchart: 'https://www.barchart.com/futures/major-commodities' };
 
 const TX_META = {
-  normal:     { label: 'Normal',     chip: 'bg-emerald-500/15 text-wtm-green border-wtm-green' },
-  stressed:   { label: 'Stressed',   chip: 'bg-amber-500/15 text-wtm-amber border-wtm-amber' },
+  normal: { label: 'Normal', chip: 'bg-emerald-500/15 text-wtm-green border-wtm-green' },
+  stressed: { label: 'Stressed', chip: 'bg-amber-500/15 text-wtm-amber border-wtm-amber' },
   disorderly: { label: 'Disorderly', chip: 'bg-orange-500/15 text-orange-400 border-orange-400' },
-  crisis:     { label: 'Crisis',     chip: 'bg-red-500/15 text-wtm-red border-wtm-red' },
+  crisis: { label: 'Crisis', chip: 'bg-red-500/15 text-wtm-red border-wtm-red' },
 };
 
-/* ── Gate Logic ─────────────────────────────────────────────────────────── */
+const LADDER = [
+  { id: 'liquidity', name: 'Liquidity & Rates', sub: '2Y/10Y · curve shape' },
+  { id: 'credit', name: 'Credit Confirmation', sub: 'HY/IG · Whinfell Score' },
+  { id: 'breadth', name: 'Equity Breadth', sub: 'SPY · IWM · participation' },
+  { id: 'highbeta', name: 'High-Beta / BTC', sub: 'IBIT vs QQQ/SPY' },
+  { id: 'basis', name: 'Basis & Term Structure', sub: 'Futures curve · contango' },
+];
+
+const STATUS_COLORS = { confirming: 'bg-wtm-green', mixed: 'bg-wtm-amber', impairing: 'bg-wtm-red', neutral: 'bg-wtm-border' };
+
+const PROMPT_L2 = `WTM Layer 2 — BTC Options Workflow\n\nContext: Whinfell Transmission Model intake complete.\n- Whinfell Score: [from intake]\n- Transmission State: [from intake]\n- Regime Tag: [from intake]\n- Gate Status: [Allowed / Tight Risk Band / NO NEW BTC RISK]\n\nTask:\n1) Confirm gate permits BTC options activity (if Tight Risk Band → reduced sizing only)\n2) Map IBIT/BTC vol surface vs credit transmission alignment\n3) Recommend structure: covered / spread / collar — with max notional\n4) State invalidation: score threshold, vol spike, credit impairment\n5) Output: EXECUTE (sized) / WATCH / BLOCKED`;
+
+const PROMPT_L3 = `WTM Layer 3 — BTC Calendar Arb Agent\n\nContext: Whinfell Transmission Model intake complete.\n- Whinfell Score: [from intake]\n- Transmission State: [from intake]\n- Regime Tag: [from intake]\n- Gate Status: [Allowed / Tight Risk Band / NO NEW BTC RISK]\n\nTask:\n1) Verify gate status permits calendar arb (BLOCKED if Score < 50)\n2) Read near vs far BTC basis from Barchart — compute attractiveness\n3) Rank calendar spread opportunities vs WTM transmission read\n4) If Tight Risk Band: client basis structures only, reduced size\n5) Output one-line action: EXECUTE / WATCH / BLOCKED with size and risks`;
+
+const PROMPTS = [
+  { id: 'A', title: 'WTM Transmission Read & Regime Classification', desc: 'Classify today\u2019s overall regime and key signals.', text: `Using the current Whinfell Transmission Map (regime banner, Whinfell Score, credit inputs, rates, breadth, futures leadership, and BTC/IBIT behavior), classify today\u2019s transmission state.\n\n1. State: Risk-On, Fragile Risk-On, Neutral, Risk-Off, or Crisis.\n2. Whinfell Score and zone (Green / Amber / Red).\n3. Top 2 confirming signals and top 2 disconfirming signals.\n4. One-line desk posture recommendation and what would cause an upgrade or downgrade.\n\nBe concise and transmission-focused.` },
+  { id: 'B', title: 'WTM Posture & Gross-Risk Recommendation', desc: 'Set daily gross risk and sizing.', text: `Using current Whinfell Score, transmission state, and desk posture, recommend gross risk and position sizing for today.\n\n1. Recommended gross risk range (% of capital deployed).\n2. Max per-trade risk (% and dollar amount).\n3. Max concurrent trades.\n4. For a candidate trade (entry, stop, target, account size), calculate: contract/share count, notional, risk $, reward $, and R-multiple.\n\nKeep sizing conservative and aligned with the current Whinfell regime.` },
+  { id: 'C', title: 'WTM Trade Evaluation & Ranking', desc: 'Evaluate and rank candidate trades.', text: `Given a list of candidate trades (tickers, direction, setup), evaluate each through the Whinfell lens and rank them.\n\nFor each trade:\n- Regime fit\n- Basis/term-structure alignment\n- Liquidity and edge\n- Transmission confirmation\n\nOutput a ranked list: Core, Tactical, Watchlist, with one-line justification and WTM Trade Score (0\u2013100). Flag any trades that should be banned due to regime mismatch.` },
+  { id: 'D', title: 'WTM Income Projection from Current Book', desc: 'Project income scenarios.', text: `Using the current book (positions, sizes, key levels) and Whinfell regime, build projected income scenarios for the next session/week.\n\n1. Base, favorable, and adverse scenarios with estimated P&L ($ and % of capital).\n2. Key drivers (carry, basis, directional, convexity).\n3. One-line income posture statement.\n\nBe realistic and tie directly to the current Whinfell Score and transmission state.` },
+  { id: 'E', title: 'WTM Divergence & Risk Compression', desc: 'Diagnose divergences and recommend risk actions.', text: `When the tape diverges from Whinfell transmission signals, diagnose and recommend risk compression.\n\n1. Describe key divergences (credit vs equities, BTC vs SPY, futures vs regime, etc.).\n2. Classify as transient or regime-threatening.\n3. Recommend concrete actions: reduce gross, rotate, tighten stops, or exit.\n4. State what evidence would justify re-expanding risk.\n\nBe concise and action-oriented.` },
+];
+
+let postureManual = false;
+
+function el(id) { return document.getElementById(id); }
 
 function evaluateGate(score) {
-  if (Number.isNaN(score)) {
-    return {
-      key: 'unknown', label: '—', chipLabel: '—',
-      bannerTitle: 'Enter Whinfell Score',
-      bannerSub: 'WTM intake drives BTC module access',
-      bannerBg: 'bg-wtm-surface', bannerTitleCls: 'text-wtm-muted',
-      bannerSubCls: 'text-wtm-muted', glow: '',
-      chipCls: 'border-wtm-border text-wtm-muted bg-wtm-bg',
-      borderAccent: 'border-l-wtm-border', blocked: true,
-    };
-  }
-  if (score < 50) {
-    return {
-      key: 'blocked', label: 'NO NEW BTC RISK', chipLabel: 'BLOCKED',
-      bannerTitle: 'NO NEW BTC RISK',
-      bannerSub: 'Score < 50 · BTC modules disabled · Defensive posture',
-      bannerBg: 'bg-red-500/10', bannerTitleCls: 'text-wtm-red',
-      bannerSubCls: 'text-red-300/70', glow: 'gate-glow-red',
-      chipCls: 'border-wtm-red text-wtm-red bg-red-500/15',
-      borderAccent: 'border-l-wtm-red', blocked: true,
-    };
-  }
-  if (score < 65) {
-    return {
-      key: 'tight', label: 'Tight Risk Band', chipLabel: 'Tight Risk',
-      bannerTitle: 'Tight Risk Band',
-      bannerSub: 'Score 50–64 · Reduced BTC sizing · Client basis favored',
-      bannerBg: 'bg-amber-500/10', bannerTitleCls: 'text-wtm-amber',
-      bannerSubCls: 'text-amber-200/70', glow: 'gate-glow-amber',
-      chipCls: 'border-wtm-amber text-wtm-amber bg-amber-500/15',
-      borderAccent: 'border-l-wtm-amber', blocked: false,
-    };
-  }
-  return {
-    key: 'allowed', label: 'Allowed', chipLabel: 'Allowed',
-    bannerTitle: 'Allowed',
-    bannerSub: 'Score ≥ 65 · Full BTC module access permitted',
-    bannerBg: 'bg-emerald-500/10', bannerTitleCls: 'text-wtm-green',
-    bannerSubCls: 'text-emerald-200/70', glow: 'gate-glow-green',
-    chipCls: 'border-wtm-green text-wtm-green bg-emerald-500/15',
-    borderAccent: 'border-l-wtm-green', blocked: false,
-  };
+  if (Number.isNaN(score)) return { key: 'unknown', label: '—', chipLabel: '—', bannerTitle: 'Enter Whinfell Score', bannerSub: 'WTM intake drives BTC module access', bannerBg: 'bg-wtm-surface', bannerTitleCls: 'text-wtm-muted', bannerSubCls: 'text-wtm-muted', glow: '', chipCls: 'border-wtm-border text-wtm-muted bg-wtm-bg', borderAccent: 'border-l-wtm-border', blocked: true };
+  if (score < 50) return { key: 'blocked', label: 'NO NEW BTC RISK', chipLabel: 'BLOCKED', bannerTitle: 'NO NEW BTC RISK', bannerSub: 'Score < 50 · BTC modules disabled', bannerBg: 'bg-red-500/10', bannerTitleCls: 'text-wtm-red', bannerSubCls: 'text-red-300/70', glow: 'gate-glow-red', chipCls: 'border-wtm-red text-wtm-red bg-red-500/15', borderAccent: 'border-l-wtm-red', blocked: true };
+  if (score < 65) return { key: 'tight', label: 'Tight Risk Band', chipLabel: 'Tight Risk', bannerTitle: 'Tight Risk Band', bannerSub: 'Score 50–64 · Reduced BTC sizing', bannerBg: 'bg-amber-500/10', bannerTitleCls: 'text-wtm-amber', bannerSubCls: 'text-amber-200/70', glow: 'gate-glow-amber', chipCls: 'border-wtm-amber text-wtm-amber bg-amber-500/15', borderAccent: 'border-l-wtm-amber', blocked: false };
+  return { key: 'allowed', label: 'Allowed', chipLabel: 'Allowed', bannerTitle: 'Allowed', bannerSub: 'Score ≥ 65 · Full BTC access', bannerBg: 'bg-emerald-500/10', bannerTitleCls: 'text-wtm-green', bannerSubCls: 'text-emerald-200/70', glow: 'gate-glow-green', chipCls: 'border-wtm-green text-wtm-green bg-emerald-500/15', borderAccent: 'border-l-wtm-green', blocked: false };
 }
 
 function scoreZone(score) {
@@ -284,83 +258,63 @@ function scoreZone(score) {
   return { text: 'Red', cls: 'border-wtm-red text-wtm-red bg-red-500/10' };
 }
 
-/* ── Perplexity Clipboard Parser ────────────────────────────────────────── */
+function suggestPosture(score) {
+  if (Number.isNaN(score)) return '';
+  if (score >= 80) return 'full';
+  if (score >= 65) return 'selective';
+  if (score >= 50) return 'light';
+  return 'defensive';
+}
 
 const PARSE_PATTERNS = [
-  { field: 'whinfellScore', patterns: [
-    /whinfell\s*score\s*[:=]\s*(\d{1,3})/i,
-    /score\s*[:=]\s*(\d{1,3})\s*(?:\/100)?/i,
-    /WTM\s*score\s*[:=]\s*(\d{1,3})/i,
-  ]},
-  { field: 'transmissionState', patterns: [
-    /transmission\s*state\s*[:=]\s*(normal|stressed|disorderly|crisis)/i,
-    /state\s*[:=]\s*(normal|stressed|disorderly|crisis)/i,
-    /regime\s*[:=]\s*(risk-on|fragile\s*risk-on|neutral|risk-off|crisis)/i,
-  ], map: {
-    'risk-on': 'normal', 'fragile risk-on': 'stressed', 'neutral': 'normal',
-    'risk-off': 'disorderly', 'crisis': 'crisis',
-  }},
-  { field: 'regimeTag', patterns: [
-    /regime\s*tag\s*[:=]\s*(.+?)(?:\n|$)/i,
-    /regime\s*classification\s*[:=]\s*(.+?)(?:\n|$)/i,
-    /desk\s*posture\s*[:=]\s*(.+?)(?:\n|$)/i,
-  ]},
+  { field: 'whinfellScore', patterns: [/whinfell\s*score\s*[:=]\s*(\d{1,3})/i, /score\s*[:=]\s*(\d{1,3})/i] },
+  { field: 'transmissionState', patterns: [/transmission\s*state\s*[:=]\s*(normal|stressed|disorderly|crisis)/i], map: { 'risk-on': 'normal', 'risk-off': 'disorderly' } },
+  { field: 'regimeTag', patterns: [/regime\s*tag\s*[:=]\s*(.+?)(?:\n|$)/i] },
 ];
 
 function parsePerplexityText(text) {
   const result = {};
-  const lines = text.replace(/\r\n/g, '\n');
-
   for (const { field, patterns, map } of PARSE_PATTERNS) {
     for (const re of patterns) {
-      const m = lines.match(re);
+      const m = text.match(re);
       if (!m) continue;
       let val = m[1].trim();
       if (map) val = map[val.toLowerCase()] || val.toLowerCase();
-      if (field === 'whinfellScore') {
-        const n = parseInt(val, 10);
-        if (n >= 0 && n <= 100) result.whinfellScore = String(n);
-      } else if (field === 'transmissionState') {
-        if (TX_META[val]) result.transmissionState = val;
-      } else {
-        result.regimeTag = val.replace(/[.;,]+$/, '').trim();
-      }
+      if (field === 'whinfellScore') { const n = parseInt(val, 10); if (n >= 0 && n <= 100) result.whinfellScore = String(n); }
+      else if (field === 'transmissionState' && TX_META[val]) result.transmissionState = val;
+      else if (field === 'regimeTag') result.regimeTag = val;
       break;
     }
   }
   return result;
 }
 
-/* ── Storage ────────────────────────────────────────────────────────────── */
-
 function collectState() {
+  const tracer = {};
+  LADDER.forEach(row => { tracer[row.id] = el('tracer-' + row.id)?.value || ''; });
   return {
-    whinfellScore: el('whinfellScore').value,
-    transmissionState: el('transmissionState').value,
-    regimeTag: el('regimeTag').value,
-    urlKoyfin: el('urlKoyfin').value,
-    urlBarchart: el('urlBarchart').value,
-    lastKoyfin: el('lastKoyfin').dataset.ts || null,
-    lastBarchart: el('lastBarchart').dataset.ts || null,
+    whinfellScore: el('whinfellScore').value, transmissionState: el('transmissionState').value, regimeTag: el('regimeTag').value,
+    urlKoyfin: el('urlKoyfin').value, urlBarchart: el('urlBarchart').value,
+    grossA: el('grossA').value, grossB: el('grossB').value, posture: el('posture').value, handoverNote: el('handoverNote').value,
+    postureManual, tracer, lastKoyfin: el('lastKoyfin').dataset.ts || null, lastBarchart: el('lastBarchart').dataset.ts || null,
     savedAt: new Date().toISOString(),
   };
 }
 
 function loadState() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return { ...DEFAULTS, ...JSON.parse(raw) };
-    // Migrate from Operator Dashboard v1.1 if present
-    const legacy = localStorage.getItem('whinfell_operator_v1_1');
-    if (legacy) return { ...DEFAULTS, ...JSON.parse(legacy), _migrated: true };
-  } catch { /* ignore */ }
+    for (const key of [STORAGE_KEY, ...LEGACY_KEYS]) {
+      const raw = localStorage.getItem(key);
+      if (raw) return { ...DEFAULTS, ...JSON.parse(raw) };
+    }
+  } catch { /* */ }
   return { ...DEFAULTS };
 }
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
   setSaveIndicator('Saved · ' + new Date().toLocaleString(), true);
-  flashSaveButton();
+  flashSave();
 }
 
 function applyState(s) {
@@ -369,161 +323,175 @@ function applyState(s) {
   el('regimeTag').value = s.regimeTag ?? '';
   el('urlKoyfin').value = s.urlKoyfin || DEFAULTS.urlKoyfin;
   el('urlBarchart').value = s.urlBarchart || DEFAULTS.urlBarchart;
+  el('grossA').value = s.grossA ?? '';
+  el('grossB').value = s.grossB ?? '';
+  el('posture').value = s.posture ?? '';
+  el('handoverNote').value = s.handoverNote ?? '';
+  postureManual = !!s.postureManual;
+  if (s.tracer) LADDER.forEach(row => { const n = el('tracer-' + row.id); if (n && s.tracer[row.id]) n.value = s.tracer[row.id]; });
   setLastOpened('lastKoyfin', s.lastKoyfin);
   setLastOpened('lastBarchart', s.lastBarchart);
   if (s.savedAt) setSaveIndicator('Saved · ' + new Date(s.savedAt).toLocaleString(), true);
   renderAll();
 }
 
-/* ── UI Render ─────────────────────────────────────────────────────────── */
+function renderPrompts() {
+  el('panel-prompts').innerHTML = PROMPTS.map(p => `
+    <div class="bg-wtm-card border border-wtm-border rounded-lg p-3">
+      <div class="flex justify-between items-start gap-2 mb-2">
+        <div><p class="text-xs font-bold">Prompt ${p.id} – ${p.title}</p><p class="text-[10px] text-wtm-muted">${p.desc}</p></div>
+        <button type="button" class="copy-prompt text-[10px] px-2 py-1 rounded border border-wtm-border shrink-0" data-text="${encodeURIComponent(p.text)}">Copy</button>
+      </div>
+      <pre class="text-[10px] text-wtm-muted whitespace-pre-wrap bg-wtm-bg border border-wtm-border rounded p-2 max-h-24 overflow-y-auto">${p.text}</pre>
+    </div>`).join('');
+  document.querySelectorAll('.copy-prompt').forEach(btn => {
+    btn.onclick = async () => {
+      await navigator.clipboard.writeText(decodeURIComponent(btn.dataset.text));
+      btn.textContent = 'Copied ✓';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    };
+  });
+}
 
-function el(id) { return document.getElementById(id); }
+function renderTracerTable() {
+  el('tracerTableBody').innerHTML = LADDER.map(row => `
+    <tr class="bg-wtm-bg/50"><td class="p-2"><div class="font-semibold">${row.name}</div><div class="text-[9px] text-wtm-muted">${row.sub}</div></td>
+    <td class="p-2"><select id="tracer-${row.id}" class="tracer-select w-full bg-wtm-card border border-wtm-border rounded px-2 py-1 text-[11px]">
+      <option value="">—</option><option value="confirming">Confirming</option><option value="mixed">Mixed</option><option value="impairing">Impairing</option><option value="neutral">Neutral</option>
+    </select></td></tr>`).join('');
+  document.querySelectorAll('.tracer-select').forEach(sel => {
+    sel.onchange = () => { renderTracerVisual(); markDirty(); };
+  });
+}
+
+function renderTracerBars() {
+  el('tracerBars').innerHTML = LADDER.map(row => `
+    <div><div class="flex justify-between text-[9px] text-wtm-muted mb-0.5"><span>${row.name}</span><span id="tracer-lbl-${row.id}">—</span></div>
+    <div class="h-2 bg-wtm-bg rounded border border-wtm-border overflow-hidden"><div id="tracer-bar-${row.id}" class="tracer-bar h-full bg-wtm-border" style="width:0%"></div></div></div>`).join('');
+}
+
+function statusWidth(status) {
+  return { confirming: 85, mixed: 50, impairing: 20, neutral: 35, '': 0 }[status] ?? 0;
+}
+
+function renderTracerVisual() {
+  const score = parseInt(el('whinfellScore').value, 10);
+  const zone = scoreZone(score);
+  el('tracerScoreLabel').textContent = Number.isNaN(score) ? '—' : `${score} (${zone.text})`;
+  el('tracerScoreBar').style.width = (Number.isNaN(score) ? 0 : score) + '%';
+  el('tracerScoreBar').className = `h-full tracer-bar ${Number.isNaN(score) ? 'bg-wtm-border' : score >= 65 ? 'bg-wtm-green' : score >= 50 ? 'bg-wtm-amber' : 'bg-wtm-red'}`;
+  LADDER.forEach(row => {
+    const st = el('tracer-' + row.id)?.value || '';
+    const bar = el('tracer-bar-' + row.id);
+    const lbl = el('tracer-lbl-' + row.id);
+    if (bar) { bar.style.width = statusWidth(st) + '%'; bar.className = `tracer-bar h-full ${STATUS_COLORS[st] || 'bg-wtm-border'}`; }
+    if (lbl) lbl.textContent = st || '—';
+  });
+}
+
+function updateGrossTotal() {
+  const t = (parseFloat(el('grossA').value) || 0) + (parseFloat(el('grossB').value) || 0);
+  el('grossTotal').value = t.toFixed(1) + ' $mm';
+}
+
+function linkPosture(score, gate) {
+  const suggested = suggestPosture(score);
+  const hint = el('postureHint');
+  if (!postureManual && suggested) el('posture').value = suggested;
+  const labels = { full: 'Full Gross', selective: 'Selective', light: 'Light Gross', defensive: 'Defensive', flat: 'Flat' };
+  hint.textContent = `Linked: Score ${Number.isNaN(score) ? '—' : score} · Gate: ${gate.label} · Suggested: ${labels[suggested] || '—'}`;
+}
 
 function renderAll() {
   const score = parseInt(el('whinfellScore').value, 10);
   const gate = evaluateGate(score);
   const zone = scoreZone(score);
-
-  // Gate banner
   const banner = el('gateBanner');
-  banner.className = `shrink-0 px-5 py-4 text-center border-b border-wtm-border transition-all duration-200 ${gate.bannerBg} ${gate.glow}`;
+  banner.className = `shrink-0 px-5 py-3.5 text-center border-b border-wtm-border transition-all ${gate.bannerBg} ${gate.glow}`;
   el('gateBannerTitle').textContent = gate.bannerTitle;
   el('gateBannerTitle').className = `text-lg font-extrabold tracking-wide uppercase ${gate.bannerTitleCls}`;
   el('gateBannerSub').textContent = gate.bannerSub;
   el('gateBannerSub').className = `text-[11px] mt-1 font-medium ${gate.bannerSubCls}`;
-
-  // Score zone chip
-  const zc = el('scoreZoneChip');
-  zc.textContent = zone.text;
-  zc.className = `text-[9px] font-bold uppercase px-2 py-2 rounded border self-center ${zone.cls}`;
-
-  // Gate status chip
-  const gs = el('gateStatusChip');
-  gs.textContent = gate.label;
-  gs.className = `mt-1 min-h-[38px] flex items-center justify-center rounded-md border text-xs font-extrabold uppercase tracking-wider ${gate.chipCls}`;
-
-  // Transmission chip
+  el('scoreZoneChip').textContent = zone.text;
+  el('scoreZoneChip').className = `text-[9px] font-bold uppercase px-2 py-2 rounded border self-center ${zone.cls}`;
+  el('gateStatusChip').textContent = gate.label;
+  el('gateStatusChip').className = `mt-1 min-h-[38px] flex items-center justify-center rounded-md border text-xs font-extrabold uppercase ${gate.chipCls}`;
   const tx = el('transmissionState').value;
   const tc = el('txChip');
-  if (tx && TX_META[tx]) {
-    tc.textContent = TX_META[tx].label;
-    tc.className = `text-[9px] font-bold uppercase px-2 py-2 rounded border self-center shrink-0 ${TX_META[tx].chip}`;
-  } else {
-    tc.textContent = '—';
-    tc.className = 'text-[9px] font-bold uppercase px-2 py-2 rounded border border-wtm-border text-wtm-muted self-center shrink-0';
-  }
-
-  // BTC cards
-  for (const { cardId, chipId } of [{ cardId: 'cardBtcOptions', chipId: 'chipL2' }, { cardId: 'cardBtcCalendar', chipId: 'chipL3' }]) {
-    const card = el(cardId);
-    const chip = el(chipId);
+  if (tx && TX_META[tx]) { tc.textContent = TX_META[tx].label; tc.className = `text-[9px] font-bold uppercase px-2 py-2 rounded border shrink-0 self-center ${TX_META[tx].chip}`; }
+  else { tc.textContent = '—'; tc.className = 'text-[9px] font-bold uppercase px-2 py-2 rounded border border-wtm-border text-wtm-muted shrink-0 self-center'; }
+  [['cardBtcOptions','chipL2'],['cardBtcCalendar','chipL3']].forEach(([c, ch]) => {
+    const card = el(c), chip = el(ch);
     chip.textContent = gate.chipLabel;
-    chip.className = `text-[10px] font-extrabold uppercase px-2.5 py-1 rounded border shrink-0 ${gate.chipCls}`;
-    card.classList.remove('border-l-wtm-border', 'border-l-wtm-red', 'border-l-wtm-amber', 'border-l-wtm-green', 'card-blocked');
+    chip.className = `text-[10px] font-extrabold uppercase px-2 py-1 rounded border shrink-0 ${gate.chipCls}`;
+    card.classList.remove('border-l-wtm-border','border-l-wtm-red','border-l-wtm-amber','border-l-wtm-green','card-blocked');
     card.classList.add(gate.borderAccent);
     card.classList.toggle('card-blocked', gate.blocked);
-  }
-
-  // URL displays
-  const k = el('urlKoyfin').value.trim();
-  const b = el('urlBarchart').value.trim();
+  });
+  el('btnCopyL2').disabled = gate.blocked;
+  el('btnCopyL3').disabled = gate.blocked;
+  const k = el('urlKoyfin').value.trim(), b = el('urlBarchart').value.trim();
   el('urlDisplayKoyfin').textContent = k || 'No URL saved';
   el('urlDisplayBarchart').textContent = b || 'No URL saved';
-  el('urlDisplayKoyfin').classList.toggle('italic', !k);
-  el('urlDisplayBarchart').classList.toggle('italic', !k);
-  el('urlDisplayKoyfin').classList.toggle('text-wtm-muted', !k);
-  el('urlDisplayBarchart').classList.toggle('text-wtm-muted', !b);
+  updateGrossTotal();
+  linkPosture(score, gate);
+  renderTracerVisual();
 }
 
 function setLastOpened(id, iso) {
-  const node = el(id);
-  if (iso) { node.textContent = new Date(iso).toLocaleString(); node.dataset.ts = iso; }
-  else { node.textContent = 'Never'; delete node.dataset.ts; }
+  const n = el(id);
+  if (iso) { n.textContent = new Date(iso).toLocaleString(); n.dataset.ts = iso; }
+  else { n.textContent = 'Never'; delete n.dataset.ts; }
 }
 
-function openUrl(inputId, lastId) {
-  const url = el(inputId).value.trim();
-  if (!url) { showToast('Set and save a URL first.', 'warn'); return; }
-  window.open(url, '_blank', 'noopener');
-  const now = new Date().toISOString();
-  setLastOpened(lastId, now);
-  const s = { ...loadState(), ...collectState(), [lastId === 'lastKoyfin' ? 'lastKoyfin' : 'lastBarchart']: now };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
-}
+function setSaveIndicator(t, ok) { el('saveIndicator').textContent = t; el('saveIndicator').classList.toggle('text-wtm-green', !!ok); el('saveIndicator').classList.toggle('text-wtm-muted', !ok); }
+function flashSave() { const b = el('btnSave'), o = b.textContent; b.textContent = 'Saved ✓'; setTimeout(() => b.textContent = o, 1200); }
+function markDirty() { setSaveIndicator('Unsaved changes', false); }
 
-function setSaveIndicator(text, ok) {
-  el('saveIndicator').textContent = text;
-  el('saveIndicator').classList.toggle('text-wtm-green', !!ok);
-  el('saveIndicator').classList.toggle('text-wtm-muted', !ok);
+function showToast(msg, type) {
+  const t = el('toast'); t.textContent = msg; t.classList.remove('translate-y-20','opacity-0');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.add('translate-y-20','opacity-0'), 3000);
 }
-
-function flashSaveButton() {
-  const b = el('btnSave');
-  const orig = b.textContent;
-  b.textContent = 'Saved ✓';
-  setTimeout(() => b.textContent = orig, 1200);
-}
-
-function showToast(msg, type = 'info') {
-  const t = el('toast');
-  t.textContent = msg;
-  t.classList.remove('translate-y-20', 'opacity-0');
-  t.classList.add('translate-y-0', 'opacity-100');
-  if (type === 'warn') t.classList.add('border-wtm-amber');
-  else if (type === 'ok') t.classList.add('border-wtm-green');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => {
-    t.classList.add('translate-y-20', 'opacity-0');
-    t.classList.remove('border-wtm-amber', 'border-wtm-green');
-  }, 3200);
-}
-
-/* ── Import from Perplexity ─────────────────────────────────────────────── */
 
 async function importFromPerplexity() {
   let text;
-  try {
-    text = await navigator.clipboard.readText();
-  } catch {
-    showToast('Clipboard access denied. Copy Perplexity output first.', 'warn');
-    return;
-  }
-  if (!text.trim()) {
-    showToast('Clipboard is empty.', 'warn');
-    return;
-  }
-  const parsed = parsePerplexityText(text);
-  const keys = Object.keys(parsed);
-  if (!keys.length) {
-    showToast('No WTM fields found. Use labels: Whinfell Score, Transmission State, Regime Tag.', 'warn');
-    return;
-  }
-  if (parsed.whinfellScore != null) el('whinfellScore').value = parsed.whinfellScore;
-  if (parsed.transmissionState) el('transmissionState').value = parsed.transmissionState;
-  if (parsed.regimeTag) el('regimeTag').value = parsed.regimeTag;
-  renderAll();
-  setSaveIndicator('Imported — click Save State', false);
-  showToast(`Imported: ${keys.join(', ')}`, 'ok');
+  try { text = await navigator.clipboard.readText(); } catch { showToast('Clipboard denied'); return; }
+  const p = parsePerplexityText(text);
+  if (!Object.keys(p).length) { showToast('No WTM fields found in clipboard'); return; }
+  if (p.whinfellScore) el('whinfellScore').value = p.whinfellScore;
+  if (p.transmissionState) el('transmissionState').value = p.transmissionState;
+  if (p.regimeTag) el('regimeTag').value = p.regimeTag;
+  renderAll(); markDirty(); showToast('Imported from Perplexity');
 }
 
-/* ── Event Wiring ───────────────────────────────────────────────────────── */
-
-function markDirty() {
-  setSaveIndicator('Unsaved changes', false);
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('tab-active', b.dataset.tab === name));
+  document.querySelectorAll('[data-panel]').forEach(p => p.classList.toggle('panel-hidden', p.dataset.panel !== name));
 }
 
-el('btnSave').addEventListener('click', saveState);
-el('btnImport').addEventListener('click', importFromPerplexity);
-el('btnKoyfin').addEventListener('click', () => openUrl('urlKoyfin', 'lastKoyfin'));
-el('btnBarchart').addEventListener('click', () => openUrl('urlBarchart', 'lastBarchart'));
+async function copyText(text, btn, label) {
+  await navigator.clipboard.writeText(text);
+  const o = btn.textContent; btn.textContent = 'Copied ✓';
+  setTimeout(() => btn.textContent = o || label, 2000);
+}
 
-['whinfellScore', 'transmissionState', 'regimeTag', 'urlKoyfin', 'urlBarchart'].forEach(id => {
-  const node = el(id);
-  const evt = id === 'whinfellScore' || id === 'regimeTag' ? 'input' : 'change';
-  node.addEventListener(evt, () => { renderAll(); markDirty(); });
+/* Events */
+el('btnSave').onclick = saveState;
+el('btnImport').onclick = importFromPerplexity;
+el('btnKoyfin').onclick = () => { const u = el('urlKoyfin').value.trim(); if (!u) return showToast('Set URL'); window.open(u,'_blank','noopener'); setLastOpened('lastKoyfin', new Date().toISOString()); };
+el('btnBarchart').onclick = () => { const u = el('urlBarchart').value.trim(); if (!u) return showToast('Set URL'); window.open(u,'_blank','noopener'); setLastOpened('lastBarchart', new Date().toISOString()); };
+el('btnCopyL2').onclick = () => copyText(PROMPT_L2, el('btnCopyL2'), 'Copy Layer 2 Prompt');
+el('btnCopyL3').onclick = () => copyText(PROMPT_L3, el('btnCopyL3'), 'Copy Layer 3 Prompt');
+document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => switchTab(b.dataset.tab));
+['whinfellScore','regimeTag','urlKoyfin','urlBarchart','grossA','grossB','handoverNote'].forEach(id => {
+  el(id).addEventListener(id.includes('Score') || id === 'regimeTag' || id.startsWith('gross') ? 'input' : 'input', () => { renderAll(); markDirty(); });
 });
+el('transmissionState').onchange = () => { renderAll(); markDirty(); };
+el('posture').onchange = () => { postureManual = !!el('posture').value; markDirty(); };
 
-/* ── Boot ───────────────────────────────────────────────────────────────── */
+renderPrompts();
+renderTracerTable();
+renderTracerBars();
 applyState(loadState());
 </script>
 </body>

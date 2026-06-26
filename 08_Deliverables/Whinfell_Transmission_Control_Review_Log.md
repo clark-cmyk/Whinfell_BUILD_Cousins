@@ -30,13 +30,31 @@
 
 ---
 
-## Phase 1 — Queued
+## Phase 1 — Draft Ready for Review
 
-**Target:** Draft for review when ready
+**Version:** v1.1 (Phase 1 Draft)  
+**Date:** June 26, 2026  
+**Status:** Self Review PASS — awaiting Peer → Arena → TempLibby
 
-| Item | Scope |
-|------|-------|
-| WTM Prompts A–E | Full canonical set with copy buttons |
-| Gross Risk module | Basic inputs + posture linkage to intake |
-| BTC Layer 2 & 3 | Enhanced cards with gate enforcement + prompt copy |
-| Signal Tracer | Simple tabular + graphical snapshots |
+| Item | Scope | Self Review |
+|------|-------|-------------|
+| WTM Prompts A–E | Full canonical set with copy buttons | PASS — texts match Operator Dashboard v1.1 |
+| Gross Risk module | Book A/B, total gross, posture linkage | PASS — auto posture from score; manual override preserved |
+| BTC Layer 2 & 3 | Gate enforcement + prompt copy | PASS — blocked <50; copy disabled when gated |
+| Signal Tracer | Tabular ladder + visual score bar | PASS — 5 stages, status bars sync with selects |
+
+### Phase 1 Technical Notes
+
+- Storage key: `whinfell_transmission_control_v1` (migrates from v0 + legacy operator key)
+- Bottom utility panel (~44vh): Prompts | Gross Risk | Signal Tracer
+- Gate logic unchanged: &lt;50 BLOCKED · 50–64 Tight · ≥65 Allowed
+- Posture zones: Full (80+) · Selective (65–79) · Light (50–64) · Defensive (&lt;50)
+
+### Self Review Checklist (June 26, 2026)
+
+- [x] Canonical Prompts A–E render with Copy buttons
+- [x] Gross Risk: Book A + B → Total Gross auto-sum
+- [x] Posture auto-links to score unless operator overrides
+- [x] BTC L2/L3 cards gate-enforced (visual + disabled copy when blocked)
+- [x] Signal Tracer tabular + visual bars update on intake/score change
+- [x] Phase 0 features intact: intake, gate banner, Perplexity import, save/load, Koyfin/Barchart launch
