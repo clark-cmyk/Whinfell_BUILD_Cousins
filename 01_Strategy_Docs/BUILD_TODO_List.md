@@ -10,7 +10,7 @@
 
 | # | Deliverable | Priority | Status | Owner | Target Date | Notes |
 |---|-------------|----------|--------|-------|-------------|-------|
-| C3 | Exact Series & Ticker Master List | **High** | **In Progress** | Bridge | 2 days | Draft v0.9 in `07_Reference_Materials/` |
+| C3 | Exact Series & Ticker Master List | **High** | **Peer Review** | Bridge | 2 days | Self Review ✅ — 17 series mapped; 3 open items for workspace confirm |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | 7 days | - |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | 5 days | - |
 

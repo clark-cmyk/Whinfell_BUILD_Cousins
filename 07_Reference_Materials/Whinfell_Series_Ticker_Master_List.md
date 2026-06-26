@@ -4,7 +4,7 @@
 **Version:** 0.9 (Draft — pending review)  
 **Owner:** Bridge  
 **Last Updated:** June 26, 2026  
-**Status:** In Progress — Self Review  
+**Status:** Self Review Complete — Peer Review next  
 **Maintained by:** BUILD Cousins (Bridge)
 
 ---
@@ -84,7 +84,7 @@ Per C1 Section 5 Missing Data Rules.
 
 | Gate | Status | Date |
 |------|--------|------|
-| Self Review | In Progress | June 26, 2026 |
-| Peer Review | Not started | — |
+| Self Review | ✅ **Pass** | June 26, 2026 |
+| Peer Review | Next | — |
 | Arena Review | Not started | — |
 | TempLibby Sign-off | Not started | — |
