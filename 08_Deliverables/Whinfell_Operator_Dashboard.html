@@ -17,13 +17,27 @@
       height: 100vh; display: flex; flex-direction: column; overflow: hidden;
     }
     header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 16px; background: var(--surface);
-      border-bottom: 1px solid var(--border); flex-shrink: 0; gap: 12px;
+      display: flex; align-items: stretch; justify-content: space-between;
+      padding: 0; background: var(--surface);
+      border-bottom: 1px solid var(--border); flex-shrink: 0;
     }
+    .header-brand {
+      flex: 1; padding: 12px 20px; display: flex; flex-direction: column; justify-content: center; gap: 3px;
+    }
+    .header-brand-row { display: flex; align-items: center; gap: 10px; }
     header h1 { font-size: 15px; font-weight: 600; }
+    .version-badge {
+      font-size: 9px; font-weight: 700; color: var(--accent); background: rgba(61,139,253,0.15);
+      border: 1px solid rgba(61,139,253,0.35); padding: 2px 8px; border-radius: 4px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+    }
     header .meta { font-size: 11px; color: var(--muted); }
-    .header-actions { display: flex; gap: 8px; }
+    .header-controls {
+      display: flex; flex-direction: column; align-items: flex-end; justify-content: center;
+      gap: 6px; padding: 12px 20px; border-left: 1px solid var(--border);
+      background: rgba(0,0,0,0.15); min-width: 200px;
+    }
+    .header-controls .save-status { margin-top: 0; text-align: right; }
     .btn {
       background: var(--surface2); border: 1px solid var(--border); color: var(--text);
       padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;
@@ -91,40 +105,77 @@
     .btn-live:hover { filter: brightness(1.1); }
     .btc-card {
       background: var(--surface2); border: 1px solid var(--border);
-      border-radius: 8px; padding: 12px; transition: opacity 0.2s;
+      border-radius: 8px; padding: 12px 12px 12px 14px; transition: opacity 0.2s, border-color 0.2s;
+      border-left-width: 4px;
     }
-    .btc-card.gate-blocked { opacity: 0.4; pointer-events: none; filter: grayscale(0.5); }
-    .btc-card h3 { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+    .btc-card.chip-allowed { border-left-color: var(--green); }
+    .btc-card.chip-tight { border-left-color: var(--amber); }
+    .btc-card.chip-blocked { border-left-color: var(--red); }
+    .btc-card.chip-neutral { border-left-color: var(--border); }
+    .btc-card.gate-blocked { opacity: 0.42; pointer-events: none; filter: grayscale(0.45); }
+    .btc-card h3 { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
     .btc-card .layer-tag { font-size: 9px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
     .btc-card p { font-size: 10px; color: var(--muted); line-height: 1.5; margin: 6px 0 10px; }
-    .btc-gate-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .gate-pill {
-      font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.03em;
+    .btc-gate-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
+    .status-chip {
+      font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 6px;
+      letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
     }
-    .gate-pill.allowed { background: rgba(61,221,140,0.2); color: var(--green); border: 1px solid var(--green); }
-    .gate-pill.tight { background: rgba(245,166,35,0.2); color: var(--amber); border: 1px solid var(--amber); }
-    .gate-pill.blocked { background: rgba(245,101,101,0.2); color: var(--red); border: 1px solid var(--red); }
+    .status-chip.allowed { background: rgba(61,221,140,0.22); color: var(--green); border: 1px solid var(--green); }
+    .status-chip.tight { background: rgba(245,166,35,0.22); color: var(--amber); border: 1px solid var(--amber); }
+    .status-chip.blocked { background: rgba(245,101,101,0.22); color: var(--red); border: 1px solid var(--red); }
+    .status-chip.neutral { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
     .utility {
       flex-shrink: 0; background: var(--surface);
       border-top: 1px solid var(--border); max-height: 46vh;
       display: flex; flex-direction: column;
     }
+    .wtm-intake-block {
+      flex-shrink: 0; border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(61,139,253,0.06) 0%, var(--surface) 100%);
+    }
     .gate-banner {
-      flex-shrink: 0; padding: 8px 16px; font-size: 11px; font-weight: 700;
-      text-align: center; letter-spacing: 0.03em;
+      padding: 14px 20px; font-size: 14px; font-weight: 800;
+      text-align: center; letter-spacing: 0.04em; line-height: 1.35;
     }
-    .gate-banner.red { background: rgba(245,101,101,0.18); color: var(--red); border-bottom: 1px solid var(--red); }
-    .gate-banner.amber { background: rgba(245,166,35,0.15); color: var(--amber); border-bottom: 1px solid var(--amber); }
-    .gate-banner.green { background: rgba(61,221,140,0.12); color: var(--green); border-bottom: 1px solid var(--green); }
-    .gate-banner.neutral { background: var(--bg); color: var(--muted); border-bottom: 1px solid var(--border); }
-    .wtm-intake {
-      flex-shrink: 0; padding: 10px 16px;
-      border-bottom: 1px solid var(--border);
-    }
+    .gate-banner .gate-sub { display: block; font-size: 10px; font-weight: 500; margin-top: 3px; opacity: 0.85; }
+    .gate-banner.red { background: rgba(245,101,101,0.22); color: #ff8a8a; border-bottom: 2px solid var(--red); }
+    .gate-banner.amber { background: rgba(245,166,35,0.18); color: #ffc966; border-bottom: 2px solid var(--amber); }
+    .gate-banner.green { background: rgba(61,221,140,0.15); color: #6eeea8; border-bottom: 2px solid var(--green); }
+    .gate-banner.neutral { background: var(--bg); color: var(--muted); border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; }
+    .wtm-intake { padding: 12px 16px 14px; }
     .wtm-intake-grid {
-      display: grid; grid-template-columns: 100px 1fr 1fr 1fr; gap: 10px; align-items: end;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-items: end;
     }
     @media (max-width: 900px) { .wtm-intake-grid { grid-template-columns: 1fr 1fr; } }
+    .tx-field-row { display: flex; gap: 8px; align-items: center; }
+    .tx-field-row select { flex: 1; min-width: 0; }
+    .regime-chip {
+      font-size: 9px; font-weight: 800; padding: 6px 8px; border-radius: 5px;
+      text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; flex-shrink: 0;
+    }
+    .regime-chip.tx-green { background: rgba(61,221,140,0.18); color: var(--green); border: 1px solid var(--green); }
+    .regime-chip.tx-amber { background: rgba(245,166,35,0.18); color: var(--amber); border: 1px solid var(--amber); }
+    .regime-chip.tx-orange { background: rgba(255,140,60,0.18); color: #ff9f5a; border: 1px solid #ff9f5a; }
+    .regime-chip.tx-red { background: rgba(245,101,101,0.18); color: var(--red); border: 1px solid var(--red); }
+    .regime-chip.tx-neutral { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+    .gate-status-display {
+      display: flex; align-items: center; justify-content: center; min-height: 36px;
+      border-radius: 6px; font-size: 12px; font-weight: 800; letter-spacing: 0.04em;
+      text-transform: uppercase; background: var(--bg); border: 1px solid var(--border); color: var(--muted);
+    }
+    .gate-status-display.allowed { background: rgba(61,221,140,0.15); color: var(--green); border-color: var(--green); }
+    .gate-status-display.tight { background: rgba(245,166,35,0.15); color: var(--amber); border-color: var(--amber); }
+    .gate-status-display.blocked { background: rgba(245,101,101,0.15); color: var(--red); border-color: var(--red); }
+    .score-field-wrap { display: flex; align-items: center; gap: 8px; }
+    .score-field-wrap input { flex: 1; min-width: 0; }
+    .score-zone-mini {
+      font-size: 9px; font-weight: 700; padding: 4px 6px; border-radius: 4px; white-space: nowrap;
+    }
+    .score-zone-mini.green { color: var(--green); border: 1px solid var(--green); background: rgba(61,221,140,0.1); }
+    .score-zone-mini.amber { color: var(--amber); border: 1px solid var(--amber); background: rgba(245,166,35,0.1); }
+    .score-zone-mini.red { color: var(--red); border: 1px solid var(--red); background: rgba(245,101,101,0.1); }
+    .score-zone-mini.neutral { color: var(--muted); border: 1px solid var(--border); }
     .field input, .field select, .field textarea {
       width: 100%; background: var(--surface2); border: 1px solid var(--border);
       color: var(--text); padding: 7px 10px; border-radius: 6px; font-size: 12px;
@@ -187,11 +238,15 @@
 <body>
 
 <header>
-  <div>
-    <h1>Whinfell Operator Dashboard</h1>
-    <div class="meta">C4.5 v1.1 · WTM Action Layer · No iframes · Gate-enforced BTC</div>
+  <div class="header-brand">
+    <div class="header-brand-row">
+      <h1>Whinfell Operator Dashboard</h1>
+      <span class="version-badge">C4.5 v1.1</span>
+    </div>
+    <div class="meta">WTM Action Layer · No iframes · Gate-enforced BTC</div>
   </div>
-  <div class="header-actions">
+  <div class="header-controls">
+    <div class="save-status" id="saveStatusHeader">—</div>
     <button class="btn btn-primary" id="btnSave">Save Settings</button>
   </div>
 </header>
@@ -253,19 +308,19 @@
         <button class="btn-live" id="btnOpenBarchart">Open Live Barchart ↗</button>
       </div>
 
-      <div class="btc-card" id="btcOptionsCard">
+      <div class="btc-card chip-neutral" id="btcOptionsCard">
         <div class="btc-gate-row">
           <div><div class="layer-tag">WTM Layer 2</div><h3>BTC Options Workflow</h3></div>
-          <span class="gate-pill" id="gatePillL2">—</span>
+          <span class="status-chip neutral" id="gatePillL2">—</span>
         </div>
         <p>Structured BTC options evaluation gated by WTM intake. Copy Layer 2 prompt when gate status is ALLOWED or Tight Risk Band (reduced sizing).</p>
         <button class="btn" id="btnCopyL2">Copy Layer 2 Prompt</button>
       </div>
 
-      <div class="btc-card" id="btcCalendarCard">
+      <div class="btc-card chip-neutral" id="btcCalendarCard">
         <div class="btc-gate-row">
           <div><div class="layer-tag">WTM Layer 3</div><h3>BTC Calendar Arb Agent</h3></div>
-          <span class="gate-pill" id="gatePillL3">—</span>
+          <span class="status-chip neutral" id="gatePillL3">—</span>
         </div>
         <p>Calendar spread arb agent for BTC basis structures. Blocked when Gate Status = NO NEW BTC RISK (Score &lt; 50).</p>
         <button class="btn" id="btnCopyL3">Copy Layer 3 Prompt</button>
@@ -275,39 +330,49 @@
 </section>
 
 <section class="utility">
-  <div class="gate-banner neutral" id="gateBanner">Enter Whinfell Score to calculate Gate Status</div>
-
-  <div class="wtm-intake">
-    <div class="section-label">WTM Intake — Regime &amp; Gate Logic</div>
-    <div class="wtm-intake-grid">
-      <div class="field">
-        <label for="whinfellScore">Whinfell Score</label>
-        <input type="number" id="whinfellScore" min="0" max="100" placeholder="58" />
-      </div>
-      <div class="field">
-        <label for="transmissionState">Transmission State</label>
-        <select id="transmissionState">
-          <option value="">— Select —</option>
-          <option value="normal">Normal</option>
-          <option value="stressed">Stressed</option>
-          <option value="disorderly">Disorderly</option>
-          <option value="crisis">Crisis</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="regimeTag">Regime Tag</label>
-        <input type="text" id="regimeTag" list="regimeTags" placeholder="e.g. Constructive / Fragile" />
-        <datalist id="regimeTags">
-          <option value="Risk-On / Constructive"></option>
-          <option value="Neutral / Range"></option>
-          <option value="Fragile / Selective"></option>
-          <option value="Stress / Compression"></option>
-          <option value="Crisis / Risk-Off"></option>
-        </datalist>
-      </div>
-      <div class="field">
-        <label for="gateStatus">Gate Status (auto)</label>
-        <input type="text" id="gateStatus" readonly value="—" />
+  <div class="wtm-intake-block">
+    <div class="gate-banner neutral" id="gateBanner">
+      Enter Whinfell Score to calculate Gate Status
+      <span class="gate-sub" id="gateBannerSub">WTM intake drives all BTC gate enforcement</span>
+    </div>
+    <div class="wtm-intake">
+      <div class="section-label">WTM Intake — Regime &amp; Gate Logic</div>
+      <div class="wtm-intake-grid">
+        <div class="field">
+          <label for="whinfellScore">Whinfell Score</label>
+          <div class="score-field-wrap">
+            <input type="number" id="whinfellScore" min="0" max="100" placeholder="58" />
+            <span class="score-zone-mini neutral" id="scoreZoneMini">—</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="transmissionState">Transmission State</label>
+          <div class="tx-field-row">
+            <select id="transmissionState">
+              <option value="">— Select —</option>
+              <option value="normal">Normal</option>
+              <option value="stressed">Stressed</option>
+              <option value="disorderly">Disorderly</option>
+              <option value="crisis">Crisis</option>
+            </select>
+            <span class="regime-chip tx-neutral" id="txChip">—</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="regimeTag">Regime Tag</label>
+          <input type="text" id="regimeTag" list="regimeTags" placeholder="e.g. Risk-On / Fragile" />
+          <datalist id="regimeTags">
+            <option value="Risk-On / Constructive"></option>
+            <option value="Neutral / Range"></option>
+            <option value="Fragile / Selective"></option>
+            <option value="Stress / Compression"></option>
+            <option value="Crisis / Risk-Off"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label>Gate Status</label>
+          <div class="gate-status-display" id="gateStatusDisplay">—</div>
+        </div>
       </div>
     </div>
   </div>
@@ -378,6 +443,26 @@ const DEFAULTS = {
 };
 
 const TX_LABELS = { normal: 'Normal', stressed: 'Stressed', disorderly: 'Disorderly', crisis: 'Crisis' };
+const TX_CHIP = {
+  normal: { label: 'Normal', cls: 'tx-green' },
+  stressed: { label: 'Stressed', cls: 'tx-amber' },
+  disorderly: { label: 'Disorderly', cls: 'tx-orange' },
+  crisis: { label: 'Crisis', cls: 'tx-red' },
+};
+
+function getBtcChipLabel(gate) {
+  if (gate.key === 'blocked') return 'BLOCKED';
+  if (gate.key === 'tight') return 'Tight Risk';
+  if (gate.key === 'allowed') return 'Allowed';
+  return '—';
+}
+
+function getScoreZoneMini(score) {
+  if (isNaN(score)) return { text: '—', cls: 'neutral' };
+  if (score >= 65) return { text: 'Green', cls: 'green' };
+  if (score >= 50) return { text: 'Amber', cls: 'amber' };
+  return { text: 'Red', cls: 'red' };
+}
 
 const PROMPT_L2 = `WTM Layer 2 — BTC Options Workflow
 
@@ -487,50 +572,91 @@ function getGate(score) {
   if (isNaN(score)) return {
     label: '—', key: 'unknown', bannerClass: 'neutral',
     bannerText: 'Enter Whinfell Score to calculate Gate Status',
-    pillClass: 'blocked', blocked: true, l2Disabled: true, l3Disabled: true,
+    bannerSub: 'WTM intake drives all BTC gate enforcement',
+    chipClass: 'neutral', blocked: true, l2Disabled: true, l3Disabled: true,
   };
   if (score < 50) return {
     label: 'NO NEW BTC RISK', key: 'blocked', bannerClass: 'red',
-    bannerText: '⛔ NO NEW BTC RISK — Score < 50 · BTC sections disabled · Reduce defensive posture',
-    pillClass: 'blocked', blocked: true, l2Disabled: true, l3Disabled: true,
+    bannerText: 'NO NEW BTC RISK',
+    bannerSub: 'Score < 50 · BTC sections disabled · Defensive posture required',
+    chipClass: 'blocked', blocked: true, l2Disabled: true, l3Disabled: true,
   };
   if (score < 65) return {
     label: 'Tight Risk Band', key: 'tight', bannerClass: 'amber',
-    bannerText: '⚠ Tight Risk Band — Score 50–64 · Reduced BTC sizing · Client basis favored',
-    pillClass: 'tight', blocked: false, l2Disabled: false, l3Disabled: false,
+    bannerText: 'Tight Risk Band',
+    bannerSub: 'Score 50–64 · Reduced BTC sizing · Client basis favored',
+    chipClass: 'tight', blocked: false, l2Disabled: false, l3Disabled: false,
   };
   return {
     label: 'Allowed', key: 'allowed', bannerClass: 'green',
-    bannerText: '✓ Allowed — Score ≥ 65 · Full WTM action layer active · BTC options + calendar arb permitted',
-    pillClass: 'allowed', blocked: false, l2Disabled: false, l3Disabled: false,
+    bannerText: 'Allowed',
+    bannerSub: 'Score ≥ 65 · Full WTM action layer · BTC options + calendar arb permitted',
+    chipClass: 'allowed', blocked: false, l2Disabled: false, l3Disabled: false,
   };
+}
+
+function updateTransmissionChip() {
+  const tx = document.getElementById('transmissionState').value;
+  const chip = document.getElementById('txChip');
+  if (!tx || !TX_CHIP[tx]) {
+    chip.textContent = '—';
+    chip.className = 'regime-chip tx-neutral';
+    return;
+  }
+  chip.textContent = TX_CHIP[tx].label;
+  chip.className = 'regime-chip ' + TX_CHIP[tx].cls;
 }
 
 function updateWtmLogic() {
   const score = parseInt(document.getElementById('whinfellScore').value, 10);
   const gate = getGate(score);
-  document.getElementById('gateStatus').value = gate.label;
+  const chipLabel = getBtcChipLabel(gate);
+  const zone = getScoreZoneMini(score);
+
+  const zoneEl = document.getElementById('scoreZoneMini');
+  zoneEl.textContent = zone.text;
+  zoneEl.className = 'score-zone-mini ' + zone.cls;
+
+  const gateDisplay = document.getElementById('gateStatusDisplay');
+  gateDisplay.textContent = gate.label;
+  gateDisplay.className = 'gate-status-display ' + gate.chipClass;
 
   const banner = document.getElementById('gateBanner');
-  banner.textContent = gate.bannerText;
+  banner.innerHTML = gate.bannerText + '<span class="gate-sub" id="gateBannerSub">' + gate.bannerSub + '</span>';
   banner.className = 'gate-banner ' + gate.bannerClass;
 
+  updateTransmissionChip();
+
+  const btcChipClass = 'chip-' + (gate.key === 'unknown' ? 'neutral' : gate.chipClass);
   ['gatePillL2', 'gatePillL3'].forEach(id => {
     const el = document.getElementById(id);
-    el.textContent = gate.blocked ? 'BLOCKED' : 'ALLOWED';
-    el.className = 'gate-pill ' + (gate.blocked ? 'blocked' : gate.pillClass);
+    el.textContent = chipLabel;
+    el.className = 'status-chip ' + gate.chipClass;
   });
 
-  document.getElementById('btcOptionsCard').classList.toggle('gate-blocked', gate.l2Disabled);
-  document.getElementById('btcCalendarCard').classList.toggle('gate-blocked', gate.l3Disabled);
+  ['btcOptionsCard', 'btcCalendarCard'].forEach(id => {
+    const card = document.getElementById(id);
+    card.classList.remove('chip-allowed', 'chip-tight', 'chip-blocked', 'chip-neutral');
+    card.classList.add(btcChipClass);
+    card.classList.toggle('gate-blocked', gate.l2Disabled);
+  });
+
   document.getElementById('btnCopyL2').disabled = gate.l2Disabled;
   document.getElementById('btnCopyL3').disabled = gate.l3Disabled;
 }
 
+function setSaveStatus(text, ok) {
+  ['saveStatus', 'saveStatusHeader'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.classList.toggle('ok', !!ok);
+  });
+}
+
 function saveSettings() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(collectFormData()));
-  document.getElementById('saveStatus').textContent = 'Saved · ' + new Date().toLocaleString();
-  document.getElementById('saveStatus').classList.add('ok');
+  setSaveStatus('Saved · ' + new Date().toLocaleString(), true);
   updateStatusPanels();
   updateWtmLogic();
   ['btnSave','btnSave2'].forEach(id => {
@@ -555,10 +681,7 @@ function applySettings(s) {
   updateGrossTotal();
   updateWtmLogic();
   updateStatusPanels();
-  if (s.savedAt) {
-    document.getElementById('saveStatus').textContent = 'Saved · ' + new Date(s.savedAt).toLocaleString();
-    document.getElementById('saveStatus').classList.add('ok');
-  }
+  if (s.savedAt) setSaveStatus('Saved · ' + new Date(s.savedAt).toLocaleString(), true);
 }
 
 function setLastOpened(elId, iso) {
@@ -630,8 +753,7 @@ async function copyPrompt(text, btn, defaultLabel) {
 }
 
 function markUnsaved() {
-  document.getElementById('saveStatus').textContent = 'Unsaved — click Save Settings';
-  document.getElementById('saveStatus').classList.remove('ok');
+  setSaveStatus('Unsaved — click Save Settings', false);
 }
 
 document.querySelectorAll('.tab').forEach(tab => {
@@ -652,7 +774,7 @@ document.getElementById('btnCopyL3').onclick = () => copyPrompt(PROMPT_L3, docum
 
 ['urlKoyfin','urlBarchart'].forEach(id => document.getElementById(id).onchange = () => { updateStatusPanels(); markUnsaved(); });
 ['transmissionState','regimeTag','basisPref','handoverNote'].forEach(id => {
-  document.getElementById(id).onchange = markUnsaved;
+  document.getElementById(id).onchange = () => { if (id === 'transmissionState') updateTransmissionChip(); markUnsaved(); };
   if (id === 'regimeTag') document.getElementById(id).oninput = markUnsaved;
 });
 ['grossA','grossB'].forEach(id => document.getElementById(id).oninput = () => { updateGrossTotal(); markUnsaved(); });

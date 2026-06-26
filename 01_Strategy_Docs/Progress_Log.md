@@ -14,7 +14,7 @@
 | C2 | Fallback Excel Dashboard | **Signed Off** | Edge + Safeguard | June 26, 2026 |
 | C3 | Series & Ticker Master List | **Signed Off** | Bridge | June 26, 2026 |
 | C4.5 | Operator Dashboard | **Shipped to Desk** | Bridge + Edge + Forge Master + Clarity | June 26, 2026 |
-| **C4.5 v1.1** | WTM Action Layer Upgrade | **Peer Review** | Bridge + Edge + Precision | June 26, 2026 |
+| **C4.5 v1.1** | WTM Action Layer Upgrade | **Arena PASS — TempLibby** | Bridge + Edge + Precision | June 26, 2026 |
 | C4 | Test 6 Refined Prompts | **Not Started** | Precision | - |
 | C5 | Quick Reference Card | **Not Started** | Hammer + Precision | - |
 
@@ -27,14 +27,14 @@
 | C1_Whinfell_Credit_Confirmation_Score_Logic.md | 1.0 | Signed Off |
 | C2_Whinfell_Credit_Score_Fallback.xlsx | 0.1 | Signed Off |
 | C3_Whinfell_Series_Ticker_Master_List.md | 1.0 | Signed Off |
-| **Whinfell_Operator_Dashboard.html** | **v1.1 Draft** | **WTM intake + gates + BTC L2/L3** |
+| **Whinfell_Operator_Dashboard.html** | **v1.1** | **Production polish — TempLibby sign-off pending** |
 | C4.5_Desk_Announcement_Memo.md | 1.0 | Ready to Send |
 
 ---
 
 ## Notes
 
-- **June 26, 2026** — **C4.5 v1.1:** Canonical Prompts A–E swapped. Self Review PASS → Peer Review active. Arena (VV + ID) queued.
+- **June 26, 2026** — **C4.5 v1.1 production polish:** Header, intake grid, gate banner, BTC chips, TX regime chips. Self → Peer → Arena (VV + FM) PASS. TempLibby sign-off pending.
 - **June 26, 2026** — **C4.5 SHIPPED TO DESK.** TempLibby final sign-off. Ship `2e7d7f3`.
 - **June 26, 2026** — File path confirmed: `08_Deliverables/Whinfell_Operator_Dashboard.html` (not GROK_BUILD_Outputs).
 - **June 26, 2026** — Next: C4 (Prompt Testing), C5 (Quick Reference Card).

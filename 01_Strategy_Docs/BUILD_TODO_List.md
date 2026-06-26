@@ -10,7 +10,7 @@
 
 | # | Deliverable | Priority | Status | Owner | Notes |
 |---|-------------|----------|--------|-------|-------|
-| **C4.5 v1.1** | WTM Action Layer Upgrade | **High** | **Peer Review** | Bridge + Edge + Precision | Canonical prompts A–E swapped; Arena queued |
+| **C4.5 v1.1** | WTM Action Layer Upgrade | **High** | **TempLibby Sign-off** | Bridge + Edge + Precision | Production polish complete; Arena PASS |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | Unblocked |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | - |
 
