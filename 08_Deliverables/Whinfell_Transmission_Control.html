@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whinfell Transmission Control — Phase 1.2</title>
+  <title>Whinfell Transmission Control — Phase 2 Draft</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -31,6 +31,12 @@
     .horizon-up { color: #3dd68c; }
     .horizon-flat { color: #8b9cb3; }
     .horizon-down { color: #f56565; }
+    .chain-arrow-thin { font-size: 10px; opacity: 0.7; }
+    .chain-arrow-mid { font-size: 13px; font-weight: 700; }
+    .chain-arrow-thick { font-size: 16px; font-weight: 900; }
+    .chain-node-weakest { box-shadow: 0 0 10px rgba(245,101,101,0.45); animation: pulse-weakest 2s ease-in-out infinite; }
+    @keyframes pulse-weakest { 0%, 100% { box-shadow: 0 0 6px rgba(245,101,101,0.3); } 50% { box-shadow: 0 0 14px rgba(245,101,101,0.55); } }
+    .snapshot-selected { border-color: #3d8bfd !important; background: rgba(61,139,253,0.08) !important; }
   </style>
 </head>
 <body class="bg-wtm-bg text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
@@ -39,7 +45,7 @@
     <div class="flex-1 px-5 py-3 flex flex-col justify-center gap-0.5">
       <div class="flex items-center gap-2.5 flex-wrap">
         <h1 class="text-[15px] font-semibold tracking-tight">Whinfell Transmission Control</h1>
-        <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 1.2</span>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 2 Draft</span>
       </div>
       <p class="text-[11px] text-wtm-muted">Execution layer · Perplexity handoff · WTM Action Layer</p>
     </div>
@@ -155,7 +161,19 @@
             <label class="block"><span class="text-[9px] text-wtm-muted uppercase">Basis Spread</span>
               <input id="l3BasisSpread" type="text" placeholder="manual" class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" /></label>
           </div>
-          <button id="btnCopyL3" type="button" class="text-xs px-3 py-1.5 rounded border border-wtm-border bg-wtm-bg hover:bg-wtm-border w-full">Copy Layer 3 Prompt</button>
+          <div class="grid grid-cols-3 gap-2 mb-2">
+            <label class="block"><span class="text-[9px] text-wtm-muted uppercase">Ref Low</span>
+              <input id="l3RefLow" type="text" placeholder="cheap floor" class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" /></label>
+            <label class="block"><span class="text-[9px] text-wtm-muted uppercase">Ref Mid</span>
+              <input id="l3RefMid" type="text" placeholder="neutral" class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" /></label>
+            <label class="block"><span class="text-[9px] text-wtm-muted uppercase">Ref High</span>
+              <input id="l3RefHigh" type="text" placeholder="rich ceiling" class="w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" /></label>
+          </div>
+          <div id="l3ScanResult" class="hidden mb-2 p-2 rounded border text-[10px]"></div>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="btnScanL3" type="button" class="text-xs px-3 py-1.5 rounded border border-wtm-accent/50 bg-wtm-accent/10 text-wtm-accent hover:bg-wtm-accent/20">Scan for Opportunities</button>
+            <button id="btnCopyL3" type="button" class="text-xs px-3 py-1.5 rounded border border-wtm-border bg-wtm-bg hover:bg-wtm-border">Copy Layer 3 Prompt</button>
+          </div>
         </div>
       </div>
     </div>
@@ -166,6 +184,7 @@
       <button type="button" data-tab="prompts" class="tab-btn tab-active px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">WTM Prompts A–E</button>
       <button type="button" data-tab="risk" class="tab-btn px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">Gross Risk</button>
       <button type="button" data-tab="tracer" class="tab-btn px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">Signal Tracer</button>
+      <button type="button" data-tab="scenario" class="tab-btn px-4 py-2.5 text-[11px] font-medium text-wtm-muted whitespace-nowrap">Scenario Loop</button>
     </div>
     <div class="flex-1 overflow-y-auto p-4">
       <div id="panel-prompts" class="space-y-2" data-panel="prompts"></div>
@@ -196,6 +215,17 @@
           <textarea id="handoverNote" rows="2" placeholder="Gate, regime, risks…" class="w-full mt-1 bg-wtm-bg border border-wtm-border rounded px-3 py-2 text-sm resize-y"></textarea></label>
       </div>
       <div id="panel-tracer" class="panel-hidden" data-panel="tracer">
+        <div id="shockConfigPanel" class="mb-3 p-2.5 rounded-lg border border-wtm-border bg-wtm-card/50">
+          <div class="flex flex-wrap gap-3 items-center mb-2">
+            <span class="text-[10px] font-bold uppercase text-wtm-muted">Shock Intensity</span>
+            <label class="flex items-center gap-1 text-[10px] cursor-pointer"><input type="radio" name="shockIntensity" value="mild" class="accent-wtm-accent" /> Mild (1d only)</label>
+            <label class="flex items-center gap-1 text-[10px] cursor-pointer"><input type="radio" name="shockIntensity" value="full" checked class="accent-wtm-accent" /> Full (all horizons)</label>
+          </div>
+          <div class="flex flex-wrap gap-2 items-center">
+            <span class="text-[10px] font-bold uppercase text-wtm-muted">Enabled Stages</span>
+            <div id="shockStageChecks" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
         <div class="flex flex-wrap gap-2 mb-3 items-center">
           <span class="text-[10px] font-bold uppercase text-wtm-accent">Shock Scenarios</span>
           <button type="button" data-shock="creditWidening" class="shock-btn text-[10px] px-2 py-1 rounded border border-wtm-border bg-wtm-card hover:bg-wtm-border">Credit Widening</button>
@@ -203,8 +233,18 @@
           <button type="button" data-shock="btcDecoupling" class="shock-btn text-[10px] px-2 py-1 rounded border border-wtm-border bg-wtm-card hover:bg-wtm-border">BTC Decoupling</button>
           <button type="button" data-shock="volSpike" class="shock-btn text-[10px] px-2 py-1 rounded border border-wtm-border bg-wtm-card hover:bg-wtm-border">Vol Spike</button>
           <button type="button" id="btnClearShock" class="text-[10px] px-2 py-1 rounded border border-wtm-red/50 text-wtm-red bg-red-500/10 hover:bg-red-500/20">Clear Shock</button>
-          <button type="button" id="btnRerunTracer" class="text-[10px] px-2 py-1 rounded border border-wtm-accent/50 text-wtm-accent bg-wtm-accent/10 hover:bg-wtm-accent/20">Re-run Tracer</button>
+          <button type="button" id="btnReevaluate" class="text-[10px] px-2 py-1 rounded border border-wtm-accent/50 text-wtm-accent bg-wtm-accent/10 hover:bg-wtm-accent/20 font-semibold">Re-evaluate</button>
           <span id="activeShockLabel" class="text-[10px] text-wtm-muted ml-auto">No active shock</span>
+        </div>
+        <div class="mb-3 p-2.5 rounded-lg border border-wtm-border bg-wtm-card/40">
+          <div class="flex flex-wrap gap-2 items-center mb-2">
+            <span class="text-[10px] font-bold uppercase text-wtm-accent">Tracer Snapshots</span>
+            <span class="text-[9px] text-wtm-muted">(max 12 · persisted)</span>
+            <input id="snapshotName" type="text" placeholder="Snapshot name…" class="flex-1 min-w-[120px] bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" />
+            <button type="button" id="btnSaveSnapshot" class="text-[10px] px-2 py-1 rounded border border-wtm-green/50 text-wtm-green bg-emerald-500/10 hover:bg-emerald-500/20">Save</button>
+          </div>
+          <div id="snapshotList" class="flex flex-wrap gap-1.5 min-h-[28px]"></div>
+          <div id="snapshotCompare" class="hidden mt-2 p-2 rounded border border-wtm-accent/30 bg-wtm-accent/5 text-[10px]"></div>
         </div>
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
           <div class="xl:col-span-2 overflow-x-auto">
@@ -215,7 +255,7 @@
               </thead>
               <tbody id="tracerHorizonBody" class="divide-y divide-wtm-border"></tbody>
             </table>
-            <p class="text-[9px] text-wtm-muted mt-1">↑ confirming · → neutral · ↓ impairing · Phase 2 auto-fill placeholder</p>
+            <p class="text-[9px] text-wtm-muted mt-1">↑ confirming · → neutral · ↓ impairing · operator-marked horizons</p>
           </div>
           <div>
             <p class="text-[10px] font-bold uppercase text-wtm-accent mb-2">Transmission Chain</p>
@@ -236,18 +276,25 @@
           </div>
         </div>
       </div>
+      <div id="panel-scenario" class="panel-hidden" data-panel="scenario">
+        <p class="text-[10px] text-wtm-muted mb-3">Session-only what-if intake variants — compare gate and transmission health side-by-side without overwriting live intake.</p>
+        <div id="scenarioColumns" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+        <button type="button" id="btnRunScenarioLoop" class="mt-3 text-[10px] px-3 py-1.5 rounded border border-wtm-accent/50 text-wtm-accent bg-wtm-accent/10 hover:bg-wtm-accent/20">Run Comparison</button>
+      </div>
     </div>
   </section>
 
   <div id="toast" class="fixed bottom-4 right-4 max-w-sm px-4 py-3 rounded-lg border border-wtm-border bg-wtm-card text-xs shadow-xl translate-y-20 opacity-0 transition-all z-50 pointer-events-none"></div>
 
 <script>
-/** Whinfell Transmission Control — Phase 1.2 · Storage v1 (schema 2) */
+/** Whinfell Transmission Control — Phase 2 Draft · Storage v1 (schema 3) */
 
 const STORAGE_KEY = 'whinfell_transmission_control_v1';
 const LEGACY_KEYS = ['whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
-const STATE_VERSION = 2;
-const EXPORT_FORMAT = 'WTC-1.2';
+const STATE_VERSION = 3;
+const EXPORT_FORMAT = 'WTC-2.0';
+const MAX_SNAPSHOTS = 12;
+const SCENARIO_VARIANT_COUNT = 3;
 const RESEARCH_EXPORT_FORMAT = 'WTM EXPORT v2.0';
 const BTC_BIAS_MAP = { confirming: 'up', dragging: 'down', neutral: 'flat' };
 const HORIZON_PARSE = { '1d': 'd1', '5d': 'd5', '20d': 'd20', '60d': 'd60', d1: 'd1', d5: 'd5', d20: 'd20', d60: 'd60' };
@@ -323,6 +370,8 @@ const PROMPTS = [
 
 let appState = createEmptyState();
 let preShockSnapshot = null;
+let compareSnapshotId = null;
+let scenarioLoop = { variants: [], lastResults: [] };
 
 function el(id) { return document.getElementById(id); }
 
@@ -332,14 +381,19 @@ function createEmptyHorizons() {
   return h;
 }
 
+function createEmptyShockConfig() {
+  return { intensity: 'full', disabledStages: [] };
+}
+
 function createEmptyState() {
   return {
     version: STATE_VERSION,
     intake: { whinfellScore: '', transmissionState: '', regimeTag: '' },
     grossRisk: { bookA: '', bookB: '', capitalBaseMm: '', posture: '', postureManual: false, handoverNote: '' },
     research: { keyObservation: '', grossRiskRecommendation: '', btcBias: '', timestamp: '' },
-    tracer: { horizons: createEmptyHorizons(), activeShock: null },
-    btcL3: { nearMonth: '', farMonth: '', basisSpread: '' },
+    tracer: { horizons: createEmptyHorizons(), activeShock: null, shockConfig: createEmptyShockConfig() },
+    snapshots: [],
+    btcL3: { nearMonth: '', farMonth: '', basisSpread: '', refLow: '', refMid: '', refHigh: '', lastScan: {} },
     urls: { ...DEFAULTS.urls },
     meta: { savedAt: null, lastKoyfin: null, lastBarchart: null },
   };
@@ -398,11 +452,53 @@ function computeTracerSummary(horizons) {
   return { stageNets, chainHealth, overall, weakestIdx };
 }
 
+const HEALTH_LABELS = [
+  { min: 80, label: 'Strong' },
+  { min: 65, label: 'Constructive' },
+  { min: 50, label: 'Mixed' },
+  { min: 35, label: 'Fragile' },
+  { min: 0, label: 'Impaired' },
+];
+
+function healthLabel(score) {
+  return (HEALTH_LABELS.find(h => score >= h.min) || HEALTH_LABELS[HEALTH_LABELS.length - 1]).label;
+}
+
+function computeHealthScore(state) {
+  const horizons = state.tracer?.horizons || createEmptyHorizons();
+  const summary = computeTracerSummary(horizons);
+  const whinfell = parseInt(state.intake?.whinfellScore, 10);
+  const maxNet = 4;
+  const minNet = -4;
+  const ladderAvg = LADDER.reduce((sum, row, i) => {
+    const net = summary.stageNets[i];
+    return sum + ((net - minNet) / (maxNet - minNet)) * 100;
+  }, 0) / LADDER.length;
+  let coherenceSum = 0;
+  let coherenceCount = 0;
+  summary.chainHealth.forEach(delta => {
+    if (delta === null) return;
+    coherenceSum += Math.max(0, 100 - Math.abs(delta) * 25);
+    coherenceCount++;
+  });
+  const coherence = coherenceCount ? coherenceSum / coherenceCount : 50;
+  const whinfellComponent = Number.isNaN(whinfell) ? 50 : whinfell;
+  const score = Math.round(Math.max(0, Math.min(100,
+    ladderAvg * 0.40 + whinfellComponent * 0.35 + coherence * 0.25
+  )));
+  const weakestStage = summary.weakestIdx >= 0 ? LADDER[summary.weakestIdx].name : '—';
+  return { score, label: healthLabel(score), weakestStage, weakestIdx: summary.weakestIdx, summary };
+}
+
 function chainArrow(delta) {
-  if (delta === null) return '';
-  if (delta >= 2) return { sym: '⇄', cls: 'text-wtm-green' };
-  if (delta <= -2) return { sym: '⚠', cls: 'text-wtm-red' };
-  return { sym: '→', cls: 'text-wtm-muted' };
+  if (delta === null) return null;
+  const abs = Math.abs(delta);
+  const sizeCls = abs >= 3 ? 'chain-arrow-thick' : abs >= 2 ? 'chain-arrow-mid' : 'chain-arrow-thin';
+  if (delta >= 2) return { sym: '⇄', cls: `text-wtm-green ${sizeCls}` };
+  if (delta <= -2) return { sym: '⚠', cls: `text-wtm-red ${sizeCls}` };
+  if (delta === 1) return { sym: '↗', cls: `text-wtm-green ${sizeCls}` };
+  if (delta === -1) return { sym: '↘', cls: `text-wtm-amber ${sizeCls}` };
+  return { sym: '→', cls: `text-wtm-muted ${sizeCls}` };
 }
 
 function parseScore(val) {
@@ -597,11 +693,14 @@ function buildWtmExportV20() {
 function buildPerplexityExport() {
   const state = buildStateFromDOM();
   const gate = deriveGate(state);
+  const health = computeHealthScore(state);
   const total = deriveGrossTotal(state);
   const posture = state.grossRisk.posture || suggestPosture(gate.score);
+  const shockCfg = state.tracer.shockConfig || createEmptyShockConfig();
   const lines = [
     'WHINFELL TRANSMISSION CONTROL — STATE EXPORT',
     `Format: ${EXPORT_FORMAT}`,
+    `Schema Version: ${STATE_VERSION}`,
     `Generated: ${new Date().toISOString()}`,
     '---',
     `Whinfell Score: ${state.intake.whinfellScore || '—'}`,
@@ -609,6 +708,7 @@ function buildPerplexityExport() {
     `Regime Tag: ${state.intake.regimeTag || '—'}`,
     `Gate Status: ${gate.label}`,
     `Score Zone: ${gate.zone.text}`,
+    `Transmission Health: ${health.score} (${health.label}) · Weakest: ${health.weakestStage}`,
     '---',
     `Gross Risk Book A (%): ${state.grossRisk.bookA || '0'}`,
     `Gross Risk Book B (%): ${state.grossRisk.bookB || '0'}`,
@@ -629,11 +729,26 @@ function buildPerplexityExport() {
   const shock = state.tracer.activeShock && SHOCKS[state.tracer.activeShock];
   lines.push('---');
   lines.push(`Active Shock: ${shock ? shock.label : 'None'}`);
+  lines.push(`Shock Intensity: ${shockCfg.intensity || 'full'}`);
+  lines.push(`Shock Disabled Stages: ${(shockCfg.disabledStages || []).length ? shockCfg.disabledStages.join(', ') : 'None'}`);
+  if ((state.snapshots || []).length) {
+    lines.push('---');
+    lines.push('Tracer Snapshots:');
+    state.snapshots.forEach(s => {
+      lines.push(`  - ${s.name} | ${s.savedAt?.slice(0, 19) || '—'} | Health band: ${s.scoreBand || '—'} | Regime: ${s.regimeTag || '—'}`);
+    });
+  }
   if (state.btcL3.nearMonth || state.btcL3.farMonth || state.btcL3.basisSpread) {
     lines.push('---');
     lines.push(`Near Month: ${state.btcL3.nearMonth || '—'}`);
     lines.push(`Far Month: ${state.btcL3.farMonth || '—'}`);
     lines.push(`Basis Spread: ${state.btcL3.basisSpread || '—'}`);
+    lines.push(`Ref Low: ${state.btcL3.refLow || '—'}`);
+    lines.push(`Ref Mid: ${state.btcL3.refMid || '—'}`);
+    lines.push(`Ref High: ${state.btcL3.refHigh || '—'}`);
+    if (state.btcL3.lastScan?.result) {
+      lines.push(`Last L3 Scan: ${state.btcL3.lastScan.result} — ${state.btcL3.lastScan.reason || ''}`);
+    }
   }
   lines.push('---');
   lines.push('End of WTC Export — paste into Perplexity or re-import via Transmission Control');
@@ -707,10 +822,18 @@ function applyImportFields(fields) {
 
 function normalizeLegacyState(raw) {
   if (!raw || typeof raw !== 'object') return createEmptyState();
-  if (raw.version === STATE_VERSION && raw.intake) return {
+  if ((raw.version === STATE_VERSION || raw.version === 2) && raw.intake) return {
     ...createEmptyState(), ...raw,
+    version: STATE_VERSION,
     research: { ...createEmptyState().research, ...(raw.research || {}) },
-    tracer: { ...createEmptyState().tracer, ...raw.tracer, horizons: { ...createEmptyHorizons(), ...(raw.tracer?.horizons || {}) } },
+    snapshots: Array.isArray(raw.snapshots) ? raw.snapshots.slice(0, MAX_SNAPSHOTS) : [],
+    tracer: {
+      ...createEmptyState().tracer,
+      ...raw.tracer,
+      horizons: { ...createEmptyHorizons(), ...(raw.tracer?.horizons || {}) },
+      shockConfig: { ...createEmptyShockConfig(), ...(raw.tracer?.shockConfig || {}) },
+    },
+    btcL3: { ...createEmptyState().btcL3, ...(raw.btcL3 || {}) },
   };
 
   const s = createEmptyState();
@@ -742,6 +865,10 @@ function normalizeLegacyState(raw) {
     });
   }
   s.tracer.activeShock = raw.tracer?.activeShock ?? null;
+  s.tracer.shockConfig = { ...createEmptyShockConfig(), ...(raw.tracer?.shockConfig || {}) };
+  s.snapshots = Array.isArray(raw.snapshots) ? raw.snapshots.slice(0, MAX_SNAPSHOTS) : [];
+  s.btcL3 = { ...s.btcL3, ...(raw.btcL3 || {}) };
+  s.version = STATE_VERSION;
   return s;
 }
 
@@ -769,11 +896,20 @@ function buildStateFromDOM() {
       handoverNote: el('handoverNote').value,
     },
     research: { ...(appState.research || createEmptyState().research) },
-    tracer: { horizons, activeShock: appState.tracer.activeShock },
+    tracer: {
+      horizons,
+      activeShock: appState.tracer.activeShock,
+      shockConfig: readShockConfigFromDOM(),
+    },
+    snapshots: [...(appState.snapshots || [])],
     btcL3: {
       nearMonth: el('l3NearMonth').value,
       farMonth: el('l3FarMonth').value,
       basisSpread: el('l3BasisSpread').value,
+      refLow: el('l3RefLow').value,
+      refMid: el('l3RefMid').value,
+      refHigh: el('l3RefHigh').value,
+      lastScan: { ...(appState.btcL3?.lastScan || {}) },
     },
     urls: { koyfin: el('urlKoyfin').value, barchart: el('urlBarchart').value },
     meta: {
@@ -799,6 +935,11 @@ function applyStateToDOM(state) {
   el('l3NearMonth').value = appState.btcL3.nearMonth;
   el('l3FarMonth').value = appState.btcL3.farMonth;
   el('l3BasisSpread').value = appState.btcL3.basisSpread;
+  el('l3RefLow').value = appState.btcL3.refLow || '';
+  el('l3RefMid').value = appState.btcL3.refMid || '';
+  el('l3RefHigh').value = appState.btcL3.refHigh || '';
+  applyShockConfigToDOM(appState.tracer.shockConfig);
+  renderL3ScanResult(appState.btcL3.lastScan);
   LADDER.forEach(row => {
     HORIZONS.forEach(h => {
       const sel = el(`hz-${row.id}-${h}`);
@@ -853,6 +994,254 @@ function renderPrompts() {
   });
 }
 
+function readShockConfigFromDOM() {
+  const intensity = document.querySelector('input[name="shockIntensity"]:checked')?.value || 'full';
+  const disabledStages = [];
+  document.querySelectorAll('.shock-stage-cb').forEach(cb => {
+    if (!cb.checked) disabledStages.push(cb.dataset.stage);
+  });
+  return { intensity, disabledStages };
+}
+
+function applyShockConfigToDOM(cfg) {
+  const c = cfg || createEmptyShockConfig();
+  document.querySelectorAll('input[name="shockIntensity"]').forEach(r => {
+    r.checked = r.value === (c.intensity || 'full');
+  });
+  document.querySelectorAll('.shock-stage-cb').forEach(cb => {
+    cb.checked = !(c.disabledStages || []).includes(cb.dataset.stage);
+  });
+}
+
+function renderShockStageChecks() {
+  el('shockStageChecks').innerHTML = LADDER.map(row => `
+    <label class="flex items-center gap-1 text-[9px] cursor-pointer px-1.5 py-0.5 rounded border border-wtm-border bg-wtm-bg">
+      <input type="checkbox" class="shock-stage-cb accent-wtm-accent" data-stage="${row.id}" checked />
+      ${row.short}
+    </label>`).join('');
+  document.querySelectorAll('.shock-stage-cb').forEach(cb => {
+    cb.onchange = () => {
+      appState.tracer.shockConfig = readShockConfigFromDOM();
+      markDirty();
+    };
+  });
+  document.querySelectorAll('input[name="shockIntensity"]').forEach(r => {
+    r.onchange = () => {
+      appState.tracer.shockConfig = readShockConfigFromDOM();
+      markDirty();
+    };
+  });
+}
+
+function makeSnapshotId() {
+  return 'snap_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+}
+
+function saveTracerSnapshot() {
+  const name = (el('snapshotName').value || '').trim();
+  if (!name) { showToast('Enter a snapshot name'); return; }
+  const state = buildStateFromDOM();
+  const gate = deriveGate(state);
+  const snap = {
+    id: makeSnapshotId(),
+    name,
+    savedAt: new Date().toISOString(),
+    scoreBand: gate.zone.text,
+    regimeTag: state.intake.regimeTag,
+    intake: { ...state.intake },
+    tracer: { horizons: JSON.parse(JSON.stringify(state.tracer.horizons)), activeShock: state.tracer.activeShock },
+    posture: state.grossRisk.posture || suggestPosture(gate.score),
+  };
+  appState.snapshots = [snap, ...(appState.snapshots || [])].slice(0, MAX_SNAPSHOTS);
+  el('snapshotName').value = '';
+  renderSnapshotList();
+  markDirty();
+  showToast(`Snapshot saved: ${name}`);
+}
+
+function deleteTracerSnapshot(id) {
+  appState.snapshots = (appState.snapshots || []).filter(s => s.id !== id);
+  if (compareSnapshotId === id) { compareSnapshotId = null; el('snapshotCompare').classList.add('hidden'); }
+  renderSnapshotList();
+  markDirty();
+  showToast('Snapshot deleted');
+}
+
+function loadTracerSnapshot(id) {
+  const snap = (appState.snapshots || []).find(s => s.id === id);
+  if (!snap) return;
+  if (snap.tracer?.horizons) {
+    LADDER.forEach(row => {
+      HORIZONS.forEach(h => {
+        const sel = el(`hz-${row.id}-${h}`);
+        if (sel) sel.value = snap.tracer.horizons[row.id]?.[h] || '';
+      });
+    });
+  }
+  appState.tracer.activeShock = snap.tracer?.activeShock || null;
+  renderTracerVisual();
+  markDirty();
+  showToast(`Loaded snapshot: ${snap.name}`);
+}
+
+function toggleCompareSnapshot(id) {
+  compareSnapshotId = compareSnapshotId === id ? null : id;
+  renderSnapshotList();
+  renderSnapshotCompare();
+}
+
+function renderSnapshotCompare() {
+  const panel = el('snapshotCompare');
+  if (!compareSnapshotId) { panel.classList.add('hidden'); return; }
+  const snap = (appState.snapshots || []).find(s => s.id === compareSnapshotId);
+  if (!snap) { panel.classList.add('hidden'); return; }
+  const current = buildStateFromDOM();
+  const curHealth = computeHealthScore(current);
+  const snapState = { intake: snap.intake || {}, tracer: snap.tracer || {} };
+  const snapHealth = computeHealthScore(snapState);
+  const snapSummary = snapHealth.summary;
+  const curSummary = curHealth.summary;
+  const diffs = LADDER.map((row, i) => {
+    const d = curSummary.stageNets[i] - snapSummary.stageNets[i];
+    return `${row.short}: ${d > 0 ? '+' : ''}${d}`;
+  }).join(' · ');
+  panel.classList.remove('hidden');
+  panel.innerHTML = `<span class="font-bold text-wtm-accent uppercase">Compare — ${snap.name}</span>
+    <div class="mt-1 grid grid-cols-2 gap-2">
+      <div><span class="text-wtm-muted">Snapshot:</span> Health ${snapHealth.score} (${snapHealth.label}) · ${snap.scoreBand || '—'}</div>
+      <div><span class="text-wtm-muted">Current:</span> Health ${curHealth.score} (${curHealth.label}) · ${deriveGate(current).zone.text}</div>
+    </div>
+    <p class="mt-1 text-wtm-muted">Net deltas (current − snapshot): ${diffs}</p>`;
+}
+
+function snapshotHealth(snap) {
+  return computeHealthScore({ intake: snap.intake || {}, tracer: snap.tracer || {} });
+}
+
+function renderSnapshotList() {
+  const list = el('snapshotList');
+  const snaps = appState.snapshots || [];
+  if (!snaps.length) {
+    list.innerHTML = '<span class="text-[9px] text-wtm-muted italic">No snapshots saved</span>';
+    return;
+  }
+  list.innerHTML = snaps.map(s => {
+    const h = snapshotHealth(s);
+    return `
+    <div class="flex items-center gap-1 px-2 py-1 rounded border text-[9px] ${compareSnapshotId === s.id ? 'snapshot-selected border-wtm-accent' : 'border-wtm-border bg-wtm-bg'}">
+      <span class="font-semibold">${s.name}</span>
+      <span class="text-wtm-muted">${h.score} (${h.label}) · ${s.scoreBand || '—'}</span>
+      <button type="button" class="snap-load text-wtm-accent hover:underline" data-id="${s.id}">Load</button>
+      <button type="button" class="snap-compare text-wtm-muted hover:underline" data-id="${s.id}">${compareSnapshotId === s.id ? 'Hide' : 'Compare'}</button>
+      <button type="button" class="snap-del text-wtm-red hover:underline" data-id="${s.id}">Del</button>
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.snap-load').forEach(b => b.onclick = () => loadTracerSnapshot(b.dataset.id));
+  list.querySelectorAll('.snap-compare').forEach(b => b.onclick = () => toggleCompareSnapshot(b.dataset.id));
+  list.querySelectorAll('.snap-del').forEach(b => b.onclick = () => deleteTracerSnapshot(b.dataset.id));
+}
+
+function initScenarioLoop() {
+  scenarioLoop.variants = Array.from({ length: SCENARIO_VARIANT_COUNT }, (_, i) => ({
+    id: 'var_' + (i + 1),
+    label: ['Base Case', 'Stress Case', 'Upside Case'][i] || `Variant ${i + 1}`,
+    whinfellScore: '',
+    transmissionState: '',
+    regimeTag: '',
+  }));
+  renderScenarioColumns();
+}
+
+function renderScenarioColumns() {
+  el('scenarioColumns').innerHTML = scenarioLoop.variants.map((v, i) => `
+    <div class="bg-wtm-card border border-wtm-border rounded-lg p-3" data-var-idx="${i}">
+      <p class="text-[10px] font-bold uppercase text-wtm-accent mb-2">${v.label}</p>
+      <label class="block mb-2"><span class="text-[9px] text-wtm-muted uppercase">Whinfell Score</span>
+        <input type="number" min="0" max="100" class="sc-score w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" value="${v.whinfellScore}" /></label>
+      <label class="block mb-2"><span class="text-[9px] text-wtm-muted uppercase">Transmission State</span>
+        <select class="sc-tx w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]">
+          <option value="">—</option>
+          ${Object.keys(TX_META).map(k => `<option value="${k}" ${v.transmissionState === k ? 'selected' : ''}>${TX_META[k].label}</option>`).join('')}
+        </select></label>
+      <label class="block mb-2"><span class="text-[9px] text-wtm-muted uppercase">Regime Tag</span>
+        <input type="text" class="sc-regime w-full mt-0.5 bg-wtm-bg border border-wtm-border rounded px-2 py-1 text-[10px]" value="${v.regimeTag}" /></label>
+      <div class="sc-result mt-2 p-2 rounded border border-wtm-border bg-wtm-bg text-[9px] text-wtm-muted">Run comparison to evaluate</div>
+    </div>`).join('');
+  el('scenarioColumns').querySelectorAll('[data-var-idx]').forEach(col => {
+    const idx = parseInt(col.dataset.varIdx, 10);
+    col.querySelector('.sc-score').oninput = e => { scenarioLoop.variants[idx].whinfellScore = e.target.value; };
+    col.querySelector('.sc-tx').onchange = e => { scenarioLoop.variants[idx].transmissionState = e.target.value; };
+    col.querySelector('.sc-regime').oninput = e => { scenarioLoop.variants[idx].regimeTag = e.target.value; };
+  });
+}
+
+function runScenarioLoop() {
+  const current = buildStateFromDOM();
+  scenarioLoop.lastResults = scenarioLoop.variants.map(v => {
+    const variantState = {
+      intake: { whinfellScore: v.whinfellScore, transmissionState: v.transmissionState, regimeTag: v.regimeTag },
+      tracer: current.tracer,
+    };
+    const gate = deriveGate(variantState);
+    const health = computeHealthScore(variantState);
+    const posture = suggestPosture(gate.score);
+    return { ...v, gate: gate.label, health: health.score, healthLabel: health.label, weakest: health.weakestStage, posture: POSTURE_LABELS[posture] || '—' };
+  });
+  el('scenarioColumns').querySelectorAll('[data-var-idx]').forEach(col => {
+    const idx = parseInt(col.dataset.varIdx, 10);
+    const r = scenarioLoop.lastResults[idx];
+    const resEl = col.querySelector('.sc-result');
+    if (!r || !resEl) return;
+    const healthCls = r.health >= 65 ? 'text-wtm-green' : r.health >= 50 ? 'text-wtm-amber' : 'text-wtm-red';
+    resEl.innerHTML = `<div class="font-bold ${healthCls}">Health ${r.health} (${r.healthLabel})</div>
+      <div>Gate: ${r.gate} · Posture: ${r.posture}</div>
+      <div class="text-wtm-muted">Weakest: ${r.weakest}</div>`;
+  });
+  showToast('Scenario comparison updated');
+}
+
+function parseL3Number(val) {
+  const n = parseFloat(String(val).replace(/[^0-9.-]/g, ''));
+  return Number.isFinite(n) ? n : NaN;
+}
+
+function scanBtcL3Opportunity(btcL3) {
+  const spread = parseL3Number(btcL3.basisSpread);
+  const low = parseL3Number(btcL3.refLow);
+  const mid = parseL3Number(btcL3.refMid);
+  const high = parseL3Number(btcL3.refHigh);
+  if (Number.isNaN(spread)) return { result: 'neutral', reason: 'Enter a numeric basis spread', scannedAt: new Date().toISOString() };
+  if (Number.isNaN(low) && Number.isNaN(high)) return { result: 'neutral', reason: 'Enter ref low and/or ref high thresholds', scannedAt: new Date().toISOString() };
+  if (!Number.isNaN(high) && spread >= high) {
+    return { result: 'rich', reason: `Spread ${spread} ≥ ref high ${high} — calendar rich / sell-spread bias`, scannedAt: new Date().toISOString() };
+  }
+  if (!Number.isNaN(low) && spread <= low) {
+    return { result: 'cheap', reason: `Spread ${spread} ≤ ref low ${low} — calendar cheap / buy-spread bias`, scannedAt: new Date().toISOString() };
+  }
+  const band = !Number.isNaN(mid) ? `near ref mid ${mid}` : `between ${low} and ${high}`;
+  return { result: 'neutral', reason: `Spread ${spread} ${band} — no edge vs references`, scannedAt: new Date().toISOString() };
+}
+
+function renderL3ScanResult(scan) {
+  const panel = el('l3ScanResult');
+  if (!scan?.result) { panel.classList.add('hidden'); return; }
+  const cls = scan.result === 'rich' ? 'border-wtm-green text-wtm-green bg-emerald-500/10'
+    : scan.result === 'cheap' ? 'border-wtm-accent text-wtm-accent bg-wtm-accent/10'
+    : 'border-wtm-border text-wtm-muted bg-wtm-bg';
+  panel.className = `mb-2 p-2 rounded border text-[10px] ${cls}`;
+  panel.classList.remove('hidden');
+  panel.innerHTML = `<span class="font-bold uppercase">${scan.result}</span> — ${scan.reason || ''}`;
+}
+
+function runL3Scan() {
+  const state = buildStateFromDOM();
+  const scan = scanBtcL3Opportunity(state.btcL3);
+  appState.btcL3.lastScan = scan;
+  renderL3ScanResult(scan);
+  markDirty();
+  showToast(`L3 scan: ${scan.result}`);
+}
+
 function renderTracerHorizonTable() {
   el('tracerHorizonBody').innerHTML = LADDER.map(row => `
     <tr class="bg-wtm-bg/50" data-stage="${row.id}">
@@ -889,14 +1278,20 @@ function renderTracerVisual() {
   const chain = el('tracerChain');
   chain.innerHTML = LADDER.map((row, i) => {
     const net = summary.stageNets[i];
-    const nodeCls = i === summary.weakestIdx && net < 0 ? 'border-wtm-red text-wtm-red bg-red-500/15' : net > 0 ? 'border-wtm-green text-wtm-green bg-emerald-500/10' : 'border-wtm-border text-wtm-muted bg-wtm-bg';
+    const isWeakest = i === summary.weakestIdx;
+    const nodeCls = isWeakest
+      ? 'border-wtm-red text-wtm-red bg-red-500/20 chain-node-weakest'
+      : net > 0 ? 'border-wtm-green text-wtm-green bg-emerald-500/10'
+      : net < 0 ? 'border-wtm-amber text-wtm-amber bg-amber-500/10'
+      : 'border-wtm-border text-wtm-muted bg-wtm-bg';
     const arrow = i > 0 ? chainArrow(summary.chainHealth[i]) : null;
-    const arrowHtml = arrow ? `<span class="${arrow.cls} font-bold px-0.5">${arrow.sym}</span>` : '';
-    return `${arrowHtml}<span class="px-1.5 py-0.5 rounded border text-[8px] font-bold ${nodeCls}">${row.short}</span>`;
+    const arrowHtml = arrow ? `<span class="${arrow.cls} px-0.5 inline-block" title="Δ ${summary.chainHealth[i]}">${arrow.sym}</span>` : '';
+    return `${arrowHtml}<span class="px-1.5 py-0.5 rounded border text-[8px] font-bold ${nodeCls}" title="${row.name} · net ${net}">${row.short}</span>`;
   }).join('');
 
-  const healthLabel = summary.overall > 4 ? 'Strong' : summary.overall > 0 ? 'Constructive' : summary.overall < -4 ? 'Impaired' : summary.overall < 0 ? 'Fragile' : 'Mixed';
-  el('tracerOverall').textContent = `Overall health: ${healthLabel} (net ${summary.overall > 0 ? '+' : ''}${summary.overall})`;
+  const health = computeHealthScore(state);
+  el('tracerOverall').textContent = `Transmission Health: ${health.score} (${health.label}) · Weakest: ${health.weakestStage} · ladder net ${summary.overall > 0 ? '+' : ''}${summary.overall}`;
+  renderSnapshotCompare();
 
   const shockLabel = state.tracer.activeShock && SHOCKS[state.tracer.activeShock];
   el('activeShockLabel').textContent = shockLabel ? `Active: ${shockLabel.label}` : 'No active shock';
@@ -936,7 +1331,9 @@ function renderAll() {
   banner.className = `shrink-0 px-5 py-3.5 text-center border-b border-wtm-border transition-all ${gate.bannerBg} ${gate.glow}`;
   el('gateBannerTitle').textContent = gate.bannerTitle;
   el('gateBannerTitle').className = `text-lg font-extrabold tracking-wide uppercase ${gate.bannerTitleCls}`;
-  el('gateBannerSub').textContent = gate.bannerSub;
+  const health = computeHealthScore(state);
+  const healthSub = `Transmission Health: ${health.score} (${health.label}) · Weakest: ${health.weakestStage}`;
+  el('gateBannerSub').textContent = gate.key === 'unknown' ? gate.bannerSub : `${gate.bannerSub} · ${healthSub}`;
   el('gateBannerSub').className = `text-[11px] mt-1 font-medium ${gate.bannerSubCls}`;
 
   el('scoreZoneChip').textContent = zone.text;
@@ -977,13 +1374,17 @@ function renderAll() {
 function applyShock(shockId, skipSnapshot) {
   const shock = SHOCKS[shockId];
   if (!shock) return;
+  const cfg = readShockConfigFromDOM();
+  appState.tracer.shockConfig = cfg;
   if (!skipSnapshot && !preShockSnapshot) {
     preShockSnapshot = JSON.parse(JSON.stringify(buildStateFromDOM().tracer.horizons));
   }
+  const horizonsToApply = cfg.intensity === 'mild' ? ['d1'] : HORIZONS;
   LADDER.forEach(row => {
+    if ((cfg.disabledStages || []).includes(row.id)) return;
     const effects = shock.effects[row.id];
     if (!effects) return;
-    HORIZONS.forEach(h => {
+    horizonsToApply.forEach(h => {
       if (effects[h]) {
         const sel = el(`hz-${row.id}-${h}`);
         if (sel) sel.value = effects[h];
@@ -992,20 +1393,23 @@ function applyShock(shockId, skipSnapshot) {
   });
   appState.tracer.activeShock = shockId;
   renderTracerVisual();
+  renderAll();
   markDirty();
-  showToast(`Shock applied: ${shock.label}`);
+  const stageNote = (cfg.disabledStages || []).length ? ` · ${cfg.disabledStages.length} stage(s) skipped` : '';
+  showToast(`Shock applied (${cfg.intensity}): ${shock.label}${stageNote}`);
 }
 
-function rerunTracer() {
+function reevaluateTransmission() {
   const shockId = appState.tracer.activeShock;
   if (shockId && SHOCKS[shockId]) {
     applyShock(shockId, true);
-    showToast(`Tracer re-run: ${SHOCKS[shockId].label}`);
   } else {
     renderTracerVisual();
-    showToast('Tracer matrix refreshed');
+    renderAll();
   }
+  const health = computeHealthScore(buildStateFromDOM());
   markDirty();
+  showToast(`Re-evaluated · Health ${health.score} (${health.label})`);
 }
 
 function clearShock() {
@@ -1026,14 +1430,18 @@ function clearShock() {
 
 function buildL3Prompt() {
   const state = buildStateFromDOM();
-  const { nearMonth, farMonth, basisSpread } = state.btcL3;
+  const { nearMonth, farMonth, basisSpread, refLow, refMid, refHigh, lastScan } = state.btcL3;
   let extra = '';
-  if (nearMonth || farMonth || basisSpread) {
+  if (nearMonth || farMonth || basisSpread || refLow || refMid || refHigh) {
     extra = '\n\nManual spread inputs:\n';
     if (nearMonth) extra += `- Near Month: ${nearMonth}\n`;
     if (farMonth) extra += `- Far Month: ${farMonth}\n`;
     if (basisSpread) extra += `- Basis Spread: ${basisSpread}\n`;
+    if (refLow) extra += `- Ref Low: ${refLow}\n`;
+    if (refMid) extra += `- Ref Mid: ${refMid}\n`;
+    if (refHigh) extra += `- Ref High: ${refHigh}\n`;
   }
+  if (lastScan?.result) extra += `\nL3 Scan Result: ${lastScan.result} — ${lastScan.reason || ''}\n`;
   return PROMPT_L3_BASE + extra;
 }
 
@@ -1089,7 +1497,10 @@ async function copyText(text, btn, label) {
 el('btnSave').onclick = persistState;
 el('btnExport').onclick = exportForPerplexity;
 el('btnImport').onclick = importFromPerplexity;
-el('btnRerunTracer').onclick = rerunTracer;
+el('btnReevaluate').onclick = reevaluateTransmission;
+el('btnSaveSnapshot').onclick = saveTracerSnapshot;
+el('btnScanL3').onclick = runL3Scan;
+el('btnRunScenarioLoop').onclick = runScenarioLoop;
 el('btnKoyfin').onclick = () => { const u = el('urlKoyfin').value.trim(); if (!u) return showToast('Set URL'); window.open(u,'_blank','noopener'); setLastOpened('lastKoyfin', new Date().toISOString()); markDirty(); };
 el('btnBarchart').onclick = () => { const u = el('urlBarchart').value.trim(); if (!u) return showToast('Set URL'); window.open(u,'_blank','noopener'); setLastOpened('lastBarchart', new Date().toISOString()); markDirty(); };
 el('btnCopyL2').onclick = () => copyText(PROMPT_L2, el('btnCopyL2'), 'Copy Layer 2 Prompt');
@@ -1098,15 +1509,25 @@ el('btnClearShock').onclick = clearShock;
 document.querySelectorAll('.shock-btn').forEach(b => b.onclick = () => applyShock(b.dataset.shock));
 document.querySelectorAll('.tab-btn').forEach(b => b.onclick = () => switchTab(b.dataset.tab));
 
-['whinfellScore','regimeTag','urlKoyfin','urlBarchart','grossA','grossB','capitalBaseMm','handoverNote','l3NearMonth','l3FarMonth','l3BasisSpread'].forEach(id => {
+['whinfellScore','regimeTag','urlKoyfin','urlBarchart','grossA','grossB','capitalBaseMm','handoverNote','l3NearMonth','l3FarMonth','l3BasisSpread','l3RefLow','l3RefMid','l3RefHigh'].forEach(id => {
   el(id).addEventListener('input', () => { renderAll(); markDirty(); });
 });
 el('transmissionState').onchange = () => { renderAll(); markDirty(); };
 el('posture').onchange = () => { appState.grossRisk.postureManual = !!el('posture').value; renderAll(); markDirty(); };
 
 renderPrompts();
+renderShockStageChecks();
 renderTracerHorizonTable();
+initScenarioLoop();
 applyStateToDOM(loadState());
+if (scenarioLoop.variants[0]) {
+  const s = buildStateFromDOM();
+  scenarioLoop.variants[0].whinfellScore = s.intake.whinfellScore;
+  scenarioLoop.variants[0].transmissionState = s.intake.transmissionState;
+  scenarioLoop.variants[0].regimeTag = s.intake.regimeTag;
+  renderScenarioColumns();
+}
+renderSnapshotList();
 </script>
 </body>
 </html>

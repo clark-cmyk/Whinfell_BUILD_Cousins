@@ -179,6 +179,27 @@ Prompt A updated to require v2.0 block at end of research responses.
 
 ---
 
+## Phase 2 — Signal Intelligence Draft (Sprint)
+
+**Version:** Phase 2 Draft (schema v3)  
+**Date:** June 26, 2026  
+**Status:** Sprint shipped — Arena self-review PASS · awaiting desk feedback
+
+| Item | Status |
+|------|--------|
+| Health score on gate banner (informational) | ✅ |
+| Named snapshots (cap 12) + compare | ✅ |
+| Enhanced chain visualization | ✅ |
+| Configurable shocks (mild/full + stage toggles) | ✅ |
+| Re-evaluate macro | ✅ |
+| Scenario Loop (session-only, 3 variants) | ✅ |
+| BTC L3 reference-band scan | ✅ |
+| WTC-2.0 export | ✅ |
+
+**Spec:** `Whinfell_Phase2_Signal_Intelligence_Spec.md`
+
+---
+
 ## Out of Scope (Confirmed Deferred)
 
 - Auto-execution / live data feeds
