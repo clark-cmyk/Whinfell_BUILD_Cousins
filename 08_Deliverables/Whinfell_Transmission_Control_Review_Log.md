@@ -16,7 +16,7 @@
 ## Phase 1 — Aligned Draft
 
 **Version:** v1.1 (Phase 1 Aligned)  
-**Alignment commit:** `039436b`  
+**Alignment commit:** `8285f28`  
 **Status:** Peer Review PASS · Arena Review PASS · **Awaiting TempLibby Sign-Off**
 
 ### Scope Delivered
