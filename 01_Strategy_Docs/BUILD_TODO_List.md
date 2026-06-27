@@ -10,7 +10,7 @@
 
 | # | Deliverable | Priority | Status | Owner | Notes |
 |---|-------------|----------|--------|-------|-------|
-| **Transmission Control P1** | WTM Prompts + Gross Risk + BTC + Signal Tracer | **High** | **Aligned — Arena PASS** | Bridge + Edge + Precision | Awaiting TempLibby |
+| **Transmission Control P1.2** | Perplexity handoff + Re-run Tracer | **High** | **Complete** | Bridge + Edge + Spark | v1.2 shipped |
 | C4 | Structured Testing of the 6 Refined Prompts | Medium | Not Started | Precision | Unblocked |
 | C5 | Quick Reference Card (One-Pager) | Medium | Not Started | Hammer + Precision | - |
 

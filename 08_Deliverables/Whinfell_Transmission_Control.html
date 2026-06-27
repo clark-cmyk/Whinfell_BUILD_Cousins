@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whinfell Transmission Control — Phase 1</title>
+  <title>Whinfell Transmission Control — Phase 1.2</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -39,12 +39,13 @@
     <div class="flex-1 px-5 py-3 flex flex-col justify-center gap-0.5">
       <div class="flex items-center gap-2.5 flex-wrap">
         <h1 class="text-[15px] font-semibold tracking-tight">Whinfell Transmission Control</h1>
-        <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 1 Aligned</span>
+        <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 1.2</span>
       </div>
-      <p class="text-[11px] text-wtm-muted">WTM Action Layer · Prompts · Gross Risk · Signal Tracer</p>
+      <p class="text-[11px] text-wtm-muted">Execution layer · Perplexity handoff · WTM Action Layer</p>
     </div>
     <div class="flex items-center gap-2 px-5 py-2.5 sm:border-l border-wtm-border bg-black/20 shrink-0 flex-wrap justify-end">
       <span id="saveIndicator" class="text-[10px] text-wtm-muted">—</span>
+      <button id="btnExport" type="button" class="text-xs px-3 py-1.5 rounded-md border border-wtm-border bg-wtm-card hover:bg-wtm-border">Export for Perplexity</button>
       <button id="btnImport" type="button" class="text-xs px-3 py-1.5 rounded-md border border-wtm-border bg-wtm-card hover:bg-wtm-border">Import from Perplexity</button>
       <button id="btnSave" type="button" class="text-xs px-3 py-1.5 rounded-md bg-wtm-accent/80 border border-wtm-accent hover:bg-wtm-accent font-medium">Save State</button>
     </div>
@@ -197,6 +198,7 @@
           <button type="button" data-shock="btcDecoupling" class="shock-btn text-[10px] px-2 py-1 rounded border border-wtm-border bg-wtm-card hover:bg-wtm-border">BTC Decoupling</button>
           <button type="button" data-shock="volSpike" class="shock-btn text-[10px] px-2 py-1 rounded border border-wtm-border bg-wtm-card hover:bg-wtm-border">Vol Spike</button>
           <button type="button" id="btnClearShock" class="text-[10px] px-2 py-1 rounded border border-wtm-red/50 text-wtm-red bg-red-500/10 hover:bg-red-500/20">Clear Shock</button>
+          <button type="button" id="btnRerunTracer" class="text-[10px] px-2 py-1 rounded border border-wtm-accent/50 text-wtm-accent bg-wtm-accent/10 hover:bg-wtm-accent/20">Re-run Tracer</button>
           <span id="activeShockLabel" class="text-[10px] text-wtm-muted ml-auto">No active shock</span>
         </div>
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -235,11 +237,22 @@
   <div id="toast" class="fixed bottom-4 right-4 max-w-sm px-4 py-3 rounded-lg border border-wtm-border bg-wtm-card text-xs shadow-xl translate-y-20 opacity-0 transition-all z-50 pointer-events-none"></div>
 
 <script>
-/** Whinfell Transmission Control — Phase 1 Aligned · Storage v1 (schema 2) */
+/** Whinfell Transmission Control — Phase 1.2 · Storage v1 (schema 2) */
 
 const STORAGE_KEY = 'whinfell_transmission_control_v1';
 const LEGACY_KEYS = ['whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 2;
+const EXPORT_FORMAT = 'WTC-1.2';
+const HORIZON_PARSE = { '1d': 'd1', '5d': 'd5', '20d': 'd20', '60d': 'd60', d1: 'd1', d5: 'd5', d20: 'd20', d60: 'd60' };
+const MARK_PARSE = { up: 'up', '↑': 'up', confirming: 'up', flat: 'flat', '→': 'flat', neutral: 'flat', mixed: 'flat', down: 'down', '↓': 'down', impairing: 'down' };
+const TX_PARSE = {
+  normal: 'normal', stressed: 'stressed', disorderly: 'disorderly', crisis: 'crisis',
+  'risk-on': 'normal', 'risk-off': 'disorderly', constructive: 'normal', compression: 'disorderly',
+};
+const POSTURE_PARSE = {
+  full: 'full', selective: 'selective', light: 'light', defensive: 'defensive', flat: 'flat',
+  'full gross': 'full', 'light gross': 'light', 'no new risk': 'flat',
+};
 const HORIZONS = ['d1', 'd5', 'd20', 'd60'];
 const HORIZON_LABELS = { d1: '1d', d5: '5d', d20: '20d', d60: '60d' };
 const HORIZON_DISPLAY = { up: '↑', flat: '→', down: '↓', '': '—' };
@@ -384,27 +397,173 @@ function chainArrow(delta) {
   return { sym: '→', cls: 'text-wtm-muted' };
 }
 
-const PARSE_PATTERNS = [
-  { field: 'whinfellScore', patterns: [/whinfell\s*score\s*[:=]\s*(\d{1,3})/i, /score\s*[:=]\s*(\d{1,3})/i] },
-  { field: 'transmissionState', patterns: [/transmission\s*state\s*[:=]\s*(normal|stressed|disorderly|crisis)/i], map: { 'risk-on': 'normal', 'risk-off': 'disorderly' } },
-  { field: 'regimeTag', patterns: [/regime\s*tag\s*[:=]\s*(.+?)(?:\n|$)/i] },
-];
+function parseScore(val) {
+  const n = parseInt(String(val).replace(/[^\d]/g, ''), 10);
+  return n >= 0 && n <= 100 ? String(n) : null;
+}
+
+function parseTransmissionState(val) {
+  const key = String(val).toLowerCase().replace(/[^a-z-]/g, '');
+  return TX_PARSE[key] || (TX_META[key] ? key : null);
+}
+
+function parsePosture(val) {
+  const key = String(val).toLowerCase().trim();
+  return POSTURE_PARSE[key] || null;
+}
+
+function parseHorizonMark(val) {
+  return MARK_PARSE[String(val).toLowerCase().trim()] || null;
+}
 
 function parsePerplexityText(text) {
-  const result = {};
-  for (const { field, patterns, map } of PARSE_PATTERNS) {
-    for (const re of patterns) {
-      const m = text.match(re);
-      if (!m) continue;
-      let val = m[1].trim();
-      if (map) val = map[val.toLowerCase()] || val.toLowerCase();
-      if (field === 'whinfellScore') { const n = parseInt(val, 10); if (n >= 0 && n <= 100) result.whinfellScore = String(n); }
-      else if (field === 'transmissionState' && TX_META[val]) result.transmissionState = val;
-      else if (field === 'regimeTag') result.regimeTag = val;
-      break;
+  if (!text || typeof text !== 'string') return { fields: {}, imported: [] };
+  const normalized = text.replace(/\r\n/g, '\n');
+  const fields = {};
+  const imported = [];
+
+  const labeled = [
+    [/whinfell\s*score\s*[:=]\s*(\d{1,3})/i, 'whinfellScore', v => parseScore(v)],
+    [/transmission\s*state\s*[:=]\s*([^\n]+)/i, 'transmissionState', v => parseTransmissionState(v)],
+    [/regime\s*tag\s*[:=]\s*([^\n]+)/i, 'regimeTag', v => v.trim()],
+    [/gate\s*status\s*[:=]\s*([^\n]+)/i, 'gateStatus', v => v.trim()],
+    [/score\s*zone\s*[:=]\s*([^\n]+)/i, 'scoreZone', v => v.trim()],
+    [/gross\s*risk\s*book\s*a\s*(?:\(%\))?\s*[:=]\s*([\d.]+)/i, 'grossA', v => v.trim()],
+    [/gross\s*risk\s*book\s*b\s*(?:\(%\))?\s*[:=]\s*([\d.]+)/i, 'grossB', v => v.trim()],
+    [/total\s*gross\s*risk\s*(?:\(%\))?\s*[:=]\s*([\d.]+)/i, 'totalGross', v => v.trim()],
+    [/approved\s*posture\s*[:=]\s*([^\n]+)/i, 'posture', v => parsePosture(v) || v.trim()],
+    [/handover(?:\s*\/\s*watch)?\s*(?:note|items)?\s*[:=]\s*([^\n]+)/i, 'handoverNote', v => v.trim()],
+    [/capital\s*base\s*(?:\(\$mm\))?\s*[:=]\s*([\d.]+)/i, 'capitalBaseMm', v => v.trim()],
+    [/active\s*shock\s*[:=]\s*([^\n]+)/i, 'activeShock', v => v.trim()],
+    [/near\s*month\s*[:=]\s*([^\n]+)/i, 'l3NearMonth', v => v.trim()],
+    [/far\s*month\s*[:=]\s*([^\n]+)/i, 'l3FarMonth', v => v.trim()],
+    [/basis\s*spread\s*[:=]\s*([^\n]+)/i, 'l3BasisSpread', v => v.trim()],
+  ];
+
+  for (const [re, key, transform] of labeled) {
+    const m = normalized.match(re);
+    if (!m) continue;
+    const val = transform(m[1]);
+    if (val === null || val === undefined || val === '') continue;
+    fields[key] = val;
+    imported.push(key);
+  }
+
+  if (!fields.whinfellScore) {
+    const scoreFallback = normalized.match(/(?:^|\n)\s*score\s*[:=]\s*(\d{1,3})/i);
+    if (scoreFallback) {
+      const val = parseScore(scoreFallback[1]);
+      if (val) { fields.whinfellScore = val; imported.push('whinfellScore'); }
     }
   }
-  return result;
+
+  fields.tracerHorizons = {};
+  LADDER.forEach(row => {
+    const escaped = row.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const lineRe = new RegExp(`${escaped}\\s*[:|]\\s*([^\\n]+)`, 'i');
+    const line = normalized.match(lineRe);
+    if (!line) return;
+    const segment = line[1];
+    const horizon = {};
+    segment.replace(/(1d|5d|20d|60d|d1|d5|d20|d60)\s*[:=]\s*([↑→↓]|up|flat|down|confirming|mixed|impairing|neutral)/gi, (_, h, mark) => {
+      const hz = HORIZON_PARSE[h.toLowerCase()];
+      const parsed = parseHorizonMark(mark);
+      if (hz && parsed) horizon[hz] = parsed;
+    });
+    if (Object.keys(horizon).length) {
+      fields.tracerHorizons[row.id] = horizon;
+      imported.push(`tracer:${row.id}`);
+    }
+  });
+
+  return { fields, imported: [...new Set(imported)] };
+}
+
+function buildPerplexityExport() {
+  const state = buildStateFromDOM();
+  const gate = deriveGate(state);
+  const total = deriveGrossTotal(state);
+  const posture = state.grossRisk.posture || suggestPosture(gate.score);
+  const lines = [
+    'WHINFELL TRANSMISSION CONTROL — STATE EXPORT',
+    `Format: ${EXPORT_FORMAT}`,
+    `Generated: ${new Date().toISOString()}`,
+    '---',
+    `Whinfell Score: ${state.intake.whinfellScore || '—'}`,
+    `Transmission State: ${state.intake.transmissionState || '—'}`,
+    `Regime Tag: ${state.intake.regimeTag || '—'}`,
+    `Gate Status: ${gate.label}`,
+    `Score Zone: ${gate.zone.text}`,
+    '---',
+    `Gross Risk Book A (%): ${state.grossRisk.bookA || '0'}`,
+    `Gross Risk Book B (%): ${state.grossRisk.bookB || '0'}`,
+    `Total Gross Risk (%): ${total.toFixed(1)}`,
+    `Approved Posture: ${POSTURE_LABELS[posture] || posture || '—'}`,
+    `Capital Base ($mm): ${state.grossRisk.capitalBaseMm || '—'}`,
+    `Handover Note: ${state.grossRisk.handoverNote || '—'}`,
+    '---',
+    'Signal Tracer Horizons:',
+  ];
+
+  LADDER.forEach(row => {
+    const hz = state.tracer.horizons[row.id] || {};
+    const parts = HORIZONS.map(h => `${HORIZON_LABELS[h]}: ${HORIZON_DISPLAY[hz[h] || ''] || '—'}`).join(' | ');
+    lines.push(`${row.name}: ${parts}`);
+  });
+
+  const shock = state.tracer.activeShock && SHOCKS[state.tracer.activeShock];
+  lines.push('---');
+  lines.push(`Active Shock: ${shock ? shock.label : 'None'}`);
+  if (state.btcL3.nearMonth || state.btcL3.farMonth || state.btcL3.basisSpread) {
+    lines.push('---');
+    lines.push(`Near Month: ${state.btcL3.nearMonth || '—'}`);
+    lines.push(`Far Month: ${state.btcL3.farMonth || '—'}`);
+    lines.push(`Basis Spread: ${state.btcL3.basisSpread || '—'}`);
+  }
+  lines.push('---');
+  lines.push('End of WTC Export — paste into Perplexity or re-import via Transmission Control');
+  return lines.join('\n');
+}
+
+function applyImportFields(fields) {
+  if (fields.whinfellScore) el('whinfellScore').value = fields.whinfellScore;
+  if (fields.transmissionState) el('transmissionState').value = fields.transmissionState;
+  if (fields.regimeTag) el('regimeTag').value = fields.regimeTag;
+  if (fields.grossA) el('grossA').value = fields.grossA;
+  if (fields.grossB) el('grossB').value = fields.grossB;
+  if (fields.capitalBaseMm) el('capitalBaseMm').value = fields.capitalBaseMm;
+  if (fields.handoverNote) el('handoverNote').value = fields.handoverNote;
+  if (fields.l3NearMonth) el('l3NearMonth').value = fields.l3NearMonth;
+  if (fields.l3FarMonth) el('l3FarMonth').value = fields.l3FarMonth;
+  if (fields.l3BasisSpread) el('l3BasisSpread').value = fields.l3BasisSpread;
+  if (fields.posture) {
+    const p = parsePosture(fields.posture) || fields.posture;
+    if (POSTURE_LABELS[p] || ['full','selective','light','defensive','flat'].includes(p)) {
+      el('posture').value = p;
+      appState.grossRisk.postureManual = true;
+    }
+  }
+  if (fields.tracerHorizons) {
+    LADDER.forEach(row => {
+      const hz = fields.tracerHorizons[row.id];
+      if (!hz) return;
+      HORIZONS.forEach(h => {
+        const sel = el(`hz-${row.id}-${h}`);
+        if (sel && hz[h]) sel.value = hz[h];
+      });
+    });
+  }
+  if (fields.activeShock) {
+    const shockKey = Object.keys(SHOCKS).find(k =>
+      k.toLowerCase() === fields.activeShock.toLowerCase() ||
+      SHOCKS[k].label.toLowerCase() === fields.activeShock.toLowerCase()
+    );
+    if (shockKey) {
+      preShockSnapshot = JSON.parse(JSON.stringify(buildStateFromDOM().tracer.horizons));
+      applyShock(shockKey, true);
+    }
+  }
+  renderAll();
 }
 
 function normalizeLegacyState(raw) {
@@ -669,10 +828,10 @@ function renderAll() {
   renderTracerVisual();
 }
 
-function applyShock(shockId) {
+function applyShock(shockId, skipSnapshot) {
   const shock = SHOCKS[shockId];
   if (!shock) return;
-  if (!preShockSnapshot) {
+  if (!skipSnapshot && !preShockSnapshot) {
     preShockSnapshot = JSON.parse(JSON.stringify(buildStateFromDOM().tracer.horizons));
   }
   LADDER.forEach(row => {
@@ -689,6 +848,18 @@ function applyShock(shockId) {
   renderTracerVisual();
   markDirty();
   showToast(`Shock applied: ${shock.label}`);
+}
+
+function rerunTracer() {
+  const shockId = appState.tracer.activeShock;
+  if (shockId && SHOCKS[shockId]) {
+    applyShock(shockId, true);
+    showToast(`Tracer re-run: ${SHOCKS[shockId].label}`);
+  } else {
+    renderTracerVisual();
+    showToast('Tracer matrix refreshed');
+  }
+  markDirty();
 }
 
 function clearShock() {
@@ -738,12 +909,23 @@ function showToast(msg) {
 async function importFromPerplexity() {
   let text;
   try { text = await navigator.clipboard.readText(); } catch { showToast('Clipboard denied'); return; }
-  const p = parsePerplexityText(text);
-  if (!Object.keys(p).length) { showToast('No WTM fields found in clipboard'); return; }
-  if (p.whinfellScore) el('whinfellScore').value = p.whinfellScore;
-  if (p.transmissionState) el('transmissionState').value = p.transmissionState;
-  if (p.regimeTag) el('regimeTag').value = p.regimeTag;
-  renderAll(); markDirty(); showToast('Imported from Perplexity');
+  const { fields, imported } = parsePerplexityText(text);
+  if (!imported.length) { showToast('No WTM fields found in clipboard'); return; }
+  applyImportFields(fields);
+  markDirty();
+  showToast(`Imported ${imported.length} field(s) from Perplexity`);
+}
+
+async function exportForPerplexity() {
+  const text = buildPerplexityExport();
+  try {
+    await navigator.clipboard.writeText(text);
+    const btn = el('btnExport');
+    const o = btn.textContent;
+    btn.textContent = 'Exported ✓';
+    setTimeout(() => btn.textContent = o, 2000);
+    showToast('State exported — paste into Perplexity');
+  } catch { showToast('Clipboard denied'); }
 }
 
 function switchTab(name) {
@@ -758,7 +940,9 @@ async function copyText(text, btn, label) {
 }
 
 el('btnSave').onclick = persistState;
+el('btnExport').onclick = exportForPerplexity;
 el('btnImport').onclick = importFromPerplexity;
+el('btnRerunTracer').onclick = rerunTracer;
 el('btnKoyfin').onclick = () => { const u = el('urlKoyfin').value.trim(); if (!u) return showToast('Set URL'); window.open(u,'_blank','noopener'); setLastOpened('lastKoyfin', new Date().toISOString()); markDirty(); };
 el('btnBarchart').onclick = () => { const u = el('urlBarchart').value.trim(); if (!u) return showToast('Set URL'); window.open(u,'_blank','noopener'); setLastOpened('lastBarchart', new Date().toISOString()); markDirty(); };
 el('btnCopyL2').onclick = () => copyText(PROMPT_L2, el('btnCopyL2'), 'Copy Layer 2 Prompt');

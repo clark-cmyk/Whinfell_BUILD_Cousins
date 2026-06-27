@@ -121,6 +121,35 @@
 
 ---
 
+## Phase 1.2 — WTM Action Layer Refinement
+
+**Version:** v1.2 (Phase 1.2)  
+**Date:** June 26, 2026  
+**Status:** Implemented — Perplexity handoff + Re-run Tracer
+
+### Scope (C4.5 v1.2 / Transmission Control 1.2)
+
+| Item | Owner Role | Status |
+|------|------------|--------|
+| Perplexity Export — structured plain text | Bridge | ✅ `Export for Perplexity` |
+| HTML Import — robust clipboard parser | Bridge + Precision | ✅ Extended field + tracer parsing |
+| Nested state save/load | Bridge | ✅ (carried from 1.1) |
+| Gate enforcement on BTC cards | Safeguard | ✅ (carried from 1.1) |
+| Prompts A–E with Inputs/Outputs | Clarity + Precision | ✅ (carried from 1.1) |
+| Signal Tracer horizons + shocks | Edge | ✅ (carried from 1.1) |
+| Re-run Tracer (no heavy looping) | Spark + Edge | ✅ Re-applies shock or refreshes matrix |
+
+### Looping Decision (Agreed)
+
+- **Phase 1.2:** Re-run Tracer button only — no continuous monitoring or auto-alerts
+- **Phase 2:** Sophisticated looping, arb scanning, live data integration
+
+### Export Format (`WTC-1.2`)
+
+Structured labels for round-trip handoff: intake, gate, gross risk, tracer horizons, active shock, L3 spread fields.
+
+---
+
 ## Out of Scope (Confirmed Deferred)
 
 - Auto-execution / live data feeds
