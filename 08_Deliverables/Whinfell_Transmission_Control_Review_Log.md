@@ -123,9 +123,10 @@
 
 ## Phase 1.2 — WTM Action Layer Refinement
 
-**Version:** v1.2 (Phase 1.2)  
+**Version:** v1.2 (Phase 1.2 / C4.5 v1.2)  
 **Date:** June 26, 2026  
-**Status:** Implemented — Perplexity handoff + Re-run Tracer
+**Ship commit:** `c9d9b63`  
+**Status:** **APPROVED & SHIPPED** — TempLibby final sign-off
 
 ### Scope (C4.5 v1.2 / Transmission Control 1.2)
 
@@ -163,6 +164,18 @@ Canonical Perplexity/research handoff block. Import parser prioritizes v2.0 bloc
 | Timestamp | Research metadata |
 
 Prompt A updated to require v2.0 block at end of research responses.
+
+### TempLibby Sign-Off
+
+**Status:** **APPROVED — Shipped & Production-Ready**  
+**Date:** June 26, 2026  
+**Authority:** TempLibby, Template Team
+
+> Export contract, parser, and state synchronization are clean and production-ready. Research-to-execution loop closed via WTM EXPORT v2.0.
+
+**Architecture locked:**
+- Perplexity = Research & Analysis layer
+- Transmission Control = Execution & State layer
 
 ---
 
