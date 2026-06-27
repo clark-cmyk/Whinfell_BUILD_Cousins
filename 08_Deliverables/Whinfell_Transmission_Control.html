@@ -92,6 +92,11 @@
         <div id="gateStatusChip" class="mt-1 min-h-[38px] flex items-center justify-center rounded-md border border-wtm-border bg-wtm-bg text-xs font-extrabold uppercase text-wtm-muted">—</div>
       </div>
     </div>
+    <div id="researchReadout" class="hidden mt-2 p-2 rounded-md border border-wtm-accent/30 bg-wtm-accent/5 text-[10px]">
+      <span class="font-bold text-wtm-accent uppercase">Research Import · WTM EXPORT v2.0</span>
+      <p id="keyObservationDisplay" class="text-wtm-muted mt-1"></p>
+      <p id="btcBiasDisplay" class="text-wtm-muted mt-0.5"></p>
+    </div>
   </section>
 
   <section class="shrink-0 px-5 py-2 border-b border-wtm-border bg-wtm-card/40">
@@ -243,6 +248,8 @@ const STORAGE_KEY = 'whinfell_transmission_control_v1';
 const LEGACY_KEYS = ['whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 2;
 const EXPORT_FORMAT = 'WTC-1.2';
+const RESEARCH_EXPORT_FORMAT = 'WTM EXPORT v2.0';
+const BTC_BIAS_MAP = { confirming: 'up', dragging: 'down', neutral: 'flat' };
 const HORIZON_PARSE = { '1d': 'd1', '5d': 'd5', '20d': 'd20', '60d': 'd60', d1: 'd1', d5: 'd5', d20: 'd20', d60: 'd60' };
 const MARK_PARSE = { up: 'up', '↑': 'up', confirming: 'up', flat: 'flat', '→': 'flat', neutral: 'flat', mixed: 'flat', down: 'down', '↓': 'down', impairing: 'down' };
 const TX_PARSE = {
@@ -295,7 +302,7 @@ const PROMPTS = [
   { id: 'A', title: 'WTM Transmission Read & Regime Classification', desc: 'Classify today\u2019s overall regime and key signals.',
     inputs: 'WTM map, Whinfell Score, credit, rates, breadth, futures, BTC/IBIT',
     outputs: 'Regime state, score zone, confirming/disconfirming signals, posture rec',
-    text: `Using the current Whinfell Transmission Map (regime banner, Whinfell Score, credit inputs, rates, breadth, futures leadership, and BTC/IBIT behavior), classify today\u2019s transmission state.\n\n1. State: Risk-On, Fragile Risk-On, Neutral, Risk-Off, or Crisis.\n2. Whinfell Score and zone (Green / Amber / Red).\n3. Top 2 confirming signals and top 2 disconfirming signals.\n4. One-line desk posture recommendation and what would cause an upgrade or downgrade.\n\nBe concise and transmission-focused.` },
+    text: `Using the current Whinfell Transmission Map (regime banner, Whinfell Score, credit inputs, rates, breadth, futures leadership, and BTC/IBIT behavior), classify today\u2019s transmission state.\n\n1. State: Risk-On, Fragile Risk-On, Neutral, Risk-Off, or Crisis.\n2. Whinfell Score and zone (Green / Amber / Red).\n3. Top 2 confirming signals and top 2 disconfirming signals.\n4. One-line desk posture recommendation and what would cause an upgrade or downgrade.\n\nBe concise and transmission-focused.\n\nEnd your response with a WTM EXPORT v2.0 block (exact labels) for Transmission Control import:\n--- WTM EXPORT v2.0 ---\nWhinfell Score: [0-100]\nTransmission State: [Normal / Stressed / Disorderly / Crisis]\nRegime Tag: [phrase]\nKey Observation: [1-2 sentences]\nGross Risk Recommendation: [e.g. 35% total, Light posture]\nBTC Bias: [Confirming / Dragging / Neutral]\nTimestamp: [ISO datetime]` },
   { id: 'B', title: 'WTM Posture & Gross-Risk Recommendation', desc: 'Set daily gross risk and sizing.',
     inputs: 'Whinfell Score, transmission state, desk posture, capital base',
     outputs: 'Gross risk %, per-trade sizing, concurrent trade limits, R-multiple calc',
@@ -330,6 +337,7 @@ function createEmptyState() {
     version: STATE_VERSION,
     intake: { whinfellScore: '', transmissionState: '', regimeTag: '' },
     grossRisk: { bookA: '', bookB: '', capitalBaseMm: '', posture: '', postureManual: false, handoverNote: '' },
+    research: { keyObservation: '', grossRiskRecommendation: '', btcBias: '', timestamp: '' },
     tracer: { horizons: createEmptyHorizons(), activeShock: null },
     btcL3: { nearMonth: '', farMonth: '', basisSpread: '' },
     urls: { ...DEFAULTS.urls },
@@ -416,9 +424,80 @@ function parseHorizonMark(val) {
   return MARK_PARSE[String(val).toLowerCase().trim()] || null;
 }
 
+function parseGrossRiskRecommendation(val) {
+  const s = String(val);
+  const pct = s.match(/(\d+(?:\.\d+)?)\s*%/);
+  const total = pct ? parseFloat(pct[1]) : null;
+  let posture = null;
+  const lower = s.toLowerCase();
+  if (/\blight\b/.test(lower)) posture = 'light';
+  else if (/\bselective\b/.test(lower)) posture = 'selective';
+  else if (/\bfull\b/.test(lower)) posture = 'full';
+  else if (/\bdefensive\b/.test(lower)) posture = 'defensive';
+  else if (/\bflat\b/.test(lower)) posture = 'flat';
+  return { total, posture };
+}
+
+function extractWtmExportV20(text) {
+  const start = text.search(/---\s*WTM EXPORT v2\.0\s*---/i);
+  if (start < 0) return null;
+  const rest = text.slice(start).replace(/^---\s*WTM EXPORT v2\.0\s*---\s*/i, '');
+  const end = rest.search(/\n---\s*WTM EXPORT/i);
+  return (end >= 0 ? rest.slice(0, end) : rest).trim();
+}
+
+function parseWtmExportV20(block) {
+  const fields = {};
+  const imported = [];
+  const lines = [
+    ['whinfellScore', /^\s*Whinfell Score:\s*(.+)$/im, v => parseScore(v)],
+    ['transmissionState', /^\s*Transmission State:\s*(.+)$/im, v => parseTransmissionState(v)],
+    ['regimeTag', /^\s*Regime Tag:\s*(.+)$/im, v => v.trim()],
+    ['keyObservation', /^\s*Key Observation:\s*(.+)$/im, v => v.trim()],
+    ['grossRiskRecommendation', /^\s*Gross Risk Recommendation:\s*(.+)$/im, v => v.trim()],
+    ['btcBias', /^\s*BTC Bias:\s*(.+)$/im, v => v.trim()],
+    ['researchTimestamp', /^\s*Timestamp:\s*(.+)$/im, v => v.trim()],
+  ];
+  for (const [key, re, transform] of lines) {
+    const m = block.match(re);
+    if (!m) continue;
+    const val = transform(m[1]);
+    if (val === null || val === undefined || val === '') continue;
+    fields[key] = val;
+    imported.push(key);
+  }
+  if (fields.grossRiskRecommendation) {
+    const gr = parseGrossRiskRecommendation(fields.grossRiskRecommendation);
+    if (gr.total !== null) {
+      fields.grossA = String(gr.total);
+      fields.totalGross = String(gr.total);
+      imported.push('grossA', 'totalGross');
+    }
+    if (gr.posture) {
+      fields.posture = gr.posture;
+      imported.push('posture');
+    }
+  }
+  if (fields.btcBias) {
+    const mark = BTC_BIAS_MAP[String(fields.btcBias).toLowerCase().trim()];
+    if (mark) {
+      fields.tracerHorizons = { highbeta: { d1: mark } };
+      imported.push('tracer:highbeta', 'btcBias');
+    }
+  }
+  fields._format = RESEARCH_EXPORT_FORMAT;
+  return { fields, imported: [...new Set(imported)] };
+}
+
 function parsePerplexityText(text) {
-  if (!text || typeof text !== 'string') return { fields: {}, imported: [] };
+  if (!text || typeof text !== 'string') return { fields: {}, imported: [], format: null };
   const normalized = text.replace(/\r\n/g, '\n');
+  const v20Block = extractWtmExportV20(normalized);
+  if (v20Block) {
+    const v20 = parseWtmExportV20(v20Block);
+    if (v20.imported.length) return { ...v20, format: RESEARCH_EXPORT_FORMAT };
+  }
+
   const fields = {};
   const imported = [];
 
@@ -438,6 +517,10 @@ function parsePerplexityText(text) {
     [/near\s*month\s*[:=]\s*([^\n]+)/i, 'l3NearMonth', v => v.trim()],
     [/far\s*month\s*[:=]\s*([^\n]+)/i, 'l3FarMonth', v => v.trim()],
     [/basis\s*spread\s*[:=]\s*([^\n]+)/i, 'l3BasisSpread', v => v.trim()],
+    [/key\s*observation\s*[:=]\s*([^\n]+)/i, 'keyObservation', v => v.trim()],
+    [/gross\s*risk\s*recommendation\s*[:=]\s*([^\n]+)/i, 'grossRiskRecommendation', v => v.trim()],
+    [/btc\s*bias\s*[:=]\s*([^\n]+)/i, 'btcBias', v => v.trim()],
+    [/timestamp\s*[:=]\s*([^\n]+)/i, 'researchTimestamp', v => v.trim()],
   ];
 
   for (const [re, key, transform] of labeled) {
@@ -476,7 +559,39 @@ function parsePerplexityText(text) {
     }
   });
 
-  return { fields, imported: [...new Set(imported)] };
+  if (fields.grossRiskRecommendation && !fields.grossA) {
+    const gr = parseGrossRiskRecommendation(fields.grossRiskRecommendation);
+    if (gr.total !== null) { fields.grossA = String(gr.total); imported.push('grossA'); }
+    if (gr.posture && !fields.posture) { fields.posture = gr.posture; imported.push('posture'); }
+  }
+  if (fields.btcBias && !fields.tracerHorizons) {
+    const mark = BTC_BIAS_MAP[String(fields.btcBias).toLowerCase().trim()];
+    if (mark) { fields.tracerHorizons = { highbeta: { d1: mark } }; imported.push('tracer:highbeta'); }
+  }
+
+  return { fields, imported: [...new Set(imported)], format: EXPORT_FORMAT };
+}
+
+function buildWtmExportV20() {
+  const state = buildStateFromDOM();
+  const gate = deriveGate(state);
+  const total = deriveGrossTotal(state);
+  const posture = state.grossRisk.posture || suggestPosture(gate.score);
+  const txLabel = state.intake.transmissionState && TX_META[state.intake.transmissionState]
+    ? TX_META[state.intake.transmissionState].label : (state.intake.transmissionState || '—');
+  const btcHz = state.tracer.horizons.highbeta?.d1 || '';
+  const btcBias = btcHz === 'up' ? 'Confirming' : btcHz === 'down' ? 'Dragging' : 'Neutral';
+  const obs = state.research.keyObservation || state.grossRisk.handoverNote || '—';
+  return [
+    '--- WTM EXPORT v2.0 ---',
+    `Whinfell Score: ${state.intake.whinfellScore || '—'}`,
+    `Transmission State: ${txLabel}`,
+    `Regime Tag: ${state.intake.regimeTag || '—'}`,
+    `Key Observation: ${obs}`,
+    `Gross Risk Recommendation: ${total.toFixed(0)}% total, ${POSTURE_LABELS[posture] || posture || '—'} posture`,
+    `BTC Bias: ${state.research.btcBias || btcBias}`,
+    `Timestamp: ${new Date().toISOString().slice(0, 19)}`,
+  ].join('\n');
 }
 
 function buildPerplexityExport() {
@@ -522,10 +637,33 @@ function buildPerplexityExport() {
   }
   lines.push('---');
   lines.push('End of WTC Export — paste into Perplexity or re-import via Transmission Control');
+  lines.push('');
+  lines.push(buildWtmExportV20());
   return lines.join('\n');
 }
 
+function updateResearchReadout(state) {
+  const r = state.research || {};
+  const has = r.keyObservation || r.btcBias || r.timestamp;
+  const panel = el('researchReadout');
+  panel.classList.toggle('hidden', !has);
+  if (!has) return;
+  el('keyObservationDisplay').textContent = r.keyObservation ? `Observation: ${r.keyObservation}` : '';
+  const parts = [];
+  if (r.btcBias) parts.push(`BTC Bias: ${r.btcBias}`);
+  if (r.timestamp) parts.push(`Imported: ${r.timestamp}`);
+  el('btcBiasDisplay').textContent = parts.join(' · ');
+}
+
 function applyImportFields(fields) {
+  if (fields.keyObservation || fields.btcBias || fields.researchTimestamp || fields.grossRiskRecommendation) {
+    appState.research = {
+      keyObservation: fields.keyObservation || appState.research?.keyObservation || '',
+      grossRiskRecommendation: fields.grossRiskRecommendation || '',
+      btcBias: fields.btcBias || '',
+      timestamp: fields.researchTimestamp || new Date().toISOString().slice(0, 19),
+    };
+  }
   if (fields.whinfellScore) el('whinfellScore').value = fields.whinfellScore;
   if (fields.transmissionState) el('transmissionState').value = fields.transmissionState;
   if (fields.regimeTag) el('regimeTag').value = fields.regimeTag;
@@ -533,6 +671,7 @@ function applyImportFields(fields) {
   if (fields.grossB) el('grossB').value = fields.grossB;
   if (fields.capitalBaseMm) el('capitalBaseMm').value = fields.capitalBaseMm;
   if (fields.handoverNote) el('handoverNote').value = fields.handoverNote;
+  else if (fields.keyObservation && !el('handoverNote').value.trim()) el('handoverNote').value = fields.keyObservation;
   if (fields.l3NearMonth) el('l3NearMonth').value = fields.l3NearMonth;
   if (fields.l3FarMonth) el('l3FarMonth').value = fields.l3FarMonth;
   if (fields.l3BasisSpread) el('l3BasisSpread').value = fields.l3BasisSpread;
@@ -568,7 +707,11 @@ function applyImportFields(fields) {
 
 function normalizeLegacyState(raw) {
   if (!raw || typeof raw !== 'object') return createEmptyState();
-  if (raw.version === STATE_VERSION && raw.intake) return { ...createEmptyState(), ...raw, tracer: { ...createEmptyState().tracer, ...raw.tracer, horizons: { ...createEmptyHorizons(), ...(raw.tracer?.horizons || {}) } } };
+  if (raw.version === STATE_VERSION && raw.intake) return {
+    ...createEmptyState(), ...raw,
+    research: { ...createEmptyState().research, ...(raw.research || {}) },
+    tracer: { ...createEmptyState().tracer, ...raw.tracer, horizons: { ...createEmptyHorizons(), ...(raw.tracer?.horizons || {}) } },
+  };
 
   const s = createEmptyState();
   s.intake.whinfellScore = raw.whinfellScore ?? raw.intake?.whinfellScore ?? '';
@@ -580,6 +723,7 @@ function normalizeLegacyState(raw) {
   s.grossRisk.posture = raw.posture ?? raw.grossRisk?.posture ?? '';
   s.grossRisk.postureManual = !!(raw.postureManual ?? raw.grossRisk?.postureManual);
   s.grossRisk.handoverNote = raw.handoverNote ?? raw.grossRisk?.handoverNote ?? '';
+  s.research = { ...createEmptyState().research, ...(raw.research || {}) };
   s.urls.koyfin = raw.urlKoyfin ?? raw.urls?.koyfin ?? DEFAULTS.urls.koyfin;
   s.urls.barchart = raw.urlBarchart ?? raw.urls?.barchart ?? DEFAULTS.urls.barchart;
   s.meta.lastKoyfin = raw.lastKoyfin ?? raw.meta?.lastKoyfin ?? null;
@@ -624,6 +768,7 @@ function buildStateFromDOM() {
       postureManual: appState.grossRisk.postureManual,
       handoverNote: el('handoverNote').value,
     },
+    research: { ...(appState.research || createEmptyState().research) },
     tracer: { horizons, activeShock: appState.tracer.activeShock },
     btcL3: {
       nearMonth: el('l3NearMonth').value,
@@ -825,6 +970,7 @@ function renderAll() {
   el('urlDisplayBarchart').textContent = state.urls.barchart?.trim() || 'No URL saved';
 
   updateGrossDisplay(state, gate);
+  updateResearchReadout(state);
   renderTracerVisual();
 }
 
@@ -909,11 +1055,12 @@ function showToast(msg) {
 async function importFromPerplexity() {
   let text;
   try { text = await navigator.clipboard.readText(); } catch { showToast('Clipboard denied'); return; }
-  const { fields, imported } = parsePerplexityText(text);
+  const { fields, imported, format } = parsePerplexityText(text);
   if (!imported.length) { showToast('No WTM fields found in clipboard'); return; }
   applyImportFields(fields);
   markDirty();
-  showToast(`Imported ${imported.length} field(s) from Perplexity`);
+  const fmt = format === RESEARCH_EXPORT_FORMAT ? 'WTM EXPORT v2.0' : 'WTC';
+  showToast(`Imported ${imported.length} field(s) · ${fmt}`);
 }
 
 async function exportForPerplexity() {

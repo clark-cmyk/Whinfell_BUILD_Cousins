@@ -148,6 +148,22 @@
 
 Structured labels for round-trip handoff: intake, gate, gross risk, tracer horizons, active shock, L3 spread fields.
 
+### Research Layer Export (`WTM EXPORT v2.0`)
+
+Canonical Perplexity/research handoff block. Import parser prioritizes v2.0 block when present.
+
+| Label | Maps To |
+|-------|---------|
+| Whinfell Score | Intake |
+| Transmission State | Intake |
+| Regime Tag | Intake |
+| Key Observation | Research readout + handover (if empty) |
+| Gross Risk Recommendation | Total % + posture |
+| BTC Bias | High-Beta/BTC tracer 1d horizon |
+| Timestamp | Research metadata |
+
+Prompt A updated to require v2.0 block at end of research responses.
+
 ---
 
 ## Out of Scope (Confirmed Deferred)
