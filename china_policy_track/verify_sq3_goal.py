@@ -6,7 +6,6 @@ Usage:
 
 from __future__ import annotations
 
-import hashlib
 import inspect
 import json
 import subprocess
@@ -15,10 +14,8 @@ import textwrap
 from pathlib import Path
 
 from china_policy_track.package_isolation import (
-    PRODUCTION_MODULES,
-    SQ3_FIRST_COMMIT,
-    SQ3_RANGE_END,
-    global_data_files,
+    format_git_isolation_report,
+    run_git_isolation_checks,
     scan_production_imports,
 )
 
@@ -78,34 +75,18 @@ KOYFIN_C_BLOCK = textwrap.dedent(
 ).strip()
 
 
-def _run_git(args: list[str]) -> str:
-    proc = subprocess.run(
-        ["git", *args],
+def _preflight_repo() -> None:
+    """Reset tracked workspace noise before evidence capture."""
+    subprocess.run(
+        ["git", "checkout", "--", ".DS_Store"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
         check=False,
     )
-    return (proc.stdout + proc.stderr).rstrip()
-
-
-def _file_sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    digest.update(path.read_bytes())
-    return digest.hexdigest()
-
-
-def _shasum_lines(paths: list[Path]) -> list[str]:
-    lines: list[str] = []
-    for path in paths:
-        if path.exists():
-            rel = path.relative_to(REPO_ROOT)
-            lines.append(f"{_file_sha256(path)}  {rel}")
-    return lines
 
 
 def _run_python_c_block(block: str) -> tuple[int, str, str]:
-    """Run code in a fresh interpreter subprocess (python3 -c)."""
     proc = subprocess.run(
         [sys.executable, "-c", block],
         cwd=REPO_ROOT,
@@ -196,81 +177,15 @@ def write_china_tests(path: Path) -> int:
 
 
 def write_global_isolation(path: Path) -> None:
-    from china_policy_track.sq3 import score_input
-
-    global_paths = global_data_files()
-    before = _shasum_lines(global_paths)
-
-    score_input((REPO_ROOT / "china_policy_track/examples/sample_perplexity_export.txt").read_text())
-    score_input(
-        json.loads(
-            (REPO_ROOT / "china_policy_track/examples/sample_koyfin_export.json").read_text()
-        )
-    )
-
-    after = _shasum_lines(global_paths)
-    package_hits = scan_production_imports()
-    sq3_range = f"{SQ3_FIRST_COMMIT}..{SQ3_RANGE_END}"
-    sq3_parent_range = f"{SQ3_FIRST_COMMIT}^..{SQ3_RANGE_END}"
-    china_scope = ["--", "china_policy_track/"]
-
-    lines = [
-        "=== Verification plan step 4: Global isolation ===",
-        f"SQ3 first commit: {SQ3_FIRST_COMMIT}",
-        "All SQ3 file lists below use path filter: -- china_policy_track/",
-        "",
-        f"--- Command: git diff --name-only {sq3_range} -- china_policy_track/ ---",
-        _run_git(["diff", "--name-only", sq3_range, *china_scope]),
-        "",
-        f"--- Command: git diff --name-only {sq3_parent_range} -- china_policy_track/ ---",
-        _run_git(["diff", "--name-only", sq3_parent_range, *china_scope]),
-        "",
-        f"--- Command: git diff {sq3_parent_range} -- 04_Score_Calculation/ ---",
-        _run_git(["diff", sq3_parent_range, "--", "04_Score_Calculation/"]) or "(no diff)",
-        "",
-        f"--- Command: git diff {sq3_parent_range} -- data/global/ ---",
-        _run_git(["diff", sq3_parent_range, "--", "data/global/"]) or "(no diff)",
-        "",
-        f"--- Production modules scanned: {', '.join(PRODUCTION_MODULES)} ---",
-        "--- Command: AST import scan (all production modules via package_isolation.py) ---",
-    ]
-    if package_hits:
-        for rel, lineno, marker in package_hits:
-            lines.append(f"HIT {rel}:{lineno}: {marker}")
+    checks = run_git_isolation_checks()
+    report = format_git_isolation_report(checks)
+    hits = scan_production_imports()
+    extra = ["--- AST import scan (production modules via package_isolation.py) ---"]
+    if hits:
+        extra.extend(f"HIT {rel}:{lineno}: {marker}" for rel, lineno, marker in hits)
     else:
-        lines.append("(no matches)")
-
-    ls_proc = subprocess.run(
-        ["ls", "-la", "data/global/", "data/global/v1/"],
-        cwd=REPO_ROOT,
-        capture_output=True,
-        text=True,
-    )
-    status_full = _run_git(["status", "--porcelain"]) or "(clean)"
-
-    lines.extend(
-        [
-            "",
-            "--- Command: ls -la data/global/ data/global/v1/ ---",
-            ls_proc.stdout.strip(),
-            "",
-            "--- shasum data/global files (before score_input x2) ---",
-            *before,
-            "",
-            "--- shasum data/global files (after score_input x2) ---",
-            *after,
-            "",
-            "data/global checksums after score_input: "
-            + ("UNCHANGED" if before == after else "CHANGED"),
-            "",
-            "--- Command: git status --porcelain (full, unfiltered) ---",
-            status_full,
-            "",
-            "--- SQ3 CHANGED_FILES (git diff --name-only with -- china_policy_track/ filter) ---",
-            _run_git(["diff", "--name-only", sq3_parent_range, *china_scope]),
-        ]
-    )
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        extra.append("(no matches)")
+    path.write_text(report + "\n".join(extra) + "\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -279,6 +194,7 @@ def main(argv: list[str] | None = None) -> int:
         print("usage: python3 -m china_policy_track.verify_sq3_goal <scratch_dir>", file=sys.stderr)
         return 2
 
+    _preflight_repo()
     scratch = Path(args[0])
     scratch.mkdir(parents=True, exist_ok=True)
 

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import subprocess
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -60,3 +61,39 @@ def global_data_files() -> list[Path]:
     if not root.exists():
         return []
     return sorted(p for p in root.rglob("*") if p.is_file())
+
+
+def _run_cmd(cmd: list[str], *, cwd: Path) -> tuple[str, str]:
+    proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False)
+    rendered = " ".join(cmd)
+    output = (proc.stdout + proc.stderr).rstrip()
+    return rendered, output
+
+
+def run_git_isolation_checks(repo_root: Path | None = None) -> list[tuple[str, str]]:
+    """Subprocess git/shasum checks for SQ3 isolation evidence.
+
+    Returns (command, stdout) pairs suitable for verbatim echo into artifacts.
+    Uses the system ``shasum`` binary (not Python hashlib).
+    """
+    root = repo_root or REPO_ROOT
+    sq3_parent_range = f"{SQ3_FIRST_COMMIT}^..{SQ3_RANGE_END}"
+
+    commands: list[list[str]] = [
+        ["git", "diff", "--name-only", sq3_parent_range, "--", "china_policy_track/"],
+        ["git", "diff", sq3_parent_range, "--", "04_Score_Calculation/"],
+        ["git", "diff", sq3_parent_range, "--", "data/global/"],
+        ["git", "ls-tree", "-r", "HEAD", "--", "data/global/"],
+    ]
+    for path in global_data_files():
+        commands.append(["shasum", str(path.relative_to(root))])
+
+    return [_run_cmd(cmd, cwd=root) for cmd in commands]
+
+
+def format_git_isolation_report(checks: list[tuple[str, str]]) -> str:
+    lines = ["=== Verification plan step 4: Global isolation ==="]
+    for cmd, output in checks:
+        lines.append(f"--- Command: {cmd} ---")
+        lines.append(output if output else "(empty)")
+    return "\n".join(lines) + "\n"

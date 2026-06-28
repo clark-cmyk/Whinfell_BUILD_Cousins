@@ -11,7 +11,11 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
 from china_policy_track.data_parser import parse_input
-from china_policy_track.package_isolation import PRODUCTION_MODULES, scan_production_imports
+from china_policy_track.package_isolation import (
+    PRODUCTION_MODULES,
+    run_git_isolation_checks,
+    scan_production_imports,
+)
 from china_policy_track.sq3 import (
     INTERPRETATION_BANDS,
     WEIGHT_GROWTH_MARKET,
@@ -123,6 +127,24 @@ class TestSQ3Scoring(unittest.TestCase):
         )
         self.assertIn("components", d)
         self.assertIn("normalized_inputs", d)
+
+    def test_sq3_git_isolation(self):
+        """Subprocess git/shasum checks: SQ3 did not modify Global score paths."""
+        checks = run_git_isolation_checks(REPO_ROOT)
+        by_cmd = {cmd: out for cmd, out in checks}
+
+        china_cmd = next(c for c in by_cmd if "diff --name-only" in c and "china_policy_track/" in c)
+        self.assertTrue(by_cmd[china_cmd].strip(), "expected china_policy_track changes in SQ3 range")
+
+        score_diff = next(c for c in by_cmd if "04_Score_Calculation/" in c and "diff " in c)
+        global_diff = next(c for c in by_cmd if "data/global/" in c and "diff " in c and "name-only" not in c)
+        self.assertEqual(by_cmd[score_diff].strip(), "")
+        self.assertEqual(by_cmd[global_diff].strip(), "")
+
+        shasum_cmds = [c for c in by_cmd if c.startswith("shasum ")]
+        self.assertGreaterEqual(len(shasum_cmds), 1)
+        for cmd in shasum_cmds:
+            self.assertRegex(by_cmd[cmd], r"[0-9a-f]{40}\s+")
 
     def test_sq3_package_isolated_from_global(self):
         """Full production package must not import Global score logic; scoring must not touch data/global/."""
