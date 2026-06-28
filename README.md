@@ -11,5 +11,7 @@ Parallel execution team supporting the Whinfell Transmission Map build.
 - 06_Testing_Logs/        ← Prompt testing results
 - 07_Reference_Materials/ ← Ticker lists, definitions
 - 08_Deliverables/        ← Final approved outputs
+- china_policy_track/     ← China Policy data models, Parquet schema, ingestion
+- data/china_policy/      ← China Policy Parquet storage (isolated from data/global/)
 
 This team works autonomously once the Operating Plan is approved.
