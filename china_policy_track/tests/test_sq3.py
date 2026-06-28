@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import ast
 import json
 import sys
 import unittest
@@ -12,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
 from china_policy_track.data_parser import parse_input
+from china_policy_track.package_isolation import PRODUCTION_MODULES, scan_production_imports
 from china_policy_track.sq3 import (
     INTERPRETATION_BANDS,
     WEIGHT_GROWTH_MARKET,
@@ -125,42 +125,34 @@ class TestSQ3Scoring(unittest.TestCase):
         self.assertIn("normalized_inputs", d)
 
     def test_sq3_package_isolated_from_global(self):
-        """SQ3 module must not depend on Global score logic; scoring must not touch data/global/."""
-        import china_policy_track.sq3 as sq3_module
+        """Full production package must not import Global score logic; scoring must not touch data/global/."""
+        import china_policy_track
+        from china_policy_track.package_isolation import global_data_files
 
-        sq3_path = REPO_ROOT / "china_policy_track/sq3.py"
-        sq3_source = sq3_path.read_text(encoding="utf-8")
-        tree = ast.parse(sq3_source, filename=str(sq3_path))
-        forbidden = {"04_Score_Calculation", "Credit_Confirmation", "Whinfell_Credit_Confirmation"}
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                for alias in node.names:
-                    self.assertFalse(
-                        any(marker in alias.name for marker in forbidden),
-                        f"forbidden import: {alias.name}",
-                    )
-            elif isinstance(node, ast.ImportFrom):
-                module = node.module or ""
-                self.assertFalse(
-                    any(marker in module for marker in forbidden),
-                    f"forbidden import from: {module}",
-                )
-        for marker in forbidden:
-            self.assertNotIn(marker, sq3_source)
+        for module_name in PRODUCTION_MODULES:
+            self.assertTrue(
+                (REPO_ROOT / "china_policy_track" / module_name).exists(),
+                f"missing production module: {module_name}",
+            )
 
-        global_files = sorted((REPO_ROOT / "data/global").rglob("*"))
-        mtimes_before = {p: p.stat().st_mtime for p in global_files if p.is_file()}
+        hits = scan_production_imports()
+        self.assertEqual(hits, [], f"forbidden imports found: {hits}")
+
+        # Drive real public package import path (not only sq3.py in isolation).
+        self.assertTrue(hasattr(china_policy_track, "score_input"))
+        self.assertTrue(hasattr(china_policy_track, "calculate_sq3"))
+
+        mtimes_before = {p: p.stat().st_mtime for p in global_data_files()}
 
         text = (REPO_ROOT / "china_policy_track/examples/sample_perplexity_export.txt").read_text()
         raw = json.loads(
             (REPO_ROOT / "china_policy_track/examples/sample_koyfin_export.json").read_text()
         )
         for payload in (text, raw):
-            score_input(payload)
+            china_policy_track.score_input(payload)
 
         for path, mtime in mtimes_before.items():
             self.assertEqual(path.stat().st_mtime, mtime, f"SQ3 scoring modified {path}")
-        self.assertEqual(sq3_module.__name__, "china_policy_track.sq3")
 
 
 if __name__ == "__main__":

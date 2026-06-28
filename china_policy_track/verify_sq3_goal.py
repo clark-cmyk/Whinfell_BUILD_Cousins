@@ -8,21 +8,21 @@ from __future__ import annotations
 
 import hashlib
 import inspect
-import io
 import json
 import subprocess
 import sys
 import textwrap
-from contextlib import redirect_stdout
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
-SQ3_BASE_REF = "703610b"
-FORBIDDEN_GLOBAL_MARKERS = (
-    "04_Score_Calculation",
-    "Credit_Confirmation",
-    "Whinfell_Credit_Confirmation",
+from china_policy_track.package_isolation import (
+    PRODUCTION_MODULES,
+    SQ3_FIRST_COMMIT,
+    SQ3_RANGE_END,
+    global_data_files,
+    scan_production_imports,
 )
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 PERPLEXITY_C_BLOCK = textwrap.dedent(
     """
@@ -104,73 +104,39 @@ def _shasum_lines(paths: list[Path]) -> list[str]:
     return lines
 
 
-def _global_data_paths() -> list[Path]:
-    root = REPO_ROOT / "data" / "global"
-    if not root.exists():
-        return []
-    return sorted(p for p in root.rglob("*") if p.is_file())
-
-
-def _production_py_files() -> list[Path]:
-    pkg = REPO_ROOT / "china_policy_track"
-    excluded = {"tests", "verify_sq3_goal.py"}
-    files: list[Path] = []
-    for py_file in sorted(pkg.glob("*.py")):
-        if py_file.name in excluded:
-            continue
-        files.append(py_file)
-    return files
-
-
-def _scan_china_policy_imports() -> list[tuple[str, int, str]]:
-    """AST import scan on production modules only (excludes tests/ and this verifier)."""
-    import ast
-
-    hits: list[tuple[str, int, str]] = []
-    for py_file in _production_py_files():
-        tree = ast.parse(py_file.read_text(encoding="utf-8"), filename=str(py_file))
-        rel = str(py_file.relative_to(REPO_ROOT))
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Import):
-                for alias in node.names:
-                    for marker in FORBIDDEN_GLOBAL_MARKERS:
-                        if marker in alias.name:
-                            hits.append((rel, node.lineno, alias.name))
-            elif isinstance(node, ast.ImportFrom):
-                module = node.module or ""
-                for marker in FORBIDDEN_GLOBAL_MARKERS:
-                    if marker in module:
-                        hits.append((rel, node.lineno, module))
-    return hits
-
-
-def _exec_c_block(block: str) -> str:
-    buf = io.StringIO()
-    namespace: dict = {"__name__": "__sq3_verify__"}
-    with redirect_stdout(buf):
-        exec(compile(block, "<sq3_verify_block>", "exec"), namespace)
-    return buf.getvalue().rstrip()
+def _run_python_c_block(block: str) -> tuple[int, str, str]:
+    """Run code in a fresh interpreter subprocess (python3 -c)."""
+    proc = subprocess.run(
+        [sys.executable, "-c", block],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+    )
+    return proc.returncode, proc.stdout.rstrip(), proc.stderr.rstrip()
 
 
 def write_sq3_output(path: Path) -> None:
     lines = [
         "=== INVOCATION CODE (Verification plan step 1) ===",
-        "Fresh interpreter blocks executed via exec() — equivalent to python3 -c.",
+        "Each block executed as a separate `python3 -c` subprocess (fresh interpreter).",
         "",
         "# Perplexity sample — parse + score_observation, twice",
-        "python3 -c \"",
-        PERPLEXITY_C_BLOCK.replace('"', '\\"'),
-        "\"",
+        f"python3 -c {json.dumps(PERPLEXITY_C_BLOCK)}",
         "",
         "# Koyfin sample — parse + score_observation + score_from_mapping, twice",
-        "python3 -c \"",
-        KOYFIN_C_BLOCK.replace('"', '\\"'),
-        "\"",
+        f"python3 -c {json.dumps(KOYFIN_C_BLOCK)}",
         "",
         "=== EXECUTION OUTPUT ===",
     ]
-    lines.append(_exec_c_block(PERPLEXITY_C_BLOCK))
-    lines.append(_exec_c_block(KOYFIN_C_BLOCK))
+    for label, block in (("perplexity", PERPLEXITY_C_BLOCK), ("koyfin", KOYFIN_C_BLOCK)):
+        rc, out, err = _run_python_c_block(block)
+        lines.append(f"--- {label} subprocess exit_code={rc} ---")
+        if out:
+            lines.append(out)
+        if err:
+            lines.append(f"stderr: {err}")
+        if rc != 0:
+            raise RuntimeError(f"{label} verification subprocess failed (exit {rc}): {err}")
     lines.append("all_verification_asserts_passed")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -232,7 +198,7 @@ def write_china_tests(path: Path) -> int:
 def write_global_isolation(path: Path) -> None:
     from china_policy_track.sq3 import score_input
 
-    global_paths = _global_data_paths()
+    global_paths = global_data_files()
     before = _shasum_lines(global_paths)
 
     score_input((REPO_ROOT / "china_policy_track/examples/sample_perplexity_export.txt").read_text())
@@ -243,22 +209,30 @@ def write_global_isolation(path: Path) -> None:
     )
 
     after = _shasum_lines(global_paths)
-    package_hits = _scan_china_policy_imports()
+    package_hits = scan_production_imports()
+    sq3_range = f"{SQ3_FIRST_COMMIT}..{SQ3_RANGE_END}"
+    sq3_parent_range = f"{SQ3_FIRST_COMMIT}^..{SQ3_RANGE_END}"
+    china_scope = ["--", "china_policy_track/"]
 
     lines = [
         "=== Verification plan step 4: Global isolation ===",
-        f"SQ3 commit range base: {SQ3_BASE_REF}..HEAD",
+        f"SQ3 first commit: {SQ3_FIRST_COMMIT}",
+        "All SQ3 file lists below use path filter: -- china_policy_track/",
         "",
-        "--- Command: git diff --name-only 703610b..HEAD ---",
-        _run_git(["diff", "--name-only", f"{SQ3_BASE_REF}..HEAD"]),
+        f"--- Command: git diff --name-only {sq3_range} -- china_policy_track/ ---",
+        _run_git(["diff", "--name-only", sq3_range, *china_scope]),
         "",
-        "--- Command: git diff 703610b..HEAD -- 04_Score_Calculation/ ---",
-        _run_git(["diff", f"{SQ3_BASE_REF}..HEAD", "--", "04_Score_Calculation/"]) or "(no diff)",
+        f"--- Command: git diff --name-only {sq3_parent_range} -- china_policy_track/ ---",
+        _run_git(["diff", "--name-only", sq3_parent_range, *china_scope]),
         "",
-        "--- Command: git diff 703610b..HEAD -- data/global/ ---",
-        _run_git(["diff", f"{SQ3_BASE_REF}..HEAD", "--", "data/global/"]) or "(no diff)",
+        f"--- Command: git diff {sq3_parent_range} -- 04_Score_Calculation/ ---",
+        _run_git(["diff", sq3_parent_range, "--", "04_Score_Calculation/"]) or "(no diff)",
         "",
-        "--- Command: AST import scan china_policy_track/*.py (excludes tests/, verify_sq3_goal.py) ---",
+        f"--- Command: git diff {sq3_parent_range} -- data/global/ ---",
+        _run_git(["diff", sq3_parent_range, "--", "data/global/"]) or "(no diff)",
+        "",
+        f"--- Production modules scanned: {', '.join(PRODUCTION_MODULES)} ---",
+        "--- Command: AST import scan (all production modules via package_isolation.py) ---",
     ]
     if package_hits:
         for rel, lineno, marker in package_hits:
@@ -272,6 +246,8 @@ def write_global_isolation(path: Path) -> None:
         capture_output=True,
         text=True,
     )
+    status_full = _run_git(["status", "--porcelain"]) or "(clean)"
+
     lines.extend(
         [
             "",
@@ -284,8 +260,14 @@ def write_global_isolation(path: Path) -> None:
             "--- shasum data/global files (after score_input x2) ---",
             *after,
             "",
-            "data/global checksums: "
+            "data/global checksums after score_input: "
             + ("UNCHANGED" if before == after else "CHANGED"),
+            "",
+            "--- Command: git status --porcelain (full, unfiltered) ---",
+            status_full,
+            "",
+            "--- SQ3 CHANGED_FILES (git diff --name-only with -- china_policy_track/ filter) ---",
+            _run_git(["diff", "--name-only", sq3_parent_range, *china_scope]),
         ]
     )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
