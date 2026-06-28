@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import re
 import subprocess
 from pathlib import Path
 
@@ -28,7 +29,10 @@ FORBIDDEN_GLOBAL_MARKERS: tuple[str, ...] = (
 )
 
 SQ3_FIRST_COMMIT = "9f7ae5b"
+SQ3_BASE_REF = f"{SQ3_FIRST_COMMIT}^"
 SQ3_RANGE_END = "HEAD"
+
+_LS_TREE_LINE = re.compile(r"^\d+ blob ([0-9a-f]{40})\s*(data/global/.+)$")
 
 
 def production_py_paths() -> list[Path]:
@@ -63,6 +67,16 @@ def global_data_files() -> list[Path]:
     return sorted(p for p in root.rglob("*") if p.is_file())
 
 
+def parse_ls_tree_global(output: str) -> dict[str, str]:
+    """Parse ``git ls-tree`` lines into {repo_path: git_blob_oid}."""
+    entries: dict[str, str] = {}
+    for line in output.splitlines():
+        match = _LS_TREE_LINE.match(line.strip())
+        if match:
+            entries[match.group(2)] = match.group(1)
+    return entries
+
+
 def _run_cmd(cmd: list[str], *, cwd: Path) -> tuple[str, str]:
     proc = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, check=False)
     rendered = " ".join(cmd)
@@ -70,25 +84,90 @@ def _run_cmd(cmd: list[str], *, cwd: Path) -> tuple[str, str]:
     return rendered, output
 
 
+def _run_shell(cmd: str, *, cwd: Path) -> tuple[str, str]:
+    proc = subprocess.run(cmd, cwd=cwd, shell=True, capture_output=True, text=True, check=False)
+    output = (proc.stdout + proc.stderr).rstrip()
+    return cmd, output
+
+
+def _shasum_hex_from_output(output: str) -> str:
+    token = output.strip().split()
+    return token[0] if token else ""
+
+
+def ls_tree_global_at(ref: str, repo_root: Path | None = None) -> dict[str, str]:
+    root = repo_root or REPO_ROOT
+    _, output = _run_cmd(["git", "ls-tree", "-r", ref, "--", "data/global/"], cwd=root)
+    return parse_ls_tree_global(output)
+
+
+def git_show_shasum(ref: str, repo_path: str, repo_root: Path | None = None) -> tuple[str, str]:
+    """SHA1 of committed blob content via ``git show ref:path | shasum``."""
+    root = repo_root or REPO_ROOT
+    cmd = f"git show {ref}:{repo_path} | shasum"
+    return _run_shell(cmd, cwd=root)
+
+
+def cat_file_shasum(blob_oid: str, repo_root: Path | None = None) -> tuple[str, str]:
+    """SHA1 of git object content via ``git cat-file -p oid | shasum``."""
+    root = repo_root or REPO_ROOT
+    cmd = f"git cat-file -p {blob_oid} | shasum"
+    return _run_shell(cmd, cwd=root)
+
+
 def run_git_isolation_checks(repo_root: Path | None = None) -> list[tuple[str, str]]:
-    """Subprocess git/shasum checks for SQ3 isolation evidence.
+    """Subprocess git/shasum checks pinned to committed refs (not working-tree files).
 
     Returns (command, stdout) pairs suitable for verbatim echo into artifacts.
-    Uses the system ``shasum`` binary (not Python hashlib).
     """
     root = repo_root or REPO_ROOT
-    sq3_parent_range = f"{SQ3_FIRST_COMMIT}^..{SQ3_RANGE_END}"
+    sq3_parent_range = f"{SQ3_BASE_REF}..{SQ3_RANGE_END}"
 
-    commands: list[list[str]] = [
+    checks: list[tuple[str, str]] = []
+    for cmd in (
         ["git", "diff", "--name-only", sq3_parent_range, "--", "china_policy_track/"],
         ["git", "diff", sq3_parent_range, "--", "04_Score_Calculation/"],
         ["git", "diff", sq3_parent_range, "--", "data/global/"],
-        ["git", "ls-tree", "-r", "HEAD", "--", "data/global/"],
-    ]
-    for path in global_data_files():
-        commands.append(["shasum", str(path.relative_to(root))])
+        ["git", "ls-tree", "-r", SQ3_BASE_REF, "--", "data/global/"],
+        ["git", "ls-tree", "-r", SQ3_RANGE_END, "--", "data/global/"],
+    ):
+        checks.append(_run_cmd(cmd, cwd=root))
 
-    return [_run_cmd(cmd, cwd=root) for cmd in commands]
+    base_entries = ls_tree_global_at(SQ3_BASE_REF, root)
+    head_entries = ls_tree_global_at(SQ3_RANGE_END, root)
+    for repo_path in sorted(head_entries):
+        checks.append(git_show_shasum(SQ3_BASE_REF, repo_path, root))
+        checks.append(git_show_shasum(SQ3_RANGE_END, repo_path, root))
+        checks.append(cat_file_shasum(head_entries[repo_path], root))
+
+    return checks
+
+
+def verify_global_blob_parity(repo_root: Path | None = None) -> dict[str, dict[str, str]]:
+    """Assert data/global blobs unchanged SQ3 base→HEAD; shasum matches ls-tree oids."""
+    root = repo_root or REPO_ROOT
+    base_entries = ls_tree_global_at(SQ3_BASE_REF, root)
+    head_entries = ls_tree_global_at(SQ3_RANGE_END, root)
+    if base_entries != head_entries:
+        raise AssertionError(f"data/global ls-tree mismatch: base={base_entries} head={head_entries}")
+
+    report: dict[str, dict[str, str]] = {}
+    for repo_path, blob_oid in sorted(head_entries.items()):
+        _, base_out = git_show_shasum(SQ3_BASE_REF, repo_path, root)
+        _, head_out = git_show_shasum(SQ3_RANGE_END, repo_path, root)
+        _, cat_out = cat_file_shasum(blob_oid, root)
+        base_hex = _shasum_hex_from_output(base_out)
+        head_hex = _shasum_hex_from_output(head_out)
+        cat_hex = _shasum_hex_from_output(cat_out)
+        if not (base_hex and base_hex == head_hex == cat_hex):
+            raise AssertionError(
+                f"shasum mismatch for {repo_path}: base={base_hex} head={head_hex} cat={cat_hex}"
+            )
+        report[repo_path] = {
+            "blob_oid": blob_oid,
+            "shasum": base_hex,
+        }
+    return report
 
 
 def format_git_isolation_report(checks: list[tuple[str, str]]) -> str:

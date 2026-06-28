@@ -13,8 +13,15 @@ sys.path.insert(0, str(REPO_ROOT))
 from china_policy_track.data_parser import parse_input
 from china_policy_track.package_isolation import (
     PRODUCTION_MODULES,
+    SQ3_BASE_REF,
+    SQ3_RANGE_END,
+    _shasum_hex_from_output,
+    cat_file_shasum,
+    git_show_shasum,
+    parse_ls_tree_global,
     run_git_isolation_checks,
     scan_production_imports,
+    verify_global_blob_parity,
 )
 from china_policy_track.sq3 import (
     INTERPRETATION_BANDS,
@@ -129,7 +136,7 @@ class TestSQ3Scoring(unittest.TestCase):
         self.assertIn("normalized_inputs", d)
 
     def test_sq3_git_isolation(self):
-        """Subprocess git/shasum checks: SQ3 did not modify Global score paths."""
+        """Subprocess git checks: SQ3 did not modify Global paths; blob shasums match ls-tree."""
         checks = run_git_isolation_checks(REPO_ROOT)
         by_cmd = {cmd: out for cmd, out in checks}
 
@@ -141,10 +148,31 @@ class TestSQ3Scoring(unittest.TestCase):
         self.assertEqual(by_cmd[score_diff].strip(), "")
         self.assertEqual(by_cmd[global_diff].strip(), "")
 
-        shasum_cmds = [c for c in by_cmd if c.startswith("shasum ")]
-        self.assertGreaterEqual(len(shasum_cmds), 1)
-        for cmd in shasum_cmds:
-            self.assertRegex(by_cmd[cmd], r"[0-9a-f]{40}\s+")
+        base_tree_cmd = f"git ls-tree -r {SQ3_BASE_REF} -- data/global/"
+        head_tree_cmd = f"git ls-tree -r {SQ3_RANGE_END} -- data/global/"
+        base_entries = parse_ls_tree_global(by_cmd[base_tree_cmd])
+        head_entries = parse_ls_tree_global(by_cmd[head_tree_cmd])
+        self.assertEqual(base_entries, head_entries)
+
+        parity = verify_global_blob_parity(REPO_ROOT)
+        self.assertGreaterEqual(len(parity), 1)
+
+        for repo_path, blob_oid in head_entries.items():
+            _, base_out = git_show_shasum(SQ3_BASE_REF, repo_path, REPO_ROOT)
+            _, head_out = git_show_shasum(SQ3_RANGE_END, repo_path, REPO_ROOT)
+            _, cat_out = cat_file_shasum(blob_oid, REPO_ROOT)
+            base_hex = _shasum_hex_from_output(base_out)
+            head_hex = _shasum_hex_from_output(head_out)
+            cat_hex = _shasum_hex_from_output(cat_out)
+            self.assertEqual(base_hex, head_hex)
+            self.assertEqual(base_hex, cat_hex)
+            self.assertEqual(base_hex, parity[repo_path]["shasum"])
+            self.assertEqual(blob_oid, parity[repo_path]["blob_oid"])
+
+            show_cmd = f"git show {SQ3_RANGE_END}:{repo_path} | shasum"
+            cat_cmd = f"git cat-file -p {blob_oid} | shasum"
+            self.assertEqual(_shasum_hex_from_output(by_cmd[show_cmd]), base_hex)
+            self.assertEqual(_shasum_hex_from_output(by_cmd[cat_cmd]), base_hex)
 
     def test_sq3_package_isolated_from_global(self):
         """Full production package must not import Global score logic; scoring must not touch data/global/."""
