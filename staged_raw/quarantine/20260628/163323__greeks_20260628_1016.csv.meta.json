@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "cwt",
+  "source_file": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=greeks/greeks_20260628_1016.csv",
+  "quarantined_at": "2026-06-28T16:33:23.367094+00:00",
+  "reason": "missing required headers: timestamp, near_month or basis_spread",
+  "sha256": "fdcc83f285f6f0060ed3c4ff5cb3e2597258487faf4d619ae4b9d88411c75174"
+}

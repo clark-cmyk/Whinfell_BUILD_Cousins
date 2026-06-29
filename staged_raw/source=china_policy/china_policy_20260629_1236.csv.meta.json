@@ -1,0 +1,19 @@
+{
+  "meta_version": "1.0.0",
+  "collector_id": "comet-first-pass",
+  "collector_version": "1.0.0",
+  "pipeline_version": "1.0.0",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/china_policy_20260629_1236.csv",
+  "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=china_policy/china_policy_20260629_1236.csv",
+  "staged_at": "2026-06-29T15:24:19.383615+00:00",
+  "operator": "desk",
+  "source": "china_policy",
+  "dataset": null,
+  "filename": "china_policy_20260629_1236.csv",
+  "sha256": "aed81e102b734a9ca94346d1d6095c9a562f0749ef5232fcecf5d6fa2eab38ab",
+  "status": "staged",
+  "errors": [],
+  "warnings": [
+    "optional headers absent: dominant_theme"
+  ]
+}

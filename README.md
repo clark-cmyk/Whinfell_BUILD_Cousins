@@ -13,5 +13,10 @@ Parallel execution team supporting the Whinfell Transmission Map build.
 - 08_Deliverables/        ← Final approved outputs
 - china_policy_track/     ← China Policy data models, Parquet schema, ingestion
 - data/china_policy/      ← China Policy Parquet storage (isolated from data/global/)
+- staged_raw/             ← Operator CSV staging (Comet runbook → Parquet)
+- run_csv_download.py     ← Daily CSV chain: stage → collect → hydrate
+- scripts/morning_daily.sh  ← Morning one-liner (Comet blueprint)
+- 08_Deliverables/Comet_Browser_Operations_Blueprint.md ← Backup views + shortcuts
+- whinfell_pipeline/      ← Ingest, hydrate, WTM EXPORT v2.1 spec
 
 This team works autonomously once the Operating Plan is approved.

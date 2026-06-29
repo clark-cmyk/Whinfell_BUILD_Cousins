@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "cwt",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/btm26_daily-nearby_historical-data-06-28-2026 (1).csv",
+  "quarantined_at": "2026-06-28T16:33:23.346315+00:00",
+  "reason": "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: btm26_daily-nearby_historical-data-06-28-2026 (1).csv",
+  "sha256": "b10e8fb0349b35cbb59e8d65be75e9907ae3ae18592149966ca81195ab77582d"
+}

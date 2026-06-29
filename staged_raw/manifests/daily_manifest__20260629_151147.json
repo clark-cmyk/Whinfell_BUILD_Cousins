@@ -1,0 +1,24 @@
+{
+  "manifest_version": "1.0.0",
+  "runbook_version": "1.0.0",
+  "manifest_type": "daily",
+  "created_at": "2026-06-29T15:11:47.400669+00:00",
+  "operator": "desk",
+  "staged_root": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw",
+  "downloads_dir": "/Users/clarksonwthornburgh/Downloads/whinfell_drop",
+  "window": "today",
+  "stage_manifest": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/manifests/stage_manifest__20260629_151145.json",
+  "stage": {
+    "files_scanned": 22,
+    "files_staged": 1,
+    "files_quarantined": 16,
+    "files_skipped": 5
+  },
+  "collect_exit": 0,
+  "collect_stdout": "pipeline_staged_ingest_ok version=1.0.0\nstaged_root=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw\nfiles_found=6\nfiles_processed=6\nfiles_failed=0\nglobal_written=3\nchina_written=1\nexecution_records=2\ncrypto_ingested=0\nfile=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260629_0041.csv source=barchart dataset=futures_intraday adapter=barchart status=parsed archived=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/archived/20260629T151145Z__futures_intraday_20260629_0041.csv\nfile=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260629_0948.csv source=barchart dataset=futures_intraday adapter=barchart status=parsed archived=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/archived/20260629T151145Z__futures_intraday_20260629_0948.csv\nfile=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=rates/rates_20260629_0038.csv source=koyfin dataset=rates adapter=koyfin status=parsed archived=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=rates/archived/20260629T151146Z__rates_20260629_0038.csv\nwarning=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=rates/rates_20260629_0038.csv: optional headers absent: sq3_band, sq3_score\nfile=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260629_0929.csv source=koyfin dataset=credit adapter=koyfin status=partial archived=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/archived/20260629T151146Z__credit_20260629_0929.csv\nwarning=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260629_0929.csv: optional headers absent: sq3_band, sq3_score\nwarning=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260629_0929.csv: Missing global fields: whinfell_score\nfile=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=equities/equities_20260629_0929.csv source=koyfin dataset=equities adapter=koyfin status=parsed archived=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=equities/archived/20260629T151146Z__equities_20260629_0929.csv\nwarning=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=equities/equities_20260629_0929.csv: optional headers absent: sq3_band, sq3_score\nfile=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=china_policy/china_policy_20260629_1236.csv source=china_policy dataset=- adapter=legacy_parser status=parsed archived=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=china_policy/archived/20260629T151146Z__china_policy_20260629_1236.csv\nwarning=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=china_policy/china_policy_20260629_1236.csv: optional headers absent: dominant_theme\n",
+  "hydrate_exit": 0,
+  "hydrate_output": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/data/hydration/latest.json",
+  "export_path": null,
+  "errors": [],
+  "chain_ok": true
+}

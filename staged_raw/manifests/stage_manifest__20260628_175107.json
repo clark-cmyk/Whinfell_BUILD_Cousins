@@ -1,0 +1,223 @@
+{
+  "manifest_version": "1.0.0",
+  "runbook_version": "1.0.0",
+  "manifest_type": "stage",
+  "created_at": "2026-06-28T17:51:07.336708+00:00",
+  "operator": "desk",
+  "staged_root": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw",
+  "downloads_dir": "/Users/clarksonwthornburgh/Downloads/whinfell_drop",
+  "window": "today",
+  "files_scanned": 17,
+  "files_staged": 16,
+  "files_quarantined": 1,
+  "files_skipped": 0,
+  "entries": [
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/btc_basis_20260628.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/btc_basis_20260628.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/btc_basis_20260628.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_intraday",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_spreads)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/credit_20260628_1120.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260628_1120.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260628_1120.csv.meta.json",
+      "source": "koyfin",
+      "dataset": "credit",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (koyfin_snapshot)",
+        "optional headers absent: sq3_band, sq3_score"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/equities_20260628_1120.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=equities/equities_20260628_1120.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=equities/equities_20260628_1120.csv.meta.json",
+      "source": "koyfin",
+      "dataset": "equities",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (koyfin_snapshot)",
+        "optional headers absent: sq3_band, sq3_score"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1015.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1015.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1015.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1145.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1145.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1145.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1206.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1206.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1206.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1225.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1225.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1225.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1232.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1232.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1232.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1234.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1234.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1234.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_daily_20260628_1235.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1235.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_daily/futures_daily_20260628_1235.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_daily",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_historical)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_intraday_20260628_1146.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1146.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1146.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_intraday",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_prices)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_intraday_20260628_1207.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1207.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1207.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_intraday",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_prices)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_intraday_20260628_1221.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1221.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1221.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_intraday",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_watchlist)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/greeks_20260628_1016.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=greeks/greeks_20260628_1016.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=greeks/greeks_20260628_1016.csv.meta.json",
+      "source": "barchart",
+      "dataset": "greeks",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_options)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/options_20260628_1016.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=options/options_20260628_1016.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=options/options_20260628_1016.csv.meta.json",
+      "source": "barchart",
+      "dataset": "options",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_options)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/rates_20260628_1119.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=rates/rates_20260628_1119.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=rates/rates_20260628_1119.csv.meta.json",
+      "source": "koyfin",
+      "dataset": "rates",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (koyfin_wide_timeseries)",
+        "optional headers absent: sq3_band, sq3_score"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/sjn26_daily-nearby_historical-data-06-28-2026 (1).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: sjn26_daily-nearby_historical-data-06-28-2026 (1).csv"
+      ],
+      "warnings": []
+    }
+  ]
+}

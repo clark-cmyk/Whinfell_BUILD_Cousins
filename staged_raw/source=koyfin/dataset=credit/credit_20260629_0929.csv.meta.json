@@ -1,0 +1,19 @@
+{
+  "meta_version": "1.0.0",
+  "collector_id": "comet-first-pass",
+  "collector_version": "1.0.0",
+  "pipeline_version": "1.0.0",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/credit_20260629_0929.csv",
+  "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260629_0929.csv",
+  "staged_at": "2026-06-29T15:24:19.388449+00:00",
+  "operator": "desk",
+  "source": "koyfin",
+  "dataset": "credit",
+  "filename": "credit_20260629_0929.csv",
+  "sha256": "c68cab162bae5f2bf2678076883a168749e1857a036476a459f3febc43c15af6",
+  "status": "staged",
+  "errors": [],
+  "warnings": [
+    "optional headers absent: sq3_band, sq3_score"
+  ]
+}

@@ -1,0 +1,328 @@
+{
+  "hydration_version": "1.0.0",
+  "pipeline_version": "1.0.0",
+  "bundle_version": "1.0.0",
+  "snapshot_id": "global-2026-06-29-raw2wtm-01",
+  "lineage_hash": "sha256:b5f9b9286a384dc7e733c7e6bf17f10e03ece178dca188e87411788df3498818",
+  "validation_status": "parsed",
+  "as_of": "2026-06-29T15:11:45+00:00",
+  "source": "parquet_hydration",
+  "freshness_status": "fresh",
+  "global": {
+    "observation_id": "global-2026-06-29-raw2wtm-01",
+    "whinfell_score": 50,
+    "transmission_state": "stressed",
+    "regime_tag": "Fragile Risk-On",
+    "key_observation": "Desk auto-transform from Koyfin wide export (2.2e).",
+    "gate_status": "",
+    "sq3_score": 35,
+    "sq3_band": "Impaired",
+    "near_month": "Jul",
+    "far_month": "Back",
+    "basis_spread": "59685.00",
+    "ref_low": "47748.00",
+    "ref_mid": "59685.00",
+    "ref_high": "71622.00",
+    "btc_bias": "Neutral"
+  },
+  "china": {
+    "policy_strength": 50,
+    "state_impulse_score": 0,
+    "growth_impulse_score": 0,
+    "sq3_score": 35,
+    "sq3_band": "Impaired",
+    "regime_tag": "desk-auto",
+    "observation_id": "china-2026-06-29-raw2wtm-01",
+    "as_of": "2026-06-29T15:11:45+00:00",
+    "source": "manual"
+  },
+  "china_ladder": {
+    "sq3_score": 35,
+    "horizons": {
+      "liquidity": {
+        "d1": "flat",
+        "d5": "flat",
+        "d20": "down",
+        "d60": "flat"
+      },
+      "credit": {
+        "d1": "down",
+        "d5": "down",
+        "d20": "flat",
+        "d60": "down"
+      },
+      "breadth": {
+        "d1": "up",
+        "d5": "flat",
+        "d20": "flat",
+        "d60": "flat"
+      },
+      "highbeta": {
+        "d1": "flat",
+        "d5": "down",
+        "d20": "flat",
+        "d60": "flat"
+      },
+      "basis": {
+        "d1": "flat",
+        "d5": "flat",
+        "d20": "down",
+        "d60": "flat"
+      }
+    }
+  },
+  "crypto_sleeve": {
+    "version": "1.0.0",
+    "as_of": "2026-06-29T15:11:45.264226+00:00",
+    "assets": {
+      "xrp_spot_usd": {
+        "ticker": "XRPUSD",
+        "asset_key": "xrp_spot_usd",
+        "name": "Ripple - United States Dollar",
+        "last_price": 1.044,
+        "1d_chg": "-0.0011",
+        "vol_1m": 52.46,
+        "total_return_5d": "-0.0272",
+        "tr_1w": -0.0765,
+        "tr_1m": -0.2107,
+        "tr_3m": -0.2109,
+        "tr_6m": -0.4362,
+        "tr_1y": -0.5216,
+        "total_return_3y": "1.2566",
+        "total_return_5y": "0.6067",
+        "vol_3m": 38.9,
+        "vol_1y": 60.62,
+        "_raw": {
+          "Ticker": "XRPUSD",
+          "Name": "Ripple - United States Dollar",
+          "Last Price": "1.0440",
+          "1d Chg %": "-0.0011",
+          "Volatility (1M)": "52.46",
+          "Total Return (5D)": "-0.0272",
+          "Total Return (1W)": "-0.0765",
+          "Total Return (1M)": "-0.2107",
+          "Total Return (3M)": "-0.2109",
+          "Total Return (6M)": "-0.4362",
+          "Total Return (1Y)": "-0.5216",
+          "Total Return (3Y)": "1.2566",
+          "Total Return (5Y)": "0.6067",
+          "Volatility (3M)": "38.90",
+          "Volatility (1Y)": "60.62"
+        }
+      },
+      "btc_spot_usd": {
+        "ticker": "BTCUSD",
+        "asset_key": "btc_spot_usd",
+        "name": "Bitcoin - United States Dollar",
+        "last_price": 59402.16,
+        "1d_chg": "-0.0026",
+        "vol_1m": 33.27,
+        "total_return_5d": "-0.0241",
+        "tr_1w": -0.077,
+        "tr_1m": -0.1926,
+        "tr_3m": -0.1074,
+        "tr_6m": -0.319,
+        "tr_1y": -0.4469,
+        "total_return_3y": "0.9733",
+        "total_return_5y": "0.7123",
+        "total_return_10y": "91.9910",
+        "vol_3m": 28.16,
+        "vol_1y": 36.05,
+        "_raw": {
+          "Ticker": "BTCUSD",
+          "Name": "Bitcoin - United States Dollar",
+          "Last Price": "59402.16",
+          "1d Chg %": "-0.0026",
+          "Volatility (1M)": "33.27",
+          "Total Return (5D)": "-0.0241",
+          "Total Return (1W)": "-0.0770",
+          "Total Return (1M)": "-0.1926",
+          "Total Return (3M)": "-0.1074",
+          "Total Return (6M)": "-0.3190",
+          "Total Return (1Y)": "-0.4469",
+          "Total Return (3Y)": "0.9733",
+          "Total Return (5Y)": "0.7123",
+          "Total Return (10Y)": "91.9910",
+          "Volatility (3M)": "28.16",
+          "Volatility (1Y)": "36.05"
+        }
+      },
+      "eth_spot_usd": {
+        "ticker": "ETHUSD",
+        "asset_key": "eth_spot_usd",
+        "name": "Ethereum - United States Dollar",
+        "last_price": 1568.99,
+        "1d_chg": "-0.0024",
+        "vol_1m": 52.95,
+        "total_return_5d": "-0.0261",
+        "tr_1w": -0.0945,
+        "tr_1m": -0.2215,
+        "tr_3m": -0.2158,
+        "tr_6m": -0.4651,
+        "tr_1y": -0.3551,
+        "total_return_3y": "-0.1431",
+        "total_return_5y": "-0.2642",
+        "vol_3m": 41.13,
+        "vol_1y": 57.15,
+        "_raw": {
+          "Ticker": "ETHUSD",
+          "Name": "Ethereum - United States Dollar",
+          "Last Price": "1568.99",
+          "1d Chg %": "-0.0024",
+          "Volatility (1M)": "52.95",
+          "Total Return (5D)": "-0.0261",
+          "Total Return (1W)": "-0.0945",
+          "Total Return (1M)": "-0.2215",
+          "Total Return (3M)": "-0.2158",
+          "Total Return (6M)": "-0.4651",
+          "Total Return (1Y)": "-0.3551",
+          "Total Return (3Y)": "-0.1431",
+          "Total Return (5Y)": "-0.2642",
+          "Volatility (3M)": "41.13",
+          "Volatility (1Y)": "57.15"
+        }
+      },
+      "sol_spot_usd": {
+        "ticker": "SOLUSD",
+        "asset_key": "sol_spot_usd",
+        "name": "Solana - United States Dollar",
+        "last_price": 73.06,
+        "1d_chg": "0.0319",
+        "vol_1m": 65.09,
+        "total_return_5d": "0.0812",
+        "tr_1w": 0.0043,
+        "tr_1m": -0.1103,
+        "tr_3m": -0.1075,
+        "tr_6m": -0.4076,
+        "tr_1y": -0.5156,
+        "total_return_3y": "3.5605",
+        "total_return_5y": "1.1636",
+        "vol_3m": 45.68,
+        "vol_1y": 61.56,
+        "_raw": {
+          "Ticker": "SOLUSD",
+          "Name": "Solana - United States Dollar",
+          "Last Price": "73.0600",
+          "1d Chg %": "0.0319",
+          "Volatility (1M)": "65.09",
+          "Total Return (5D)": "0.0812",
+          "Total Return (1W)": "0.0043",
+          "Total Return (1M)": "-0.1103",
+          "Total Return (3M)": "-0.1075",
+          "Total Return (6M)": "-0.4076",
+          "Total Return (1Y)": "-0.5156",
+          "Total Return (3Y)": "3.5605",
+          "Total Return (5Y)": "1.1636",
+          "Volatility (3M)": "45.68",
+          "Volatility (1Y)": "61.56"
+        }
+      }
+    },
+    "charts": {
+      "btc_price_chart": {
+        "chart_key": "btc_price_chart",
+        "asset_key": "btc_spot_usd",
+        "field": "close",
+        "row_count": 366,
+        "latest": {
+          "date": "06-29-2026",
+          "close": 59650.39
+        },
+        "priority": "backup"
+      },
+      "eth_price_chart_backup": {
+        "chart_key": "eth_price_chart_backup",
+        "asset_key": "eth_spot_usd",
+        "field": "close",
+        "row_count": 366,
+        "latest": {
+          "date": "06-29-2026",
+          "close": 1569.94
+        },
+        "priority": "backup"
+      },
+      "xrp_price_chart_backup": {
+        "chart_key": "xrp_price_chart_backup",
+        "asset_key": "xrp_spot_usd",
+        "field": "close",
+        "row_count": 366,
+        "latest": {
+          "date": "06-29-2026",
+          "close": 1.0408
+        },
+        "priority": "backup"
+      },
+      "sol_price_chart_backup": {
+        "chart_key": "sol_price_chart_backup",
+        "asset_key": "sol_spot_usd",
+        "field": "close",
+        "row_count": 366,
+        "latest": {
+          "date": "06-29-2026",
+          "close": 71.4
+        },
+        "priority": "backup"
+      }
+    },
+    "correlation_series": {},
+    "snapshot": {
+      "as_of": "2026-06-29T15:11:45.239015+00:00",
+      "source_file": "credit_20260629_0929.csv",
+      "tickers_found": [
+        "BTCUSD",
+        "ETHUSD",
+        "SOLUSD",
+        "XRPUSD"
+      ]
+    },
+    "legacy_BTCPRice": 59650.39
+  },
+  "execution": {
+    "btc_bias": "Neutral",
+    "near_month": "Jul",
+    "far_month": "Back",
+    "basis_spread": "59685.00",
+    "ref_low": "47748.00",
+    "ref_mid": "59685.00",
+    "ref_high": "71622.00",
+    "policy_strength": 50,
+    "state_impulse_score": 0,
+    "growth_impulse_score": 0,
+    "source": "manual"
+  },
+  "suggested_tracer": {
+    "liquidity": {
+      "d1": "flat",
+      "d5": "flat",
+      "d20": "down",
+      "d60": "flat"
+    },
+    "credit": {
+      "d1": "flat",
+      "d5": "down",
+      "d20": "flat",
+      "d60": "flat"
+    },
+    "breadth": {
+      "d1": "flat",
+      "d5": "flat",
+      "d20": "flat",
+      "d60": "flat"
+    },
+    "highbeta": {
+      "d1": "flat",
+      "d5": "flat",
+      "d20": "flat",
+      "d60": "flat"
+    },
+    "basis": {
+      "d1": "flat",
+      "d5": "flat",
+      "d20": "flat",
+      "d60": "flat"
+    }
+  },
+  "tracer_apply_mode": "confirm_required",
+  "wtm_export_v21": "--- WTM EXPORT v2.1 ---\nWhinfell Score: 50\nTransmission State: Stressed\nRegime Tag: Fragile Risk-On\nKey Observation: Desk auto-transform from Koyfin wide export (2.2e).\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-29T15:11:45\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-29-raw2wtm-01\nLineage Hash: sha256:b5f9b9286a384dc7e733c7e6bf17f10e03ece178dca188e87411788df3498818\nValidation Status: parsed\nData As Of: 2026-06-29T15:11:45Z\nSource Channel: koyfin\nFreshness Status: fresh\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.",
+  "warnings": []
+}

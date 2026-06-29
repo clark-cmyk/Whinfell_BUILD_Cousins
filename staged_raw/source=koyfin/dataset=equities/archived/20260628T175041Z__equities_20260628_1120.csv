@@ -1,0 +1,2 @@
+observation_id,timestamp,whinfell_score,transmission_state,regime_tag,key_observation
+global-2026-06-28-raw2wtm-01,2026-06-28T12:50:41-05:00,62,elevated,Constructive / Selective Risk-On,CTA -; SBAR -; PINK +; HEQT +; PFIX +; CTAP -

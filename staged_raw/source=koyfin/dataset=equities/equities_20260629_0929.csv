@@ -1,0 +1,2 @@
+observation_id,timestamp,whinfell_score,transmission_state,regime_tag,key_observation
+global-2026-06-29-raw2wtm-01,2026-06-29T10:24:19-05:00,70,normal,Confirmed Risk-On,SVOL +; SBAR +; PINK -; PFIX -; CTAP +; SPUC +

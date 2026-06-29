@@ -1,0 +1,119 @@
+================================================================================
+PERPLEXITY / COMET — 2.2e UPDATE (paste this to your collection agents)
+Authority: Clark · BUILD Cousins · June 28, 2026
+================================================================================
+
+## WHAT CHANGED (read carefully — downloads are NOT optional)
+
+The desk shipped **BUILD 2.2e**: automatic **raw→WTM transform** AFTER export.
+
+### 2.2e REPLACES (automated by Python):
+- Manual file renaming
+- Hand-crafting WTM observation rows
+- Parsing CSV content in the browser agent
+- The slow 13-ticker Barchart loop
+
+### 2.2e does NOT REPLACE (you still do this in the browser):
+- Opening Koyfin / Barchart saved screens
+- Clicking Export / Download CSV
+- Saving files to ~/Downloads/whinfell_drop
+
+**You are still a download robot.** Clark's Mac transforms what you download.
+Without fresh CSV exports in whinfell_drop, `run_batch_collect.py run` has nothing to ingest.
+
+---
+
+## THE OLD PROBLEM (why we built this)
+
+Perplexity and Comet were:
+- **Too slow** — looping BT1, ER1, ZN*1, etc. one at a time (40–65 clicks)
+- **Wasting compute** — reading and summarizing CSV contents in the browser agent
+- **Making mistakes** — wrong folders, wrong export types, duplicate files, ticker confusion
+
+That workflow is **retired**.
+
+---
+
+## THE NEW WORKFLOW (FAST BATCH + AUTO TRANSFORM)
+
+### Step 1 — Export 8 bulk screens (unchanged)
+
+Save ALL files to: **~/Downloads/whinfell_drop**
+
+| # | Source | Screen | Wired URL (Barchart) |
+|---|--------|--------|----------------------|
+| 1 | Koyfin | WTM-Rates-Credit | My Dashboards (or koyfin wide Date export) |
+| 2 | Koyfin | WTM-Equities-Breadth / Simplify All ETFs | watchlist |
+| 3 | Koyfin | WTM-Credit-Confirmation / WhinPump | watchlist |
+| 4 | Koyfin | WTM-China-Policy | dashboard |
+| 5 | Barchart | WTM-Futures-Intraday | https://www.barchart.com/futures/major-commodities |
+| 6 | Barchart | WTM-Futures-Daily | https://www.barchart.com/futures/quotes/BTM26/historical-download |
+| 7 | Barchart | WTM-BTC-Basis (optional) | https://www.barchart.com/futures/quotes/BTM26/spreads |
+| 8 | Barchart | Options (optional) | https://www.barchart.com/futures/quotes/BTN26/options |
+
+**Raw vendor filenames are OK.** Examples that now work:
+- `koyfin_2026-06-28.csv`
+- `btm26_daily-nearby_historical-data-06-28-2026.csv`
+- `bitcoin-futures-prices-intraday-06-28-2026.csv`
+- `futures-spreads-btn26-06-28-2026.csv`
+- `koyfin_WhinPump*.csv`
+- `koyfin_Simplify_All_ETFs_*.csv`
+
+The tool renames AND transforms them automatically.
+
+### Step 2 — Run one command
+
+```bash
+cd ~/Desktop/Whinfell_BUILD_Cousins
+python3 run_batch_collect.py run --window today
+```
+
+**What 2.2e does automatically:**
+1. Renames vendor files → canonical names (`rates_*`, `futures_daily_*`, etc.)
+2. Detects raw vendor headers (`Symbol,Time,Latest` / `Date,HYG Close` / `Leg1,Leg2`)
+3. Writes **single-row WTM observation** CSVs with correct headers
+4. Stages → collects → hydrates → `data/hydration/latest.json`
+
+### Step 3 — Report to Clark
+
+```
+WHINFELL 2.2e COLLECT REPORT
+files_staged: ___
+files_quarantined: ___  (should be 0 or near-0 for standard exports)
+hydration_bundle: data/hydration/latest.json
+transform: raw→WTM automatic (2.2e)
+```
+
+Clark: Transmission Control → Import Latest Hydration Bundle
+
+---
+
+## RULES (updated)
+
+| DO | DON'T |
+|----|-------|
+| Export raw vendor CSVs to whinfell_drop | Parse or summarize CSV in agent |
+| Run `run_batch_collect.py run` | Loop 13 tickers individually |
+| Report staged/quarantined counts | Manually craft WTM observation rows |
+| Use 8 bulk screens | Rename files by hand |
+
+---
+
+## SCORE NOTE
+
+Whinfell scores from 2.2e are **desk heuristics** computed from latest Koyfin/Barchart
+rows (C1-inspired proxies). They are marked `raw2wtm` in observation IDs. Clark reviews
+in Transmission Control before acting.
+
+---
+
+## DOCS
+
+- Full instructions: `08_Deliverables/Perplexity_Comet_Collection_Instructions.md`
+- Original prompt: `08_Deliverables/Perplexity_Full_Collection_Prompt.txt`
+- This update: `08_Deliverables/Perplexity_2.2e_Update_Prompt.txt`
+- Transform code: `whinfell_pipeline/raw_csv_transform.py`
+
+================================================================================
+END — paste to Perplexity and begin FAST BATCH collect
+================================================================================

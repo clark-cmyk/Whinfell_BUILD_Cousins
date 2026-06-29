@@ -1,0 +1,280 @@
+{
+  "manifest_version": "1.0.0",
+  "runbook_version": "1.0.0",
+  "manifest_type": "stage",
+  "created_at": "2026-06-29T15:11:45.494052+00:00",
+  "operator": "desk",
+  "staged_root": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw",
+  "downloads_dir": "/Users/clarksonwthornburgh/Downloads/whinfell_drop",
+  "window": "today",
+  "files_scanned": 22,
+  "files_staged": 1,
+  "files_quarantined": 16,
+  "files_skipped": 5,
+  "entries": [
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-China-Credit.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-China-Credit.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-China-Credit2.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-China-Credit2.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-China-Policy.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-China-Policy.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-Credit-Confirmation.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-Credit-Confirmation.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-Credit-Confirmation2.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-Credit-Confirmation2.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-Equities-Breath.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-Equities-Breath.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-Global-Rates.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-Global-Rates.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-Rates-Credit.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-Rates-Credit.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/china_policy_20260629_1236.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=china_policy/china_policy_20260629_1236.csv",
+      "meta_path": "",
+      "source": "china_policy",
+      "dataset": null,
+      "status": "skipped",
+      "errors": [],
+      "warnings": [
+        "already staged with valid contract"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/credit_20260629_0929.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260629_0929.csv",
+      "meta_path": "",
+      "source": "koyfin",
+      "dataset": "credit",
+      "status": "skipped",
+      "errors": [],
+      "warnings": [
+        "already staged with valid contract"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/equities_20260629_0929.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=equities/equities_20260629_0929.csv",
+      "meta_path": "",
+      "source": "koyfin",
+      "dataset": "equities",
+      "status": "skipped",
+      "errors": [],
+      "warnings": [
+        "already staged with valid contract"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_intraday_20260629_0041.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260629_0041.csv",
+      "meta_path": "",
+      "source": "barchart",
+      "dataset": "futures_intraday",
+      "status": "skipped",
+      "errors": [],
+      "warnings": [
+        "already staged with valid contract"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_intraday_20260629_0948.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260629_0948.csv",
+      "meta_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260629_0948.csv.meta.json",
+      "source": "barchart",
+      "dataset": "futures_intraday",
+      "status": "staged",
+      "errors": [],
+      "warnings": [
+        "raw\u2192WTM transform applied (barchart_watchlist)"
+      ]
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/gbtc-options-exp-2026-07-02-weekly-near-the-money-side-by-side-hlc-06-29-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: gbtc-options-exp-2026-07-02-weekly-near-the-money-side-by-side-hlc-06-29-2026.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/ibit-options-exp-2026-06-29-weekly-near-the-money-side-by-side-hlc-06-29-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: ibit-options-exp-2026-06-29-weekly-near-the-money-side-by-side-hlc-06-29-2026.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_2026-06-29 (1).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_2026-06-29 (1).csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_2026-06-29 (2).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_2026-06-29 (2).csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_2026-06-29 (3).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_2026-06-29 (3).csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_2026-06-29 (4).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_2026-06-29 (4).csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_2026-06-29 (5).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_2026-06-29 (5).csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_FI-Market-Chart_2026.06.29_09.29.58.592.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_FI-Market-Chart_2026.06.29_09.29.58.592.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/rates_20260629_0038.csv",
+      "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=rates/rates_20260629_0038.csv",
+      "meta_path": "",
+      "source": "koyfin",
+      "dataset": "rates",
+      "status": "skipped",
+      "errors": [],
+      "warnings": [
+        "already staged with valid contract"
+      ]
+    }
+  ]
+}

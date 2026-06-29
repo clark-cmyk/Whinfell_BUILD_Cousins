@@ -214,6 +214,80 @@ Prompt A updated to require v2.0 block at end of research responses.
 
 ---
 
+## Phase 2.2c — Staged CSV Folder + Ingest Integration
+
+**Version:** Phase 2.2c (`staged_raw/` + `--staged`)  
+**Date:** June 27, 2026  
+**Status:** **DELIVERED**
+
+| Item | Status |
+|------|--------|
+| `staged_raw/` tree (barchart · koyfin · china_policy datasets) | ✅ |
+| Filename + header validation | ✅ |
+| `ingest --staged` scans, ingests via adapter registry, archives CSVs | ✅ |
+| End-to-end chain documented (stage → ingest → hydrate → Transmission Control) | ✅ |
+| Unit tests (`test_staged_2_2c.py`) | ✅ |
+
+---
+
+## Phase 2.2 Final — Browser Blueprint + Daily Workflow
+
+**Version:** Phase 2.2 Final (Comet Browser Operations Blueprint)  
+**Date:** June 27, 2026  
+**Status:** **SHIPPED**
+
+| Item | Status |
+|------|--------|
+| `Comet_Browser_Operations_Blueprint.md` (backup views, shortcuts, supervised prompt) | ✅ |
+| Transmission Control **Import Latest Hydration Bundle** + status chip | ✅ |
+| Operator Guide v1.4 + Quick Reference v1.4 (full daily chain) | ✅ |
+| `scripts/morning_daily.sh` + improved `init_daily_csv.sh` | ✅ |
+| `verify_2_2_final.py` morning-style E2E | ✅ |
+
+---
+
+## Phase 2.2d — Comet CSV Download Runbook Integration
+
+**Version:** `run_csv_download.py` v1.0 (Comet runbook)  
+**Date:** June 27, 2026  
+**Status:** **SHIPPED**
+
+| Item | Status |
+|------|--------|
+| `run_csv_download.py` CLI (`init` · `stage` · `collect` · `hydrate` · `daily`) | ✅ |
+| Copy-not-move staging from `--downloads` | ✅ |
+| `.meta.json` sidecars per staged CSV | ✅ |
+| Quarantine for bad filenames / headers | ✅ |
+| `stage_manifest__*` + `daily_manifest__*` in `staged_raw/manifests/` | ✅ |
+| Integration with `ingest --staged` + `hydrate` (no breaking changes) | ✅ |
+| Operator Guide v1.4 + Quick Reference Card v1.4 | ✅ |
+| Unit tests (`test_csv_download.py`) + full chain CLI verification | ✅ |
+
+**Desk commands:** `python3 run_csv_download.py daily --operator desk --window 24h --hydrate-output data/hydration/latest.json`
+
+---
+
+## Phase 2.2b — Hybrid Tracer + Progressive Disclosure
+
+**Version:** Phase 2.2b (schema v5 + `tracer.flow`)  
+**Date:** June 27, 2026  
+**Status:** **DELIVERED** — Chunk 2.2b (Comet feedback)
+
+| Item | Status |
+|------|--------|
+| Pipeline suggested tracer (Accept / Dismiss / Manual Override) | ✅ |
+| Three visual states: Pending · Operator Confirmed · Manual Override | ✅ |
+| Pure `applyHorizonOverride` / `applyIntakeOverride`; chrome via `getTracerChrome` | ✅ |
+| Horizon/Manual Override → `manualOverride` + cmd bar Override + provenance message | ✅ |
+| Intake-only edits → command bar Override without changing `tracer.flow` | ✅ |
+| Progressive disclosure: prompts, gross risk advanced, shock config, snapshots | ✅ |
+| Dual-track toggle compatibility (tracer flows unchanged) | ✅ |
+| Headless verification (`html_headless_2_2b.mjs` + unit test) | ✅ |
+
+**Focus:** Auto-suggest from Parquet/pipeline; operator confirms or overrides; reduced center-pane density.
+
+---
+
 ## Out of Scope (Confirmed Deferred)
 
 - Auto-execution / live data feeds

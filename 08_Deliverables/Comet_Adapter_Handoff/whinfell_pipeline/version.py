@@ -1,0 +1,16 @@
+"""Pipeline and schema version constants."""
+
+PIPELINE_VERSION = "1.0.0"
+BUNDLE_VERSION = "1.0.0"
+COMET_COLLECTOR_VERSION = "1.0.0"
+COMET_COLLECTOR_ID = "comet-first-pass"
+
+GLOBAL_TRACK_ID = "global"
+GLOBAL_SCHEMA_VERSION = "2.1.0"
+GLOBAL_PARQUET_FILENAME = "global_observations.parquet"
+GLOBAL_DATA_ROOT = "data/global"
+
+DECISION_EXPORT_FORMAT = "WTM EXPORT v2.1"
+DECISION_EXPORT_FORMAT_LEGACY = "WTM EXPORT v2.0"
+
+CHINA_TRACK_ID = "china_policy"

@@ -1,0 +1,17 @@
+{
+  "meta_version": "1.0.0",
+  "collector_id": "comet-first-pass",
+  "collector_version": "1.0.0",
+  "pipeline_version": "1.0.0",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures_intraday_20260629_0041.csv",
+  "staged_path": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260629_0041.csv",
+  "staged_at": "2026-06-29T15:24:19.403523+00:00",
+  "operator": "desk",
+  "source": "barchart",
+  "dataset": "futures_intraday",
+  "filename": "futures_intraday_20260629_0041.csv",
+  "sha256": "4e6f9b4224372b1271a7b3b29c1b7783cffb6c387c255e2fbcbdf43f5bf56ae0",
+  "status": "staged",
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,2 @@
+observation_id,timestamp,near_month,far_month,basis_spread,ref_low,ref_mid,ref_high
+exec-2026-06-28-raw2wtm-01,2026-06-28T12:58:22-05:00,Jul,Back,59700.00,47760.00,59700.00,71640.00

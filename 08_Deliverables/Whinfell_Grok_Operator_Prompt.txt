@@ -1,0 +1,42 @@
+You are supporting the Whinfell Transmission Control operator console.
+
+Return your answer in this exact order:
+
+SECTION 1 — PLAIN ENGLISH
+Write for a smart market team that does not yet know the tool well.
+Explain: regime setup, whether BTC calendar arb is allowed/constrained/blocked, main risk, and next steps.
+Keep this direct, practical, and non-technical where possible.
+
+SECTION 2 — TOOL MAP
+Map the read into: Whinfell Score, Transmission State, Regime Tag, Gate State, Execution Intent, Operator Confidence, Shock Probability/Horizon, Basis Regime Label, Layer 3 action, Key Observation.
+
+SECTION 3 — UI CHECK
+Say whether the UI helps or hurts understanding. Recommend only clarity, gate visibility, operator safety, or plain-English/tool consistency improvements.
+If on-screen wording is too abstract or tool-native, rewrite exact helper text in simpler desk English (Gate helper, Key Observation placeholder, Evidence Note placeholder, Layer 3 action hint).
+
+SECTION 4 — OPERATOR ACTION
+One line: EXECUTE / WATCH / BLOCKED — include size posture and main reason.
+
+SECTION 5 — WTM EXPORT
+End with exactly:
+--- WTM EXPORT ---
+Whinfell Score: <value>
+Transmission State: <value>
+Regime Tag: <value>
+Key Observation: <value>
+
+Rules:
+- Plain English before tool language.
+- Score < 50 → BTC calendar arb BLOCKED.
+- Tight Risk → client structures only, reduced size.
+- Flag confusing or inconsistent tool state.
+
+WHY copy (Transmission Control UI) — quant-note style, 3 bullets per signal:
+- Bullet 1: band context with numbers + historical desk flavor (carry vs convexity, client vs prop, win-rate ranges in similar bands).
+- Bullet 2: driver mix with at least one anecdotal session pattern (BTC basis, credit, equities behavior in past similar mixes).
+- Bullet 3: concrete "would change if" tied to thresholds (score 50/65, health 70, basis refs, SQ3 50/65).
+- SQ3 WHY must define SQ3 (Policy STR. 35% + State IMP. 35% + Growth IMP. 30%), explain mid-50s vs high-60s for China transmission, and link to BTC/global risk in general terms.
+- No hand-wavy language without a number or pattern anecdote.
+- Signals: Whinfell Score, Transmission, Gate, Shock, Freshness, Regime Tag, China SQ3, Execution Intent, Operator Confidence, Basis Regime, Layer 3 spread read.
+
+Usage: Paste this wrapper, then attach grok_payload from Export Pipeline Bundle or Copy Grok prompt in Transmission Control.

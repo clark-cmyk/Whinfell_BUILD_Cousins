@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "desk",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/WTM-China-Credit.csv",
+  "quarantined_at": "2026-06-29T15:11:45.482058+00:00",
+  "reason": "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: WTM-China-Credit.csv",
+  "sha256": "53da48a3f1129279f5f212c7ae3c410bb31756c40bd892958716739cd9a932aa"
+}

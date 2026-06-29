@@ -1,0 +1,28 @@
+{
+  "manifest_version": "1.0.0",
+  "runbook_version": "1.0.0",
+  "manifest_type": "stage",
+  "created_at": "2026-06-28T14:09:55.933266+00:00",
+  "operator": "desk",
+  "staged_root": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw",
+  "downloads_dir": "/Users/clarksonwthornburgh/Downloads",
+  "window": "24h",
+  "files_scanned": 1,
+  "files_staged": 0,
+  "files_quarantined": 1,
+  "files_skipped": 0,
+  "entries": [
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/watchlist-dailymonitor0610-intraday-06-27-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: watchlist-dailymonitor0610-intraday-06-27-2026.csv"
+      ],
+      "warnings": []
+    }
+  ]
+}

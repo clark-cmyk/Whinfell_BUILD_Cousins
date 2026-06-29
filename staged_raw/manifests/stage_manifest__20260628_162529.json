@@ -1,0 +1,136 @@
+{
+  "manifest_version": "1.0.0",
+  "runbook_version": "1.0.0",
+  "manifest_type": "stage",
+  "created_at": "2026-06-28T16:25:29.315700+00:00",
+  "operator": "cwt",
+  "staged_root": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw",
+  "downloads_dir": "/Users/clarksonwthornburgh/Downloads/whinfell_drop",
+  "window": "today",
+  "files_scanned": 10,
+  "files_staged": 0,
+  "files_quarantined": 10,
+  "files_skipped": 0,
+  "entries": [
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/btm26_daily-nearby_historical-data-06-28-2026 (1).csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: btm26_daily-nearby_historical-data-06-28-2026 (1).csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/btm26_daily-nearby_historical-data-06-28-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: btm26_daily-nearby_historical-data-06-28-2026.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/btn26-options-monthly-options-exp-07_31_26-50-strikes-+_--side-by-side-intraday-06-28-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: btn26-options-monthly-options-exp-07_31_26-50-strikes-+_--side-by-side-intraday-06-28-2026.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/btn26-volatility-greeks-exp-07_31_26-50-strikes-+_--06-28-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: btn26-volatility-greeks-exp-07_31_26-50-strikes-+_--06-28-2026.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/futures-spreads-btn26-06-28-2026.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: futures-spreads-btn26-06-28-2026.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_2026-06-28.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_2026-06-28.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_Simplify_All_ETFs_20260415_2026.06.28_10.53.06.159.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_Simplify_All_ETFs_20260415_2026.06.28_10.53.06.159.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_Simplify_All_ETFs_20260415_2026.06.28_11.20.17.854.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_Simplify_All_ETFs_20260415_2026.06.28_11.20.17.854.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_WhinPump20260626_2026.06.28_10.47.58.001.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_WhinPump20260626_2026.06.28_10.47.58.001.csv"
+      ],
+      "warnings": []
+    },
+    {
+      "source_path": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_WhinPump20260626_2026.06.28_11.20.13.299.csv",
+      "staged_path": "",
+      "meta_path": "",
+      "source": "",
+      "dataset": null,
+      "status": "quarantined",
+      "errors": [
+        "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_WhinPump20260626_2026.06.28_11.20.13.299.csv"
+      ],
+      "warnings": []
+    }
+  ]
+}

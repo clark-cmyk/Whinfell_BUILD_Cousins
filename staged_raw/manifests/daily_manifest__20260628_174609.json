@@ -1,0 +1,26 @@
+{
+  "manifest_version": "1.0.0",
+  "runbook_version": "1.0.0",
+  "manifest_type": "daily",
+  "created_at": "2026-06-28T17:46:09.861204+00:00",
+  "operator": "desk",
+  "staged_root": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw",
+  "downloads_dir": "/Users/clarksonwthornburgh/Downloads/whinfell_drop",
+  "window": "today",
+  "stage_manifest": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/manifests/stage_manifest__20260628_174609.json",
+  "stage": {
+    "files_scanned": 17,
+    "files_staged": 0,
+    "files_quarantined": 17,
+    "files_skipped": 0
+  },
+  "collect_exit": 1,
+  "collect_stdout": "pipeline_staged_ingest_ok version=1.0.0\nstaged_root=/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw\nfiles_found=0\nfiles_processed=0\nfiles_failed=0\nglobal_written=0\nchina_written=0\nexecution_records=0\n",
+  "hydrate_exit": 0,
+  "hydrate_output": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/data/hydration/latest.json",
+  "export_path": null,
+  "errors": [
+    "collect failed"
+  ],
+  "chain_ok": false
+}

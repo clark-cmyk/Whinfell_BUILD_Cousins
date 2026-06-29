@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "cwt",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/koyfin_WhinPump20260626_2026.06.28_10.47.58.001.csv",
+  "quarantined_at": "2026-06-28T16:25:29.313642+00:00",
+  "reason": "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: koyfin_WhinPump20260626_2026.06.28_10.47.58.001.csv",
+  "sha256": "688f8fd5723e8d06b1e3b5a4ee1ec3287d443799376da9a0a2cb03d5764d10ca"
+}

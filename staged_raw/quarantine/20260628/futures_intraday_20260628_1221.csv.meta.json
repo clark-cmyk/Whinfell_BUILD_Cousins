@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "desk",
+  "source_file": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=barchart/dataset=futures_intraday/futures_intraday_20260628_1221.csv",
+  "quarantined_at": "2026-06-28T17:45:45.482954+00:00",
+  "reason": "missing required headers: timestamp, near_month or basis_spread",
+  "sha256": "83e8f4e5f85d9c1e39ebf021db70694c5b5e34e50251d03c6e6656f2117791bf"
+}

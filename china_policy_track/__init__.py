@@ -14,6 +14,21 @@ from china_policy_track.sq3 import (
     score_input,
     score_observation,
 )
+from china_policy_track.china_ladder import (
+    CHINA_FINAL_BANDS,
+    CHINA_LADDER_FINAL_BANDS,
+    LADDER_SPEC_VERSION,
+    ChinaFinalBand,
+    ChinaLadderScoreResult,
+    WeakestStageResult,
+    calculate_final_china_score,
+    china_ladder_js_spec,
+    interpretation_band_for_final_score,
+    score_china_ladder,
+    stage_health_band,
+    stage_map_for_desk,
+    weakest_stage,
+)
 from china_policy_track.version import EXPORT_FORMAT, SCHEMA_VERSION, TRACK_ID
 
 __all__ = [
@@ -27,6 +42,19 @@ __all__ = [
     "score_observation",
     "score_from_mapping",
     "score_input",
+    "CHINA_FINAL_BANDS",
+    "CHINA_LADDER_FINAL_BANDS",
+    "LADDER_SPEC_VERSION",
+    "ChinaFinalBand",
+    "ChinaLadderScoreResult",
+    "WeakestStageResult",
+    "calculate_final_china_score",
+    "china_ladder_js_spec",
+    "interpretation_band_for_final_score",
+    "score_china_ladder",
+    "stage_health_band",
+    "stage_map_for_desk",
+    "weakest_stage",
     "SCHEMA_VERSION",
     "TRACK_ID",
     "EXPORT_FORMAT",

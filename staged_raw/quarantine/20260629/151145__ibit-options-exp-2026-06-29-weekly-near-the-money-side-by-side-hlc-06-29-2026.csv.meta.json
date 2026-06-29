@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "desk",
+  "source_file": "/Users/clarksonwthornburgh/Downloads/whinfell_drop/ibit-options-exp-2026-06-29-weekly-near-the-money-side-by-side-hlc-06-29-2026.csv",
+  "quarantined_at": "2026-06-29T15:11:45.489366+00:00",
+  "reason": "filename must match {dataset}_{YYYYMMDD}_{HHMM}.csv or {product}_{flavor}_{YYYYMMDD}.csv: ibit-options-exp-2026-06-29-weekly-near-the-money-side-by-side-hlc-06-29-2026.csv",
+  "sha256": "af25717dc1e08d8dc0bd6a92d8e7ebeecb5243fb152ce906a6d854a7696c858c"
+}

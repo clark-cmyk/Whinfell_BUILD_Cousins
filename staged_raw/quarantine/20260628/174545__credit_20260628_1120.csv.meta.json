@@ -1,0 +1,9 @@
+{
+  "meta_version": "1.0.0",
+  "status": "quarantined",
+  "operator": "desk",
+  "source_file": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/source=koyfin/dataset=credit/credit_20260628_1120.csv",
+  "quarantined_at": "2026-06-28T17:45:45.461110+00:00",
+  "reason": "missing required headers: timestamp, whinfell_score, regime_tag, or key_observation",
+  "sha256": "76a14c35601a23b6fe560455ce199c8ca5ce992d00cdfb79d6b104ed97254394"
+}
