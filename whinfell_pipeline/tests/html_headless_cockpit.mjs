@@ -10,6 +10,7 @@ const HTML_PATH = path.join(REPO, '08_Deliverables/Whinfell_Transmission_Control
 const CHINA_MODELS_JS = path.join(REPO, '08_Deliverables/desk_china_ladder_models.js');
 const META_JSON = path.join(REPO, '08_Deliverables/data_dictionary_meta.json');
 const COCKPIT_BUNDLE = path.join(REPO, 'whinfell_pipeline/examples/cockpit_hydration_snippet.json');
+const LATEST_BUNDLE = path.join(REPO, 'data/hydration/latest.json');
 
 const REQUIRED_FNS = [
   'drawRvBasisChart', 'toggleFocusMode', 'toggleCompareMode', 'setActiveNode',
@@ -39,8 +40,8 @@ globalThis.fetch = () => Promise.resolve({
   let body = ddStub + chinaModels + '\n' + m[0].replace(/^<script>\s*/, '').replace(/\s*<\/script>$/, '');
   const cut = body.indexOf("el('btnSave').onclick");
   if (cut >= 0) body = body.slice(0, cut);
-  const probeMatch = html.match(/window\.__creditMissionProbe[\s\S]*?\n\};\n/);
-  if (!probeMatch) throw new Error('__creditMissionProbe not found in HTML');
+  const probeMatch = html.match(/function runMissionSurfaceProbe[\s\S]*?window\.__rvHorizonEvidenceProbe[\s\S]*?\n\};\n/);
+  if (!probeMatch) throw new Error('mission surface probes not found in HTML');
   body += '\n' + probeMatch[0];
   body += `
 appState = createEmptyState();
@@ -53,7 +54,15 @@ this.__test = {
   assessHydrationSession, renderHydrationBanner, setSharedHorizon, document,
   assessCockpitHydrationMode, buildNodeGateDecisionSentence, renderNodeCoverageBanner,
   assessPostImportWorkflow, deriveGate, isMissionSurfaceNode, buildMissionImplicationChips,
+  renderIngestProvenanceAudit, renderHydrationFieldLog, renderDataDictionaryAudit, buildUiAuditPayload,
+  renderFlipchartState, openDictionaryAudit, buildDataDictionaryAuditRows,
   __creditMissionProbe: window.__creditMissionProbe,
+  __uiAuditProbe: window.__uiAuditProbe,
+  __liquidityMissionProbe: window.__liquidityMissionProbe,
+  __breadthMissionProbe: window.__breadthMissionProbe,
+  __highbetaMissionProbe: window.__highbetaMissionProbe,
+  __rvHorizonEvidenceProbe: window.__rvHorizonEvidenceProbe,
+  applyConsoleTheme, initConsoleTheme,
 };
 `;
   return body;
@@ -93,6 +102,8 @@ function makeSandbox() {
       }
     }
     addEventListener() {}
+    setAttribute(name, value) { this[name] = value; }
+    getAttribute(name) { return this[name] ?? null; }
     get onclick() { return this._onclk; }
     set onclick(fn) { this._onclk = fn; }
     get onchange() { return this._onchg; }
@@ -134,8 +145,15 @@ function makeSandbox() {
     lineWidth: 1,
   };
 
+  const documentElement = {
+    _attrs: { 'data-theme': 'dark' },
+    getAttribute(name) { return this._attrs[name] ?? null; },
+    setAttribute(name, value) { this._attrs[name] = value; },
+  };
+
   return {
     document: {
+      documentElement,
       createElement() {
         return new El('');
       },
@@ -188,6 +206,7 @@ function seedCockpitDom(t) {
     'cmdSq3Score', 'cmdSq3Band', 'cmdGrossRisk', 'cmdGrossPosture', 'cmdHydrationBadge', 'gateText',
     'chinaPolicyStrength', 'chinaStateImpulse', 'chinaGrowthImpulse', 'chinaRegimeTag',
     'gateChip', 'gateHelperText', 'shockText', 'shockMeta', 'scoreCard', 'cmdGlobalCluster', 'cmdChinaCluster',
+    'btnTheme',
     'gateExplainList', 'gateUnlockList', 'gateHealthSub', 'gateDetailPanel', 'sq3ComputedDisplay', 'sq3BandChip',
     'scoreZoneChip', 'gateStatusChip', 'txChip', 'grossTotal', 'grossMmHint', 'postureWarning',
   ];
@@ -366,6 +385,181 @@ function testHydrationBanner(t, bundle) {
   return { missingLevel: missing.level, okAfterHydrate: true };
 }
 
+function testBreadthMissionSurface(t, bundle) {
+  seedCockpitDom(t);
+  if (typeof t.__breadthMissionProbe !== 'function') {
+    throw new Error('__breadthMissionProbe missing from headless harness');
+  }
+  const result = t.__breadthMissionProbe(bundle);
+  if (result.error) throw new Error(result.error);
+
+  if (!result.missionVisible) throw new Error('breadth mission banner hidden');
+  if (!result.tacticalLead || result.tacticalLead === '—') {
+    throw new Error(`breadth tactical lead empty: ${result.tacticalLead}`);
+  }
+  if (!/fair|rich|cheap/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing RV richness: ${result.tacticalLead}`);
+  }
+  if (!/0\.5×|eligible|blocked|neutral/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing expression/gate read: ${result.tacticalLead}`);
+  }
+  if (result.tacticalLead.includes('SQ3') || result.tacticalLead.includes('constraint')) {
+    throw new Error(`SQ3 must not appear in lead sentence: ${result.tacticalLead}`);
+  }
+  if (!result.tacticalSuffix || !result.tacticalSuffix.includes('SQ3')) {
+    throw new Error(`material SQ3 suffix missing: ${result.tacticalSuffix}`);
+  }
+  if (!result.compositeFallback) {
+    throw new Error(`breadth composite fallback chip missing: ${result.chips.join(', ')}`);
+  }
+  if (result.gateChip !== 'Tight + China Caution') {
+    throw new Error(`expected Tight + China Caution gate chip, got ${result.gateChip}`);
+  }
+
+  return {
+    breadthMissionSurface: true,
+    tacticalLead: result.tacticalLead,
+    compositeFallbackVisible: result.compositeFallback,
+    gateChipLabel: result.gateChip,
+  };
+}
+
+function testHighbetaMissionSurface(t, bundle) {
+  seedCockpitDom(t);
+  if (typeof t.__highbetaMissionProbe !== 'function') {
+    throw new Error('__highbetaMissionProbe missing from headless harness');
+  }
+  const result = t.__highbetaMissionProbe(bundle);
+  if (result.error) throw new Error(result.error);
+
+  if (!result.missionVisible) throw new Error('highbeta mission banner hidden');
+  if (!result.tacticalLead || result.tacticalLead === '—') {
+    throw new Error(`highbeta tactical lead empty: ${result.tacticalLead}`);
+  }
+  if (!/fair|rich|cheap/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing RV richness: ${result.tacticalLead}`);
+  }
+  if (!/0\.5×|eligible|blocked|neutral/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing expression/gate read: ${result.tacticalLead}`);
+  }
+  if (result.tacticalLead.includes('SQ3') || result.tacticalLead.includes('constraint')) {
+    throw new Error(`SQ3 must not appear in lead sentence: ${result.tacticalLead}`);
+  }
+  if (!result.tacticalSuffix || !result.tacticalSuffix.includes('SQ3')) {
+    throw new Error(`material SQ3 suffix missing: ${result.tacticalSuffix}`);
+  }
+  if (!result.compositeFallback) {
+    throw new Error(`highbeta composite fallback chip missing: ${result.chips.join(', ')}`);
+  }
+  if (result.gateChip !== 'Tight + China Caution') {
+    throw new Error(`expected Tight + China Caution gate chip, got ${result.gateChip}`);
+  }
+
+  return {
+    highbetaMissionSurface: true,
+    tacticalLead: result.tacticalLead,
+    compositeFallbackVisible: result.compositeFallback,
+    gateChipLabel: result.gateChip,
+  };
+}
+
+function testLiquidityMissionSurface(t, bundle) {
+  seedCockpitDom(t);
+  if (typeof t.__liquidityMissionProbe !== 'function') {
+    throw new Error('__liquidityMissionProbe missing from headless harness');
+  }
+  const result = t.__liquidityMissionProbe(bundle);
+  if (result.error) throw new Error(result.error);
+
+  if (!result.missionVisible) throw new Error('liquidity mission banner hidden');
+  if (!result.tacticalLead || result.tacticalLead === '—') {
+    throw new Error(`liquidity tactical lead empty: ${result.tacticalLead}`);
+  }
+  if (!/fair|rich|cheap/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing RV richness: ${result.tacticalLead}`);
+  }
+  if (!/0\.5×|eligible|blocked/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing gate read: ${result.tacticalLead}`);
+  }
+  if (result.tacticalLead.includes('SQ3') || result.tacticalLead.includes('constraint')) {
+    throw new Error(`SQ3 must not appear in lead sentence: ${result.tacticalLead}`);
+  }
+  if (!result.tacticalSuffix || !result.tacticalSuffix.includes('SQ3')) {
+    throw new Error(`material SQ3 suffix missing: ${result.tacticalSuffix}`);
+  }
+  if (result.compositeFallback) {
+    throw new Error(`liquidity should show band chip, not composite fallback: ${result.chips.join(', ')}`);
+  }
+  if (result.bandChip !== 'Supportive') {
+    throw new Error(`expected Supportive band chip, got ${result.bandChip}`);
+  }
+  if (!result.readingValue.includes('%')) {
+    throw new Error(`expected pct reading, got ${result.readingValue}`);
+  }
+  if (result.gateChip !== 'Tight + China Caution') {
+    throw new Error(`expected Tight + China Caution gate chip, got ${result.gateChip}`);
+  }
+
+  return {
+    liquidityMissionSurface: true,
+    tacticalLead: result.tacticalLead,
+    tacticalSuffix: result.tacticalSuffix,
+    readingValue: result.readingValue,
+    bandChip: result.bandChip,
+    gateChipLabel: result.gateChip,
+    chips: result.chips,
+  };
+}
+
+function testThemeToggle(t) {
+  seedCockpitDom(t);
+  if (typeof t.applyConsoleTheme !== 'function') {
+    throw new Error('applyConsoleTheme missing from headless harness');
+  }
+  t.applyConsoleTheme('light');
+  if (t.document.documentElement.getAttribute('data-theme') !== 'light') {
+    throw new Error('light theme not applied');
+  }
+  if (t.document.getElementById('btnTheme').textContent !== 'Dark mode') {
+    throw new Error('theme button label not updated for light mode');
+  }
+  t.applyConsoleTheme('dark');
+  if (t.document.documentElement.getAttribute('data-theme') !== 'dark') {
+    throw new Error('dark theme not applied');
+  }
+  return { themeToggle: true };
+}
+
+function testCreditRvHorizonFallback(t, bundle) {
+  hydrateCockpit(t, bundle);
+  t.setActiveNode('credit');
+  if (typeof t.__rvHorizonEvidenceProbe !== 'function') {
+    throw new Error('__rvHorizonEvidenceProbe missing from headless harness');
+  }
+  const result = t.__rvHorizonEvidenceProbe(bundle, 'credit');
+  if (result.error) throw new Error(result.error);
+  if (result.fallbackMode !== 'spot') {
+    throw new Error(`expected spot fallback mode for credit HY OAS, got ${result.fallbackMode}`);
+  }
+  if (!result.spotFallbackTable) {
+    throw new Error('focus horizon table missing spot-fallback class');
+  }
+  if (result.spotValueRepeatCount !== 1) {
+    throw new Error(`spot value should appear once in table, got ${result.spotValueRepeatCount}`);
+  }
+  if (!result.hasSpotNote) {
+    throw new Error('spot fallback explanatory note missing from focus layer');
+  }
+  if (result.primaryHorizon !== '3m') {
+    throw new Error(`expected active 3m horizon to carry spot value, got ${result.primaryHorizon}`);
+  }
+  return {
+    creditRvHorizonFallback: true,
+    spotValueRepeatCount: result.spotValueRepeatCount,
+    primaryHorizon: result.primaryHorizon,
+  };
+}
+
 function testCreditMissionSurface(t, bundle) {
   seedCockpitDom(t);
   if (typeof t.__creditMissionProbe !== 'function') {
@@ -411,6 +605,103 @@ function testCreditMissionSurface(t, bundle) {
   };
 }
 
+function testUiAuditProbe(t, bundle) {
+  hydrateCockpit(t, bundle);
+  if (typeof t.__uiAuditProbe !== 'function') {
+    throw new Error('__uiAuditProbe missing from headless harness');
+  }
+  const result = t.__uiAuditProbe(bundle);
+  if (result.error) throw new Error(result.error);
+  if (result.consoleBuild !== '2.2-HYDRATION-AUDIT-2026-06-30') {
+    throw new Error(`unexpected console build: ${result.consoleBuild}`);
+  }
+  if (!result.hasFlipchartState) {
+    throw new Error(`flipchart state not visible: ${result.flipPosition}`);
+  }
+  if (!['complete', 'partial', 'degraded'].includes(result.coverageMode)) {
+    throw new Error(`invalid coverage mode: ${result.coverageMode}`);
+  }
+  t.renderDataDictionaryAudit(t.buildStateFromDOM());
+  if (!t.document.getElementById('dataDictionaryAudit')?.innerHTML) {
+    throw new Error('data dictionary audit panel empty');
+  }
+  return {
+    uiAuditProbe: true,
+    coverageMode: result.coverageMode,
+    dictionaryAuditCount: result.dictionaryAuditCount,
+    flipPosition: result.flipPosition,
+  };
+}
+
+function testHydrationFieldLog(t, bundle) {
+  hydrateCockpit(t, bundle);
+  if (typeof t.renderHydrationFieldLog !== 'function') {
+    throw new Error('renderHydrationFieldLog missing from headless harness');
+  }
+  const state = t.buildStateFromDOM();
+  state.hydration = {
+    ...(state.hydration || {}),
+    ...(t.appState.hydration || {}),
+    hydration_audit: bundle.hydration_audit || t.appState.hydration?.hydration_audit,
+  };
+  t.renderHydrationFieldLog(state);
+  const node = t.document.getElementById('hydrationFieldLog');
+  if (!node) throw new Error('hydrationFieldLog element missing');
+  const audit = bundle.hydration_audit;
+  if (!audit?.summary) {
+    if (!node.textContent.includes('hydration_audit')) {
+      throw new Error('expected hydration field log placeholder');
+    }
+    return { hydrationFieldLog: 'empty' };
+  }
+  if (!node.innerHTML.includes('hydration-field-log-table')) {
+    throw new Error('hydration field log table not rendered');
+  }
+  if (!node.innerHTML.includes(String(audit.summary.required_ok))) {
+    throw new Error('required_ok not shown in hydration field log');
+  }
+  return {
+    hydrationFieldLog: true,
+    requiredOk: audit.summary.required_ok,
+    quality: audit.summary.bundle_quality_score,
+    session: audit.summary.tc_session_level,
+  };
+}
+
+function testIngestProvenanceAudit(t, bundle) {
+  hydrateCockpit(t, bundle);
+  if (typeof t.renderIngestProvenanceAudit !== 'function') {
+    throw new Error('renderIngestProvenanceAudit missing from headless harness');
+  }
+  const state = t.buildStateFromDOM();
+  state.hydration = {
+    ...(state.hydration || {}),
+    ...(t.appState.hydration || {}),
+    ingest_provenance: bundle.ingest_provenance || t.appState.hydration?.ingest_provenance,
+  };
+  t.renderIngestProvenanceAudit(state);
+  const node = t.document.getElementById('ingestProvenanceAudit');
+  if (!node) throw new Error('ingestProvenanceAudit element missing');
+  const ingest = bundle.ingest_provenance;
+  if (!ingest?.staged_count) {
+    if (!node.textContent.includes('ARCH-1 M3')) {
+      throw new Error('expected empty ingest audit placeholder');
+    }
+    return { ingestAudit: 'empty' };
+  }
+  if (!node.innerHTML.includes('ingest-audit-table')) {
+    throw new Error('ingest audit table not rendered');
+  }
+  if (!node.innerHTML.includes('Primary output kind:')) {
+    throw new Error('primary output kind line missing from ingest audit');
+  }
+  return {
+    ingestAudit: true,
+    stagedCount: ingest.staged_count,
+    primaryOutputKind: ingest.primary_output_kind || 'unknown',
+  };
+}
+
 function testImportGuard(t, bundle) {
   hydrateCockpit(t, bundle);
   const healthyScore = t.scoreHydrationBundleQuality(bundle);
@@ -435,15 +726,26 @@ function runSuite(script, bundle, label) {
     navigation: testRailNavigation(boot(script), bundle),
     fundsFlow: testFundsFlowCard(boot(script), bundle),
     creditMission: testCreditMissionSurface(boot(script), bundle),
+    creditRvHorizonFallback: testCreditRvHorizonFallback(boot(script), bundle),
+    liquidityMission: testLiquidityMissionSurface(boot(script), bundle),
+    breadthMission: testBreadthMissionSurface(boot(script), bundle),
+    highbetaMission: testHighbetaMissionSurface(boot(script), bundle),
+    themeToggle: testThemeToggle(boot(script), bundle),
     statePreservation: testStatePreservation(boot(script), bundle),
     importGuard: testImportGuard(boot(script), bundle),
     hydrationBanner: testHydrationBanner(boot(script), bundle),
     nodeCoverage: testNodeCoverageBanner(boot(script), bundle),
+    ingestAudit: testIngestProvenanceAudit(boot(script), latestBundle),
+    hydrationFieldLog: testHydrationFieldLog(boot(script), latestBundle),
+    uiAudit: testUiAuditProbe(boot(script), latestBundle),
   };
 }
 
 const html = fs.readFileSync(HTML_PATH, 'utf8');
 const bundle = JSON.parse(fs.readFileSync(COCKPIT_BUNDLE, 'utf8'));
+const latestBundle = fs.existsSync(LATEST_BUNDLE)
+  ? JSON.parse(fs.readFileSync(LATEST_BUNDLE, 'utf8'))
+  : bundle;
 const script = extractScript(html);
 
 const run1 = runSuite(script, bundle, 'run1');

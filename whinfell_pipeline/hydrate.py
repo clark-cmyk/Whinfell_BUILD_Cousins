@@ -14,6 +14,7 @@ from china_policy_track.sq3 import calculate_sq3
 from china_policy_track.storage import default_parquet_path as china_default
 from china_policy_track.storage import read_observations as read_china
 from whinfell_pipeline.export_contract import ProvenanceMeta, build_wtm_export_v21, build_wtm_export_v22
+from whinfell_pipeline.ingest_provenance import collect_staged_ingest_provenance
 from whinfell_pipeline.flows_parser import assess_flows_basket_health, ensure_flows_sidecar
 from whinfell_pipeline.funds_flows import build_flows_sidecar_metadata
 from whinfell_pipeline.node_cockpits import build_cockpit_context, build_node_cockpits
@@ -22,6 +23,7 @@ from whinfell_pipeline.freshness import compute_freshness
 from whinfell_pipeline.global_track.storage import default_parquet_path as global_default
 from whinfell_pipeline.global_track.storage import read_observations as read_global
 from whinfell_pipeline.lineage import compute_lineage_hash
+from whinfell_pipeline.hydration_audit import build_hydration_audit, write_hydration_log
 from whinfell_pipeline.version import BUNDLE_VERSION, PIPELINE_VERSION
 
 HYDRATION_BUNDLE_VERSION = "1.2.0"
@@ -324,6 +326,8 @@ def build_hydration_bundle(
         lineage_hash = compute_lineage_hash(core)
 
     freshness = compute_freshness(data_as_of).value
+    root = repo_root or Path(__file__).resolve().parents[1]
+    ingest_provenance = collect_staged_ingest_provenance(root / "staged_raw", as_of=data_as_of)
     provenance = ProvenanceMeta(
         snapshot_id=snapshot_id,
         lineage_hash=lineage_hash,
@@ -331,9 +335,8 @@ def build_hydration_bundle(
         data_as_of=data_as_of,
         source_channel=provenance_source,
         freshness_status=freshness,
+        output_kind=str(ingest_provenance.get("primary_output_kind") or "derived_signals"),
     )
-
-    root = repo_root or Path(__file__).resolve().parents[1]
     if flows_sidecar is not None:
         flows_data = flows_sidecar
     else:
@@ -407,6 +410,8 @@ def build_hydration_bundle(
     flows_health = assess_flows_basket_health(flows_data, node_id="credit")
     bundle["flows_health"] = flows_health
     bundle["flows_sidecar"] = build_flows_sidecar_metadata(flows_data, node_id="credit")
+    bundle["ingest_provenance"] = ingest_provenance
+    bundle["hydration_audit"] = build_hydration_audit(bundle)
     return bundle
 
 
@@ -433,8 +438,17 @@ def main(argv: list[str] | None = None) -> int:
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(bundle, indent=2), encoding="utf-8")
+    log_path = out.parent / "hydration_log.json"
+    write_hydration_log(bundle, log_path)
 
+    audit = bundle.get("hydration_audit") or {}
+    summary = audit.get("summary") or {}
     print(f"hydration_ok version={HYDRATION_BUNDLE_VERSION}")
+    print(
+        f"audit_required_ok={summary.get('required_ok')}/{summary.get('required_fields')} "
+        f"quality={summary.get('bundle_quality_score')} session={summary.get('tc_session_level')}"
+    )
+    print(f"hydration_log={log_path}")
     print(f"snapshot_id={bundle['snapshot_id']}")
     print(f"freshness_status={bundle['freshness_status']}")
     print(f"output={out}")

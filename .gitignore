@@ -16,6 +16,7 @@ whinfell_pipeline/*
 !whinfell_pipeline/funds_flows.py
 !whinfell_pipeline/export_contract.py
 !whinfell_pipeline/hydrate.py
+!whinfell_pipeline/hydration_audit.py
 !whinfell_pipeline/version.py
 !whinfell_pipeline/verify_2_2b_goal.py
 !whinfell_pipeline/examples/
@@ -69,6 +70,7 @@ whinfell_pipeline/tests/*
 !whinfell_pipeline/tests/test_funds_flows.py
 !whinfell_pipeline/tests/test_flows_production.py
 !whinfell_pipeline/tests/test_export_contract.py
+!whinfell_pipeline/tests/test_hydration_audit.py
 !whinfell_pipeline/desk_live_session.py
 !scripts/desk_live_session.sh
 !scripts/ci_verify.sh
