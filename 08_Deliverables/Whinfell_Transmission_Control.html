@@ -1914,8 +1914,9 @@ window.DICTIONARY_BADGE_DEFAULT = {
       left: 0;
       top: calc(100% + 6px);
       z-index: 50;
-      min-width: 220px;
-      max-width: 280px;
+      min-width: 240px;
+      max-width: 320px;
+      white-space: pre-line;
       padding: 8px 10px;
       font-size: 11px;
       font-weight: 500;
@@ -2451,17 +2452,17 @@ window.DICTIONARY_BADGE_DEFAULT = {
       </div>
       <section class="decision-strip" aria-label="Primary KPIs">
         <div id="scoreCard" class="metric-card score-card">
-          <span class="label metric-tip" tabindex="0" data-tip="Composite 0–100 regime score from credit, rates, breadth, and BTC transmission. &lt;50 Red blocks new BTC risk; 50–64 Amber is reduced size; ≥65 Green allows normal desk sizing.">Whinfell Score</span>
+          <span id="tipWhinfellScore" class="label metric-tip" tabindex="0" data-tip="Whinfell Score — import hydration for live metrics.">Whinfell Score</span>
           <strong id="cmdWhinfellScore">—</strong>
           <span id="cmdScoreZone" class="meta">—</span>
         </div>
         <div class="metric-card">
-          <span class="label metric-tip" tabindex="0" data-tip="Ladder health 0–100 from the five transmission nodes (Liquidity → Credit → Breadth → High-beta → Basis). Weakest link drives the read; compares confirming vs impairing horizon marks.">Transmission</span>
+          <span id="tipTransmission" class="label metric-tip" tabindex="0" data-tip="Transmission health — import hydration for live metrics.">Transmission</span>
           <strong id="txHealthValue">—</strong>
           <span id="txHealthMeta" class="meta">—</span>
         </div>
         <div class="metric-card">
-          <span class="label metric-tip" tabindex="0" data-tip="BTC access gate from Whinfell Score: BLOCKED (&lt;50), Tight Risk (50–64), or Allowed (≥65). SQ3 &lt;50 adds China Caution on mission nodes. Does not auto-trade.">Gate state</span>
+          <span id="tipGateState" class="label metric-tip" tabindex="0" data-tip="Gate state — import hydration for live metrics.">Gate state</span>
           <strong id="gateText">—</strong>
           <span id="cmdGateLabel" class="hidden">—</span>
           <span id="gateChip" class="gate-chip">—</span>
@@ -2469,12 +2470,12 @@ window.DICTIONARY_BADGE_DEFAULT = {
           <span id="cmdGateSub" class="hidden">—</span>
         </div>
         <div class="metric-card">
-          <span class="label metric-tip" tabindex="0" data-tip="Active shock scenario from Signal Tracer (e.g. Credit Widening, Vol Spike, BTC Decoupling). When armed, horizon marks shift and sizing compresses until dismissed or re-imported.">Shock</span>
+          <span id="tipShock" class="label metric-tip" tabindex="0" data-tip="Shock scenario — baseline until tracer arms a shock.">Shock</span>
           <strong id="shockText">No active shock</strong>
           <span id="shockMeta" class="meta">Baseline regime</span>
         </div>
         <div id="cmdFreshnessCluster" class="metric-card">
-          <span class="label metric-tip" tabindex="0" data-tip="Pipeline data age from last hydration import. Fresh &lt;4h · Aging 4–24h · Stale &gt;24h. Stale bundles flag override — re-run daily chain before sizing.">Freshness</span>
+          <span id="tipFreshness" class="label metric-tip" tabindex="0" data-tip="Freshness — import hydration for live age.">Freshness</span>
           <div class="flex items-center gap-2">
             <span id="cmdFreshnessDot" class="freshness-dot hidden"></span>
             <strong id="cmdFreshness">—</strong>
@@ -3011,7 +3012,7 @@ const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
 /** Bump when operator-console UX changes — visible in header for reload verification. */
-const TC_CONSOLE_BUILD = '2.2-UX-FIX-2026-06-30';
+const TC_CONSOLE_BUILD = '2.2-UX-TIPS-2026-06-30';
 const DESK_GITHUB_BLOB = 'https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/';
 const DESK_GITHUB_RAW = 'https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/';
 const DESK_PAGES_URL = 'https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/';
@@ -7015,10 +7016,84 @@ function setSignalDetailOpen(open) {
   backdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
 }
 
+function setMetricTip(id, text) {
+  const node = el(id);
+  if (node) node.setAttribute('data-tip', text);
+}
+
+function renderMetricTips(state, gate, health, metrics) {
+  const scoreNum = Number(metrics.whinfellScore);
+  const scoreStr = Number.isFinite(scoreNum) ? String(scoreNum) : '—';
+  const zoneText = metrics.scoreZone?.text || '—';
+
+  let scoreMath = 'Enter score or import hydration.';
+  if (Number.isFinite(scoreNum)) {
+    if (scoreNum < 50) scoreMath = `Now ${scoreNum} (<50 Red): 0% new BTC prop · +${50 - scoreNum} pts to Amber floor (50).`;
+    else if (scoreNum < 65) scoreMath = `Now ${scoreNum} (50–64 Amber): ~½ prop · +${65 - scoreNum} pts to Green (65+).`;
+    else scoreMath = `Now ${scoreNum} (≥65 Green): full desk sizing OK · watch drop below 65 → half size.`;
+  }
+  setMetricTip('tipWhinfellScore',
+    `Whinfell Score 0–100 — credit, rates, breadth, BTC transmission.\nNow: ${scoreStr} · ${zoneText}\nMental math: ${scoreMath}`);
+
+  const hNum = Number(health.score);
+  let txMath = 'Import hydration to compute ladder health.';
+  if (Number.isFinite(hNum)) {
+    const gap = TX_HEALTH_OPEN_THRESHOLD - hNum;
+    txMath = gap > 0
+      ? `Health ${hNum} · need +${gap} to hit open threshold (${TX_HEALTH_OPEN_THRESHOLD}) for full prop calendar.`
+      : `Health ${hNum} ≥ ${TX_HEALTH_OPEN_THRESHOLD} — transmission supports full prop sizing.`;
+    if (health.weakestStage) txMath += `\nWeakest link: ${health.weakestStage} (${health.label || '—'}).`;
+  }
+  setMetricTip('tipTransmission',
+    `Transmission health 0–100 — five-node ladder (Liq→Credit→Breadth→BTC→Basis).\nNow: ${Number.isFinite(hNum) ? hNum : '—'} · ${health.label || '—'}\nMental math: ${txMath}`);
+
+  const banner = gateStripTitle(gate);
+  const sq3 = metrics.sq3Score;
+  let gateMath = '';
+  if (Number.isFinite(scoreNum)) {
+    if (scoreNum < 50) gateMath = `Score ${scoreNum} <50 → BTC calendar BLOCKED (basis irrelevant).`;
+    else if (scoreNum < 65) gateMath = `Score ${scoreNum} in 50–64 → client-only ~0.5×; prop flat.`;
+    else gateMath = `Score ${scoreNum} ≥65 → BTC allowed within desk policy.`;
+  } else gateMath = 'Set Whinfell Score to evaluate gate.';
+  if (sq3 != null && !Number.isNaN(Number(sq3)) && Number(sq3) < 50) {
+    gateMath += `\nSQ3 ${sq3} <50 → China Caution chip on every mission node.`;
+  }
+  setMetricTip('tipGateState',
+    `Gate = BTC access rule (not auto-trade).\nNow: ${banner}\nMental math: ${gateMath}`);
+
+  const shockKey = state.tracer?.activeShock;
+  const shockDef = shockKey && SHOCKS[shockKey];
+  const shockCfg = state.tracer?.shockConfig || readShockConfigFromDOM();
+  let shockMath = 'No shock → use baseline horizon marks and normal sizing bands.';
+  if (shockDef) {
+    const prob = shockCfg?.probability ?? state.operator?.shockProbability;
+    const hz = shockCfg?.horizon ?? state.operator?.shockHorizon;
+    shockMath = `Active: ${shockDef.label} — compress size ~½; matrix marks override until dismiss/re-import.`;
+    if (prob != null && prob !== '') shockMath += `\nTagged ${prob}% / ${hz || '—'} horizon — treat as live stress overlay.`;
+  }
+  setMetricTip('tipShock',
+    `Shock = Signal Tracer stress scenario.\nNow: ${shockDef ? shockDef.label : 'None (baseline)'}\nMental math: ${shockMath}`);
+
+  const freshStatus = metrics.freshnessStatus || computeFreshnessFromIso(metrics.dataAsOf).status;
+  const freshLabel = metrics.freshnessLabel || freshnessLabelFromStatus(freshStatus);
+  let ageLine = 'No pipeline timestamp.';
+  let freshMath = 'Import hydration to read data age.';
+  if (metrics.dataAsOf) {
+    const ageH = Math.round(((Date.now() - new Date(metrics.dataAsOf).getTime()) / 3600000) * 10) / 10;
+    ageLine = `${freshLabel} · ${ageH}h since as-of`;
+    if (ageH < FRESH_HOURS) freshMath = `<${FRESH_HOURS}h → trade normal size (data trusted).`;
+    else if (ageH < STALE_HOURS) freshMath = `${FRESH_HOURS}–${STALE_HOURS}h → cap size · re-export before adding risk.`;
+    else freshMath = `>${STALE_HOURS}h → no new BTC risk until AM chain refresh.`;
+  }
+  setMetricTip('tipFreshness',
+    `Freshness = pipeline bundle age (not market clock).\nNow: ${ageLine}\nMental math: ${freshMath}`);
+}
+
 function renderCommandBar(state, gate) {
   const prov = state.provenance || createEmptyProvenance();
   const metrics = resolveCommandBarMetrics(state, gate, prov);
   const health = computeHealthScore(state);
+  renderMetricTips(state, gate, health, metrics);
   const zone = metrics.scoreZone || gate.zone;
   const sq3Key = metrics.sq3Score != null ? sq3BandKey(metrics.sq3Band) : 'unknown';
 
