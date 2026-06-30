@@ -155,6 +155,8 @@ class TestNodeCockpits(unittest.TestCase):
         credit = bundle["node_cockpits"]["credit"]
         self.assertIn("funds_flows", credit)
         self.assertIn("flows_meta", credit["funds_flows"])
+        self.assertIn("flows_sidecar", bundle)
+        self.assertEqual(bundle["flows_sidecar"]["flows_status"], "unavailable")
 
     def test_funds_flows_on_all_nodes(self):
         cockpits = build_node_cockpits(

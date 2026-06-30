@@ -43,6 +43,25 @@ The UI must behave like a **command environment** where:
 
 ---
 
+## Degraded vs neutral — trust rule (behavioral contract)
+
+Every **degraded** or **non-authoritative** state must be **visibly distinguishable** from a real **neutral** state. Ambiguity is what makes advanced tools feel second-rate.
+
+This applies to:
+
+| Signal | Must not look like neutral |
+|--------|---------------------------|
+| Freshness degrade | Stale/aging ≠ “all clear” |
+| Provenance gap | Missing lineage ≠ authoritative read |
+| `flows_meta` / sponsorship | `unavailable` / `fallback_1d` / `partial` ≠ supportive/neutral verdict chrome |
+| Compare mode gaps | Missing node data ≠ flat “no signal” |
+| Partial hydration | Incomplete bundle ≠ full session |
+| Imported sidecars | Degraded ingest mode visible at import + rail |
+
+**Implementation rule:** render meta chip / degrade banner **before** verdict or aggregate lines; unavailable blocks use collapsed placeholder, not neutral badge styling.
+
+---
+
 ## Core interaction standard
 
 Every interaction should reinforce four properties:

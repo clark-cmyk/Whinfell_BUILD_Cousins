@@ -63,10 +63,17 @@ def load_flows_sidecar(repo_root: Path | None = None) -> dict[str, Any] | None:
     return dict(data) if isinstance(data, dict) else None
 
 
-def build_flows_sidecar_metadata(sidecar: Mapping[str, Any] | None) -> dict[str, Any] | None:
-    """Top-level hydration mirror — metadata only."""
+def build_flows_sidecar_metadata(sidecar: Mapping[str, Any] | None) -> dict[str, Any]:
+    """Top-level hydration mirror — always present so degrade ≠ silent absence."""
     if not sidecar:
-        return None
+        return {
+            "as_of": "",
+            "source_file": "",
+            "ingest_mode": "disabled",
+            "flows_status": "unavailable",
+            "ticker_count": 0,
+            "warnings": ["missing_wtm_flows_file"],
+        }
     tickers = sidecar.get("tickers") or {}
     ingest_mode = str(sidecar.get("ingest_mode") or "disabled")
     flows_status = "ok"
@@ -485,7 +492,7 @@ def build_funds_flows(
             "basket_label": basket.get("basket_label") or "",
             "node_id": node_id,
             "flows_meta": flows_meta,
-            "aggregate": {"verdict": None, "confidence_delta": 0},
+            "aggregate": {"verdict": "neutral", "confidence_delta": 0},
             "etfs": [],
             "interpretation": build_interpretation(
                 verdict="neutral",

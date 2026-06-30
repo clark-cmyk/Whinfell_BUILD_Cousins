@@ -395,9 +395,7 @@ def build_hydration_bundle(
         "wtm_export_v22": wtm_block_v22,
         "warnings": [] if g_obs and c_obs else (["Partial hydration — single track only"] if g_obs or c_obs else []),
     }
-    flows_meta_block = build_flows_sidecar_metadata(flows_data)
-    if flows_meta_block:
-        bundle["flows_sidecar"] = flows_meta_block
+    bundle["flows_sidecar"] = build_flows_sidecar_metadata(flows_data)
     return bundle
 
 
