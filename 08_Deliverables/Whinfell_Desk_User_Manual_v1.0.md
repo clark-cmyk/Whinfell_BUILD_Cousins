@@ -120,11 +120,21 @@ SQ3 = Policy STR. (35%) + State IMP. (35%) + Growth IMP. (30%)
 
 **For Wes, Lovable, and any reviewer who should not touch Clark's machine.**
 
+### Access (private — GitHub login required)
+
+The desk repo is **private**. Reviewers need:
+
+1. A **GitHub account**
+2. **Read** collaborator access (Clark invites you)
+3. **GitHub Pro** on Clark's account (enables private Pages)
+
+**Setup guide (Clark):** [Desk_Preview_Private_Access_Setup.md](Desk_Preview_Private_Access_Setup.md)
+
 ### URL (auto-hydrated — no import step)
 
-**[https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/)**
+Use the URL shown in the repo **Settings → Pages** after Clark enables private Pages (may match `https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/` once re-deployed).
 
-Opens Transmission Control with the latest published hydration bundle. On HTTPS the console auto-loads [latest.json](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/data/hydration/latest.json) — no file picker, no git, no terminal.
+Sign in to GitHub first, then open the link. Transmission Control auto-loads the co-hosted hydration bundle — no file picker, no git, no terminal.
 
 ### What reviewers should see
 
@@ -136,7 +146,7 @@ Opens Transmission Control with the latest published hydration bundle. On HTTPS 
 
 ### What to tell stakeholders
 
-> Open the link above. Transmission Control loads with today's hydration bundle. Click **Explain** in the header for the field-by-field hydration log. No login or local setup required.
+> Clark will invite you to the private GitHub repo. Accept the invite, sign in to GitHub, then open the desk link from Clark. Transmission Control loads with today's hydration bundle. Click **Explain** in the header for the field-by-field hydration log. No local setup required.
 
 ### When Clark updates the preview
 

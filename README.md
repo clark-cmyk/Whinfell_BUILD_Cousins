@@ -4,11 +4,14 @@ Whinfell Transmission Control Tool — **BETA 2026-06-30**
 
 Parallel execution team supporting the Whinfell Transmission Map build.
 
-## Desk preview (free GitHub Pages)
+## Desk preview (private GitHub Pages)
 
-After push: **https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/**
+**Access:** Private repo · **GitHub Pro required** · collaborators only (e.g. Wes)  
+**Setup:** [`08_Deliverables/Desk_Preview_Private_Access_Setup.md`](08_Deliverables/Desk_Preview_Private_Access_Setup.md)
 
-Update: `bash scripts/publish_desk_preview.sh` after `whinfell_daily_am.sh`
+After Pro upgrade + invite: open URL from repo **Settings → Pages** (signed into GitHub).
+
+Publish: `bash scripts/publish_desk_preview.sh` after `whinfell_daily_am.sh`
 
 ## Folder Structure
 

@@ -67,7 +67,7 @@
 | **Phase 2.1** | Refinements post-feedback | Medium | **Next BUILD P1** | Bridge + Edge | WTC-2.0 import · scenario loop · TODO **#10** |
 | **Phase 2.2 UI** | TC cockpit hierarchy refactor (header/KPI/drawer) | High | **Shipped** | Bridge + Clarity | Badge `2.2-UX-FIX-2026-06-30` · three-zone top bar · signal drawer · docs drawer · KPI hovers |
 | **Phase 2.2 UI** | UI audit human + agent optimization | High | **Shipped** | Bridge + Clarity | `whinfell_ui_audit_chunked.md` · DD audit panel · coverage pill scoping fixed · RV data table |
-| **Desk ops** | GitHub Pages shareable desk (Wes / reviewers) | High | **Live** | Clark + Bridge | Public repo · auto-hydrate · no import step on HTTPS |
+| **Desk ops** | GitHub Pages shareable desk (Wes / reviewers) | High | **Private gate** | Clark | Repo private · need **GitHub Pro** · invite Wes · see Desk_Preview_Private_Access_Setup.md |
 | **Desk ops** | Desk User Manual + SQ3 Reference | High | **Shipped** | Clarity | Linked index in TC · raw GitHub paths for agents |
 | **Desk ops** | Hydration field-by-field audit | High | **Shipped** | Bridge | `data/hydration/hydration_log.json` · Explain drawer |
 | **Phase 2.2 Final** | Desk validation of browser blueprint | Medium | **Collecting** | Bridge | Blueprint + hydration UX + UI refactor shipped |
@@ -108,15 +108,16 @@
 
 ---
 
-## Desk preview — free GitHub Pages (Wes + Lovable, $0)
+## Desk preview — private GitHub Pages (Wes + reviewers)
 
-**Live:** [https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/) · repo **public** · badge **`2.2-UX-FIX-2026-06-30`**.
+**Status:** Repo **private** (Jun 30) · Pages **paused** until Clark upgrades to **GitHub Pro** (~$4/mo).  
+**Setup:** `08_Deliverables/Desk_Preview_Private_Access_Setup.md`
 
-**Shipped:** `scripts/build_desk_preview.sh` · `scripts/publish_desk_preview.sh` · `.github/workflows/desk-preview-pages.yml` · TC auto-hydrate from co-hosted `latest.json` on HTTPS.
+**Shipped:** `scripts/build_desk_preview.sh` · `scripts/publish_desk_preview.sh` · `.github/workflows/desk-preview-pages.yml` · TC auto-hydrate from co-hosted `latest.json`.
 
-**Clark ongoing:** after AM chain → `bash scripts/publish_desk_preview.sh` (commit + push → auto-deploy ~1–2 min).
+**Clark one-time:** Pro upgrade → Settings → Pages → **Private** + GitHub Actions → invite Wes (read) → `publish_desk_preview.sh`
 
-**Wes / reviewers:** bookmark URL above · hard-refresh (`Cmd+Shift+R`) — no clone, no import, no terminal.
+**Wes:** accept GitHub invite → sign in → open Pages URL from Clark · hard-refresh (`Cmd+Shift+R`).
 
 **Lovable:** same URL + `08_Deliverables/whinfell_ui_audit_chunked.md` · header **Docs** for full manual index.
 

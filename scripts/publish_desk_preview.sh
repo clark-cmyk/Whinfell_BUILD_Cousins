@@ -43,4 +43,5 @@ git push origin HEAD
 echo ""
 echo "publish_desk_preview: pushed — GitHub Actions will deploy Pages in ~1–2 min."
 echo "  Check: GitHub repo → Actions → Desk preview (GitHub Pages)"
-echo "  URL:   GitHub repo → Settings → Pages (shown after first successful deploy)"
+echo "  URL:   GitHub repo → Settings → Pages (private — collaborators + GitHub login)"
+echo "  Setup: 08_Deliverables/Desk_Preview_Private_Access_Setup.md (Pro + invite Wes)"
