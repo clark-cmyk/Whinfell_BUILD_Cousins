@@ -1,18 +1,19 @@
 # Phase 2 — Node Cockpit Data Model
 
-**Version:** 0.2 (locked decisions applied)  
+**Version:** 0.3 (UI architecture + state layers)  
 **Date:** June 29, 2026  
-**Authors:** BUILD Cousins (Blueprint + Bridge)  
-**Status:** Locked — ready for implementation planning  
-**Prerequisites:** [Master Data Dictionary v1.0](Master_Data_Dictionary_v1.0.md) (Locked), hydration bundle v1.0.0 stable
+**Authors:** BUILD Cousins (Blueprint + Bridge + Clarity)  
+**Status:** Locked — ready for TC implementation planning  
+**Prerequisites:** [Master Data Dictionary v1.0](Master_Data_Dictionary_v1.0.md) (Locked), hydration bundle v1.2.0 stable  
+**UI companion:** [Phase2_TC_Cockpit_UI_Architecture.md](Phase2_TC_Cockpit_UI_Architecture.md) (navigation, shell, charts, AI-first rules)
 
 ---
 
 ## Purpose
 
-Define the **minimum data shape** for one ladder node to function as a **fully independent trading cockpit**. This document covers fields and JSON structure only — no UI, no pipeline code, no Transmission Control changes.
+Define the **minimum data shape** for one ladder node to function as a **fully independent trading cockpit**. This document covers **JSON fields, state layers, and pipeline contracts**. UI layout, navigation, and chart behavior are specified in the UI Architecture companion — not duplicated here.
 
-**Scope:** One reusable `node_cockpit` object, instantiated five times (Liquidity, Credit, Breadth, High-Beta/BTC, Basis). Phase 3 UI and Phase 4 validation consume this model unchanged.
+**Scope:** One reusable `node_cockpit` object, instantiated five times (Liquidity, Credit, Breadth, High-Beta/BTC, Basis). Transmission Control Phase 2 UI consumes this model unchanged.
 
 ---
 
@@ -46,10 +47,12 @@ All JSON keys use **snake_case** per Master DD v1.0.
 ## Design principles
 
 1. **Self-contained per node** — each cockpit object has everything needed to render signal, recs, implementation, sizing, and RV/basis without cross-node lookups (except optional global context block).
-2. **Pipeline vs operator** — every field is tagged `source`: `pipeline` | `derived` | `operator` | `default`.
-3. **Reuse before invent** — tracer horizons (`d1`, `d5`, `d20`, `d60`), freshness, and `canonical_assets` from Master DD; extend only where cockpit capability is missing.
-4. **Progressive fill** — MVP cockpit loads with signal + directional stub; RV, implementation, and quartile panels degrade gracefully when history is absent.
-5. **Round-trip safe** — per-node block must serialize to WTM EXPORT v2.2 and re-import without key drift.
+2. **AI-first cockpit** — maximum reasoning quality from **structured hydration**; minimum compute/tokens/redraws. Pipeline pre-computes scores, quartiles, and `funds_flows` verdicts; client toggles views only; LLM is operator-triggered, never on every flip.
+3. **Pipeline vs operator** — every field is tagged `source`: `pipeline` | `derived` | `operator` | `default`.
+4. **Reuse before invent** — tracer horizons (`d1`, `d5`, `d20`, `d60`), freshness, and `canonical_assets` from Master DD; extend only where cockpit capability is missing.
+5. **Progressive fill** — MVP cockpit loads with signal + directional stub; RV, implementation, and quartile panels degrade gracefully when history is absent.
+6. **Degrade as data** — `flows_meta`, partial RV horizons, and missing history expose machine-readable degrade flags; UI must distinguish degraded from true neutral (see [Whinfell_Cockpit_UI_Interaction_Standard.md](Whinfell_Cockpit_UI_Interaction_Standard.md)).
+7. **Round-trip safe** — per-node block must serialize to WTM EXPORT v2.2 and re-import without key drift.
 
 ---
 
@@ -531,25 +534,41 @@ Add top-level block `node_cockpits` — keyed by `node_id`. Existing v1.0.0 bloc
 }
 ```
 
-### 8.3 Transmission Control local state extension
+### 8.3 Transmission Control local state extension (v7)
 
-Persist operator edits separately from hydration (Master DD `transmission_control_state` v6 → v7 in Phase 2):
+Persist **operator edits** and **navigation state** separately from hydration. Three layers — see §13.
 
 ```json
 {
   "version": 7,
+  "navigation": {
+    "view_mode": "flip",
+    "active_node_id": "credit",
+    "compare_node_ids": [],
+    "focus_mode": false,
+    "focus_node_id": null
+  },
+  "chart": {
+    "shared_horizon": "3m",
+    "zoom_range": { "start": "2025-01-01", "end": "2026-06-29" },
+    "y_scale_mode": "auto"
+  },
+  "panel": {
+    "scroll_positions": { "credit": 0, "basis": 120 },
+    "expanded_sections": { "basis": ["rv_table", "sizing"] }
+  },
   "node_cockpit_overrides": {
     "basis": {
       "selected_implementation_id": "basis_btc_calendar",
       "sizing": { "enabled": true, "portfolio_nav_usd": 5000000, "kelly_fraction": 0.25 },
-      "rv_basis": { "active_horizon": "6m" },
+      "rv_basis": { "active_horizon": "6m", "active_series_id": "btc_calendar_bt_near_deferred" },
       "directional": { "posture": "neutral", "rationale": "Operator note…" }
     }
   }
 }
 ```
 
-Merge rule: `hydration node_cockpits.*` ⊕ `local node_cockpit_overrides.*` → rendered cockpit. Operator fields win on conflict.
+Merge rule: `hydration node_cockpits.*` ⊕ `local node_cockpit_overrides.*` → rendered cockpit. Operator fields win on conflict. Navigation/chart state does not mutate hydration.
 
 ### 8.4 WTM EXPORT v2.2 per-node block (sketch)
 
@@ -616,18 +635,76 @@ Each `node_cockpit` may include `funds_flows` — a read-only confirmation layer
 
 ---
 
-## 11. Master DD registration (Phase 2 follow-up)
+## 11. Master DD registration (Phase 2)
 
-When this model is locked, register in `data_dictionary.yaml`:
+Registered in `data_dictionary.yaml`:
 
-- `json_structures.hydration_bundle.expected_version: "1.1.0"`
+- `json_structures.hydration_bundle.expected_version: "1.2.0"` (includes `funds_flows`, `flows_sidecar`)
 - `json_structures.hydration_bundle.blocks.node_cockpits`
 - `json_structures.hydration_bundle.blocks.cockpit_context`
 - `rv_series` — per-series registry with `quartile_direction`, `node_id`, `history_source`
-- `transmission_control_state.current_version: 7`
+- `transmission_control_state.current_version: 7` (navigation + chart + overrides)
 - `wtm_export.format: "WTM EXPORT v2.2"` with `node_cockpit_block` template
 
-**Not in scope for this document:** UI layout, ARCH-1 implementation, margin default table population, options picker (Phase 2b).
+**UI layout & navigation:** [Phase2_TC_Cockpit_UI_Architecture.md](Phase2_TC_Cockpit_UI_Architecture.md). **Not in scope here:** ARCH-1 live history routing, margin table population, options picker (Phase 2b).
+
+---
+
+## 13. State architecture — shared, node-local, navigation
+
+Locked separation for Phase 2 TC. Prevents silent state loss on flip and keeps AI-first hydration authoritative.
+
+### 13.1 Hydration bundle (read-only session authority)
+
+| Block | Scope | Mutability |
+|-------|-------|------------|
+| `global`, `china`, `cockpit_context` | All nodes | Pipeline only — re-import to refresh |
+| `node_cockpits.{node_id}` | Per node | Pipeline only |
+| `node_cockpits.*.funds_flows` | Per node | Pipeline only — includes `flows_meta` degrade contract |
+| `flows_sidecar` | Global flows ingest | Pipeline only — metadata mirror; `flows_status: unavailable` when L1 absent |
+
+Client **never** writes back to hydration JSON except via explicit Import action.
+
+### 13.2 Node-local operator state (`node_cockpit_overrides`)
+
+| Field group | Stored per `node_id` | Survives flip |
+|-------------|----------------------|---------------|
+| `selected_implementation_id` | yes | yes — restored when returning to node |
+| `sizing.*` | yes | yes |
+| `rv_basis.active_horizon`, `active_series_id` | yes | yes |
+| `directional.rationale` (operator edit) | yes | yes |
+| `relative_value.rationale` (operator edit) | yes | yes |
+
+### 13.3 Navigation & chrome state (`navigation`, `chart`, `panel`)
+
+| Field | Layer | Flip behavior |
+|-------|-------|---------------|
+| `navigation.active_node_id` | session | updates each flip |
+| `navigation.view_mode` | session | preserved (`flip` \| `compare`) |
+| `navigation.focus_mode` | session | preserved until Esc |
+| `chart.shared_horizon` | session | preserved; applied as default on new node |
+| `chart.zoom_range` | session | preserved on same time-axis series |
+| `panel.scroll_positions[node_id]` | per-node | restored per node |
+
+Full keyboard map and compare rules: UI Architecture §1.
+
+### 13.4 `flows_meta` on render (mandatory)
+
+Before painting sponsorship verdict or neutral chrome, read:
+
+```
+node_cockpit.funds_flows.flows_meta.flows_status
+node_cockpit.funds_flows.flows_meta.flows_degraded
+node_cockpit.funds_flows.enabled
+```
+
+| `flows_status` | UI treatment |
+|----------------|--------------|
+| `ok` | Normal verdict badge |
+| `partial`, `fallback_1d` | Amber meta chip + degrade banner; verdict capped per spec |
+| `unavailable` | Collapsed placeholder — **not** neutral badge |
+
+Authority: [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md) §3.0.
 
 ---
 
@@ -644,6 +721,6 @@ When this model is locked, register in `data_dictionary.yaml`:
 
 ---
 
-**Next step:** Register `rv_series` in Master DD · Blueprint locks WTM EXPORT v2.2 · Bridge drafts `node_cockpits` builder · Clarity wireframes Liquidity cockpit.
+**Next step:** Desk lock [Phase2_TC_Cockpit_UI_Architecture.md](Phase2_TC_Cockpit_UI_Architecture.md) §8 checklist · UI-1 shell + rail · ARCH-1 live quartile history · PR-4 flows card.
 
-**Locked decisions applied:** BUILD Cousins · June 29, 2026
+**Locked decisions applied:** BUILD Cousins · June 29, 2026 · v0.3 UI/state layers June 29, 2026
