@@ -1833,14 +1833,108 @@ window.DICTIONARY_BADGE_DEFAULT = {
     }
 
     .cockpit-chart-canvas {
-      flex: 1;
-      min-height: 240px;
+      flex: 1 1 auto;
+      min-height: 220px;
+      height: clamp(200px, 32vh, 420px);
       margin: 12px;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      background: rgba(0,0,0,.22);
+      background: var(--chart-bg, rgba(0,0,0,.22));
       position: relative;
       overflow: hidden;
+    }
+    [data-theme="light"] .cockpit-chart-canvas {
+      --chart-bg: rgba(0,0,0,.04);
+    }
+    .cockpit-rv-table-wrap {
+      flex-shrink: 0;
+      margin: 0 12px 12px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .cockpit-rv-table-wrap .focus-horizon-table {
+      font-size: 13px;
+    }
+    .cockpit-rv-table-wrap .focus-horizon-table th {
+      font-size: 11px;
+      color: var(--text);
+      font-weight: 700;
+    }
+    .cockpit-rv-table-wrap .focus-horizon-table td {
+      color: var(--text);
+      padding: 8px 10px;
+    }
+    .header-source-link {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(76,142,217,.35);
+      background: rgba(76,142,217,.08);
+    }
+    .header-source-link:hover { background: rgba(76,142,217,.18); text-decoration: none; }
+    .desk-docs-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: min(420px, 94vw);
+      height: 100vh;
+      z-index: 210;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      box-shadow: 12px 0 40px rgba(0,0,0,.35);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(-100%);
+      transition: transform .22s ease;
+    }
+    .desk-docs-drawer.is-open { transform: translateX(0); }
+    .desk-docs-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 205;
+      background: rgba(0,0,0,.45);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .desk-docs-backdrop.is-open { opacity: 1; pointer-events: auto; }
+    .metric-tip {
+      cursor: help;
+      border-bottom: 1px dotted var(--muted);
+      position: relative;
+    }
+    .metric-tip::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 0;
+      top: calc(100% + 6px);
+      z-index: 50;
+      min-width: 220px;
+      max-width: 280px;
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.4;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .15s ease;
+      white-space: normal;
+    }
+    .metric-card:hover .metric-tip::after,
+    .metric-tip:focus-visible::after {
+      opacity: 1;
     }
 
     .cockpit-chart-placeholder {
@@ -2267,6 +2361,8 @@ window.DICTIONARY_BADGE_DEFAULT = {
         <span id="tcConsoleBuildBadge" class="header-build-badge text-[8px] font-bold text-wtm-green bg-emerald-500/10 border border-wtm-green/35 px-2 py-0.5 rounded" title="Operator-console build — hard-refresh if stale">—</span>
         <a id="ddVersionBadge" href="https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/whinfell_pipeline/data_dictionary.yaml" target="_blank" rel="noopener noreferrer" class="header-dictionary-badge text-[9px] font-bold text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></a>
         <button type="button" id="btnDeskDocs" class="text-[9px] font-bold text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20" title="Open desk documentation links">Docs</button>
+        <a id="headerLinkKoyfin" href="https://app.koyfin.com/" target="_blank" rel="noopener noreferrer" class="header-source-link" title="Open Koyfin desk">Koyfin ↗</a>
+        <a id="headerLinkBarchart" href="https://www.barchart.com/futures/major-commodities" target="_blank" rel="noopener noreferrer" class="header-source-link" title="Open Barchart futures">Barchart ↗</a>
         <button type="button" id="btnWorkspaceToggle" class="header-workspace-toggle text-[9px] font-bold text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20">Node Cockpits</button>
       </div>
     </div>
@@ -2292,6 +2388,14 @@ window.DICTIONARY_BADGE_DEFAULT = {
       </div>
     </div>
   </header>
+  <div id="deskDocsBackdrop" class="desk-docs-backdrop" aria-hidden="true"></div>
+  <aside id="deskDocsDrawer" class="desk-docs-drawer" aria-label="Desk documentation" aria-hidden="true">
+    <div class="signal-detail-head">
+      <span class="signal-detail-title">Desk documentation</span>
+      <button type="button" id="btnCloseDeskDocs" class="signal-detail-close" aria-label="Close documentation">×</button>
+    </div>
+    <div class="signal-detail-body" id="deskDocsDrawerList" data-agent-surface="desk-docs-drawer"></div>
+  </aside>
   <div id="signalDetailBackdrop" class="signal-detail-backdrop" aria-hidden="true"></div>
   <aside id="signalDetailDrawer" class="signal-detail-drawer zone-hidden" aria-label="Signal explanations" aria-hidden="true">
     <div class="signal-detail-head">
@@ -2347,17 +2451,17 @@ window.DICTIONARY_BADGE_DEFAULT = {
       </div>
       <section class="decision-strip" aria-label="Primary KPIs">
         <div id="scoreCard" class="metric-card score-card">
-          <span class="label">Whinfell Score</span>
+          <span class="label metric-tip" tabindex="0" data-tip="Composite 0–100 regime score from credit, rates, breadth, and BTC transmission. &lt;50 Red blocks new BTC risk; 50–64 Amber is reduced size; ≥65 Green allows normal desk sizing.">Whinfell Score</span>
           <strong id="cmdWhinfellScore">—</strong>
           <span id="cmdScoreZone" class="meta">—</span>
         </div>
         <div class="metric-card">
-          <span class="label">Transmission</span>
+          <span class="label metric-tip" tabindex="0" data-tip="Ladder health 0–100 from the five transmission nodes (Liquidity → Credit → Breadth → High-beta → Basis). Weakest link drives the read; compares confirming vs impairing horizon marks.">Transmission</span>
           <strong id="txHealthValue">—</strong>
           <span id="txHealthMeta" class="meta">—</span>
         </div>
         <div class="metric-card">
-          <span class="label">Gate state</span>
+          <span class="label metric-tip" tabindex="0" data-tip="BTC access gate from Whinfell Score: BLOCKED (&lt;50), Tight Risk (50–64), or Allowed (≥65). SQ3 &lt;50 adds China Caution on mission nodes. Does not auto-trade.">Gate state</span>
           <strong id="gateText">—</strong>
           <span id="cmdGateLabel" class="hidden">—</span>
           <span id="gateChip" class="gate-chip">—</span>
@@ -2365,12 +2469,12 @@ window.DICTIONARY_BADGE_DEFAULT = {
           <span id="cmdGateSub" class="hidden">—</span>
         </div>
         <div class="metric-card">
-          <span class="label">Shock</span>
+          <span class="label metric-tip" tabindex="0" data-tip="Active shock scenario from Signal Tracer (e.g. Credit Widening, Vol Spike, BTC Decoupling). When armed, horizon marks shift and sizing compresses until dismissed or re-imported.">Shock</span>
           <strong id="shockText">No active shock</strong>
           <span id="shockMeta" class="meta">Baseline regime</span>
         </div>
         <div id="cmdFreshnessCluster" class="metric-card">
-          <span class="label">Freshness</span>
+          <span class="label metric-tip" tabindex="0" data-tip="Pipeline data age from last hydration import. Fresh &lt;4h · Aging 4–24h · Stale &gt;24h. Stale bundles flag override — re-run daily chain before sizing.">Freshness</span>
           <div class="flex items-center gap-2">
             <span id="cmdFreshnessDot" class="freshness-dot hidden"></span>
             <strong id="cmdFreshness">—</strong>
@@ -2456,6 +2560,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
               <span id="cockpitChartPct" class="zone-hidden">—</span>
             </div>
           </div>
+          <div id="cockpitRvTableWrap" class="cockpit-rv-table-wrap" aria-label="RV horizon data table"></div>
           <div id="basisSummaryStrip" class="basis-summary-strip zone-hidden">
             <div id="basisSummary" class="basis-summary">
               <div class="basis-reading-primary">
@@ -2906,7 +3011,7 @@ const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
 /** Bump when operator-console UX changes — visible in header for reload verification. */
-const TC_CONSOLE_BUILD = '2.2-DOCS-FULL-2026-06-30';
+const TC_CONSOLE_BUILD = '2.2-UX-FIX-2026-06-30';
 const DESK_GITHUB_BLOB = 'https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/';
 const DESK_GITHUB_RAW = 'https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/';
 const DESK_PAGES_URL = 'https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/';
@@ -3168,14 +3273,15 @@ function deskDocCatalogCount() {
 }
 
 function renderDeskDocsPanel() {
-  const node = el('deskDocsList');
-  if (!node) return;
+  const targets = ['deskDocsList', 'deskDocsDrawerList'].map(id => el(id)).filter(Boolean);
+  if (!targets.length) return;
   const groups = DESK_DOC_CATALOG.map(grp => {
     const items = (grp.docs || []).map(d => `<li>${deskDocAnchor(d)}</li>`).join('');
     return `<div class="desk-docs-group"><div class="desk-docs-group-title">${escapeHtml(grp.group)}</div><ul class="desk-docs-list">${items}</ul></div>`;
   }).join('');
   const count = deskDocCatalogCount();
-  node.innerHTML = `<p class="text-[9px] mb-2"><strong class="text-slate-200">${count} documents</strong> — links open on GitHub or the live desk preview. Agents: use <a href="${escapeHtml(DESK_GITHUB_RAW)}08_Deliverables/Whinfell_Desk_User_Manual_v1.0.md" class="desk-doc-link" target="_blank" rel="noopener noreferrer">raw.githubusercontent.com</a> paths from the <a href="${escapeHtml(deskDocHref({ path: '08_Deliverables/Whinfell_Desk_User_Manual_v1.0.md' }))}" class="desk-doc-link" target="_blank" rel="noopener noreferrer">manual index</a>.</p>${groups}`;
+  const html = `<p class="text-[9px] mb-2"><strong class="text-slate-200">${count} documents</strong> — links open on GitHub or the live desk preview. Agents: use <a href="${escapeHtml(DESK_GITHUB_RAW)}08_Deliverables/Whinfell_Desk_User_Manual_v1.0.md" class="desk-doc-link" target="_blank" rel="noopener noreferrer">raw.githubusercontent.com</a> paths from the <a href="${escapeHtml(deskDocHref({ path: '08_Deliverables/Whinfell_Desk_User_Manual_v1.0.md' }))}" class="desk-doc-link" target="_blank" rel="noopener noreferrer">manual index</a>.</p>${groups}`;
+  targets.forEach(node => { node.innerHTML = html; });
 }
 
 function renderSignalDetailDocs() {
@@ -3199,7 +3305,25 @@ function renderSignalDetailDocs() {
   }
 }
 
+function setDeskDocsOpen(open) {
+  const drawer = el('deskDocsDrawer');
+  const backdrop = el('deskDocsBackdrop');
+  if (drawer) {
+    drawer.classList.toggle('is-open', open);
+    drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+  }
+  if (backdrop) {
+    backdrop.classList.toggle('is-open', open);
+    backdrop.setAttribute('aria-hidden', open ? 'false' : 'true');
+  }
+  if (open) renderDeskDocsPanel();
+}
+
 function openDeskDocsPanel() {
+  if (el('deskDocsDrawer')) {
+    setDeskDocsOpen(true);
+    return;
+  }
   const panel = el('deskDocsPanel');
   const list = el('deskDocsList');
   if (panel) {
@@ -6710,8 +6834,32 @@ function buildDataDictionaryAuditRows(state, filterScope) {
     });
   }
 
-  if (!filterScope || filterScope === 'global' || filterScope === 'signals') return rows;
-  return rows.filter(r => r.auditScope === filterScope || (filterScope === 'flows' && r.id === 'flows-global'));
+  return filterAuditRowsByScope(rows, filterScope);
+}
+
+function filterAuditRowsByScope(rows, filterScope) {
+  if (!filterScope) return rows;
+  if (filterScope === 'flows') {
+    return rows.filter(r => r.auditScope === 'flows' || r.id === 'flows-global');
+  }
+  if (filterScope === 'signals') {
+    return rows.filter(r =>
+      r.id.endsWith('-horizon-fallback') ||
+      (r.component && r.auditScope !== 'flows' && r.auditScope !== 'china')
+    );
+  }
+  if (filterScope === 'global' || filterScope === 'history') {
+    return rows.filter(r =>
+      r.id.endsWith('-horizon-fallback') ||
+      r.cause === 'sample_insufficient' ||
+      r.cause === 'data_stale' ||
+      r.component?.source === 'rv_history'
+    );
+  }
+  if (filterScope === 'china') {
+    return rows.filter(r => r.auditScope === 'china');
+  }
+  return rows.filter(r => r.auditScope === filterScope);
 }
 
 function renderDdAuditDetail(row) {
@@ -6741,7 +6889,10 @@ function renderDataDictionaryAudit(state, filterScope) {
     return [];
   }
   if (!rows.length) {
-    node.innerHTML = '<p>All audited fields present for current 48h window. No remediation required.</p>';
+    const scopeMsg = filterScope
+      ? `No issues in <strong>${escapeHtml(filterScope)}</strong> coverage for this session.`
+      : 'All audited fields present for current 48h window. No remediation required.';
+    node.innerHTML = `<p>${scopeMsg}</p>`;
     el('ddAuditDetail')?.classList.add('zone-hidden');
     return [];
   }
@@ -6776,10 +6927,10 @@ function renderDataDictionaryAudit(state, filterScope) {
 function openDictionaryAudit(scope) {
   const state = buildStateFromDOM();
   setSignalDetailOpen(true);
-  renderDataDictionaryAudit(state, scope);
   const rows = buildDataDictionaryAuditRows(state, scope);
-  const hit = rows.find(r => r.auditScope === scope) || rows[0];
-  if (hit) renderDdAuditDetail(hit);
+  renderDataDictionaryAudit(state, scope);
+  if (rows.length) renderDdAuditDetail(rows[0]);
+  else el('ddAuditDetail')?.classList.add('zone-hidden');
 }
 
 function buildUiAuditPayload(state) {
@@ -7378,11 +7529,67 @@ function resolveSizeCapLabel(cockpit, gate, health) {
 
 function formatReadingValue(hz) {
   if (!hz || hz.current_value == null) return '—';
-  const unit = String(hz.unit || '').toLowerCase();
-  const val = Number(hz.current_value);
-  if (!Number.isFinite(val)) return String(hz.current_value);
-  if (unit === 'pct' || unit === '%') return `${val}%`;
-  return `${val}${hz.unit ? ` ${hz.unit}` : ''}`;
+  return formatChartValue(hz.current_value, hz.unit);
+}
+
+function formatChartValue(val, unit) {
+  const n = Number(val);
+  if (!Number.isFinite(n)) return String(val ?? '—');
+  const u = String(unit || '').toLowerCase();
+  if (u === 'pct' || u === '%') return `${n.toFixed(1)}%`;
+  if (u === 'usd' || u === '$' || u === 'dollars') {
+    return n >= 1000
+      ? `$${n.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
+      : `$${n.toFixed(0)}`;
+  }
+  if (u === 'bps' || u === 'bp') return `${n.toFixed(1)} bps`;
+  if (Math.abs(n) >= 1000) return n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  return `${n.toFixed(2)}${unit ? ` ${unit}` : ''}`;
+}
+
+function getChartTheme() {
+  const light = document.documentElement.getAttribute('data-theme') === 'light';
+  return {
+    grid: light ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.12)',
+    axisText: light ? '#374151' : '#c5d0dc',
+    label: light ? '#1a2332' : '#e8edf3',
+    muted: light ? '#5a6578' : '#9eacbb',
+    barHi: light ? 'rgba(200,80,60,0.88)' : 'rgba(255,140,105,0.92)',
+    barLo: light ? 'rgba(40,140,80,0.88)' : 'rgba(79,179,122,0.92)',
+    barMid: light ? 'rgba(50,100,180,0.85)' : 'rgba(76,142,217,0.88)',
+    zeroLine: light ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.22)',
+    activeBand: light ? 'rgba(50,100,180,0.14)' : 'rgba(76,142,217,0.14)',
+    line: light ? 'rgba(180,130,40,0.75)' : 'rgba(214,163,74,0.65)',
+  };
+}
+
+function syncHeaderSourceLinks(state) {
+  const koyfin = (state?.urls?.koyfin || DEFAULTS.urls.koyfin || '').trim();
+  const barchart = (state?.urls?.barchart || DEFAULTS.urls.barchart || '').trim();
+  const kLink = el('headerLinkKoyfin');
+  const bLink = el('headerLinkBarchart');
+  if (kLink && koyfin) kLink.href = koyfin;
+  if (bLink && barchart) bLink.href = barchart;
+}
+
+let cockpitChartResizeObs = null;
+function initCockpitChartResize() {
+  const host = el('cockpitChartCanvas');
+  if (!host || cockpitChartResizeObs || typeof ResizeObserver === 'undefined') return;
+  cockpitChartResizeObs = new ResizeObserver(() => {
+    if (appState.ui?.workspaceView !== 'cockpit' || appState.navigation?.focus_mode || appState.navigation?.view_mode === 'compare') return;
+    const state = buildStateFromDOM();
+    const cockpit = mergeNodeCockpit(activeNodeId(), state);
+    drawRvBasisChart(cockpit, el('cockpitRvCanvas'), state, deriveGate(state));
+  });
+  cockpitChartResizeObs.observe(host);
+}
+
+function renderCockpitRvTable(cockpit, series) {
+  const wrap = el('cockpitRvTableWrap');
+  if (!wrap) return;
+  const evidence = buildRvHorizonEvidenceMarkup(cockpit, series);
+  wrap.innerHTML = `<table class="${evidence.tableClass}"><thead><tr><th>Horizon</th><th>Value</th><th>Percentile</th><th>Quartile</th><th>Richness</th></tr></thead><tbody>${evidence.rows}</tbody></table>${evidence.note || ''}`;
 }
 
 function renderDiagnosticBlock(title, chipClass, chipLabel, interpretation, implication) {
@@ -7534,10 +7741,10 @@ function buildRvHorizonEvidenceMarkup(cockpit, series) {
     let valueCell;
     if (fallback.mode === 'spot') {
       valueCell = h === fallback.primaryHorizon
-        ? `${hz.current_value} ${hz.unit || ''}`
+        ? formatChartValue(hz.current_value, hz.unit)
         : '<span class="rv-horizon-na" title="Single spot reading — applies to all lookbacks">—</span>';
     } else {
-      valueCell = `${hz.current_value} ${hz.unit || ''}`;
+      valueCell = formatChartValue(hz.current_value, hz.unit);
     }
 
     const rowCls = fallback.mode === 'spot' && h !== fallback.primaryHorizon ? ' class="rv-horizon-row--spot"' : '';
@@ -8019,7 +8226,7 @@ function buildCoverageChecklist(state) {
   const signalsOk = signalStatuses.every(s => s === 'ok');
   const signalsPartial = signalStatuses.some(s => s === 'partial');
   const items = [
-    { key: 'history', label: 'History', status: historyOk ? 'ok' : 'miss', auditScope: 'global' },
+    { key: 'history', label: 'History', status: historyOk ? 'ok' : 'miss', auditScope: 'history' },
     { key: 'flows', label: 'Flows', status: globalFlows === 'ok' ? 'ok' : (globalFlows === 'unavailable' ? 'miss' : 'partial'), auditScope: 'flows' },
     { key: 'signals', label: 'Signals', status: signalsOk ? 'ok' : (signalsPartial || signalStatuses.some(s => s === 'partial') ? 'partial' : 'miss'), auditScope: 'signals' },
   ];
@@ -8538,12 +8745,13 @@ function renderCockpitDecisionRail(cockpit, state) {
 function drawRvBasisChart(cockpit, canvas, state, gate) {
   if (!canvas || !canvas.getContext) return { drew: false, pointCount: 0 };
   const ctx = canvas.getContext('2d');
+  const theme = getChartTheme();
   const domState = state || buildStateFromDOM();
   const gateState = gate || deriveGate(domState);
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
   const rect = canvas.parentElement?.getBoundingClientRect?.() || { width: 400, height: 240 };
-  const w = Math.max(200, Math.floor(rect.width));
-  const h = Math.max(160, Math.floor(rect.height));
+  const w = Math.max(240, Math.floor(rect.width));
+  const h = Math.max(180, Math.floor(rect.height));
   canvas.width = w * dpr;
   canvas.height = h * dpr;
   canvas.style.width = `${w}px`;
@@ -8567,7 +8775,7 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
   const isMission = isMissionSurfaceNode(cockpit.node_id);
   const isBasis = cockpit.node_id === 'basis';
   const diagTags = isMission ? buildMissionChartDiagnosis(cockpit, domState, gateState) : [];
-  const pad = { l: isMission ? 52 : 44, r: 16, t: isMission ? 22 : 16, b: 36 };
+  const pad = { l: 72, r: 20, t: 28, b: 44 };
   const plotW = w - pad.l - pad.r;
   const plotH = h - pad.t - pad.b;
   const vals = points.map(p => p.value);
@@ -8575,27 +8783,25 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
   const refsReady = isBasis && basisRefsAvailable(refs);
   const domainSource = isBasis
     ? (refsReady ? [...vals, 0, refs.low, refs.mid, refs.high] : [...vals, 0])
-    : vals;
-  const domain = isBasis ? getBasisDomain(domainSource) : [Math.min(...vals), Math.max(...vals)];
+    : [0, ...vals, 100];
+  const domain = isBasis ? getBasisDomain(domainSource) : [0, 100];
   const [yMin, yMax] = domain;
   const yBase = isBasis && yMin <= 0 && yMax >= 0 ? 0 : yMin;
   const barW = plotW / points.length;
-  const unitSuffix = String(points[0]?.unit || '').toLowerCase() === 'pct' ? '%' : '';
   const activeHz = series.horizons?.[horizon];
+  const axisFont = '600 12px system-ui,sans-serif';
+  const labelFont = '600 11px system-ui,sans-serif';
+  const valueFont = '600 11px system-ui,sans-serif';
 
   if (isBasis) {
     const permText = gateState.blocked ? 'No new risk' : gateState.tight ? 'Allowed · capped 0.5×' : 'Eligible';
-    ctx.fillStyle = gateState.blocked
-      ? 'rgba(245,101,101,0.65)'
-      : gateState.tight
-        ? 'rgba(245,166,35,0.65)'
-        : 'rgba(61,221,140,0.55)';
-    ctx.font = '7px system-ui,sans-serif';
+    ctx.fillStyle = gateState.blocked ? 'rgba(245,101,101,0.85)' : gateState.tight ? 'rgba(245,166,35,0.85)' : 'rgba(61,221,140,0.75)';
+    ctx.font = labelFont;
     ctx.textAlign = 'right';
-    ctx.fillText(permText, w - pad.r, pad.t - 6);
+    ctx.fillText(permText, w - pad.r, pad.t - 10);
     if (gateState.tight || gateState.blocked) {
       ctx.fillStyle = gateState.blocked ? 'rgba(245,101,101,0.35)' : 'rgba(245,166,35,0.28)';
-      ctx.fillRect(pad.l - 3, pad.t, 2, plotH);
+      ctx.fillRect(pad.l - 4, pad.t, 3, plotH);
     }
   }
 
@@ -8603,7 +8809,7 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
     drawBasisQuartileScaffold(ctx, domain, pad, plotW, plotH);
   }
 
-  ctx.strokeStyle = 'rgba(255,255,255,.08)';
+  ctx.strokeStyle = theme.grid;
   ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
     const v = yMin + ((yMax - yMin) * i) / 4;
@@ -8612,38 +8818,39 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
     ctx.moveTo(pad.l, y);
     ctx.lineTo(w - pad.r, y);
     ctx.stroke();
-    if (isBasis) {
-      ctx.fillStyle = '#8b9cb3';
-      ctx.font = '9px system-ui,sans-serif';
-      ctx.textAlign = 'right';
-      ctx.fillText(`${v.toFixed(2)}${unitSuffix}`, pad.l - 6, y + 3);
-    }
+    ctx.fillStyle = theme.axisText;
+    ctx.font = axisFont;
+    ctx.textAlign = 'right';
+    const axisLabel = isBasis
+      ? formatChartValue(v, points[0]?.unit)
+      : `${Math.round(v)}%`;
+    ctx.fillText(axisLabel, pad.l - 8, y + 4);
   }
 
   if (isBasis && yMin <= 0 && yMax >= 0) {
     const y0 = basisValueToY(0, domain, pad, plotH);
-    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-    ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = theme.zeroLine;
+    ctx.setLineDash([4, 4]);
     ctx.beginPath();
     ctx.moveTo(pad.l, y0);
     ctx.lineTo(w - pad.r, y0);
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.fillStyle = theme.muted;
+    ctx.font = labelFont;
+    ctx.textAlign = 'right';
+    ctx.fillText('0', pad.l - 8, y0 + 4);
   }
 
   if (refsReady && refs.low < refs.high) {
     const yLo = basisValueToY(refs.low, domain, pad, plotH);
     const yHi = basisValueToY(refs.high, domain, pad, plotH);
-    ctx.fillStyle = 'rgba(214,168,95,0.08)';
+    ctx.fillStyle = 'rgba(214,168,95,0.12)';
     ctx.fillRect(pad.l, Math.min(yLo, yHi), plotW, Math.abs(yHi - yLo));
-    [
-      { v: refs.low, a: 0.20 },
-      { v: refs.mid, a: 0.32 },
-      { v: refs.high, a: 0.20 },
-    ].forEach(ref => {
+    [{ v: refs.low, a: 0.28 }, { v: refs.mid, a: 0.42 }, { v: refs.high, a: 0.28 }].forEach(ref => {
       const y = basisValueToY(ref.v, domain, pad, plotH);
       ctx.strokeStyle = `rgba(214,168,95,${ref.a})`;
-      ctx.setLineDash([2, 2]);
+      ctx.setLineDash([3, 3]);
       ctx.beginPath();
       ctx.moveTo(pad.l, y);
       ctx.lineTo(w - pad.r, y);
@@ -8651,55 +8858,49 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
       ctx.setLineDash([]);
     });
   } else if (isBasis) {
-    ctx.fillStyle = 'rgba(142,156,179,0.55)';
-    ctx.font = '8px system-ui,sans-serif';
+    ctx.fillStyle = theme.muted;
+    ctx.font = labelFont;
     ctx.textAlign = 'left';
-    ctx.fillText('History quartiles · ref band unavailable', pad.l, pad.t - 6);
+    ctx.fillText('Ref band unavailable — table below is authoritative', pad.l, pad.t - 10);
   }
 
   const activeIdx = points.findIndex(p => p.key === horizon);
   if (activeIdx >= 0) {
-    ctx.fillStyle = 'rgba(76,142,217,.12)';
+    ctx.fillStyle = theme.activeBand;
     ctx.fillRect(pad.l + activeIdx * barW, pad.t, barW, plotH);
   }
 
   points.forEach((p, i) => {
-    const x = pad.l + i * barW + barW * 0.15;
-    const bw = barW * 0.7;
-    const yTop = basisValueToY(p.value, domain, pad, plotH);
-    const yBot = basisValueToY(yBase, domain, pad, plotH);
+    const x = pad.l + i * barW + barW * 0.12;
+    const bw = barW * 0.76;
+    const yTop = isBasis
+      ? basisValueToY(p.value, domain, pad, plotH)
+      : pad.t + plotH - ((p.percentile || 50) / 100) * plotH;
+    const yBot = isBasis ? basisValueToY(yBase, domain, pad, plotH) : pad.t + plotH;
     const q = p.quartile || 2;
-    ctx.fillStyle = q >= 4 ? 'rgba(255,140,105,.85)' : q <= 1 ? 'rgba(79,179,122,.85)' : 'rgba(76,142,217,.75)';
-    ctx.fillRect(x, Math.min(yTop, yBot), bw, Math.max(4, Math.abs(yBot - yTop)));
-    ctx.fillStyle = '#9eacbb';
-    ctx.font = '9px system-ui,sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(RV_HORIZON_LABELS[p.key] || p.key, x + bw / 2, h - pad.b + 12);
-    if (isBasis && i === activeIdx && w >= 380 && barW >= 36) {
-      ctx.fillStyle = 'rgba(158,172,187,0.72)';
-      ctx.font = '8px system-ui,sans-serif';
-      ctx.fillText(`${p.value.toFixed(2)}${unitSuffix}`, x + bw / 2, Math.min(yTop, yBot) - 4);
+    ctx.fillStyle = q >= 4 ? theme.barHi : q <= 1 ? theme.barLo : theme.barMid;
+    if (isBasis) {
+      ctx.fillRect(x, Math.min(yTop, yBot), bw, Math.max(6, Math.abs(yBot - yTop)));
+    } else {
+      const barH = Math.max(6, plotH * ((p.percentile || 50) / 100));
+      ctx.fillRect(x, pad.t + plotH - barH, bw, barH);
     }
+    ctx.fillStyle = theme.label;
+    ctx.font = labelFont;
+    ctx.textAlign = 'center';
+    ctx.fillText(RV_HORIZON_LABELS[p.key] || p.key, x + bw / 2, h - pad.b + 16);
+    const valLabel = isBasis
+      ? formatChartValue(p.value, p.unit)
+      : `${Math.round(p.percentile || 0)}%`;
+    ctx.fillStyle = theme.axisText;
+    ctx.font = valueFont;
+    const labelY = isBasis ? Math.min(yTop, yBot) - 6 : Math.max(pad.t + 14, yTop - 6);
+    ctx.fillText(valLabel, x + bw / 2, labelY);
   });
 
-  if (isBasis && activeHz && Number.isFinite(activeHz.percentile)) {
-    const pctY = pad.t + plotH - ((activeHz.percentile || 50) / 100) * plotH;
-    ctx.strokeStyle = 'rgba(214,163,74,0.35)';
-    ctx.setLineDash([2, 3]);
-    ctx.beginPath();
-    ctx.moveTo(pad.l, pctY);
-    ctx.lineTo(w - pad.r, pctY);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(214,163,74,0.55)';
-    ctx.font = '7px system-ui,sans-serif';
-    ctx.textAlign = 'right';
-    ctx.fillText(formatPercentile(Number(activeHz.percentile)), w - pad.r, pctY + 2);
-  }
-
   if (!isBasis) {
-    ctx.strokeStyle = 'rgba(214,163,74,.55)';
-    ctx.lineWidth = 1.25;
+    ctx.strokeStyle = theme.line;
+    ctx.lineWidth = 2;
     ctx.beginPath();
     points.forEach((p, i) => {
       const x = pad.l + i * barW + barW / 2;
@@ -8708,26 +8909,41 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
-  } else if (diagTags.length) {
-    const fontSize = 6;
-    const gap = 4;
-    const padX = 5;
-    const chipH = fontSize + 4;
+    ctx.fillStyle = theme.muted;
+    ctx.font = labelFont;
+    ctx.textAlign = 'left';
+    ctx.fillText('Y-axis: percentile vs history', pad.l, pad.t - 10);
+  }
+
+  if (isBasis && activeHz && Number.isFinite(activeHz.percentile)) {
+    const pctY = pad.t + plotH - ((activeHz.percentile || 50) / 100) * plotH;
+    ctx.strokeStyle = theme.line;
+    ctx.setLineDash([3, 4]);
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pctY);
+    ctx.lineTo(w - pad.r, pctY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = theme.muted;
+    ctx.font = labelFont;
+    ctx.textAlign = 'right';
+    ctx.fillText(formatPercentile(Number(activeHz.percentile)), w - pad.r, pctY - 4);
+  }
+
+  if (diagTags.length) {
+    const fontSize = 10;
     let xCursor = pad.l;
-    const yDiag = h - 4;
+    const yDiag = h - 8;
     ctx.font = `${fontSize}px system-ui,sans-serif`;
     ctx.textAlign = 'left';
     diagTags.forEach(tag => {
-      const textW = ctx.measureText(tag).width + padX * 2;
+      const textW = ctx.measureText(tag).width + 12;
       if (xCursor + textW > w - pad.r) return;
-      ctx.fillStyle = 'rgba(0,0,0,0.12)';
-      ctx.fillRect(xCursor, yDiag - chipH, textW, chipH);
-      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(xCursor, yDiag - chipH, textW, chipH);
-      ctx.fillStyle = 'rgba(142,156,179,0.48)';
-      ctx.fillText(tag, xCursor + padX, yDiag - 2);
-      xCursor += textW + gap;
+      ctx.fillStyle = theme.activeBand;
+      ctx.fillRect(xCursor, yDiag - fontSize - 6, textW, fontSize + 6);
+      ctx.fillStyle = theme.muted;
+      ctx.fillText(tag, xCursor + 6, yDiag - 2);
+      xCursor += textW + 6;
     });
   }
 
@@ -8783,6 +8999,8 @@ function renderCockpitChart(cockpit, state) {
     unhydratedOverlay.classList.add('zone-hidden');
   }
 
+  renderCockpitRvTable(cockpit, series);
+  initCockpitChartResize();
   const drawResult = drawRvBasisChart(cockpit, canvas, domState, gate);
   if (placeholder) {
     if (drawResult.drew) placeholder.classList.add('zone-hidden');
@@ -8984,6 +9202,7 @@ function handleCockpitKeyboard(e) {
   if (appState.ui?.workspaceView !== 'cockpit') return;
   if (isTypingTarget(e.target)) return;
   if (e.key === 'Escape') {
+    if (el('deskDocsDrawer')?.classList.contains('is-open')) { e.preventDefault(); setDeskDocsOpen(false); return; }
     if (el('signalDetailDrawer')?.classList.contains('is-open')) { e.preventDefault(); setSignalDetailOpen(false); return; }
     if (appState.navigation?.focus_mode) { e.preventDefault(); exitFocusMode(); return; }
     if (appState.navigation?.view_mode === 'compare') { e.preventDefault(); toggleCompareMode(false); return; }
@@ -9059,6 +9278,7 @@ function renderAll() {
 
   el('urlDisplayKoyfin').textContent = state.urls.koyfin?.trim() || 'No URL saved';
   el('urlDisplayBarchart').textContent = state.urls.barchart?.trim() || 'No URL saved';
+  syncHeaderSourceLinks(state);
 
   updateGrossDisplay(state, gate);
   updateResearchReadout(state);
@@ -9329,6 +9549,8 @@ el('btnWorkspaceToggle').onclick = () => {
   markDirty();
 };
 el('btnDeskDocs')?.addEventListener('click', () => openDeskDocsPanel());
+el('btnCloseDeskDocs')?.addEventListener('click', () => setDeskDocsOpen(false));
+el('deskDocsBackdrop')?.addEventListener('click', () => setDeskDocsOpen(false));
 el('btnExportNode').onclick = () => {
   const cockpit = mergeNodeCockpit(activeNodeId(), buildStateFromDOM());
   const lines = [
