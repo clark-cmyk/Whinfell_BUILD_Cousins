@@ -1799,6 +1799,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
           <div id="basisTacticalBanner" class="basis-tactical-banner zone-hidden" aria-live="polite">
             <p class="basis-tactical-eyebrow">Basis mission read</p>
             <p id="basisTacticalSentence" class="basis-tactical-sentence">—</p>
+            <p id="basisTacticalSuffix" class="basis-tactical-suffix text-[10px] text-wtm-muted mt-0.5 zone-hidden">—</p>
           </div>
           <div class="cockpit-chart-header px-3 py-2 border-b border-wtm-border bg-wtm-surface">
             <h2 id="cockpitChartTitle" class="text-[12px] font-bold">Relative Value · Basis</h2>
@@ -6230,48 +6231,74 @@ function resolveMissionGateChipLabel(gate) {
   return humanizeValue(gate?.displayLabel || gate?.label || 'Open');
 }
 
-function buildMissionTacticalSentence(cockpit, hz, series, gate, health) {
+function buildMissionTacticalLead(cockpit, hz, series, gate, health) {
   const config = missionNodeConfig(cockpit.node_id) || MISSION_NODE_CONFIG.basis;
   const seriesLabel = series?.label || config.defaultSeriesLabel;
   const stance = hz?.richness_label || cockpit.rv_basis?.richness_label;
   const richnessText = richnessPillLabel(stance).toLowerCase();
   const rv = cockpit.relative_value || {};
-  let lead;
 
   if (gate?.blocked || rv.blocked) {
-    lead = `${seriesLabel} is ${richnessText}; ${config.blockedPhrase}`;
-  } else {
-    const expression = rv.posture ? humanizeValue(rv.posture).toLowerCase() : 'expression';
-    const capped = gate?.tight || (health && health.score < TX_HEALTH_OPEN_THRESHOLD);
-    if (capped) {
-      lead = `${seriesLabel} is ${richnessText}; ${expression} is allowed, but only at 0.5× under Tight Risk.`;
-    } else {
-      lead = `${seriesLabel} is ${richnessText}; ${expression} is eligible within desk policy.`;
-    }
+    return `${seriesLabel} is ${richnessText}; ${config.blockedPhrase}`;
   }
 
-  return lead;
+  const expression = rv.posture ? humanizeValue(rv.posture).toLowerCase() : 'expression';
+  const capped = gate?.tight || (health && health.score < TX_HEALTH_OPEN_THRESHOLD);
+  if (capped) {
+    return `${seriesLabel} is ${richnessText}; ${expression} is allowed, but only at 0.5× under Tight Risk.`;
+  }
+  return `${seriesLabel} is ${richnessText}; ${expression} is eligible within desk policy.`;
+}
+
+function buildMissionChinaSuffix(cockpit, state, gate) {
+  if (cockpit.node_id !== 'credit' || !gate?.sq3Result) return '';
+  if (!(gate.chinaCaution || gate.sq3Score < 50)) return '';
+  const sq3Band = String(gate.sq3Band || gate.sq3Result?.interpretationBand || '').toLowerCase();
+  if (sq3Band.includes('impaired') || sq3Band.includes('fragile') || sq3Band.includes('mixed')) {
+    return `· SQ3 ${gate.sq3Score} constraint`;
+  }
+  const china = computeChinaLadderRead(state);
+  if (china.finalScore != null && String(china.band || '').toLowerCase().includes('impaired')) {
+    return `· China ladder ${china.finalScore} constraint`;
+  }
+  return '';
+}
+
+function buildMissionTacticalSentence(cockpit, hz, series, gate, health) {
+  return buildMissionTacticalLead(cockpit, hz, series, gate, health);
 }
 
 function buildBasisTacticalSentence(cockpit, hz, series, gate, health) {
-  return buildMissionTacticalSentence(cockpit, hz, series, gate, health);
+  return buildMissionTacticalLead(cockpit, hz, series, gate, health);
 }
 
 function renderMissionTacticalBanner(cockpit, hz, series, state, gate) {
   const banner = el('basisTacticalBanner');
   const sentence = el('basisTacticalSentence');
+  const suffixEl = el('basisTacticalSuffix');
   const eyebrow = banner?.querySelector('.basis-tactical-eyebrow');
   const config = missionNodeConfig(cockpit.node_id);
   if (!banner || !sentence) return;
 
   if (!isMissionSurfaceNode(cockpit.node_id) || !hz || !config) {
     banner.classList.add('zone-hidden');
+    if (suffixEl) suffixEl.classList.add('zone-hidden');
     return;
   }
 
   const health = computeHealthScore(state);
   if (eyebrow) eyebrow.textContent = config.eyebrow;
-  sentence.textContent = buildMissionTacticalSentence(cockpit, hz, series, gate, health);
+  sentence.textContent = buildMissionTacticalLead(cockpit, hz, series, gate, health);
+  const suffix = buildMissionChinaSuffix(cockpit, state, gate);
+  if (suffixEl) {
+    if (suffix) {
+      suffixEl.textContent = suffix;
+      suffixEl.classList.remove('zone-hidden');
+    } else {
+      suffixEl.textContent = '';
+      suffixEl.classList.add('zone-hidden');
+    }
+  }
   banner.classList.remove('zone-hidden');
   banner.classList.toggle('basis-tactical-banner--blocked', !!(gate?.blocked || cockpit.relative_value?.blocked));
   banner.classList.toggle('basis-tactical-banner--tight', !!(gate?.tight && !gate?.blocked));
@@ -6431,7 +6458,7 @@ function buildSignalDiagnostics(cockpit, state, gate) {
   let signalChip = humanizeValue(cockpit.band || '—');
   let signalInterp = cockpit.key_observation || `${cockpit.display_name || 'Node'} composite ${cockpit.composite_score ?? '—'}.`;
   if (isHorizonNetFallback(cockpit) && !(cockpit.component_inputs || []).length) {
-    signalChip = 'Horizon-net fallback';
+    signalChip = 'horizon-net fallback';
     const obs = cockpit.key_observation ? ` ${cockpit.key_observation}` : '';
     signalInterp = cockpit.node_id === 'credit'
       ? `Credit composite uses horizon-net fallback (not C1-weighted components).${obs}`
@@ -7917,6 +7944,37 @@ if (scenarioLoop.variants[0]) {
   renderScenarioColumns();
 }
 renderSnapshotList();
+
+window.__creditMissionProbe = function creditMissionProbe(bundle) {
+  if (!bundle || typeof bundle !== 'object') {
+    return { error: 'bundle required' };
+  }
+  hydrateFromBundle(bundle);
+  if (el('chinaPolicyStrength')) el('chinaPolicyStrength').value = '50';
+  if (el('chinaStateImpulse')) el('chinaStateImpulse').value = '0';
+  if (el('chinaGrowthImpulse')) el('chinaGrowthImpulse').value = '0';
+  appState.ui = appState.ui || createEmptyState().ui;
+  appState.ui.workspaceView = 'cockpit';
+  setActiveNode('credit');
+  renderNodeCockpitShell(buildStateFromDOM());
+  const cockpit = mergeNodeCockpit('credit', buildStateFromDOM());
+  const gate = deriveGate(buildStateFromDOM());
+  const tacticalLead = el('basisTacticalSentence')?.textContent || '';
+  const tacticalSuffix = el('basisTacticalSuffix')?.textContent || '';
+  const railHtml = el('cockpitDecisionRail')?.innerHTML || '';
+  const chips = buildMissionImplicationChips(cockpit, gate).map(c => c.label);
+  return {
+    tacticalLead,
+    tacticalSuffix,
+    tactical: tacticalSuffix ? `${tacticalLead} ${tacticalSuffix}` : tacticalLead,
+    gateChip: resolveMissionGateChipLabel(gate),
+    chips,
+    railHtml,
+    railHasHorizonNet: /horizon-net fallback/i.test(railHtml),
+    sq3Score: gate.sq3Score,
+    compositeFallback: chips.includes('Composite fallback'),
+  };
+};
 </script>
 </body>
 </html>
