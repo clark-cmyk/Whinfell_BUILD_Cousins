@@ -1,9 +1,10 @@
 # Phase 2 — Funds Flows Implementation Specification
 
-**Version:** 1.0 (review for lock)  
+**Version:** 1.1 (ready for desk lock)  
 **Date:** June 29, 2026  
 **Authors:** BUILD Cousins (Blueprint + Bridge + Clarity + Integration Dynamo)  
-**Status:** Draft for desk lock — **blocks PR-1 and PR-3 until approved**  
+**Status:** **Authoritative companion spec** for flows architecture — blocks PR-1 and PR-3 until §8 sign-off  
+**Document role:** Standalone implementation authority; [Phase2_Node_Cockpit_Data_Model.md](Phase2_Node_Cockpit_Data_Model.md) holds §9.1 pointer only (no field overload)  
 **Prerequisites:** [Phase2_Funds_Flow_Sponsorship_Design.md](Phase2_Funds_Flow_Sponsorship_Design.md) v1.0, [Funds_Flow_Ingest_Arena_Debate.md](../08_Deliverables/Funds_Flow_Ingest_Arena_Debate.md) (Option D accepted)
 
 **Companion docs:** [Phase2_Node_Cockpit_Data_Model.md](Phase2_Node_Cockpit_Data_Model.md) · [Master_Data_Dictionary_v1.0.md](Master_Data_Dictionary_v1.0.md)
@@ -181,6 +182,14 @@ Attached to each of five cockpits during `build_node_cockpit()`.
   "funds_flows": {
     "enabled": true,
     "source": "derived",
+    "flows_meta": {
+      "flows_status": "ok",
+      "flows_source": "wtm_flows_timeseries",
+      "flows_degraded": false,
+      "flows_confidence_penalty": 0,
+      "fallback_reason": "",
+      "degrade_mode": "full"
+    },
     "degrade_mode": "full",
     "as_of": "2026-06-29",
     "horizon_display": "5d",
@@ -252,7 +261,51 @@ Attached to each of five cockpits during `build_node_cockpit()`.
 | `basket_weight` | number | From Master DD; used in aggregate weighted mean |
 | `data_status` | enum | `ok` \| `partial_1d_only` \| `missing` |
 | `aggregate.populated_count` | int | ETFs with at least 1D data |
-| `interpretation.degrade_notice` | string | Operator-facing banner text; empty when `degrade_mode: full` |
+| `interpretation.degrade_notice` | string | Operator-facing banner text; empty when `flows_meta.flows_status: ok` |
+| `flows_meta` | object | **Machine-readable degrade contract** — UI reads before rendering verdict; see §3.0 |
+
+#### `flows_meta` — machine-readable degrade contract (required on every L2 block)
+
+Mirrors freshness/provenance pattern in Transmission Control: operators and UI must distinguish **true neutral** from **data unavailable** without inferring from verdict alone.
+
+| Field | Type | Required | Values | Description |
+|-------|------|----------|--------|-------------|
+| `flows_status` | enum | yes | `ok` \| `partial` \| `fallback_1d` \| `unavailable` | Coarse health — drives card chrome |
+| `flows_source` | enum | yes | `wtm_flows_timeseries` \| `credit_cross_section` \| `none` | Which ingest path supplied data |
+| `flows_degraded` | bool | yes | | `true` when not `flows_status: ok` |
+| `flows_confidence_penalty` | int | yes | 0–2 | Suppresses positive `confidence_delta`; see §3.3 |
+| `fallback_reason` | string | yes | Machine code or empty | Stable key for UI/export; not free prose |
+| `degrade_mode` | enum | yes | Same as §3.1 | **Alias** of `flows_status` for backward compat |
+
+**`fallback_reason` codes (locked):**
+
+| Code | When |
+|------|------|
+| `` | `flows_status: ok` |
+| `missing_wtm_flows_file` | No `flows_*.csv` staged this session |
+| `credit_cross_section_1d_only` | PR-3b fallback active |
+| `missing_basket_etfs` | WTM-Flows present but basket incomplete |
+| `ticker_columns_absent` | File staged; required tickers missing from headers |
+| `non_credit_node_no_fallback` | Global fallback mode; this node has no 1D source |
+
+**Mapping table (`flows_meta` derivation):**
+
+| `degrade_mode` | `flows_status` | `flows_source` | `flows_degraded` | `flows_confidence_penalty` | `fallback_reason` |
+|----------------|----------------|----------------|------------------|---------------------------|-------------------|
+| `full` | `ok` | `wtm_flows_timeseries` | `false` | `0` | `` |
+| `partial_basket` | `partial` | `wtm_flows_timeseries` | `true` | `0` | `missing_basket_etfs` |
+| `fallback_1d_credit` | `fallback_1d` | `credit_cross_section` | `true` | `1` | `credit_cross_section_1d_only` |
+| `unavailable` | `unavailable` | `none` | `true` | `0` | `missing_wtm_flows_file` or `non_credit_node_no_fallback` |
+
+**UI rule:** When `flows_degraded: true`, render amber meta chip (like freshness dot) **before** verdict badge. Verdict `neutral` with `flows_status: unavailable` must **not** use supportive/neutral styling — use collapsed placeholder instead.
+
+**`flows_confidence_penalty` semantics:**
+
+| Value | Effect on `confidence_delta` |
+|-------|---------------------------|
+| `0` | Apply computed delta (−1 / 0 / +1) |
+| `1` | Clamp delta to `≤ 0` (no confidence boost in degraded mode) |
+| `2` | Force delta `0` (reserved: primary ETF missing 5D in `partial`) |
 
 #### `basket_role` definitions
 
@@ -369,17 +422,43 @@ HYG 5D inflows confirm constructive credit transmission.
 
 UI receives `cockpit.funds_flows` only. No sidecar reads in browser.
 
+**Render order (regime-first parity):** `flows_meta` chip → degrade banner → verdict → aggregate → ETF rows → interpretation.
+
+#### Mandatory fields (card must not render without these)
+
+| Field | Why mandatory |
+|-------|----------------|
+| `flows_meta.flows_status` | Distinguishes ok vs unavailable vs fallback |
+| `flows_meta.flows_source` | Provenance line in card footer |
+| `flows_meta.flows_degraded` | Chrome color (neutral vs amber) |
+| `enabled` | Hide vs show card |
+| `aggregate.verdict` | When `enabled` and not `unavailable` |
+| `interpretation.degrade_notice` | When `flows_degraded: true` |
+
+#### Optional fields (omit section when absent)
+
+| Field | Section |
+|-------|---------|
+| `aggregate.flow_pct_aum_5d` | 5D aggregate column — hidden when `fallback_1d` |
+| `etfs[].flow_pct_aum_5d` | Per-row 5D |
+| `etfs[].persistence_score` | Sparkline / persistence dot |
+| `interpretation.caution_line` | Second line |
+| `interpretation.change_mind_trigger` | Fullscreen variant only |
+| `aggregate.flow_usd_*` | Debug/export only; hidden in default rail |
+
 | Prop / section | Source field | Render rule |
 |----------------|--------------|-------------|
+| Meta chip | `flows_meta.*` | `ok` hidden; else amber: `{flows_status} · {flows_source}` |
 | Header | static | `Funds Flow Sponsorship` |
-| Verdict badge | `aggregate.verdict` | Muted color map; see design doc |
+| Verdict badge | `aggregate.verdict` | **Only if** `flows_status` ∈ `ok`, `partial`, `fallback_1d` |
 | Aggregate line | `aggregate.*`, `horizon_display` | `1D {x}% AUM · 5D {y}% AUM · {pos}/{total} positive` |
-| Degrade banner | `interpretation.degrade_notice` | Amber single line above aggregate when non-empty |
+| Degrade banner | `interpretation.degrade_notice` | Amber single line; driven by `fallback_reason` template |
 | ETF rows | `etfs[]` max 5 | Sort: primary first, then by `abs(flow_pct_aum_5d)` desc |
 | Row highlight | `basket_role === 'primary'` | Left border `*` |
 | 5D column | `flow_pct_aum_5d` | Show `—` when null; tooltip from `data_status` |
 | Interpretation | `interpretation.summary` | One line, neutral type |
 | Caution | `interpretation.caution_line` | Only when `divergence_flag` |
+| Footer | `flows_meta.flows_source`, `as_of` | `Source: WTM-Flows · 2026-06-29` |
 
 **Compare mode:** `renderFundsFlowSponsorshipCard(cockpit, { variant: 'compare', horizon: sharedHorizon })` — omits sparklines, fixed height 120px.
 
@@ -412,6 +491,18 @@ Implemented in `funds_flows.assign_verdict()`:
 ---
 
 ## 3. Degradation and fallback behavior
+
+### 3.0 Fallback precedence (locked)
+
+```
+1. Dedicated WTM-Flows time-series (`flows_*.csv` → L1 sidecar)     PRIMARY
+2. Credit cross-section 1D fallback (PR-3b)                         SECOND — Credit node only
+3. Unavailable (`flows_meta.flows_status: unavailable`)             LAST — no synthetic 5D
+```
+
+Non-credit nodes never advance past step 3 when step 1 missing. **Never** infer neutrality from absence.
+
+---
 
 ### 3.1 `degrade_mode` state machine
 
@@ -464,8 +555,8 @@ Non-credit nodes in `fallback_1d_credit` global mode: `enabled: false`, `degrade
 |------|-------------|-------------------|-------------------|
 | `full` | none | -1 / 0 / +1 per algorithm | allowed |
 | `partial_basket` | none; note missing ETFs | max +1; -1 only if primary ETF has 5D | allowed if primary ok |
-| `fallback_1d_credit` | **max `mixed`**; never `supportive` or `diverging` | **0 only** | **forced false** |
-| `unavailable` | n/a | 0 | false |
+| `fallback_1d_credit` | **max `mixed`**; never `supportive` or `diverging` | **0 only** (`flows_confidence_penalty: 1`) | **forced false** |
+| `unavailable` | n/a (`enabled: false`) | 0 | false |
 
 **Rationale merge in fallback:** Append ` (Flows: 1D fallback only — treat as indicative.)` instead of full sponsorship sentence.
 
@@ -634,15 +725,19 @@ Append to existing `NODE COCKPIT` block in `export_contract.py`:
 
 ```
 Funds Flow Enabled: true
-Funds Flow Degrade: full
+Funds Flow Status: ok
+Funds Flow Source: wtm_flows_timeseries
+Funds Flow Degraded: false
+Funds Flow Fallback Reason:
 Funds Flow Verdict: supportive
 Funds Flow 1D: +0.05% AUM
 Funds Flow 5D: +0.18% AUM
 Funds Flow Breadth: 3/4
+Funds Flow Confidence Penalty: 0
 Funds Flow Summary: HYG 5D inflows confirm constructive credit transmission.
 ```
 
-Omit 5D lines when `degrade_mode: fallback_1d_credit`. Parser round-trip optional Phase 2b — export-first acceptable for MVP.
+Omit 5D lines when `flows_status: fallback_1d`. Parser round-trip optional Phase 2b — export-first acceptable for MVP.
 
 ---
 
@@ -768,19 +863,22 @@ PR-4  FundsFlowSponsorshipCard UI
 PR-5  WTM export lines + Phase2_Node_Cockpit §9.1 pointer
 ```
 
-**Gate:** This spec v1.0 locked → then PR-1 and PR-3a may start in parallel.
+**Gate:** This spec **v1.1** locked (§8 sign-off) → then PR-1 and PR-3a may start in parallel.
 
 ---
 
-## 7. Review checklist (desk sign-off)
+## 8. Review checklist (desk sign-off)
 
-- [ ] Option D hybrid behavior in §3 matches operator expectations
-- [ ] 5D = sum of daily % AUM (not average) confirmed
-- [ ] Units: millions USD for Flow and AUM on Koyfin exports
-- [ ] Credit-only fallback limited to Credit node — acceptable
-- [ ] Non-credit nodes show unavailable (not fake data) when flows file missing
+- [ ] Companion spec authority accepted (not embedded in main cockpit doc)
+- [ ] Option D hybrid + fallback precedence §3.0
+- [ ] `flows_meta` machine-readable flags — UI can distinguish neutral vs unavailable
+- [ ] 5D = sum of daily % AUM (not average)
+- [ ] Units: millions USD for Flow and AUM
+- [ ] Credit-only fallback limited to Credit node
+- [ ] Non-credit nodes: `flows_status: unavailable` when no WTM-Flows file
 - [ ] `confidence_delta` never moves composite_score or gate
-- [ ] ETF basket ticker list complete for Clark's WTM-Flows view build
+- [ ] Appendix A JSON examples match implementation expectations
+- [ ] ETF basket ticker list for Clark's WTM-Flows view
 
 ---
 
@@ -788,14 +886,227 @@ PR-5  WTM export lines + Phase2_Node_Cockpit §9.1 pointer
 
 | # | Decision | Rationale |
 |---|----------|-----------|
-| 1 | Three-layer model L0/L1/L2 | Clean separation ingest vs node view |
-| 2 | Sidecar `latest_flows.json` | Single hydrate input; auditable |
-| 3 | `degrade_mode` enum | Deterministic UI + verdict caps |
-| 4 | 5D % AUM = sum of daily % | Desk cumulative convention; not average |
-| 5 | Fallback credit → Credit node only | Avoid false precision on other nodes |
-| 6 | `basket_role` primary/supporting/proxy | Clarifies aggregate weighting + UI highlight |
-| 7 | Hydration v1.2.0 | Signals flows capability without breaking v1.1.0 consumers |
+| 1 | Companion spec file is authoritative | Parser / DD / UI lock interfaces without overloading cockpit doc |
+| 2 | Three-layer model L0/L1/L2 | Clean separation ingest vs node view |
+| 3 | `flows_meta` block on every L2 payload | Same clarity standard as freshness/provenance in TC |
+| 4 | `flows_confidence_penalty` as data | Degraded mode suppresses boost without ambiguous verdict |
+| 5 | 5D % AUM = sum of daily % | Desk cumulative convention |
+| 6 | Fallback precedence: WTM-Flows → credit 1D → unavailable | Option D locked |
+| 7 | Hydration v1.2.0 | Backward-compatible capability signal |
 
 ---
 
-**Next step after lock:** Execute PR-1 + PR-3a using `staged_raw/quarantine/.../WTM-Flows-Global.csv` as golden fixture.
+## Appendix A — JSON examples (implementation-grade)
+
+### A.1 L1 — Parsed flow record (single ticker, post-PR-3a)
+
+```json
+{
+  "ticker": "HYG",
+  "asset_id": "hyg",
+  "canonical_asset_resolved": true,
+  "latest": {
+    "date": "2026-06-29",
+    "flow_usd_1d": -120.5,
+    "aum_usd": 14505.42,
+    "flow_pct_aum_1d": -0.83
+  },
+  "rolling": {
+    "flow_usd_5d": -310.2,
+    "flow_pct_aum_5d": -2.14,
+    "sessions_in_5d": 5,
+    "persistence_score_20d": 0.65
+  }
+}
+```
+
+### A.2 L2 — Healthy node payload (`credit`, `flows_status: ok`)
+
+```json
+{
+  "funds_flows": {
+    "enabled": true,
+    "source": "derived",
+    "as_of": "2026-06-29",
+    "horizon_display": "5d",
+    "basket_id": "credit_hy_ig",
+    "basket_label": "Credit ETF Sponsorship",
+    "node_id": "credit",
+    "flows_meta": {
+      "flows_status": "ok",
+      "flows_source": "wtm_flows_timeseries",
+      "flows_degraded": false,
+      "flows_confidence_penalty": 0,
+      "fallback_reason": "",
+      "degrade_mode": "full"
+    },
+    "aggregate": {
+      "flow_pct_aum_1d": 0.05,
+      "flow_pct_aum_5d": 0.18,
+      "positive_count": 3,
+      "total_count": 4,
+      "verdict": "supportive",
+      "confidence_delta": 1
+    },
+    "etfs": [
+      {
+        "ticker": "HYG",
+        "asset_id": "hyg",
+        "node_affiliation": "credit",
+        "basket_role": "primary",
+        "flow_pct_aum_1d": 0.08,
+        "flow_pct_aum_5d": 0.31,
+        "data_status": "ok"
+      }
+    ],
+    "interpretation": {
+      "supports_node_thesis": true,
+      "divergence_flag": false,
+      "summary": "HYG 5D inflows confirm constructive credit transmission.",
+      "degrade_notice": ""
+    }
+  }
+}
+```
+
+### A.3 L2 — Degraded fallback (`credit`, no WTM-Flows file)
+
+```json
+{
+  "funds_flows": {
+    "enabled": true,
+    "source": "derived",
+    "as_of": "2026-06-29",
+    "horizon_display": "1d",
+    "basket_id": "credit_hy_ig",
+    "node_id": "credit",
+    "flows_meta": {
+      "flows_status": "fallback_1d",
+      "flows_source": "credit_cross_section",
+      "flows_degraded": true,
+      "flows_confidence_penalty": 1,
+      "fallback_reason": "credit_cross_section_1d_only",
+      "degrade_mode": "fallback_1d_credit"
+    },
+    "aggregate": {
+      "flow_pct_aum_1d": 0.04,
+      "flow_pct_aum_5d": null,
+      "positive_count": 2,
+      "total_count": 4,
+      "verdict": "neutral",
+      "confidence_delta": 0
+    },
+    "etfs": [
+      {
+        "ticker": "HYG",
+        "asset_id": "hyg",
+        "basket_role": "primary",
+        "flow_pct_aum_1d": 0.08,
+        "flow_pct_aum_5d": null,
+        "data_status": "partial_1d_only"
+      }
+    ],
+    "interpretation": {
+      "supports_node_thesis": false,
+      "divergence_flag": false,
+      "summary": "1D credit flows mildly positive — 5D unavailable.",
+      "degrade_notice": "5D flows unavailable — using 1D Credit cross-section fallback."
+    }
+  }
+}
+```
+
+### A.4 L2 — Unavailable (`breadth`, no WTM-Flows, no fallback)
+
+```json
+{
+  "funds_flows": {
+    "enabled": false,
+    "source": "derived",
+    "as_of": "2026-06-29",
+    "basket_id": "breadth_participation",
+    "node_id": "breadth",
+    "flows_meta": {
+      "flows_status": "unavailable",
+      "flows_source": "none",
+      "flows_degraded": true,
+      "flows_confidence_penalty": 0,
+      "fallback_reason": "non_credit_node_no_fallback",
+      "degrade_mode": "unavailable"
+    },
+    "aggregate": {
+      "verdict": null,
+      "confidence_delta": 0
+    },
+    "etfs": [],
+    "interpretation": {
+      "summary": "",
+      "degrade_notice": "Flows data not available for this session."
+    }
+  }
+}
+```
+
+### A.5 L2 — Partial basket (WTM-Flows missing IBIT/IWM columns)
+
+```json
+{
+  "funds_flows": {
+    "enabled": true,
+    "node_id": "highbeta",
+    "flows_meta": {
+      "flows_status": "partial",
+      "flows_source": "wtm_flows_timeseries",
+      "flows_degraded": true,
+      "flows_confidence_penalty": 0,
+      "fallback_reason": "missing_basket_etfs",
+      "degrade_mode": "partial_basket"
+    },
+    "aggregate": {
+      "flow_pct_aum_5d": 0.09,
+      "verdict": "neutral",
+      "confidence_delta": 0
+    },
+    "interpretation": {
+      "degrade_notice": "Partial flow coverage — some basket ETFs missing from WTM-Flows."
+    }
+  }
+}
+```
+
+### A.6 Hydration bundle excerpt (v1.2.0, healthy session)
+
+```json
+{
+  "hydration_version": "1.2.0",
+  "flows_sidecar": {
+    "as_of": "2026-06-29",
+    "source_file": "flows_20260629_1525.csv",
+    "ingest_mode": "timeseries_primary",
+    "flows_status": "ok",
+    "ticker_count": 18,
+    "warnings": []
+  },
+  "node_cockpits": {
+    "credit": { "funds_flows": { "flows_meta": { "flows_status": "ok" } } }
+  }
+}
+```
+
+### A.7 WTM EXPORT NODE COCKPIT lines (degraded fallback)
+
+```
+Funds Flow Enabled: true
+Funds Flow Status: fallback_1d
+Funds Flow Source: credit_cross_section
+Funds Flow Degraded: true
+Funds Flow Fallback Reason: credit_cross_section_1d_only
+Funds Flow Verdict: neutral
+Funds Flow 1D: +0.04% AUM
+Funds Flow Confidence Penalty: 1
+Funds Flow Summary: 1D credit flows mildly positive — 5D unavailable.
+```
+
+---
+
+**Next step after §8 lock:** Execute PR-1 + PR-3a using `staged_raw/quarantine/.../WTM-Flows-Global.csv` as golden fixture.

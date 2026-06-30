@@ -590,15 +590,15 @@ A node is **cockpit-ready** when these are non-empty:
 
 ### 9.1 Funds Flow Sponsorship (Phase 2b — optional block)
 
-**Implementation authority:** [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md)
+**Implementation authority (companion spec — do not duplicate fields here):** [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md) v1.1
 
 Each `node_cockpit` may include `funds_flows` — a read-only confirmation layer (% AUM, 1D + 5D). Flows adjust `confidence` and rationale suffix only; they do not override `composite_score`, gate, or transmission.
 
 | Field | MVP |
 |-------|-----|
-| `funds_flows.degrade_mode` | `full` \| `partial_basket` \| `fallback_1d_credit` \| `unavailable` |
-| `funds_flows.aggregate.verdict` | Required when `enabled: true` |
-| `funds_flows.interpretation.degrade_notice` | Required when not `full` |
+| `funds_flows.flows_meta` | Required — `flows_status`, `flows_source`, `flows_degraded`, `flows_confidence_penalty`, `fallback_reason` |
+| `funds_flows.aggregate.verdict` | Required when `enabled: true` and `flows_status` ≠ `unavailable` |
+| `funds_flows.interpretation.degrade_notice` | Required when `flows_meta.flows_degraded: true` |
 
 ---
 

@@ -1,7 +1,7 @@
 # BUILD Cousins - TODO List
 
 **Maintained by:** BUILD Cousins  
-**Last Updated:** June 29, 2026 (Flows implementation spec — review for lock)
+**Last Updated:** June 29, 2026 (Flows spec v1.1 — §8 sign-off pending)
 **Purpose:** Track all active and planned work for the Whinfell Transmission Map support track.
 
 ---
@@ -27,7 +27,7 @@
 | **Phase 2b** | ARCH-1 component routing + Koyfin history for RV quartiles | High | **Open** | Integration Dynamo | Replaces tracer-derived component stubs |
 | **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI not started** |
 | **Phase 2 open** | Ambiguity C — trading-day vs calendar-day lookback | Medium | **Open** | TempLibby + desk | Default locked in spec; desk confirm |
-| **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **Spec review** | Bridge + Clarity | [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md) — **blocks PR-1/PR-3** |
+| **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **Spec v1.1 ready** | Bridge + Clarity | Companion spec + `flows_meta` + Appendix A JSON — **§8 sign-off → PR-1/PR-3** |
 | **Phase 2b-data** | PR-1 registry + PR-3a/b ingest + PR-2 `funds_flows.py` | High | **Blocked — spec lock** | Bridge + Dynamo | Option D locked · L0/L1/L2 model · sidecar `latest_flows.json` |
 | **Phase 2b-ops** | `WTM-Flows` normalize + Koyfin view expansion | High | **Open** | Clark | Expand view tickers per spec §5 · normalize `WTM-Flows*.csv` |
 | **Phase 2b-ops** | `normalize_whinfell_drop.sh` — map `WTM-Flows*.csv` | Medium | **Open** | Bridge | Unblock desk drop without manual `mv` |
@@ -140,6 +140,7 @@ python3 -m whinfell_pipeline.verify_2_2_final
 ---
 
 ## Notes
+- **June 29, 2026** — **Flows spec v1.1** — companion file authoritative; `flows_meta` machine-readable degrade flags; Appendix A JSON (healthy + fallback + unavailable + partial + export). Awaiting §8 checklist sign-off.
 - **June 29, 2026** — **Flows implementation spec drafted** — [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md): L0/L1/L2 data model, `degrade_mode` state machine, Credit/Breadth examples, PR-1→5 ownership, Master DD delta list. **Desk sign-off §7 before PR-1/PR-3.**
 - **June 29, 2026** — **Option D (Hybrid) locked** — primary `flows_*.csv` + credit 1D fallback; arena debate resolved.
 - **June 29, 2026** — **Funds Flow ingest /arena debate** — Options A–E documented; BUILD recommends **Option D hybrid** (primary `WTM-Flows` time-series + credit cross-section 1D fallback). Desk already has `WTM-Flows-Global.csv` (quarantined — wrong filename). Staged `credit_*.csv` has no flow columns post-2.2e. Team vote Q1–Q5 in `08_Deliverables/Funds_Flow_Ingest_Arena_Debate.md`.

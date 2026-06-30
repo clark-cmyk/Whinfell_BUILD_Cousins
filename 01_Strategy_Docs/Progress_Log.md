@@ -64,7 +64,7 @@
 | **Funds_Flow_Sponsorship_GOAL.md** | **1.0** | **`/goal` — success criteria + authority hierarchy** |
 | **Funds_Flow_Sponsorship_PLAN.md** | **1.0** | **`/plan` — PR-1→5 implementation steps** |
 | **Funds_Flow_Ingest_Arena_Debate.md** | **1.0** | **`/arena` — Option D locked** |
-| **Phase2_Flows_Implementation_Spec.md** | **1.0 draft** | **L1 sidecar + L2 node model · degrade modes · PR ownership** |
+| **Phase2_Flows_Implementation_Spec.md** | **1.1** | **Authoritative companion · `flows_meta` · Appendix A JSON · §8 sign-off gate** |
 
 ---
 
