@@ -6225,12 +6225,18 @@ function isHorizonNetFallback(cockpit) {
   return cockpit.composite_score_source === 'horizon_net_fallback';
 }
 
+function resolveMissionGateChipLabel(gate) {
+  if (gate?.blocked) return 'Blocked';
+  return humanizeValue(gate?.displayLabel || gate?.label || 'Open');
+}
+
 function buildMissionChinaSuffix(state, gate) {
-  const china = computeChinaLadderRead(state);
-  const sq3Band = String(gate.sq3Band || '').toLowerCase();
-  if (gate.sq3Result && (sq3Band.includes('impaired') || sq3Band.includes('fragile') || sq3Band.includes('mixed'))) {
+  if (!gate?.sq3Result) return '';
+  const sq3Band = String(gate.sq3Band || gate.sq3Result?.interpretationBand || '').toLowerCase();
+  if (sq3Band.includes('impaired') || sq3Band.includes('fragile') || sq3Band.includes('mixed')) {
     return ` · SQ3 ${gate.sq3Score} constraint`;
   }
+  const china = computeChinaLadderRead(state);
   if (china.finalScore != null && String(china.band || '').toLowerCase().includes('impaired')) {
     return ` · China ladder ${china.finalScore} constraint`;
   }
@@ -6309,7 +6315,7 @@ function buildMissionImplicationChips(cockpit, gate) {
   }
   chips.push({ label: flowsChip, cls: 'impl-chip--flows' });
   chips.push({
-    label: gate.blocked ? 'Blocked' : gate.tight ? 'Tight Risk' : humanizeValue(gate.displayLabel || gate.label || 'Open'),
+    label: resolveMissionGateChipLabel(gate),
     cls: gate.blocked ? 'impl-chip--block' : gate.tight ? 'impl-chip--warn' : 'impl-chip--ok',
   });
 
@@ -6487,7 +6493,7 @@ function buildSignalDiagnostics(cockpit, state, gate) {
         : 'Flows neutral — RV history leads; sponsorship is non-confirming.';
   }
 
-  const gateChip = gate.blocked ? 'Blocked' : gate.tight ? 'Tight Risk' : humanizeValue(gate.displayLabel || gate.label);
+  const gateChip = resolveMissionGateChipLabel(gate);
   const gateImpl = gateNote
     ? gateNote.replace(/size_hint/gi, 'size cap').replace(/_/g, ' ')
     : 'Gate sizing follows transmission health and Whinfell score bands.';
