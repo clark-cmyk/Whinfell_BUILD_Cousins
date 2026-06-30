@@ -16,6 +16,7 @@ from china_policy_track.storage import read_observations as read_china
 from whinfell_pipeline.export_contract import ProvenanceMeta, build_wtm_export_v21, build_wtm_export_v22
 from whinfell_pipeline.funds_flows import build_flows_sidecar_metadata, load_flows_sidecar
 from whinfell_pipeline.node_cockpits import build_cockpit_context, build_node_cockpits
+from whinfell_pipeline.rv_history import ensure_dated_series_fixture, load_rv_history
 from whinfell_pipeline.freshness import compute_freshness
 from whinfell_pipeline.global_track.storage import default_parquet_path as global_default
 from whinfell_pipeline.global_track.storage import read_observations as read_global
@@ -332,7 +333,13 @@ def build_hydration_bundle(
     )
 
     root = repo_root or Path(__file__).resolve().parents[1]
-    flows_data = flows_sidecar if flows_sidecar is not None else load_flows_sidecar(root)
+    if flows_sidecar is not None:
+        flows_data = flows_sidecar
+    else:
+        flows_data = load_flows_sidecar(root)
+
+    ensure_dated_series_fixture(root)
+    rv_history = load_rv_history(root)
 
     node_cockpits = build_node_cockpits(
         global_payload=global_payload,
@@ -341,6 +348,7 @@ def build_hydration_bundle(
         freshness_status=freshness,
         china_ladder=china_ladder or None,
         execution=execution,
+        spread_history=rv_history,
         flows_sidecar=flows_data,
     )
     cockpit_context = build_cockpit_context(

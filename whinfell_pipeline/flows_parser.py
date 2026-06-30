@@ -1,0 +1,305 @@
+"""WTM-Flows CSV → L1 sidecar — PR-3a."""
+
+from __future__ import annotations
+
+import csv
+import json
+import re
+import tempfile
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Mapping
+
+from whinfell_pipeline.data_dictionary import (
+    canonical_asset_for_ticker,
+    funds_flow_column_map,
+    funds_flow_sidecar_path,
+    get_funds_flow_ingest,
+)
+
+_SIDECAR_VERSION = "1.0.0"
+_DATE_FORMATS = ("%Y-%m-%d", "%m/%d/%Y", "%m-%d-%Y")
+
+
+def _norm_header(header: str) -> str:
+    return header.strip().lower()
+
+
+def _parse_float(val: Any) -> float | None:
+    if val is None:
+        return None
+    s = str(val).strip().replace(",", "").replace("%", "")
+    if not s or s in ("—", "-", "n/a", "na"):
+        return None
+    try:
+        return float(s)
+    except ValueError:
+        return None
+
+
+def _parse_date(val: str) -> str | None:
+    s = str(val or "").strip()
+    if not s:
+        return None
+    for fmt in _DATE_FORMATS:
+        try:
+            return datetime.strptime(s, fmt).date().isoformat()
+        except ValueError:
+            continue
+    return None
+
+
+def detect_flows_format(headers: list[str]) -> str:
+    """Return wtm_flows_wide | invalid."""
+    norm = [_norm_header(h) for h in headers]
+    if not any(h == "date" for h in norm):
+        return "invalid"
+    has_flow = any("flow" in h and ("(d)" in h or "periodic" in h) for h in norm)
+    if not has_flow:
+        return "invalid"
+    return "wtm_flows_wide"
+
+
+def _column_patterns() -> dict[str, list[str]]:
+    return funds_flow_column_map()
+
+
+def _match_ticker_columns(headers: list[str]) -> dict[str, dict[str, str]]:
+    """Map ticker -> {field: header_name}."""
+    patterns = _column_patterns()
+    tickers: dict[str, dict[str, str]] = {}
+    for header in headers:
+        nh = _norm_header(header)
+        if nh == "date":
+            continue
+        for field, pats in patterns.items():
+            for pat in pats:
+                m = re.match(r"^" + re.escape(pat.replace("{TICKER}", r"([A-Za-z0-9.]+)")).replace(r"\(\[A-Za-z0-9.\]\+\)", r"([A-Za-z0-9.]+)") + r"$", header, re.I)
+                if not m and "{TICKER}" in pat:
+                    escaped = pat.replace("{TICKER}", "")
+                    if escaped.lower() in nh:
+                        prefix = header[: header.lower().index(escaped.lower())].strip()
+                        if prefix:
+                            ticker = prefix.upper()
+                            tickers.setdefault(ticker, {})[field] = header
+                elif m:
+                    ticker = m.group(1).upper()
+                    tickers.setdefault(ticker, {})[field] = header
+    # Fallback: "{TICKER} Flow (D)" style via split
+    for header in headers:
+        nh = _norm_header(header)
+        for suffix, field in (
+            (" flow (d)", "flow_usd_1d"),
+            (" flow % aum (d)", "flow_pct_aum_1d"),
+            (" aum", "aum_usd"),
+        ):
+            if nh.endswith(suffix):
+                ticker = header[: len(header) - len(suffix)].strip().upper()
+                if ticker and field not in tickers.get(ticker, {}):
+                    tickers.setdefault(ticker, {})[field] = header
+    return tickers
+
+
+def compute_rolling_metrics(
+    sessions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """5D sums and persistence from ordered session rows (oldest→newest)."""
+    if not sessions:
+        return {
+            "flow_usd_5d": None,
+            "flow_pct_aum_5d": None,
+            "sessions_in_5d": 0,
+            "persistence_score_20d": None,
+        }
+    tail5 = sessions[-5:]
+    flow_usd_5d = sum(float(s["flow_usd_1d"]) for s in tail5 if s.get("flow_usd_1d") is not None)
+    pct_vals = [float(s["flow_pct_aum_1d"]) for s in tail5 if s.get("flow_pct_aum_1d") is not None]
+    flow_pct_aum_5d = sum(pct_vals) if pct_vals else None
+    tail20 = sessions[-20:]
+    persistence = None
+    if flow_pct_aum_5d is not None and tail20:
+        sign_5d = 1 if flow_pct_aum_5d > 0 else (-1 if flow_pct_aum_5d < 0 else 0)
+        if sign_5d != 0:
+            matches = sum(
+                1 for s in tail20
+                if s.get("flow_pct_aum_1d") is not None
+                and ((float(s["flow_pct_aum_1d"]) > 0) == (sign_5d > 0))
+            )
+            persistence = round(matches / min(20, len(tail20)), 2)
+    return {
+        "flow_usd_5d": round(flow_usd_5d, 2) if tail5 else None,
+        "flow_pct_aum_5d": round(flow_pct_aum_5d, 4) if flow_pct_aum_5d is not None else None,
+        "sessions_in_5d": len(tail5),
+        "persistence_score_20d": persistence,
+    }
+
+
+def parse_flows_csv(path: Path | str, *, rows: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Parse WTM-Flows wide CSV into L1 sidecar dict."""
+    if rows is not None:
+        parsed_rows = rows
+        headers = list(rows[0].keys()) if rows else []
+        source_file = "inline_rows"
+    else:
+        p = Path(path)
+        with p.open(newline="", encoding="utf-8") as fh:
+            reader = csv.DictReader(fh)
+            if not reader.fieldnames:
+                raise ValueError("missing header row")
+            headers = list(reader.fieldnames)
+            parsed_rows = [dict(r) for r in reader]
+        source_file = p.name
+
+    fmt = detect_flows_format(headers)
+    if fmt != "wtm_flows_wide":
+        raise ValueError(f"unsupported flows format: {fmt}")
+
+    patterns = _column_patterns()
+    date_col = next((h for h in headers if _norm_header(h) == "date"), None)
+    if not date_col:
+        raise ValueError("missing Date column")
+
+    ticker_cols = _match_ticker_columns(headers)
+    if not ticker_cols:
+        raise ValueError("no ticker flow columns detected")
+
+    series_by_ticker: dict[str, list[dict[str, Any]]] = {t: [] for t in ticker_cols}
+
+    for row in parsed_rows:
+        date = _parse_date(str(row.get(date_col) or ""))
+        if not date:
+            continue
+        for ticker, cols in ticker_cols.items():
+            flow_usd = _parse_float(row.get(cols.get("flow_usd_1d", "")))
+            aum = _parse_float(row.get(cols.get("aum_usd", "")))
+            flow_pct = _parse_float(row.get(cols.get("flow_pct_aum_1d", "")))
+            if flow_pct is None and flow_usd is not None and aum and aum > 0:
+                flow_pct = (flow_usd / aum) * 100.0
+            if flow_usd is None and flow_pct is not None and aum and aum > 0:
+                flow_usd = (flow_pct / 100.0) * aum
+            if flow_usd is None and flow_pct is None:
+                continue
+            series_by_ticker[ticker].append({
+                "date": date,
+                "flow_usd_1d": flow_usd,
+                "aum_usd": aum,
+                "flow_pct_aum_1d": flow_pct,
+            })
+
+    tickers_out: dict[str, Any] = {}
+    latest_date = ""
+    max_sessions = 0
+    for ticker, sessions in series_by_ticker.items():
+        if not sessions:
+            continue
+        sessions.sort(key=lambda s: s["date"])
+        latest = sessions[-1]
+        rolling = compute_rolling_metrics(sessions)
+        asset_id = canonical_asset_for_ticker("koyfin", ticker) or ""
+        tail = sessions[-20:]
+        tickers_out[ticker] = {
+            "ticker": ticker,
+            "asset_id": asset_id,
+            "canonical_asset_resolved": bool(asset_id),
+            "latest": {
+                "date": latest["date"],
+                "flow_usd_1d": latest.get("flow_usd_1d"),
+                "aum_usd": latest.get("aum_usd"),
+                "flow_pct_aum_1d": latest.get("flow_pct_aum_1d"),
+            },
+            "rolling": rolling,
+            "series_tail": [
+                {
+                    "date": s["date"],
+                    "flow_usd_1d": s.get("flow_usd_1d"),
+                    "aum_usd": s.get("aum_usd"),
+                    "flow_pct_aum_1d": s.get("flow_pct_aum_1d"),
+                }
+                for s in tail
+            ],
+        }
+        if latest["date"] > latest_date:
+            latest_date = latest["date"]
+        max_sessions = max(max_sessions, len(sessions))
+
+    ingest = get_funds_flow_ingest()
+    return {
+        "version": _SIDECAR_VERSION,
+        "as_of": latest_date or datetime.now().date().isoformat(),
+        "source_file": source_file,
+        "source_channel": ingest.get("source_channel_primary", "koyfin_wtm_flows"),
+        "ingest_mode": "timeseries_primary",
+        "units": dict(ingest.get("units") or {
+            "flow_usd": "millions_usd",
+            "aum_usd": "millions_usd",
+            "flow_pct_aum": "percent",
+        }),
+        "history_sessions": max_sessions,
+        "tickers": tickers_out,
+        "fallback_overlay": {"active": False, "source": None, "tickers_patched": []},
+        "warnings": [],
+    }
+
+
+def write_flows_sidecar(payload: Mapping[str, Any], path: Path | str) -> Path:
+    """Atomic write of L1 sidecar."""
+    p = Path(path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=p.parent, suffix=".json.tmp")
+    try:
+        with open(fd, "w", encoding="utf-8") as fh:
+            json.dump(payload, fh, indent=2)
+        Path(tmp).replace(p)
+    except Exception:
+        Path(tmp).unlink(missing_ok=True)
+        raise
+    return p
+
+
+def default_flows_sidecar_path(repo_root: Path | None = None) -> Path:
+    root = repo_root or Path(__file__).resolve().parents[1]
+    return root / funds_flow_sidecar_path()
+
+
+def parse_and_write(csv_path: Path | str, output_path: Path | str | None = None) -> dict[str, Any]:
+    """Parse CSV and write sidecar; return payload."""
+    payload = parse_flows_csv(csv_path)
+    out = Path(output_path) if output_path else default_flows_sidecar_path()
+    write_flows_sidecar(payload, out)
+    return payload
+
+
+def try_parse_flows_csv(path: Path | str) -> dict[str, Any] | None:
+    """Parse flows CSV; return None when file missing (no exception)."""
+    p = Path(path)
+    if not p.is_file():
+        return None
+    try:
+        return parse_flows_csv(p)
+    except (ValueError, OSError):
+        return None
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description="Parse WTM-Flows CSV → L1 sidecar JSON")
+    parser.add_argument("--input", "-i", required=True, help="flows_*.csv or WTM-Flows-Global.csv path")
+    parser.add_argument("--output", "-o", default=None, help="Sidecar output (default: data/flows/v1/latest_flows.json)")
+    args = parser.parse_args(argv)
+    try:
+        payload = parse_and_write(args.input, args.output)
+    except (ValueError, OSError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    out = Path(args.output) if args.output else default_flows_sidecar_path()
+    print(f"flows_parser_ok tickers={len(payload.get('tickers') or {})} sessions={payload.get('history_sessions')}")
+    print(f"output={out}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+

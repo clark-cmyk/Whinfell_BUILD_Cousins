@@ -35,9 +35,13 @@ FILENAME_RE = re.compile(
     r"(?P<dataset>[a-z][a-z0-9_]*)_(?P<date>\d{8})_(?P<time>\d{4})"
     r"|"
     r"(?P<product>[a-z][a-z0-9_]*)_(?P<flavor>[a-z][a-z0-9_]*)_(?P<date2>\d{8})"
+    r"|"
+    r"WTM-Flows(?:-[A-Za-z0-9]+)?"
     r")\.csv$",
     re.IGNORECASE,
 )
+
+FLOWS_VENDOR_GLOB = "WTM-Flows*.csv"
 
 GLOBAL_HEADERS = frozenset({
     "observation_id", "timestamp", "whinfell_score", "transmission_state",
@@ -347,6 +351,36 @@ def ingest_staged_root(
             fr.validation_status = "crypto_deferred"
             fr.adapter_id = "crypto_sleeve"
             result.files_processed += 1
+            result.file_results.append(fr)
+            continue
+        if staged.source == SOURCE_KOYFIN and staged.dataset == "flows":
+            val = validate_staged_file(staged)
+            if not val.ok:
+                fr.errors = list(val.errors)
+                result.files_failed += 1
+                result.file_results.append(fr)
+                continue
+            fr.warnings = list(val.warnings)
+            if dry_run:
+                fr.validation_status = "dry_run"
+                fr.adapter_id = "flows_parser"
+                result.files_processed += 1
+                result.file_results.append(fr)
+                continue
+            try:
+                from whinfell_pipeline.flows_parser import default_flows_sidecar_path, parse_and_write
+
+                payload = parse_and_write(staged.path, default_flows_sidecar_path(root))
+                fr.validation_status = "parsed"
+                fr.adapter_id = "flows_parser"
+                fr.warnings.append(f"flows_sidecar tickers={len(payload.get('tickers') or {})}")
+                result.files_processed += 1
+                if archive:
+                    archived = archive_staged_file(staged)
+                    fr.archived_to = str(archived)
+            except Exception as exc:
+                fr.errors.append(str(exc))
+                result.files_failed += 1
             result.file_results.append(fr)
             continue
         val = validate_staged_file(staged)

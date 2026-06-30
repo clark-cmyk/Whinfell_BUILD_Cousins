@@ -330,7 +330,10 @@ class TestHydrateFundsIntegration(unittest.TestCase):
     def test_hydration_bundle_always_has_flows_sidecar_block(self):
         bundle = build_hydration_bundle()
         self.assertIn("flows_sidecar", bundle)
-        self.assertEqual(bundle["flows_sidecar"]["flows_status"], "unavailable")
+        # When L1 sidecar absent, degrade to unavailable; when present (PR-3a), reflect ingest health.
+        sidecar_path = REPO_ROOT / "data" / "flows" / "v1" / "latest_flows.json"
+        expected = "ok" if sidecar_path.is_file() else "unavailable"
+        self.assertEqual(bundle["flows_sidecar"]["flows_status"], expected)
 
     def test_hydration_bundle_with_sidecar_param(self):
         bundle = build_hydration_bundle(flows_sidecar=_supportive_credit_sidecar())
