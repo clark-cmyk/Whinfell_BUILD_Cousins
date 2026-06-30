@@ -6758,9 +6758,9 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
     ctx.font = '9px system-ui,sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(RV_HORIZON_LABELS[p.key] || p.key, x + bw / 2, h - pad.b + 12);
-    if (isBasis && i === activeIdx) {
-      ctx.fillStyle = '#d6e4f5';
-      ctx.font = 'bold 9px system-ui,sans-serif';
+    if (isBasis && i === activeIdx && w >= 380 && barW >= 36) {
+      ctx.fillStyle = 'rgba(158,172,187,0.72)';
+      ctx.font = '8px system-ui,sans-serif';
       ctx.fillText(`${p.value.toFixed(2)}${unitSuffix}`, x + bw / 2, Math.min(yTop, yBot) - 4);
     }
   });
@@ -6777,26 +6777,24 @@ function drawRvBasisChart(cockpit, canvas, state, gate) {
     });
     ctx.stroke();
   } else if (diagTags.length) {
-    const fontSize = 7;
-    const gap = 5;
+    const fontSize = 6;
+    const gap = 4;
+    const padX = 5;
+    const chipH = fontSize + 4;
     let xCursor = pad.l;
-    const yDiag = h - 6;
+    const yDiag = h - 4;
     ctx.font = `${fontSize}px system-ui,sans-serif`;
     ctx.textAlign = 'left';
-    diagTags.forEach((tag, idx) => {
-      const textW = ctx.measureText(tag).width + 10;
+    diagTags.forEach(tag => {
+      const textW = ctx.measureText(tag).width + padX * 2;
       if (xCursor + textW > w - pad.r) return;
-      ctx.fillStyle = idx === diagTags.length - 1 && tag === 'TIGHT RISK'
-        ? 'rgba(245,166,35,0.18)'
-        : 'rgba(0,0,0,0.28)';
-      ctx.strokeStyle = idx === diagTags.length - 1 && tag === 'TIGHT RISK'
-        ? 'rgba(245,166,35,0.45)'
-        : 'rgba(255,255,255,0.12)';
+      ctx.fillStyle = 'rgba(0,0,0,0.12)';
+      ctx.fillRect(xCursor, yDiag - chipH, textW, chipH);
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)';
       ctx.lineWidth = 1;
-      ctx.fillRect(xCursor, yDiag - fontSize - 4, textW, fontSize + 6);
-      ctx.strokeRect(xCursor, yDiag - fontSize - 4, textW, fontSize + 6);
-      ctx.fillStyle = idx === diagTags.length - 1 && tag === 'TIGHT RISK' ? '#f5a623' : '#8b9cb3';
-      ctx.fillText(tag, xCursor + 5, yDiag);
+      ctx.strokeRect(xCursor, yDiag - chipH, textW, chipH);
+      ctx.fillStyle = 'rgba(142,156,179,0.48)';
+      ctx.fillText(tag, xCursor + padX, yDiag - 2);
       xCursor += textW + gap;
     });
   }
