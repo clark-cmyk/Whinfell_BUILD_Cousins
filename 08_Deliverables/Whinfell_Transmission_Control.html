@@ -547,6 +547,235 @@ window.DICTIONARY_BADGE_DEFAULT = {
       padding-top: 4px;
       border-top: 1px dashed var(--border);
     }
+
+    /* Phase 2 Node Cockpit Shell (UI-1) */
+    .node-rail {
+      display: flex;
+      align-items: stretch;
+      gap: 2px;
+      height: 48px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      overflow-x: auto;
+    }
+
+    .node-rail-tab {
+      flex: 1 1 0;
+      min-width: 108px;
+      max-width: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      padding: 6px 10px;
+      border: 1px solid transparent;
+      border-bottom: 2px solid transparent;
+      border-radius: 8px 8px 0 0;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+    }
+
+    .node-rail-tab:hover { background: rgba(255,255,255,.04); color: var(--text); }
+
+    .node-rail-tab-active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+      background: rgba(76,142,217,.08);
+    }
+
+    .node-rail-tab .rail-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .node-rail-tab .rail-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .band-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      flex-shrink: 0;
+    }
+
+    .band-dot-supportive { background: var(--green); box-shadow: 0 0 6px rgba(79,179,122,.45); }
+    .band-dot-mixed { background: var(--amber); box-shadow: 0 0 6px rgba(214,163,74,.4); }
+    .band-dot-fragile { background: #e07b39; box-shadow: 0 0 6px rgba(224,123,57,.4); }
+    .band-dot-blocked { background: var(--red); box-shadow: 0 0 6px rgba(207,92,92,.45); }
+    .band-dot-unknown { background: var(--muted); }
+
+    .weakest-link-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 999px;
+      background: var(--red);
+      box-shadow: 0 0 8px rgba(207,92,92,.55);
+      animation: pulse-weakest 2s ease-in-out infinite;
+    }
+
+    .flows-degrade-chip {
+      font-size: 7px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid rgba(214,163,74,.45);
+      color: var(--amber);
+      background: rgba(214,163,74,.12);
+    }
+
+    .cockpit-main { min-height: 320px; }
+
+    .cockpit-chart-area {
+      min-height: 320px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cockpit-chart-canvas {
+      flex: 1;
+      min-height: 240px;
+      margin: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cockpit-chart-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .cockpit-chart-placeholder .chart-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cockpit-decision-rail {
+      width: 100%;
+      max-width: 360px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .cockpit-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+    }
+
+    .cockpit-card h4 {
+      margin: 0 0 6px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .cockpit-card .cockpit-line {
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+
+    .cockpit-card .cockpit-sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .cockpit-detail-band {
+      max-height: 120px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 12px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,.15);
+    }
+
+    .cockpit-component-strip {
+      display: flex;
+      gap: 8px;
+      min-width: min-content;
+    }
+
+    .cockpit-component-chip {
+      flex-shrink: 0;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cockpit-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .horizon-pill {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .horizon-pill-active {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: rgba(76,142,217,.12);
+    }
+
+    .richness-extreme { color: #ff8c69; }
+    .richness-rich { color: var(--amber); }
+    .richness-fair { color: var(--muted); }
+    .richness-cheap { color: var(--green); }
+
+    .keyboard-hint {
+      font-size: 9px;
+      color: var(--muted);
+      margin-left: auto;
+    }
   </style>
 </head>
 <body class="bg-wtm-bg text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
@@ -557,8 +786,9 @@ window.DICTIONARY_BADGE_DEFAULT = {
         <h1 class="text-[15px] font-semibold tracking-tight">Whinfell Transmission Control</h1>
         <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 2.2</span>
         <span id="ddVersionBadge" class="text-[9px] font-bold uppercase tracking-wider text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></span>
+        <button type="button" id="btnWorkspaceToggle" class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20">Node Cockpits</button>
       </div>
-      <p class="text-[11px] text-wtm-muted">Pipeline-authoritative command bar · Hybrid Signal Tracer · WTM EXPORT v2.1</p>
+      <p class="text-[11px] text-wtm-muted">Phase 2 node cockpits · Pipeline command bar · WTM EXPORT v2.1</p>
     </div>
     <div class="flex items-center gap-2 px-5 py-2.5 sm:border-l border-wtm-border bg-black/20 shrink-0 flex-wrap justify-end">
       <span id="saveIndicator" class="text-[10px] text-wtm-muted">—</span>
@@ -663,8 +893,42 @@ window.DICTIONARY_BADGE_DEFAULT = {
     <div id="suggestionRows"></div>
   </section>
 
-  <!-- Three-Zone Layout -->
-  <div class="flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-12 gap-px bg-wtm-border overflow-hidden">
+  <!-- Phase 2 Node Cockpit Shell (UI-1) -->
+  <section id="nodeCockpitZone" class="flex-1 min-h-0 flex flex-col overflow-hidden" aria-label="Node cockpit workspace">
+    <nav id="nodeRail" class="node-rail" aria-label="Risk curve navigation"></nav>
+    <div id="cockpitShell" class="flex-1 min-h-0 flex flex-col overflow-hidden">
+      <div class="cockpit-main flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-12 gap-px bg-wtm-border overflow-hidden">
+        <div id="cockpitChartArea" class="cockpit-chart-area xl:col-span-8 bg-wtm-bg flex flex-col min-h-0 overflow-hidden">
+          <div class="px-3 py-2 border-b border-wtm-border bg-wtm-surface shrink-0 flex items-center justify-between gap-2 flex-wrap">
+            <div>
+              <h2 id="cockpitChartTitle" class="text-[12px] font-bold">Relative Value · Basis</h2>
+              <p id="cockpitChartSubtitle" class="text-[9px] text-wtm-muted">—</p>
+            </div>
+            <div id="cockpitHorizonPills" class="flex gap-1 flex-wrap" role="group" aria-label="RV horizon"></div>
+          </div>
+          <div id="cockpitChartCanvas" class="cockpit-chart-canvas">
+            <div id="cockpitChartPlaceholder" class="cockpit-chart-placeholder">
+              <span class="text-[10px] uppercase tracking-wider text-wtm-muted font-bold">Current reading</span>
+              <span id="cockpitChartValue" class="chart-value">—</span>
+              <span id="cockpitChartRichness" class="text-[11px] font-semibold">—</span>
+              <span id="cockpitChartPct" class="text-[10px] text-wtm-muted">—</span>
+            </div>
+          </div>
+        </div>
+        <aside id="cockpitDecisionRail" class="cockpit-decision-rail xl:col-span-4 bg-wtm-bg min-h-0" aria-label="Decision rail"></aside>
+      </div>
+      <div id="cockpitDetailBand" class="cockpit-detail-band shrink-0" aria-label="Component drivers"></div>
+      <div id="cockpitActions" class="cockpit-actions shrink-0" aria-label="Cockpit actions">
+        <button type="button" id="btnHeresWhy" class="btn btn-primary" disabled title="UI-3">Here's Why</button>
+        <button type="button" id="btnCompareMode" class="btn btn-secondary" disabled title="UI-4">Compare</button>
+        <button type="button" id="btnExportNode" class="btn btn-ghost">Export node</button>
+        <span class="keyboard-hint">← → flip · 1–5 jump · Import hydration for live cockpits</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Legacy Three-Zone Layout -->
+  <div id="legacyConsoleZone" class="zone-hidden flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-12 gap-px bg-wtm-border overflow-hidden">
 
     <!-- LEFT: Intake & State -->
     <aside id="zoneLeft" class="xl:col-span-3 bg-wtm-bg flex flex-col min-h-0 overflow-hidden">
@@ -1053,12 +1317,14 @@ window.DICTIONARY_BADGE_DEFAULT = {
 
 <script src="desk_china_ladder_models.js"></script>
 <script>
-/** Whinfell Transmission Control — Phase 2.1 · Storage v1 (schema 4) */
+/** Whinfell Transmission Control — Phase 2 · Storage v7 (node cockpit navigation) */
 
-const STORAGE_KEY = 'whinfell_transmission_control_v1';
-const LEGACY_KEYS = ['whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
-const STATE_VERSION = 6;
-const HYDRATION_BUNDLE_VERSION = '1.0.0';
+const STORAGE_KEY = 'whinfell_transmission_control_v7';
+const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
+const STATE_VERSION = 7;
+const HYDRATION_BUNDLE_VERSION = '1.2.0';
+const RV_HORIZONS = ['1m', '3m', '6m', '12m', '3y'];
+const RV_HORIZON_LABELS = { '1m': '1M', '3m': '3M', '6m': '6M', '12m': '12M', '3y': '3Y' };
 const FRESH_HOURS = 4;
 const STALE_HOURS = 24;
 const EXPORT_FORMAT = 'WTC-2.1';
@@ -2020,6 +2286,28 @@ function buildOperatorInputsPayload(state) {
   };
 }
 
+function createEmptyNavigation() {
+  return {
+    view_mode: 'flip',
+    active_node_id: 'liquidity',
+    compare_node_ids: [],
+    focus_mode: false,
+    focus_node_id: null,
+  };
+}
+
+function createEmptyChartState() {
+  return {
+    shared_horizon: '3m',
+    zoom_range: null,
+    y_scale_mode: 'auto',
+  };
+}
+
+function createEmptyPanelState() {
+  return { scroll_positions: {}, expanded_sections: {} };
+}
+
 function createEmptyState() {
   return {
     version: STATE_VERSION,
@@ -2028,7 +2316,12 @@ function createEmptyState() {
     provenance: createEmptyProvenance(),
     commandBarAuthority: createEmptyCommandBarAuthority(),
     suggestedTracer: null,
-    ui: { trackView: 'both', gateDetailOpen: false, expandedPrompt: null },
+    hydration: { node_cockpits: null, cockpit_context: null },
+    navigation: createEmptyNavigation(),
+    chart: createEmptyChartState(),
+    panel: createEmptyPanelState(),
+    node_cockpit_overrides: {},
+    ui: { trackView: 'both', gateDetailOpen: false, expandedPrompt: null, workspaceView: 'cockpit' },
     grossRisk: { bookA: '', bookB: '', capitalBaseMm: '', posture: '', postureManual: false, handoverNote: '' },
     research: { keyObservation: '', importedObservation: '', grossRiskRecommendation: '', btcBias: '', timestamp: '' },
     operator: createEmptyOperator(),
@@ -3330,6 +3623,21 @@ function hydrateFromBundle(bundle) {
     };
   }
 
+  if (bundle.node_cockpits) {
+    appState.hydration = appState.hydration || { node_cockpits: null, cockpit_context: null };
+    appState.hydration.node_cockpits = bundle.node_cockpits;
+  }
+  if (bundle.cockpit_context) {
+    appState.hydration = appState.hydration || { node_cockpits: null, cockpit_context: null };
+    appState.hydration.cockpit_context = bundle.cockpit_context;
+    if (bundle.cockpit_context.weakest_node_id && LADDER.some(r => r.id === bundle.cockpit_context.weakest_node_id)) {
+      appState.navigation = appState.navigation || createEmptyNavigation();
+      if (!appState.navigation._user_picked_node) {
+        appState.navigation.active_node_id = bundle.cockpit_context.weakest_node_id;
+      }
+    }
+  }
+
   renderAll();
   markDirty();
   const label = isHydration ? 'Parquet hydration' : (isPipeline ? 'Pipeline bundle' : 'Hydration');
@@ -3446,13 +3754,18 @@ function applyImportFields(fields) {
 
 function normalizeLegacyState(raw) {
   if (!raw || typeof raw !== 'object') return createEmptyState();
-  if ((raw.version === STATE_VERSION || raw.version === 4 || raw.version === 3 || raw.version === 2) && raw.intake) return {
+  if ((raw.version === STATE_VERSION || raw.version === 6 || raw.version === 4 || raw.version === 3 || raw.version === 2) && raw.intake) return {
     ...createEmptyState(), ...raw,
     version: STATE_VERSION,
     china: { ...createEmptyState().china, ...(raw.china || {}) },
     provenance: { ...createEmptyProvenance(), ...(raw.provenance || {}) },
     commandBarAuthority: { ...createEmptyCommandBarAuthority(), ...(raw.commandBarAuthority || {}) },
     suggestedTracer: raw.suggestedTracer || null,
+    hydration: { ...createEmptyState().hydration, ...(raw.hydration || {}) },
+    navigation: { ...createEmptyNavigation(), ...(raw.navigation || {}) },
+    chart: { ...createEmptyChartState(), ...(raw.chart || {}) },
+    panel: { ...createEmptyPanelState(), ...(raw.panel || {}) },
+    node_cockpit_overrides: { ...(raw.node_cockpit_overrides || {}) },
     ui: { ...createEmptyState().ui, ...(raw.ui || {}) },
     research: { ...createEmptyState().research, ...(raw.research || {}) },
     operator: { ...createEmptyOperator(), ...(raw.operator || {}) },
@@ -3534,10 +3847,19 @@ function buildStateFromDOM() {
     provenance: { ...(appState.provenance || createEmptyProvenance()) },
     commandBarAuthority: { ...(appState.commandBarAuthority || createEmptyCommandBarAuthority()) },
     suggestedTracer: appState.suggestedTracer || null,
+    hydration: {
+      node_cockpits: appState.hydration?.node_cockpits || null,
+      cockpit_context: appState.hydration?.cockpit_context || null,
+    },
+    navigation: { ...createEmptyNavigation(), ...(appState.navigation || {}) },
+    chart: { ...createEmptyChartState(), ...(appState.chart || {}) },
+    panel: { ...createEmptyPanelState(), ...(appState.panel || {}) },
+    node_cockpit_overrides: { ...(appState.node_cockpit_overrides || {}) },
     ui: {
       trackView: appState.ui?.trackView || 'both',
       gateDetailOpen: !!appState.ui?.gateDetailOpen,
       expandedPrompt: appState.ui?.expandedPrompt || null,
+      workspaceView: appState.ui?.workspaceView || 'cockpit',
     },
     grossRisk: {
       bookA: el('grossA').value,
@@ -4285,6 +4607,354 @@ function renderDataDictionaryBadge(forceRefresh) {
   });
 }
 
+function bandDotClass(bandKey) {
+  const k = String(bandKey || 'unknown').toLowerCase();
+  if (k === 'supportive') return 'band-dot-supportive';
+  if (k === 'mixed') return 'band-dot-mixed';
+  if (k === 'fragile') return 'band-dot-fragile';
+  if (k === 'blocked') return 'band-dot-blocked';
+  return 'band-dot-unknown';
+}
+
+function richnessClass(label) {
+  const k = String(label || '').toLowerCase();
+  if (k === 'extreme') return 'richness-extreme';
+  if (k === 'rich') return 'richness-rich';
+  if (k === 'fair') return 'richness-fair';
+  if (k === 'cheap') return 'richness-cheap';
+  return '';
+}
+
+function horizonNetToScore(net) {
+  const n = Number(net) || 0;
+  return Math.max(0, Math.min(100, Math.round(50 + n * 12.5)));
+}
+
+function horizonNetToBandKey(net) {
+  const score = horizonNetToScore(net);
+  if (score >= 65) return 'supportive';
+  if (score >= 50) return 'mixed';
+  if (score >= 35) return 'fragile';
+  return 'blocked';
+}
+
+function horizonNetToBandLabel(bandKey) {
+  return { supportive: 'Supportive', mixed: 'Mixed', fragile: 'Fragile', blocked: 'Blocked' }[bandKey] || 'Mixed';
+}
+
+function deriveStubNodeCockpit(nodeId, state) {
+  const row = LADDER.find(r => r.id === nodeId) || LADDER[0];
+  const marks = state.tracer?.horizons?.[nodeId] || { d1: '', d5: '', d20: '', d60: '' };
+  const net = HORIZONS.reduce((s, h) => s + (HORIZON_SCORE[marks[h] || ''] || 0), 0);
+  const bandKey = horizonNetToBandKey(net);
+  const health = computeHealthScore(state);
+  const gate = deriveGate(state);
+  return {
+    node_id: nodeId,
+    display_name: row.name,
+    composite_score: horizonNetToScore(net),
+    composite_score_source: 'horizon_net_fallback',
+    band: horizonNetToBandLabel(bandKey),
+    band_key: bandKey,
+    freshness_status: state.provenance?.freshnessStatus || 'unknown',
+    as_of: state.provenance?.dataAsOf || new Date().toISOString(),
+    horizon_marks: marks,
+    horizon_net: net,
+    is_weakest_link: health.weakestStage === row.name,
+    key_observation: `${row.short} node — import hydration for pipeline cockpit or mark horizons in tracer.`,
+    confidence: 'low',
+    gate_interaction: {
+      zone: gate.zone?.key || 'amber',
+      blocks_directional: gate.blocked,
+      blocks_rv: gate.blocked,
+      note: gate.rule || '',
+    },
+    component_inputs: [],
+    directional: {
+      posture: gate.blocked ? 'no_trade' : 'neutral',
+      conviction: 'low',
+      rationale: 'Stub cockpit — hydrate for pipeline directional read.',
+      blocked: !!gate.blocked,
+      block_reason: gate.blocked ? gate.rule : '',
+    },
+    relative_value: {
+      posture: 'neutral',
+      structure: row.sub,
+      conviction: 'low',
+      rationale: 'RV panel pending hydration.',
+      blocked: false,
+      block_reason: '',
+    },
+    implementations: [],
+    rv_basis: {
+      active_horizon: appState.chart?.shared_horizon || '3m',
+      active_series_id: null,
+      richness_label: null,
+      quartile_context: 'Import hydration bundle for quartile rankings.',
+      series: {},
+      _degraded: true,
+    },
+    funds_flows: {
+      enabled: false,
+      flows_meta: { flows_status: 'unavailable', flows_degraded: true },
+    },
+  };
+}
+
+function getHydratedNodeCockpit(nodeId) {
+  const cockpits = appState.hydration?.node_cockpits;
+  if (cockpits && cockpits[nodeId]) return cockpits[nodeId];
+  return null;
+}
+
+function mergeNodeCockpit(nodeId, state) {
+  const base = getHydratedNodeCockpit(nodeId) || deriveStubNodeCockpit(nodeId, state);
+  const overrides = appState.node_cockpit_overrides?.[nodeId] || {};
+  const merged = JSON.parse(JSON.stringify(base));
+  if (overrides.selected_implementation_id != null) merged.selected_implementation_id = overrides.selected_implementation_id;
+  if (overrides.sizing) merged.sizing = { ...(merged.sizing || {}), ...overrides.sizing };
+  if (overrides.rv_basis) {
+    merged.rv_basis = { ...(merged.rv_basis || {}), ...overrides.rv_basis };
+  }
+  if (overrides.directional?.rationale) {
+    merged.directional = { ...(merged.directional || {}), rationale: overrides.directional.rationale };
+  }
+  if (overrides.relative_value?.rationale) {
+    merged.relative_value = { ...(merged.relative_value || {}), rationale: overrides.relative_value.rationale };
+  }
+  return merged;
+}
+
+function activeNodeId() {
+  return appState.navigation?.active_node_id || LADDER[0].id;
+}
+
+function nodeIndexById(nodeId) {
+  return LADDER.findIndex(r => r.id === nodeId);
+}
+
+function flipNode(direction) {
+  const idx = nodeIndexById(activeNodeId());
+  if (idx < 0) return;
+  const next = direction < 0 ? Math.max(0, idx - 1) : Math.min(LADDER.length - 1, idx + 1);
+  if (next === idx) return;
+  jumpToNode(LADDER[next].id);
+}
+
+function jumpToNode(nodeId) {
+  if (!LADDER.some(r => r.id === nodeId)) return;
+  appState.navigation = appState.navigation || createEmptyNavigation();
+  appState.navigation._user_picked_node = true;
+  const detailBand = el('cockpitDetailBand');
+  if (detailBand) {
+    appState.panel = appState.panel || createEmptyPanelState();
+    appState.panel.scroll_positions[activeNodeId()] = detailBand.scrollTop;
+  }
+  appState.navigation = appState.navigation || createEmptyNavigation();
+  appState.navigation.active_node_id = nodeId;
+  if (appState.navigation.focus_mode) appState.navigation.focus_node_id = nodeId;
+  renderNodeCockpitShell(buildStateFromDOM());
+  markDirty();
+}
+
+function setSharedHorizon(horizon) {
+  if (!RV_HORIZONS.includes(horizon)) return;
+  appState.chart = appState.chart || createEmptyChartState();
+  appState.chart.shared_horizon = horizon;
+  const nodeId = activeNodeId();
+  appState.node_cockpit_overrides = appState.node_cockpit_overrides || {};
+  appState.node_cockpit_overrides[nodeId] = {
+    ...(appState.node_cockpit_overrides[nodeId] || {}),
+    rv_basis: {
+      ...((appState.node_cockpit_overrides[nodeId] || {}).rv_basis || {}),
+      active_horizon: horizon,
+    },
+  };
+  renderNodeCockpitShell(buildStateFromDOM());
+  markDirty();
+}
+
+function flowsDegradeChip(cockpit) {
+  const meta = cockpit?.funds_flows?.flows_meta;
+  if (!meta || meta.flows_status === 'ok') return '';
+  const status = meta.flows_status || 'unavailable';
+  return `<span class="flows-degrade-chip" title="Flows ${escapeHtml(status)}">${escapeHtml(status)}</span>`;
+}
+
+function renderNodeRail(state) {
+  const rail = el('nodeRail');
+  if (!rail) return;
+  const active = activeNodeId();
+  rail.innerHTML = LADDER.map((row, i) => {
+    const cockpit = mergeNodeCockpit(row.id, state);
+    const isActive = row.id === active;
+    const weakest = cockpit.is_weakest_link ? '<span class="weakest-link-dot" title="Weakest link"></span>' : '';
+    const freshCls = cockpit.freshness_status === 'fresh' ? 'freshness-dot-fresh'
+      : cockpit.freshness_status === 'aging' ? 'freshness-dot-aging'
+      : cockpit.freshness_status === 'stale' ? 'freshness-dot-stale' : '';
+    const freshDot = freshCls ? `<span class="freshness-dot ${freshCls}" title="${escapeHtml(cockpit.freshness_status)}"></span>` : '';
+    return `
+      <button type="button"
+        class="node-rail-tab ${isActive ? 'node-rail-tab-active' : ''}"
+        data-node-id="${row.id}"
+        data-node-index="${i + 1}"
+        aria-pressed="${isActive}"
+        title="${escapeHtml(row.name)} · ${i + 1}">
+        <span class="rail-label">${i + 1}. ${escapeHtml(row.short)}</span>
+        <span class="rail-meta">
+          <span class="band-dot ${bandDotClass(cockpit.band_key)}"></span>
+          ${weakest}
+          ${freshDot}
+          <span>${cockpit.composite_score ?? '—'}</span>
+          ${flowsDegradeChip(cockpit)}
+        </span>
+      </button>`;
+  }).join('');
+  rail.querySelectorAll('[data-node-id]').forEach(btn => {
+    btn.onclick = () => jumpToNode(btn.dataset.nodeId);
+  });
+}
+
+function renderCockpitDecisionRail(cockpit) {
+  const rail = el('cockpitDecisionRail');
+  if (!rail) return;
+  const dir = cockpit.directional || {};
+  const rv = cockpit.relative_value || {};
+  const gate = cockpit.gate_interaction || {};
+  const flows = cockpit.funds_flows || {};
+  const flowsMeta = flows.flows_meta || {};
+  let flowsBlock = '';
+  if (flowsMeta.flows_status === 'unavailable' || !flows.enabled) {
+    flowsBlock = `<div class="cockpit-card"><h4>Funds flow</h4><p class="cockpit-sub">Flows unavailable — not neutral.</p></div>`;
+  } else if (flowsMeta.flows_degraded) {
+    flowsBlock = `<div class="cockpit-card"><h4>Funds flow</h4><p class="cockpit-line">${escapeHtml(flows.aggregate?.verdict || '—')}</p><p class="cockpit-sub text-wtm-amber">${escapeHtml(flowsMeta.flows_status || 'degraded')}</p></div>`;
+  } else if (flows.aggregate?.verdict) {
+    flowsBlock = `<div class="cockpit-card"><h4>Funds flow</h4><p class="cockpit-line">${escapeHtml(flows.aggregate.verdict)}</p></div>`;
+  }
+  rail.innerHTML = `
+    <div class="cockpit-card">
+      <h4>Signal</h4>
+      <p class="cockpit-line"><strong>${escapeHtml(cockpit.band || '—')}</strong> · ${cockpit.composite_score ?? '—'} · ${escapeHtml(cockpit.confidence || '—')}</p>
+      <p class="cockpit-sub">${escapeHtml(cockpit.key_observation || '')}</p>
+    </div>
+    <div class="cockpit-card">
+      <h4>Directional</h4>
+      <p class="cockpit-line">${escapeHtml(dir.posture || '—')} · ${escapeHtml(dir.conviction || '—')}</p>
+      <p class="cockpit-sub">${escapeHtml(dir.rationale || '')}</p>
+      ${dir.blocked ? `<p class="cockpit-sub text-wtm-red">${escapeHtml(dir.block_reason || 'Blocked')}</p>` : ''}
+    </div>
+    <div class="cockpit-card">
+      <h4>Relative value</h4>
+      <p class="cockpit-line">${escapeHtml(rv.posture || '—')} · ${escapeHtml(rv.structure || '—')}</p>
+      <p class="cockpit-sub">${escapeHtml(rv.rationale || '')}</p>
+      ${cockpit.rv_basis?.quartile_context ? `<p class="cockpit-sub ${richnessClass(cockpit.rv_basis.richness_label)}">${escapeHtml(cockpit.rv_basis.quartile_context)}</p>` : ''}
+    </div>
+    ${flowsBlock}
+    <div class="cockpit-card">
+      <h4>Gate</h4>
+      <p class="cockpit-sub">${escapeHtml(gate.note || '—')}</p>
+    </div>`;
+}
+
+function renderCockpitChart(cockpit) {
+  const horizon = cockpit.rv_basis?.active_horizon || appState.chart?.shared_horizon || '3m';
+  const seriesMap = cockpit.rv_basis?.series || {};
+  const seriesId = cockpit.rv_basis?.active_series_id || Object.keys(seriesMap)[0];
+  const series = seriesId ? seriesMap[seriesId] : null;
+  const hz = series?.horizons?.[horizon];
+  const row = LADDER.find(r => r.id === cockpit.node_id);
+
+  el('cockpitChartTitle').textContent = series?.label || `${row?.short || 'Node'} · RV / Basis`;
+  el('cockpitChartSubtitle').textContent = series
+    ? `${series.quartile_direction || ''} · ${RV_HORIZON_LABELS[horizon] || horizon} lookback`
+    : (cockpit.rv_basis?._degraded ? 'Stub — import hydration for pipeline quartiles' : 'No series populated');
+
+  if (hz) {
+    const unit = hz.unit || '';
+    el('cockpitChartValue').textContent = `${hz.current_value}${unit ? ' ' + unit : ''}`;
+    el('cockpitChartRichness').textContent = `${hz.richness_label || '—'} · Q${hz.quartile || '—'}`;
+    el('cockpitChartRichness').className = `text-[11px] font-semibold ${richnessClass(hz.richness_label)}`;
+    el('cockpitChartPct').textContent = `${hz.percentile ?? '—'}th percentile · n=${hz.n_observations ?? '—'}`;
+  } else {
+    el('cockpitChartValue').textContent = '—';
+    el('cockpitChartRichness').textContent = cockpit.rv_basis?.quartile_context || 'Awaiting history';
+    el('cockpitChartRichness').className = 'text-[11px] font-semibold text-wtm-muted';
+    el('cockpitChartPct').textContent = cockpit.composite_score_source === 'horizon_net_fallback' ? 'Tracer fallback score' : '—';
+  }
+
+  const pills = el('cockpitHorizonPills');
+  if (pills) {
+    pills.innerHTML = RV_HORIZONS.map(h => {
+      const hasData = series?.horizons?.[h];
+      const cls = h === horizon ? 'horizon-pill-active' : '';
+      const disabled = !hasData && !cockpit.rv_basis?._degraded ? 'opacity-40' : '';
+      return `<button type="button" class="horizon-pill ${cls} ${disabled}" data-horizon="${h}">${RV_HORIZON_LABELS[h]}</button>`;
+    }).join('');
+    pills.querySelectorAll('[data-horizon]').forEach(btn => {
+      btn.onclick = () => setSharedHorizon(btn.dataset.horizon);
+    });
+  }
+}
+
+function renderCockpitDetailBand(cockpit) {
+  const band = el('cockpitDetailBand');
+  if (!band) return;
+  const scroll = appState.panel?.scroll_positions?.[cockpit.node_id];
+  if (typeof scroll === 'number') band.scrollTop = scroll;
+  const inputs = cockpit.component_inputs || [];
+  if (!inputs.length) {
+    const marks = cockpit.horizon_marks || {};
+    band.innerHTML = `<div class="cockpit-component-strip">
+      ${HORIZONS.map(h => `<span class="cockpit-component-chip">${HORIZON_LABELS[h]} ${HORIZON_DISPLAY[marks[h] || ''] || '—'}</span>`).join('')}
+      <span class="cockpit-component-chip text-wtm-muted">Import hydration for component feed</span>
+    </div>`;
+    return;
+  }
+  band.innerHTML = `<div class="cockpit-component-strip">${inputs.map(c => `
+    <span class="cockpit-component-chip" title="weight ${c.weight ?? '—'}">
+      ${escapeHtml(c.label || c.asset_id || '')} <strong>${escapeHtml(String(c.value ?? '—'))}</strong>${c.unit ? ' ' + escapeHtml(c.unit) : ''}
+      ${c.direction ? ` ${HORIZON_DISPLAY[c.direction] || ''}` : ''}
+    </span>`).join('')}</div>`;
+}
+
+function renderNodeCockpitShell(state) {
+  if (appState.ui?.workspaceView !== 'cockpit') return;
+  const cockpit = mergeNodeCockpit(activeNodeId(), state);
+  renderNodeRail(state);
+  renderCockpitChart(cockpit);
+  renderCockpitDecisionRail(cockpit);
+  renderCockpitDetailBand(cockpit);
+}
+
+function applyWorkspaceView(view) {
+  appState.ui = appState.ui || createEmptyState().ui;
+  appState.ui.workspaceView = view;
+  const cockpitOn = view === 'cockpit';
+  el('nodeCockpitZone')?.classList.toggle('zone-hidden', !cockpitOn);
+  el('legacyConsoleZone')?.classList.toggle('zone-hidden', cockpitOn);
+  const btn = el('btnWorkspaceToggle');
+  if (btn) btn.textContent = cockpitOn ? 'Legacy Console' : 'Node Cockpits';
+  if (cockpitOn) renderNodeCockpitShell(buildStateFromDOM());
+}
+
+function isTypingTarget(target) {
+  if (!target) return false;
+  const tag = target.tagName;
+  return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || target.isContentEditable;
+}
+
+function handleCockpitKeyboard(e) {
+  if (appState.ui?.workspaceView !== 'cockpit') return;
+  if (isTypingTarget(e.target)) return;
+  if (e.key === 'ArrowLeft') { e.preventDefault(); flipNode(-1); return; }
+  if (e.key === 'ArrowRight') { e.preventDefault(); flipNode(1); return; }
+  const num = parseInt(e.key, 10);
+  if (num >= 1 && num <= 5) {
+    e.preventDefault();
+    jumpToNode(LADDER[num - 1].id);
+  }
+}
+
 function renderAll() {
   renderDataDictionaryBadge(true);
   const state = buildStateFromDOM();
@@ -4340,6 +5010,7 @@ function renderAll() {
   renderSuggestedTracerPanel();
   renderTracerFlowChrome();
   renderTracerVisual();
+  renderNodeCockpitShell(state);
 }
 
 function applyShock(shockId, skipSnapshot) {
@@ -4556,12 +5227,32 @@ el('btnToggleGateDetail').onclick = () => {
 document.querySelectorAll('.track-toggle').forEach(btn => {
   btn.onclick = () => { applyTrackView(btn.dataset.track); markDirty(); };
 });
+el('btnWorkspaceToggle').onclick = () => {
+  const next = appState.ui?.workspaceView === 'cockpit' ? 'legacy' : 'cockpit';
+  applyWorkspaceView(next);
+  markDirty();
+};
+el('btnExportNode').onclick = () => {
+  const cockpit = mergeNodeCockpit(activeNodeId(), buildStateFromDOM());
+  const lines = [
+    `--- NODE COCKPIT: ${cockpit.display_name} ---`,
+    `Node ID: ${cockpit.node_id}`,
+    `Composite Score: ${cockpit.composite_score}`,
+    `Band: ${cockpit.band}`,
+    `Directional: ${cockpit.directional?.posture} (${cockpit.directional?.conviction})`,
+    `Relative Value: ${cockpit.relative_value?.posture} — ${cockpit.relative_value?.structure}`,
+    `Key Observation: ${cockpit.key_observation}`,
+  ];
+  copyText(lines.join('\n'), el('btnExportNode'), 'Export node');
+};
+document.addEventListener('keydown', handleCockpitKeyboard);
 
 renderPrompts();
 renderShockStageChecks();
 renderTracerHorizonTable();
 initScenarioLoop();
 applyStateToDOM(loadState());
+applyWorkspaceView(appState.ui?.workspaceView || 'cockpit');
 applyTrackView(appState.ui?.trackView || 'both');
 if (scenarioLoop.variants[0]) {
   const s = buildStateFromDOM();
