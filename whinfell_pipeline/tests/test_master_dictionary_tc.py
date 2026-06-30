@@ -52,6 +52,21 @@ class TestMasterDictionaryTransmissionControl(unittest.TestCase):
         self.assertIn("Master Data Dictionary v1.0", proc.stdout)
         self.assertIn("Locked", proc.stdout)
 
+    def test_disk_backed_badge_file_evidence(self):
+        """meta.json read from disk (file:// sibling path); sync block from yaml chain."""
+        script = REPO_ROOT / "whinfell_pipeline/tests/dd_badge_file_evidence.mjs"
+        proc = subprocess.run(
+            ["node", str(script)],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=15,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr or proc.stdout)
+        self.assertIn("PASS dd_badge_file_evidence", proc.stdout)
+        self.assertIn("validateDataDictionaryMeta: true", proc.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -41,6 +41,8 @@ whinfell_pipeline/tests/*
 !whinfell_pipeline/tests/test_sync_dictionary_meta.py
 !whinfell_pipeline/desk_chart_links.py
 !whinfell_pipeline/tests/dd_badge_headless.mjs
+!whinfell_pipeline/tests/dd_badge_file_evidence.mjs
+!whinfell_pipeline/tests/generate_phase1_evidence.py
 !whinfell_pipeline/sync_dictionary_meta.py
 !whinfell_pipeline/batch_collect.py
 !whinfell_pipeline/desk_urls.yaml
