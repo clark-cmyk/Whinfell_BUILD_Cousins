@@ -1,7 +1,7 @@
 # BUILD Cousins - TODO List
 
 **Maintained by:** BUILD Cousins  
-**Last Updated:** June 30, 2026 (Phase 2.2 Basis mission-surface accepted · Credit next)
+**Last Updated:** June 30, 2026 (Credit mission-surface accepted · desk handoff · node dev paused)
 **Purpose:** Track all active and planned work for the Whinfell Transmission Map support track.
 
 ---
@@ -26,7 +26,7 @@
 | **Phase 2b-data** | WTM EXPORT v2.2 + `node_cockpits` hydration builder | High | **Shipped** | Bridge | `cdd677a` · bundle v1.1.0 · 111 tests PASS |
 | **Phase 2b** | ARCH-1 component routing + Koyfin history for RV quartiles | High | **Open** | Integration Dynamo | Replaces tracer-derived component stubs |
 | **Phase 2.2-mission** | Basis node mission-surface (operator console) | High | **Shipped · Accepted** | Bridge + Clarity | Badge `2.2-MISSION-2026-06-29` · commits `54cc2b9`→`2d2c847` · no further Basis polish |
-| **Phase 2.2-mission** | Credit node mission-surface (extend Basis pattern) | **High** | **Next — plan approved** | Bridge + Clarity | HTML/JS only · medium (~1–2 sessions) · Liquidity/Breadth deferred |
+| **Phase 2.2-mission** | Credit node mission-surface (extend Basis pattern) | High | **Shipped · Accepted** | Bridge + Clarity | Handoff: `08_Deliverables/Credit_Mission_Surface_Desk_Handoff.md` · Liquidity deferred |
 | **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI: Basis shipped, Credit next** · interaction standard locked |
 | **Phase 2 open** | Ambiguity C — trading-day vs calendar-day lookback | Medium | **Open** | TempLibby + desk | Default locked in spec; desk confirm |
 | **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **PR-1 shipped** | Bridge + Clarity | Registry locked · **PR-3a/b → PR-2 → PR-4/5** |
