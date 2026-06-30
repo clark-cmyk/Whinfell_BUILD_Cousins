@@ -1,7 +1,7 @@
 # Whinfell BUILD Cousins - Progress Log
 
 **Started:** June 26, 2026  
-**Last Updated:** June 29, 2026 (Flows implementation spec — review for lock)
+**Last Updated:** June 30, 2026 (Phase 2.2 Basis mission-surface accepted · Credit next)
 
 ---
 
@@ -32,7 +32,9 @@
 | **Phase 2 prep** | Node cockpit data model spec | **Locked v0.2** | Blueprint | June 29, 2026 |
 | **Phase 2a** | `rv_series` + interim node score weights | **Shipped** | Bridge | June 29, 2026 |
 | **Phase 2b-data** | WTM EXPORT v2.2 + node cockpit hydration builder | **Shipped** | Bridge | June 29, 2026 |
-| **Phase 2** | Node architecture (5 trading cockpits) | **In progress** | Bridge + Edge + Clarity | June 29, 2026 |
+| **Phase 2** | Node architecture (5 trading cockpits) | **In progress** | Bridge + Edge + Clarity | June 30, 2026 |
+| **Phase 2.2-mission** | Basis node mission-surface (TC operator console) | **Shipped · Accepted** | Bridge + Clarity | June 29, 2026 |
+| **Phase 2.2-mission** | Credit node mission-surface | **Next — plan approved** | Bridge + Clarity | June 30, 2026 |
 | **Phase 2b** | ARCH-1 routing + live component inputs | **Open** | Integration Dynamo | June 29, 2026 |
 | **Phase 2b** | Funds Flow Sponsorship layer | **PR-1 registry shipped** | Bridge + Clarity | June 29, 2026 |
 
@@ -42,7 +44,7 @@
 
 | File | Version | Status |
 |------|---------|--------|
-| **Whinfell_Transmission_Control.html** | **v1.2 + Phase 2.2** | **Production rollout — desk** |
+| **Whinfell_Transmission_Control.html** | **v1.2 + Phase 2.2 + 2.2-MISSION** | **Production rollout — desk · Basis mission-surface live** |
 | **Whinfell_Quick_Reference_Card_v1.4.docx** | **1.4** | **Production — daily CSV chain** |
 | **Whinfell_Expanded_Operators_Guide_v1.4.md** | **1.4** | **Master reference — Phase 2.2 Final** |
 | **Comet_Browser_Operations_Blueprint.md** | **1.0** | **Backup views + shortcuts + supervised prompt** |
@@ -70,6 +72,7 @@
 
 ## Notes
 
+- **June 30, 2026** — **PHASE 2.2 BASIS MISSION-SURFACE ACCEPTED** — Hydration/coverage banner, gate sentence, funds-flow copy, post-import workflow, and Basis mission read (tactical banner, summary strip, implication rail) shipped in `Whinfell_Transmission_Control.html`. Badge `2.2-MISSION-2026-06-29`. Commits `54cc2b9`→`2d2c847`. **Basis polish frozen.** Next: Credit mission-surface (HTML/JS generalization, ~1–2 sessions); Liquidity/Breadth deferred.
 - **June 29, 2026** — **FLOWS PR-1 SHIPPED** — Master DD registry: `funds_flow_baskets` (5 nodes), `funds_flow_thresholds`, `funds_flow_column_patterns`, `funds_flow_ingest` (`flows_meta` codes), `flows` dataset + `WTM-Flows*.csv` normalize rule, `canonical_assets` extensions (SHY/IEF/TLT/BIL/IWM/RSP/BITO/GBTC), hydration target v1.2.0 blocks, optional `koyfin_flows` in collection manifest. Helpers: `funds_flow_basket_for_node()`, `funds_flow_thresholds()`, `funds_flow_column_map()`, `get_funds_flow_ingest()`. **113 tests PASS.** Next: PR-3a `flows_parser.py`.
 - **June 29, 2026** — **FLOWS IMPLEMENTATION SPEC (DRAFT)** — `Phase2_Flows_Implementation_Spec.md` covers: three-layer data model (`flows_*.csv` → `latest_flows.json` → `node_cockpit.funds_flows`), `basket_role`/`node_affiliation`, Credit & Breadth sponsorship examples, `degrade_mode` UI strings, PR-1/3a/3b/2/4/5 ownership split, full Master DD delta. Phase2 cockpit §9.1 added. **Awaiting §7 desk lock before implementation.**
 - **June 29, 2026** — **FUNDS FLOW INGEST /ARENA** — Debate doc ships five options. **Key finding:** `WTM-Flows-Global.csv` on desk (750+ dated rows, `Flow (D)` + `AUM`) but quarantined for filename; staged credit is observation-only. BUILD recommends **Option D hybrid**: optional `flows_{YYYYMMDD}_{HHMM}.csv` primary + credit cross-section 1D fallback. Vote template for Clark/TempLibby in arena doc.

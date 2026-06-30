@@ -1,7 +1,7 @@
 # BUILD Cousins - TODO List
 
 **Maintained by:** BUILD Cousins  
-**Last Updated:** June 29, 2026 (Flows spec v1.1 — §8 sign-off pending)
+**Last Updated:** June 30, 2026 (Phase 2.2 Basis mission-surface accepted · Credit next)
 **Purpose:** Track all active and planned work for the Whinfell Transmission Map support track.
 
 ---
@@ -25,7 +25,9 @@
 | **Phase 2a** | `rv_series` + interim node score weights | High | **Complete** | Bridge | Master DD registry · `3293a9b` |
 | **Phase 2b-data** | WTM EXPORT v2.2 + `node_cockpits` hydration builder | High | **Shipped** | Bridge | `cdd677a` · bundle v1.1.0 · 111 tests PASS |
 | **Phase 2b** | ARCH-1 component routing + Koyfin history for RV quartiles | High | **Open** | Integration Dynamo | Replaces tracer-derived component stubs |
-| **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI not started** · interaction standard locked |
+| **Phase 2.2-mission** | Basis node mission-surface (operator console) | High | **Shipped · Accepted** | Bridge + Clarity | Badge `2.2-MISSION-2026-06-29` · commits `54cc2b9`→`2d2c847` · no further Basis polish |
+| **Phase 2.2-mission** | Credit node mission-surface (extend Basis pattern) | **High** | **Next — plan approved** | Bridge + Clarity | HTML/JS only · medium (~1–2 sessions) · Liquidity/Breadth deferred |
+| **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI: Basis shipped, Credit next** · interaction standard locked |
 | **Phase 2 open** | Ambiguity C — trading-day vs calendar-day lookback | Medium | **Open** | TempLibby + desk | Default locked in spec; desk confirm |
 | **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **PR-1 shipped** | Bridge + Clarity | Registry locked · **PR-3a/b → PR-2 → PR-4/5** |
 | **Phase 2b-data** | PR-1 registry + PR-3a/b ingest + PR-2 `funds_flows.py` | High | **PR-1 done · PR-3 next** | Bridge + Dynamo | Option D locked · L0/L1/L2 model · sidecar `latest_flows.json` |
@@ -33,6 +35,18 @@
 | **Phase 2b-ops** | `normalize_whinfell_drop.sh` — map `WTM-Flows*.csv` | Medium | **Shipped (via DD rule)** | Bridge | `batch_collect.py normalize` reads `WTM-Flows*.csv` rule |
 | **Phase 3** | TC interface (full-screen Why, flip nav, margin module) | Medium | **Planned** | Clarity + Safeguard | Blocked on Phase 2 UI · flow card ships in 2b-ui |
 | **Phase 4** | Validation & reliability gate | Medium | **Planned** | Hammer + Precision | After Phase 3 |
+
+---
+
+## Report for TempLibby (June 30, 2026)
+
+**What happened:** Phase 2.2 Basis node mission-surface work is **accepted and shippable**. Operator console now has hydration/coverage banner, gate decision sentence, improved funds-flow messaging, post-import workflow, and Basis-specific mission read (tactical banner, summary strip, implication rail). Remaining Basis cosmetic issues are acceptable — **no further Basis polish**.
+
+**Direction:** Extend the same mission-surface pattern to **Credit** (tactical banner + summary strip in bps + implication rail + shared coverage/gate/workflow). **No pipeline or scoring changes** for v1 — Credit hydration already ships full `rv_basis`, flows, and gate fields. Effort: **medium** (~1–2 sessions). Liquidity and Breadth follow after Credit is accepted.
+
+**Open questions (Credit v1):** signal-band vs RV-cheap tension copy; weakest-link badge placement; China ladder in tactical line vs gate-only; light registry generalization vs Credit fork.
+
+**Ship commits (Basis mission-surface):** `54cc2b9` · `ad01ded` · `042b1ea` · `8d21c9e` · `2d2c847`
 
 ---
 
@@ -96,6 +110,7 @@
 | **Phase 2 prep** | Locked decisions v0.2 (composite, quartile, options defer, China soft) | June 29, 2026 | `c9974fa` |
 | **Phase 2a** | `rv_series` catalog + interim `node_score_weights` in Master DD | June 29, 2026 | 10 series · 5 nodes · `3293a9b` |
 | **Phase 2b-data** | WTM EXPORT v2.2 spec + `node_cockpits.py` + hydration v1.1.0 | June 29, 2026 | `cdd677a` · 111 tests PASS |
+| **Phase 2.2-mission** | Basis node mission-surface operator console | June 29, 2026 | `54cc2b9`→`2d2c847` · badge `2.2-MISSION-2026-06-29` |
 
 ---
 
@@ -140,6 +155,7 @@ python3 -m whinfell_pipeline.verify_2_2_final
 ---
 
 ## Notes
+- **June 30, 2026** — **Basis mission-surface accepted** — stop Basis polish; Credit mission-surface is next (plan: tactical banner + summary strip + implication rail; no pipeline changes). Open: signal/RV copy, weakest-link badge, registry vs fork.
 - **June 29, 2026** — **Flows spec v1.1** — companion file authoritative; `flows_meta` machine-readable degrade flags; Appendix A JSON (healthy + fallback + unavailable + partial + export). Awaiting §8 checklist sign-off.
 - **June 29, 2026** — **Flows implementation spec drafted** — [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md): L0/L1/L2 data model, `degrade_mode` state machine, Credit/Breadth examples, PR-1→5 ownership, Master DD delta list. **Desk sign-off §7 before PR-1/PR-3.**
 - **June 29, 2026** — **Option D (Hybrid) locked** — primary `flows_*.csv` + credit 1D fallback; arena debate resolved.
