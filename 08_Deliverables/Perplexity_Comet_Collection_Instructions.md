@@ -3,7 +3,7 @@
 **Authority:** Clark · BUILD Cousins desk  
 **Audience:** Perplexity, Comet, and any browser-collection agent  
 **Tone:** Follow exactly. Do not improvise.  
-**Updated:** 2026-06-28
+**Updated:** 2026-06-30
 
 ---
 
@@ -53,14 +53,18 @@ Wired URLs live in:
 
 ## Step 1 — The 8 exports (ONLY these for daily)
 
-### Koyfin (4 exports)
+### Koyfin (desk standard + optional)
 
 | # | Saved view name | Wired URL / navigation | Save as (tool renames if needed) |
 |---|-----------------|------------------------|----------------------------------|
 | 1 | **WTM-Rates-Credit** | [app.koyfin.com](https://app.koyfin.com/) → My Dashboards → WTM-Rates-Credit | `rates_YYYYMMDD_HHMM.csv` |
 | 2 | **WTM-Equities-Breadth** | My Dashboards → WTM-Equities-Breadth (canonical) | `equities_YYYYMMDD_HHMM.csv` |
-| 3 | **WTM-Credit-Confirmation** | My Dashboards → WTM-Credit-Confirmation (canonical) | `credit_YYYYMMDD_HHMM.csv` |
-| 4 | **WTM-China-Policy** | My Dashboards → WTM-China-Policy | `china_policy_YYYYMMDD_HHMM.csv` |
+| 3 | **WTM-Import-Core** | [WTM-Import-Core](https://app.koyfin.com/myw/70789aa7-8084-4e4c-85d3-09f9b78dcd3a) (ARCH-3 primary) | `credit_YYYYMMDD_HHMM.csv` |
+| 4 | **WTM-Credit-Confirmation** | My Dashboards → WTM-Credit-Confirmation (legacy alt) | `credit_YYYYMMDD_HHMM.csv` |
+| 5 | **WTM-China-Policy** | My Dashboards → WTM-China-Policy | `china_policy_YYYYMMDD_HHMM.csv` |
+| 6 | **WTM-Flows-Global** | [WTM-Flows-Global](https://app.koyfin.com/myw/afb1f314-4de4-47b6-b02f-0de2601b62b9) | `WTM-Flows-Global.csv` → `flows_*` |
+| 7 | **WTM-GOV-USPRC** (opt) | [WTM-GOV-USPRC](https://app.koyfin.com/myw/e94a97b3-600d-47d4-91d3-a01f8749146d) | `WTM-Flows-GOV-USPRC.csv` |
+| 8+ | Crypto charts, daily TS, China ladder assists | See `Comet_Morning_Collect_Prompt.txt` | various `*_chart_*` |
 
 **Koyfin export clicks:** Open view → `⋮` menu → **Export** → **CSV** → save to `whinfell_drop`.
 
@@ -77,10 +81,11 @@ Wired URLs live in:
 
 | # | Saved screen | Wired URL | Save as |
 |---|--------------|-----------|---------|
-| 5 | **WTM-Futures-Intraday** | [Major Commodities](https://www.barchart.com/futures/major-commodities) or list **dailymonitor0610** | `futures_intraday_YYYYMMDD_HHMM.csv` |
+| 5 | **WTM-Futures-Intraday** | [Watchlist viewName=197689](https://www.barchart.com/my/watchlist?viewName=197689) | `futures_intraday_YYYYMMDD_HHMM.csv` |
 | 6 | **WTM-Futures-Daily** | [BTM26 Historical Download](https://www.barchart.com/futures/quotes/BTM26/historical-download) | `futures_daily_YYYYMMDD_HHMM.csv` |
 | 7 | **WTM-BTC-Basis** (optional) | [BTM26 Spreads](https://www.barchart.com/futures/quotes/BTM26/spreads) | `btc_basis_YYYYMMDD.csv` |
 | 8 | **WTM-Options-Greeks** (optional) | [BTN26 Options](https://www.barchart.com/futures/quotes/BTN26/options) | `options_YYYYMMDD_HHMM.csv` |
+| 9+ | **ARCH-4 core**, China futures/basis | See `Comet_Shortcuts_WTM.md` ARCH-4 table | `futures_daily_*` raw historical |
 
 **Barchart export clicks:** Open screen → **Download CSV** (top-right of table).
 
@@ -183,25 +188,31 @@ Playbook: 08_Deliverables/Perplexity_Barchart_Koyfin_Playbook.md
 
 ## Paste prompt — Comet (supervised)
 
+**Full prompt (ALL Koyfin + ALL Barchart URLs):**  
+`08_Deliverables/Comet_Morning_Collect_Prompt.txt`
+
+**Short version:**
+
 ```
 WHINFELL DESK COLLECTOR — SUPERVISED FAST MODE
+
+Read: 08_Deliverables/Comet_Morning_Collect_Prompt.txt (do not shorten)
 
 Before any terminal command, ask Clark: "Ready to run batch collect?"
 
 SEQUENCE:
-1. python3 run_batch_collect.py plan  (read steps)
-2. python3 run_batch_collect.py open  (optional — opens wired URLs)
-3. Export each step to ~/Downloads/whinfell_drop — export only, no parsing
-4. On Clark approval: python3 run_batch_collect.py run --window today
-5. Report files_staged, files_quarantined, hydration path
+1. python3 run_batch_collect.py plan
+2. python3 run_batch_collect.py open --include-optional  (optional)
+3. Export to ~/Downloads/whinfell_drop — wired URLs:
+   Koyfin Import-Core: app.koyfin.com/myw/70789aa7-8084-4e4c-85d3-09f9b78dcd3a
+   Koyfin Flows:       app.koyfin.com/myw/afb1f314-4de4-47b6-b02f-0de2601b62b9
+   Barchart intraday:  barchart.com/my/watchlist?viewName=197689
+   Barchart daily:     barchart.com/futures/quotes/BTM26/historical-download
+   Plus rates, equities, china_policy (dashboard names)
+4. normalize_whinfell_drop.sh → on Clark approval: run_batch_collect.py run --window today
+5. Report files_staged, files_quarantined, flows_staged, hydration path
 
-FORBIDDEN:
-- Per-ticker Barchart loops (13 tickers)
-- Parsing CSV in browser
-- Skipping whinfell_drop folder
-- Auto-trading or risk changes
-
-If quarantined: show errors from staged_raw/quarantine/ and stage_manifest JSON.
+FORBIDDEN: per-ticker loops · CSV parsing · ~/Downloads root · trades
 ```
 
 ---
@@ -254,7 +265,9 @@ No browser. ~30 seconds for all historical series.
 | `08_Deliverables/Perplexity_Barchart_Koyfin_Playbook.md` | Vendor CSV formats |
 | `whinfell_pipeline/desk_urls.yaml` | Wired URLs + navigation |
 | `whinfell_pipeline/examples/comet_collection_plan.json` | Agent JSON checklist |
-| `whinfell_pipeline/examples/AGENT_COLLECTION_PROMPT.txt` | One-block paste prompt |
+| `whinfell_pipeline/examples/AGENT_COLLECTION_PROMPT.txt` | Short Comet paste prompt |
+| `08_Deliverables/Comet_Morning_Collect_Prompt.txt` | **Full Comet prompt — all Koyfin + Barchart URLs** |
+| `08_Deliverables/Comet_Shortcuts_WTM.md` | Comet shortcuts + memorized triggers |
 | `scripts/whinfell_morning_collect.sh` | Clark one-command morning |
 
 ---
