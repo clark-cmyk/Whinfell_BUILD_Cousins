@@ -163,16 +163,21 @@ window.DICTIONARY_BADGE_DEFAULT = {
     .node-coverage-blocked { color: #f56565; font-weight: 800; text-transform: uppercase; font-size: 8px; }
     .node-coverage-upstream { margin: 4px 0 2px; font-size: 9px; font-weight: 600; color: #f5a623; line-height: 1.35; }
     .node-coverage-impact { margin: 0 0 6px; font-size: 9px; color: #c5d0dc; line-height: 1.35; }
-    .coverage-checklist {
+    .coverage-checklist,
+    .coverage-pill-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px 10px;
-      font-size: 9px;
+      gap: 5px 6px;
+      font-size: 8px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.06);
     }
-    .coverage-check { display: inline-flex; align-items: center; gap: 3px; }
+    .coverage-check,
+    .coverage-pill { display: inline-flex; align-items: center; gap: 3px; padding: 3px 7px; border-radius: 999px; border: 1px solid var(--border); background: rgba(0,0,0,0.2); }
     .coverage-check--ok { color: #3dd68c; }
     .coverage-check--partial { color: #f5a623; }
     .coverage-check--miss { color: #f56565; }
@@ -241,14 +246,132 @@ window.DICTIONARY_BADGE_DEFAULT = {
     .gate-decision-sentence {
       font-size: 11px;
       font-weight: 600;
-      color: #d6e2ef;
+      color: #e8edf3;
       line-height: 1.45;
-      margin: 0 0 6px;
-      padding: 6px 8px;
+      margin: 0 0 4px;
+      padding: 7px 9px;
       border-radius: 6px;
-      background: rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.28);
       border-left: 3px solid rgba(76,142,217,0.55);
     }
+    .gate-implementation-note {
+      font-size: 9px;
+      color: #8b9cb3;
+      margin: 0;
+      line-height: 1.35;
+      font-style: italic;
+    }
+    .header-meta-sep {
+      width: 1px;
+      height: 14px;
+      background: rgba(255,255,255,0.12);
+      margin: 0 2px;
+      flex-shrink: 0;
+    }
+    .header-meta-cluster {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .basis-summary {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 420px;
+    }
+    .basis-reading-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .basis-reading-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .basis-reading-label {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .basis-stance-row,
+    .basis-trade-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px 10px;
+      font-size: 10px;
+    }
+    .basis-pill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      text-transform: capitalize;
+    }
+    .basis-pill--rich { border-color: rgba(224,123,57,0.45); color: #e07b39; background: rgba(224,123,57,0.1); }
+    .basis-pill--cheap { border-color: rgba(79,179,122,0.45); color: #4fb37a; background: rgba(79,179,122,0.1); }
+    .basis-pill--fair { border-color: rgba(76,142,217,0.4); color: #9ec5f0; background: rgba(76,142,217,0.08); }
+    .basis-meta { color: #9eacbb; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .basis-expression,
+    .basis-riskcap { color: #c5d0dc; font-weight: 600; font-size: 9px; }
+    .basis-riskcap { color: #f5a623; }
+    .diag-block { display: flex; flex-direction: column; gap: 5px; }
+    .diag-chip {
+      display: inline-flex;
+      align-self: flex-start;
+      font-size: 8px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+      color: var(--muted);
+    }
+    .diag-chip--signal { border-color: rgba(76,142,217,0.4); color: #9ec5f0; }
+    .diag-chip--warn { border-color: rgba(245,166,35,0.45); color: #f5a623; }
+    .diag-chip--block { border-color: rgba(245,101,101,0.45); color: #f56565; }
+    .diag-chip--ok { border-color: rgba(61,221,140,0.4); color: #3dd68c; }
+    .diag-interpretation { font-size: 11px; font-weight: 600; color: var(--text); line-height: 1.4; margin: 0; }
+    .diag-implication { font-size: 10px; color: var(--muted); line-height: 1.35; margin: 0; }
+    .diag-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.15);
+      font-size: 9px;
+      line-height: 1.35;
+      min-width: 180px;
+      flex-shrink: 0;
+    }
+    .diag-row--muted { opacity: 0.88; border-style: dashed; }
+    .diag-status {
+      flex-shrink: 0;
+      font-size: 7px;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #8b9cb3;
+      padding: 2px 5px;
+      border-radius: 3px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .diag-text { color: #9eacbb; }
+    .why-list--labeled li { margin-bottom: 4px; }
+    .why-list--labeled strong { color: #9ec5f0; font-weight: 700; }
     .funds-flow-upstream {
       font-size: 10px;
       font-weight: 600;
@@ -1279,9 +1402,13 @@ window.DICTIONARY_BADGE_DEFAULT = {
       <div class="flex items-center gap-2.5 flex-wrap">
         <h1 class="text-[15px] font-semibold tracking-tight">Whinfell Transmission Control</h1>
         <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 2.2</span>
-        <span id="tcConsoleBuildBadge" class="text-[8px] font-bold uppercase tracking-wider text-wtm-green bg-emerald-500/10 border border-wtm-green/35 px-2 py-0.5 rounded" title="Operator-console UX build — hard-refresh if missing coverage banner">—</span>
-        <span id="ddVersionBadge" class="text-[9px] font-bold uppercase tracking-wider text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></span>
-        <button type="button" id="btnWorkspaceToggle" class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20">Node Cockpits</button>
+        <span class="header-meta-cluster">
+          <span id="tcConsoleBuildBadge" class="text-[8px] font-bold uppercase tracking-wider text-wtm-green bg-emerald-500/10 border border-wtm-green/35 px-2 py-0.5 rounded" title="Operator-console UX build — hard-refresh if missing coverage banner">—</span>
+          <span class="header-meta-sep" aria-hidden="true"></span>
+          <span id="ddVersionBadge" class="text-[9px] font-bold uppercase tracking-wider text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></span>
+        </span>
+        <span class="header-meta-sep" aria-hidden="true"></span>
+        <button type="button" id="btnWorkspaceToggle" class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20 shrink-0">Node Cockpits</button>
       </div>
       <p class="text-[11px] text-wtm-muted">Phase 2 node cockpits · Pipeline command bar · WTM EXPORT v2.1</p>
     </div>
@@ -1422,10 +1549,17 @@ window.DICTIONARY_BADGE_DEFAULT = {
           <div id="cockpitChartCanvas" class="cockpit-chart-canvas">
             <canvas id="cockpitRvCanvas" aria-label="RV basis chart"></canvas>
             <div id="cockpitChartPlaceholder" class="cockpit-chart-placeholder">
-              <span class="text-[10px] uppercase tracking-wider text-wtm-muted font-bold">Current reading</span>
-              <span id="cockpitChartValue" class="chart-value">—</span>
-              <span id="cockpitChartRichness" class="text-[11px] font-semibold">—</span>
-              <span id="cockpitChartPct" class="text-[10px] text-wtm-muted">—</span>
+              <div id="basisSummary" class="basis-summary">
+                <div class="basis-reading-row">
+                  <span id="basisReadingValue" class="basis-reading-value">—</span>
+                  <span id="basisReadingLabel" class="basis-reading-label">Current reading</span>
+                </div>
+                <div id="basisStanceRow" class="basis-stance-row"></div>
+                <div id="basisTradeRow" class="basis-trade-row"></div>
+              </div>
+              <span id="cockpitChartValue" class="zone-hidden">—</span>
+              <span id="cockpitChartRichness" class="zone-hidden">—</span>
+              <span id="cockpitChartPct" class="zone-hidden">—</span>
             </div>
           </div>
         </div>
@@ -1839,7 +1973,7 @@ const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
 /** Bump when operator-console UX changes — visible in header for reload verification. */
-const TC_CONSOLE_BUILD = '2.2-ux-2026-06-29';
+const TC_CONSOLE_BUILD = '2.2-UX-2026-06-29';
 const HYDRATION_BUNDLE_VERSION = '1.2.0';
 const RV_HORIZONS = ['1m', '3m', '6m', '12m', '3y'];
 const RV_HORIZON_LABELS = { '1m': '1M', '3m': '3M', '6m': '6M', '12m': '12M', '3y': '3Y' };
@@ -1981,14 +2115,23 @@ function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function whyBlockFromBullets(bullets) {
+const EXECUTIVE_WHY_IDS = new Set([
+  'whyWhinfellScore', 'whyTransmission', 'whyGateState', 'whyShock', 'whyFreshness',
+]);
+
+function whyBlockFromBullets(bullets, labeled = false) {
+  if (labeled) {
+    const labels = ['Current state', 'Historical analog', 'Would change if'];
+    const items = bullets.map((b, i) => `<li><strong>${labels[i] || 'Note'}:</strong> ${escapeHtml(b)}</li>`).join('');
+    return `<ul class="why-list why-list--labeled">${items}</ul>`;
+  }
   const items = bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('');
   return `<ul class="why-list">${items}</ul>`;
 }
 
 function setWhyHtml(id, bullets) {
   const node = el(id);
-  if (node) node.innerHTML = whyBlockFromBullets(bullets);
+  if (node) node.innerHTML = whyBlockFromBullets(bullets, EXECUTIVE_WHY_IDS.has(id));
 }
 
 function formatLadderNets(health) {
@@ -5610,6 +5753,276 @@ function setSharedHorizon(horizon) {
   markDirty();
 }
 
+const PRESENTATIONAL_LABELS = {
+  short_spread: 'Short spread',
+  long_spread: 'Long spread',
+  neutral: 'Neutral',
+  no_trade: 'No trade',
+  size_hint: 'Size cap',
+  higher_is_richer: 'Higher values = richer',
+  higher_is_cheaper: 'Higher values = cheaper',
+  half: '0.5×',
+  quarter: '0.25×',
+  fragile: 'Fragile',
+  supportive: 'Supportive',
+  blocked: 'Blocked',
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High',
+};
+
+const BASIS_MISSING_MESSAGES = {
+  nearDeferredVsRefs: 'Near-deferred level vs refs unavailable — reference history missing; affects conviction, not eligibility.',
+  direction5d20d: '5D/20D spread direction unavailable — short-horizon trend check missing; affects confirmation only.',
+  rollContango: 'Roll / contango stability unavailable — term-structure continuity check missing; affects sizing confidence.',
+  refBand: 'Spread vs ref band unavailable — ref low/mid/high bundle missing; affects conviction, not gate status.',
+  etfVsFutures: 'ETF vs futures consistency unavailable — cross-market confirmation missing; affects confirmation only.',
+};
+
+const BASIS_COMPONENT_MATCHERS = [
+  { key: 'nearDeferredVsRefs', re: /near-deferred calendar level/i },
+  { key: 'direction5d20d', re: /5D\+20D direction|calendar spread 5D/i },
+  { key: 'rollContango', re: /Roll \/ contango|contango stability/i },
+  { key: 'refBand', re: /ref_low|ref band|Spread vs ref/i },
+  { key: 'etfVsFutures', re: /ETF vs futures/i },
+];
+
+function humanizeValue(value) {
+  if (value == null || value === '') return '—';
+  const key = String(value).toLowerCase();
+  if (PRESENTATIONAL_LABELS[key]) return PRESENTATIONAL_LABELS[key];
+  return String(value).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function ordinalSuffixWhole(n) {
+  const mod100 = n % 100;
+  const mod10 = n % 10;
+  if (mod10 === 1 && mod100 !== 11) return 'st';
+  if (mod10 === 2 && mod100 !== 12) return 'nd';
+  if (mod10 === 3 && mod100 !== 13) return 'rd';
+  return 'th';
+}
+
+function formatOrdinalPercentile(pct) {
+  const n = Number(pct);
+  if (!Number.isFinite(n)) return '—';
+  const rounded = Math.round(n * 10) / 10;
+  const whole = Math.floor(rounded);
+  const hasFrac = Math.abs(rounded - whole) > 0.001;
+  if (hasFrac) return `${rounded.toFixed(1)}st percentile`;
+  return `${whole}${ordinalSuffixWhole(whole)} percentile`;
+}
+
+function getBasisDomain(series, padRatio = 0.12) {
+  const vals = (series || []).filter(v => Number.isFinite(v));
+  if (!vals.length) return [0, 1];
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  const span = Math.max(max - min, 0.10);
+  const pad = span * padRatio;
+  return [min - pad, max + pad];
+}
+
+function parseBasisRef(value) {
+  if (value == null || value === '') return null;
+  const n = parseFloat(String(value).replace(/[^\d.-]/g, ''));
+  return Number.isFinite(n) ? n : null;
+}
+
+function resolveBasisRefLines(state) {
+  const l3 = state?.btcL3 || appState?.btcL3 || {};
+  return {
+    low: parseBasisRef(l3.refLow),
+    mid: parseBasisRef(l3.refMid),
+    high: parseBasisRef(l3.refHigh),
+  };
+}
+
+function richnessPillClass(label) {
+  const k = String(label || '').toLowerCase();
+  if (k === 'rich') return 'basis-pill--rich';
+  if (k === 'cheap') return 'basis-pill--cheap';
+  return 'basis-pill--fair';
+}
+
+function richnessPillLabel(label) {
+  const k = String(label || '').toLowerCase();
+  if (k === 'rich') return 'Rich vs history';
+  if (k === 'cheap') return 'Cheap vs history';
+  if (k === 'fair') return 'Fair vs history';
+  return humanizeValue(label);
+}
+
+function resolveSizeCapLabel(cockpit, gate, health) {
+  if (gate?.blocked) return 'Blocked — no new risk';
+  if (gate?.tight || (health && health.score < TX_HEALTH_OPEN_THRESHOLD)) return 'Tight Risk cap: 0.5×';
+  const hint = cockpit?.directional?.size_hint;
+  if (hint === 'half') return 'Size cap: 0.5×';
+  if (hint === 'quarter') return 'Size cap: 0.25×';
+  return 'Size: desk policy';
+}
+
+function formatReadingValue(hz) {
+  if (!hz || hz.current_value == null) return '—';
+  const unit = String(hz.unit || '').toLowerCase();
+  const val = Number(hz.current_value);
+  if (!Number.isFinite(val)) return String(hz.current_value);
+  if (unit === 'pct' || unit === '%') return `${val}%`;
+  return `${val}${hz.unit ? ` ${hz.unit}` : ''}`;
+}
+
+function renderDiagnosticBlock(title, chipClass, chipLabel, interpretation, implication) {
+  return `<div class="cockpit-card diag-block">
+    <h4>${escapeHtml(title)}</h4>
+    <span class="diag-chip ${chipClass}">${escapeHtml(chipLabel)}</span>
+    <p class="diag-interpretation">${escapeHtml(interpretation)}</p>
+    <p class="diag-implication">${escapeHtml(implication)}</p>
+  </div>`;
+}
+
+function matchBasisDiagnosticKey(label) {
+  const text = String(label || '');
+  const hit = BASIS_COMPONENT_MATCHERS.find(m => m.re.test(text));
+  return hit ? hit.key : null;
+}
+
+function renderMissingDiagnostic(message) {
+  return `<div class="diag-row diag-row--muted">
+    <span class="diag-status">Unavailable</span>
+    <span class="diag-text">${escapeHtml(message)}</span>
+  </div>`;
+}
+
+function renderBasisSummaryRows(cockpit, hz, series, state, gate) {
+  const health = computeHealthScore(state);
+  const label = series?.label || 'Current reading';
+  const stance = hz?.richness_label || cockpit.rv_basis?.richness_label;
+  const quartile = hz?.quartile || '—';
+  const rv = cockpit.relative_value || {};
+  const expression = rv.posture ? humanizeValue(rv.posture) : '—';
+
+  el('basisReadingValue').textContent = formatReadingValue(hz);
+  el('basisReadingLabel').textContent = label;
+
+  const stanceRow = el('basisStanceRow');
+  if (stanceRow) {
+    stanceRow.innerHTML = hz
+      ? `<span class="basis-pill ${richnessPillClass(stance)}">${escapeHtml(richnessPillLabel(stance))}</span>
+         <span class="basis-meta">Q${quartile}</span>
+         <span class="basis-meta">${escapeHtml(formatOrdinalPercentile(hz.percentile))}</span>
+         <span class="basis-meta">n=${hz.n_observations ?? '—'}</span>`
+      : `<span class="basis-meta">${escapeHtml(cockpit.rv_basis?.quartile_context || 'Awaiting history')}</span>`;
+  }
+
+  const tradeRow = el('basisTradeRow');
+  if (tradeRow) {
+    tradeRow.innerHTML = `
+      <span class="basis-expression">Preferred expression: ${escapeHtml(expression)}</span>
+      <span class="basis-riskcap">${escapeHtml(resolveSizeCapLabel(cockpit, gate, health))}</span>`;
+  }
+}
+
+function buildSignalDiagnostics(cockpit, state, gate) {
+  const health = computeHealthScore(state);
+  const dir = cockpit.directional || {};
+  const rv = cockpit.relative_value || {};
+  const ff = cockpit.funds_flows || {};
+  const ffMeta = ff.flows_meta || {};
+  const gateNote = cockpit.gate_interaction?.note || '';
+  const gateSentence = buildNodeGateDecisionSentence(cockpit, state, gate);
+
+  const signalChip = humanizeValue(cockpit.band || '—');
+  const signalInterp = cockpit.key_observation || `${cockpit.display_name || 'Node'} composite ${cockpit.composite_score ?? '—'}.`;
+  const signalImpl = gate.blocked
+    ? 'Do not initiate new risk — observe and maintain.'
+    : gate.tight || health.score < TX_HEALTH_OPEN_THRESHOLD
+      ? 'Size new ideas at ≤ 0.5× until health and gate improve.'
+      : 'Eligible for desk-sized expression within gate policy.';
+
+  const dirChip = `${humanizeValue(dir.posture || '—')} · ${humanizeValue(dir.conviction || 'low')}`;
+  const dirInterp = dir.rationale || 'Directional read pending hydration or tracer confirm.';
+  const dirImpl = dir.blocked
+    ? (dir.block_reason || 'Directional blocked — RV or observe only.')
+    : dir.posture === 'no_trade'
+      ? 'Stay flat directionally; use RV sleeve if gate allows.'
+      : 'Use for bias context; size still follows gate cap.';
+
+  const rvChip = rv.posture ? humanizeValue(rv.posture) : 'Neutral';
+  const rvInterp = rv.rationale || rv.structure || 'Relative value context unavailable.';
+  const rvImpl = rv.blocked
+    ? (rv.block_reason || 'RV expression blocked.')
+    : cockpit.rv_basis?.richness_label
+      ? `${richnessPillLabel(cockpit.rv_basis.richness_label)} — expression follows preferred spread leg.`
+      : 'Confirm quartile read before sizing.';
+
+  const flowsStatus = ffMeta.flows_status || 'unavailable';
+  let flowsChip = humanizeValue(flowsStatus);
+  let flowsInterp;
+  let flowsImpl;
+  if (flowsStatus === 'unavailable' || !ff.enabled) {
+    flowsInterp = describeFlowsUpstreamGap(cockpit, state);
+    flowsImpl = buildFlowsImpactLine(cockpit);
+  } else if (flowsStatus === 'partial' || flowsStatus === 'fallback_1d') {
+    flowsInterp = describeFlowsUpstreamGap(cockpit, state);
+    flowsImpl = 'Sponsorship degraded — do not treat as neutral; cap size.';
+  } else {
+    const verdict = ff.aggregate?.verdict || 'mixed';
+    flowsInterp = ff.interpretation?.summary || `Flows ${verdict} — ${ff.aggregate?.positive_count ?? '—'}/${ff.aggregate?.total_count ?? '—'} ETFs positive.`;
+    flowsImpl = verdict === 'supportive'
+      ? 'Sponsorship confirms thesis — can add conviction within gate cap.'
+      : verdict === 'diverging'
+        ? 'Flows diverge from RV — reduce size or wait for alignment.'
+        : 'Flows neutral — RV history leads; sponsorship is non-confirming.';
+  }
+
+  const gateChip = gate.blocked ? 'Blocked' : gate.tight ? 'Tight Risk' : humanizeValue(gate.displayLabel || gate.label);
+  const gateImpl = gateNote
+    ? gateNote.replace(/size_hint/gi, 'size cap').replace(/_/g, ' ')
+    : 'Gate sizing follows transmission health and Whinfell score bands.';
+
+  return {
+    signal: renderDiagnosticBlock('Signal', 'diag-chip--signal', signalChip, signalInterp, signalImpl),
+    directional: renderDiagnosticBlock('Directional', dir.blocked ? 'diag-chip--block' : 'diag-chip--warn', dirChip, dirInterp, dirImpl),
+    relativeValue: renderDiagnosticBlock('Relative value', 'diag-chip--signal', rvChip, rvInterp, rvImpl),
+    flows: renderDiagnosticBlock('Funds Flow Sponsorship', flowsStatus === 'ok' ? 'diag-chip--ok' : 'diag-chip--warn', flowsChip, flowsInterp, flowsImpl),
+    gate: `<div class="cockpit-card diag-block">
+      <h4>Gate</h4>
+      <span class="diag-chip ${gate.blocked ? 'diag-chip--block' : gate.tight ? 'diag-chip--warn' : 'diag-chip--ok'}">${escapeHtml(gateChip)}</span>
+      <p class="gate-decision-sentence">${escapeHtml(gateSentence)}</p>
+      <p class="gate-implementation-note">${escapeHtml(gateImpl)}</p>
+    </div>`,
+  };
+}
+
+function renderComponentDiagnostics(cockpit, inputs) {
+  if (!inputs.length) return '';
+  if (cockpit.node_id !== 'basis') {
+    return inputs.map(c => `
+      <span class="cockpit-component-chip" title="weight ${c.weight ?? '—'}">
+        ${escapeHtml(c.label || c.asset_id || '')} <strong>${escapeHtml(humanizeValue(c.value))}</strong>${c.unit ? ' ' + escapeHtml(c.unit) : ''}
+        ${c.direction ? ` ${HORIZON_DISPLAY[c.direction] || ''}` : ''}
+      </span>`).join('');
+  }
+  return inputs.map(c => {
+    const val = String(c.value || '').toLowerCase();
+    if (val !== 'unavailable') {
+      return `<span class="cockpit-component-chip" title="weight ${c.weight ?? '—'}">
+        ${escapeHtml(c.label || '')} <strong>${escapeHtml(humanizeValue(c.value))}</strong>
+      </span>`;
+    }
+    const key = matchBasisDiagnosticKey(c.label);
+    const msg = (key && BASIS_MISSING_MESSAGES[key])
+      || `${c.label || 'Diagnostic'} unavailable — affects conviction.`;
+    return renderMissingDiagnostic(msg);
+  }).join('');
+}
+
+function basisValueToY(value, domain, pad, plotH) {
+  const [yMin, yMax] = domain;
+  const span = yMax - yMin || 1;
+  return pad.t + plotH - ((value - yMin) / span) * plotH;
+}
+
 const COVERAGE_NODE_KEYS = [
   ['credit', 'Credit'],
   ['breadth', 'Breadth'],
@@ -5688,7 +6101,7 @@ function renderCoverageChecklistHtml(items) {
   return items.map(item => {
     const mark = item.status === 'ok' ? '✓' : item.status === 'partial' ? '◐' : '✕';
     const cls = item.status === 'ok' ? 'coverage-check--ok' : item.status === 'partial' ? 'coverage-check--partial' : 'coverage-check--miss';
-    return `<span class="coverage-check ${cls}" title="${escapeHtml(item.label)} ${item.status}">${escapeHtml(item.label)} ${mark}</span>`;
+    return `<span class="coverage-pill ${cls}" title="${escapeHtml(item.label)} ${item.status}">${escapeHtml(item.label)} ${mark}</span>`;
   }).join('');
 }
 
@@ -5754,7 +6167,7 @@ function renderNodeCoverageBanner(cockpit, state) {
     </div>
     <p class="node-coverage-summary">${escapeHtml(summary)}</p>
     ${contextLines}
-    <div class="coverage-checklist" aria-label="Coverage checklist">${checklist}</div>`;
+    <div class="coverage-pill-grid" aria-label="Coverage checklist">${checklist}</div>`;
   banner.classList.remove('zone-hidden');
 
   if (shell) {
@@ -6142,38 +6555,20 @@ function renderCockpitDecisionRail(cockpit, state) {
   if (!rail) return;
   const domState = state || buildStateFromDOM();
   const derivedGate = deriveGate(domState);
-  const gateSentence = buildNodeGateDecisionSentence(cockpit, domState, derivedGate);
-  const dir = cockpit.directional || {};
-  const rv = cockpit.relative_value || {};
-  const gate = cockpit.gate_interaction || {};
-  const flowsBlock = renderFundsFlowSponsorshipCard(cockpit, { variant: 'rail' });
+  const blocks = buildSignalDiagnostics(cockpit, domState, derivedGate);
+  const flowsDetail = renderFundsFlowSponsorshipCard(cockpit, { variant: 'rail' });
+  const showFlowsDetail = (cockpit.funds_flows?.flows_meta?.flows_status === 'ok'
+    || cockpit.funds_flows?.flows_meta?.flows_status === 'partial');
   rail.innerHTML = `
-    <div class="cockpit-card">
-      <h4>Signal</h4>
-      <p class="cockpit-line"><strong>${escapeHtml(cockpit.band || '—')}</strong> · ${cockpit.composite_score ?? '—'} · ${escapeHtml(cockpit.confidence || '—')}</p>
-      <p class="cockpit-sub">${escapeHtml(cockpit.key_observation || '')}</p>
-    </div>
-    <div class="cockpit-card">
-      <h4>Directional</h4>
-      <p class="cockpit-line">${escapeHtml(dir.posture || '—')} · ${escapeHtml(dir.conviction || '—')}</p>
-      <p class="cockpit-sub">${escapeHtml(dir.rationale || '')}</p>
-      ${dir.blocked ? `<p class="cockpit-sub text-wtm-red">${escapeHtml(dir.block_reason || 'Blocked')}</p>` : ''}
-    </div>
-    <div class="cockpit-card">
-      <h4>Relative value</h4>
-      <p class="cockpit-line">${escapeHtml(rv.posture || '—')} · ${escapeHtml(rv.structure || '—')}</p>
-      <p class="cockpit-sub">${escapeHtml(rv.rationale || '')}</p>
-      ${cockpit.rv_basis?.quartile_context ? `<p class="cockpit-sub ${richnessClass(cockpit.rv_basis.richness_label)}">${escapeHtml(cockpit.rv_basis.quartile_context)}</p>` : ''}
-    </div>
-    ${flowsBlock}
-    <div class="cockpit-card">
-      <h4>Gate</h4>
-      <p class="gate-decision-sentence">${escapeHtml(gateSentence)}</p>
-      <p class="cockpit-sub">${escapeHtml(gate.note || '—')}</p>
-    </div>`;
+    ${blocks.signal}
+    ${blocks.directional}
+    ${blocks.relativeValue}
+    ${blocks.flows}
+    ${showFlowsDetail ? flowsDetail : ''}
+    ${blocks.gate}`;
 }
 
-function drawRvBasisChart(cockpit, canvas) {
+function drawRvBasisChart(cockpit, canvas, state) {
   if (!canvas || !canvas.getContext) return { drew: false, pointCount: 0 };
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
@@ -6195,27 +6590,76 @@ function drawRvBasisChart(cockpit, canvas) {
 
   const points = RV_HORIZONS.map(hzKey => {
     const hz = series.horizons?.[hzKey];
-    return hz ? { key: hzKey, value: Number(hz.current_value), percentile: Number(hz.percentile), quartile: hz.quartile } : null;
+    return hz ? { key: hzKey, value: Number(hz.current_value), percentile: Number(hz.percentile), quartile: hz.quartile, unit: hz.unit } : null;
   }).filter(Boolean);
 
   if (!points.length) return { drew: false, pointCount: 0 };
 
-  const pad = { l: 44, r: 16, t: 16, b: 36 };
+  const isBasis = cockpit.node_id === 'basis';
+  const pad = { l: isBasis ? 52 : 44, r: 16, t: 16, b: 36 };
   const plotW = w - pad.l - pad.r;
   const plotH = h - pad.t - pad.b;
   const vals = points.map(p => p.value);
-  const minV = Math.min(...vals);
-  const maxV = Math.max(...vals);
-  const span = maxV - minV || 1;
+  const refs = isBasis ? resolveBasisRefLines(state || buildStateFromDOM()) : {};
+  const refLineVals = [refs.low, refs.mid, refs.high].filter(v => Number.isFinite(v));
+  const domainSource = isBasis ? [...vals, 0, ...refLineVals] : vals;
+  const domain = isBasis ? getBasisDomain(domainSource) : [Math.min(...vals), Math.max(...vals)];
+  const [yMin, yMax] = domain;
+  const yBase = isBasis && yMin <= 0 && yMax >= 0 ? 0 : yMin;
   const barW = plotW / points.length;
+  const unitSuffix = String(points[0]?.unit || '').toLowerCase() === 'pct' ? '%' : '';
 
   ctx.strokeStyle = 'rgba(255,255,255,.08)';
+  ctx.lineWidth = 1;
   for (let i = 0; i <= 4; i++) {
-    const y = pad.t + (plotH * i) / 4;
+    const v = yMin + ((yMax - yMin) * i) / 4;
+    const y = basisValueToY(v, domain, pad, plotH);
     ctx.beginPath();
     ctx.moveTo(pad.l, y);
     ctx.lineTo(w - pad.r, y);
     ctx.stroke();
+    if (isBasis) {
+      ctx.fillStyle = '#8b9cb3';
+      ctx.font = '9px system-ui,sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`${v.toFixed(2)}${unitSuffix}`, pad.l - 6, y + 3);
+    }
+  }
+
+  if (isBasis && yMin <= 0 && yMax >= 0) {
+    const y0 = basisValueToY(0, domain, pad, plotH);
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(pad.l, y0);
+    ctx.lineTo(w - pad.r, y0);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  if (isBasis && Number.isFinite(refs.low) && Number.isFinite(refs.high) && refs.low < refs.high) {
+    const yLo = basisValueToY(refs.low, domain, pad, plotH);
+    const yHi = basisValueToY(refs.high, domain, pad, plotH);
+    ctx.fillStyle = 'rgba(214,168,95,0.08)';
+    ctx.fillRect(pad.l, Math.min(yLo, yHi), plotW, Math.abs(yHi - yLo));
+  }
+
+  if (isBasis) {
+    [
+      { v: refs.low, a: 0.20 },
+      { v: refs.mid, a: 0.32 },
+      { v: refs.high, a: 0.20 },
+    ].forEach(ref => {
+      if (!Number.isFinite(ref.v)) return;
+      const y = basisValueToY(ref.v, domain, pad, plotH);
+      ctx.strokeStyle = `rgba(214,168,95,${ref.a})`;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(pad.l, y);
+      ctx.lineTo(w - pad.r, y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
   }
 
   const activeIdx = points.findIndex(p => p.key === horizon);
@@ -6227,42 +6671,45 @@ function drawRvBasisChart(cockpit, canvas) {
   points.forEach((p, i) => {
     const x = pad.l + i * barW + barW * 0.15;
     const bw = barW * 0.7;
-    const norm = (p.value - minV) / span;
-    const bh = Math.max(4, norm * plotH);
-    const y = pad.t + plotH - bh;
+    const yTop = basisValueToY(p.value, domain, pad, plotH);
+    const yBot = basisValueToY(yBase, domain, pad, plotH);
     const q = p.quartile || 2;
     ctx.fillStyle = q >= 4 ? 'rgba(255,140,105,.85)' : q <= 1 ? 'rgba(79,179,122,.85)' : 'rgba(76,142,217,.75)';
-    ctx.fillRect(x, y, bw, bh);
+    ctx.fillRect(x, Math.min(yTop, yBot), bw, Math.max(4, Math.abs(yBot - yTop)));
     ctx.fillStyle = '#9eacbb';
     ctx.font = '10px system-ui,sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(RV_HORIZON_LABELS[p.key] || p.key, x + bw / 2, h - pad.b + 14);
   });
 
-  ctx.strokeStyle = 'rgba(214,163,74,.9)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  points.forEach((p, i) => {
-    const x = pad.l + i * barW + barW / 2;
-    const y = pad.t + plotH - ((p.percentile || 50) / 100) * plotH;
-    if (i === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  });
-  ctx.stroke();
-
-  points.forEach((p, i) => {
-    const x = pad.l + i * barW + barW / 2;
-    const y = pad.t + plotH - ((p.percentile || 50) / 100) * plotH;
-    ctx.fillStyle = '#d6a34a';
+  if (!isBasis) {
+    ctx.strokeStyle = 'rgba(214,163,74,.55)';
+    ctx.lineWidth = 1.25;
     ctx.beginPath();
-    ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fill();
-  });
+    points.forEach((p, i) => {
+      const x = pad.l + i * barW + barW / 2;
+      const y = pad.t + plotH - ((p.percentile || 50) / 100) * plotH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  } else {
+    points.forEach((p, i) => {
+      const x = pad.l + i * barW + barW / 2;
+      const pctY = pad.t + plotH - ((p.percentile || 50) / 100) * plotH * 0.35;
+      ctx.fillStyle = 'rgba(214,163,74,0.75)';
+      ctx.beginPath();
+      ctx.arc(x, pctY, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  }
 
   return { drew: true, pointCount: points.length };
 }
 
-function renderCockpitChart(cockpit) {
+function renderCockpitChart(cockpit, state) {
+  const domState = state || buildStateFromDOM();
+  const gate = deriveGate(domState);
   const horizon = cockpit.rv_basis?.active_horizon || appState.chart?.shared_horizon || '3m';
   const seriesMap = cockpit.rv_basis?.series || {};
   const seriesId = cockpit.rv_basis?.active_series_id || Object.keys(seriesMap)[0];
@@ -6274,20 +6721,14 @@ function renderCockpitChart(cockpit) {
 
   el('cockpitChartTitle').textContent = series?.label || `${row?.short || 'Node'} · RV / Basis`;
   el('cockpitChartSubtitle').textContent = series
-    ? `${series.quartile_direction || ''} · ${RV_HORIZON_LABELS[horizon] || horizon} lookback`
+    ? `${humanizeValue(series.quartile_direction || '')} · ${RV_HORIZON_LABELS[horizon] || horizon} lookback`
     : (cockpit.rv_basis?._fallback_mode ? 'RV quartiles require hydration — history not loaded' : 'No series populated');
 
+  renderBasisSummaryRows(cockpit, hz, series, domState, gate);
   if (hz) {
-    const unit = hz.unit || '';
-    el('cockpitChartValue').textContent = `${hz.current_value}${unit ? ' ' + unit : ''}`;
+    el('cockpitChartValue').textContent = formatReadingValue(hz);
     el('cockpitChartRichness').textContent = `${hz.richness_label || '—'} · Q${hz.quartile || '—'}`;
-    el('cockpitChartRichness').className = `text-[11px] font-semibold ${richnessClass(hz.richness_label)}`;
-    el('cockpitChartPct').textContent = `${hz.percentile ?? '—'}th percentile · n=${hz.n_observations ?? '—'}`;
-  } else {
-    el('cockpitChartValue').textContent = '—';
-    el('cockpitChartRichness').textContent = cockpit.rv_basis?.quartile_context || 'Awaiting history';
-    el('cockpitChartRichness').className = 'text-[11px] font-semibold text-wtm-muted';
-    el('cockpitChartPct').textContent = cockpit.composite_score_source === 'horizon_net_fallback' ? 'Tracer fallback score' : '—';
+    el('cockpitChartPct').textContent = `${formatOrdinalPercentile(hz.percentile)} · n=${hz.n_observations ?? '—'}`;
   }
 
   const session = assessHydrationSession(buildStateFromDOM());
@@ -6305,8 +6746,8 @@ function renderCockpitChart(cockpit) {
     unhydratedOverlay.classList.add('zone-hidden');
   }
 
-  const drawResult = drawRvBasisChart(cockpit, canvas);
-  if (placeholder) placeholder.style.opacity = drawResult.drew ? '0.35' : '1';
+  const drawResult = drawRvBasisChart(cockpit, canvas, domState);
+  if (placeholder) placeholder.style.opacity = drawResult.drew ? '0.92' : '1';
 
   const pills = el('cockpitHorizonPills');
   if (pills) {
@@ -6336,11 +6777,7 @@ function renderCockpitDetailBand(cockpit) {
     </div>`;
     return;
   }
-  band.innerHTML = `<div class="cockpit-component-strip">${inputs.map(c => `
-    <span class="cockpit-component-chip" title="weight ${c.weight ?? '—'}">
-      ${escapeHtml(c.label || c.asset_id || '')} <strong>${escapeHtml(String(c.value ?? '—'))}</strong>${c.unit ? ' ' + escapeHtml(c.unit) : ''}
-      ${c.direction ? ` ${HORIZON_DISPLAY[c.direction] || ''}` : ''}
-    </span>`).join('')}</div>`;
+  band.innerHTML = `<div class="cockpit-component-strip">${renderComponentDiagnostics(cockpit, inputs)}</div>`;
 }
 
 function toggleFocusMode(force) {
@@ -6484,7 +6921,7 @@ function renderNodeCockpitShell(state) {
     renderFocusLayer(cockpit, state);
     return;
   }
-  renderCockpitChart(cockpit);
+  renderCockpitChart(cockpit, state);
   renderCockpitDecisionRail(cockpit, state);
   renderCockpitDetailBand(cockpit);
 }

@@ -122,6 +122,8 @@ function makeSandbox() {
     fillText() {},
     arc() {},
     fill() {},
+    setLineDash() {},
+    lineWidth: 1,
   };
 
   return {
@@ -163,6 +165,7 @@ function seedCockpitDom(t) {
   const ids = [
     'nodeRail', 'cockpitShell', 'cockpitChartTitle', 'cockpitChartSubtitle',
     'cockpitHorizonPills', 'cockpitRvCanvas', 'cockpitChartPlaceholder',
+    'basisReadingValue', 'basisReadingLabel', 'basisStanceRow', 'basisTradeRow',
     'cockpitChartValue', 'cockpitChartRichness', 'cockpitChartPct',
     'cockpitDecisionRail', 'cockpitDetailBand', 'cockpitFocusLayer',
     'cockpitCompareLayer', 'btnHeresWhy', 'btnCompareMode', 'nodeCockpitZone',
