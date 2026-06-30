@@ -17,7 +17,7 @@ This is the **single shareable desk manual** for operators, advisors, and browse
 | **Wes** | Reviewer / stakeholder — no local setup | [§2 Desk preview (share link)](#2-desk-preview-share-link) |
 | **Comet** | Supervised browser CSV collection | [§4 Comet collection runbook](#4-comet-collection-runbook) |
 | **Perplexity** | Morning export + batch orchestration | [§5 Perplexity daily prompt](#5-perplexity-daily-prompt) |
-| **G-Quant** | CS + quant advisor — lineage, fields, gates | [§7 Data & quant reference](#7-data--quant-reference) |
+| **G-Quant** | CS + quant advisor — lineage, fields, gates, **SQ3 math** | [§7 Data & quant reference](#7-data--quant-reference) · [SQ3 Reference](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/08_Deliverables/Whinfell_SQ3_Reference_v1.0.md) |
 | **TempLibby** | Browser Grok operator assistant | [§8 Grok operator prompt](#8-grok-operator-prompt) |
 | **Clark** | Desk owner — full daily chain + publish | [§3 Clark daily workflow](#3-clark-daily-workflow) |
 
@@ -51,6 +51,8 @@ This is the **single shareable desk manual** for operators, advisors, and browse
 | WTM EXPORT v2.1 spec | [WTM_EXPORT_v2.1_SPEC.md](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/whinfell_pipeline/WTM_EXPORT_v2.1_SPEC.md) | [raw](https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/whinfell_pipeline/WTM_EXPORT_v2.1_SPEC.md) |
 | WTM EXPORT v2.2 spec | [WTM_EXPORT_v2.2_SPEC.md](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/whinfell_pipeline/WTM_EXPORT_v2.2_SPEC.md) | [raw](https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/whinfell_pipeline/WTM_EXPORT_v2.2_SPEC.md) |
 | Transmission Control (source) | [Whinfell_Transmission_Control.html](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/08_Deliverables/Whinfell_Transmission_Control.html) | — (use Pages desk URL above) |
+| **SQ3 reference (full)** | [Whinfell_SQ3_Reference_v1.0.md](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/08_Deliverables/Whinfell_SQ3_Reference_v1.0.md) | [raw](https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/08_Deliverables/Whinfell_SQ3_Reference_v1.0.md) |
+| SQ3 engine (Python) | [china_policy_track/sq3.py](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/china_policy_track/sq3.py) | [raw](https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/china_policy_track/sq3.py) |
 
 **Clark Mac local paths** (not web links): project root `~/Desktop/Whinfell_BUILD_Cousins/`, CSV drop `~/Downloads/whinfell_drop/`.
 
@@ -89,6 +91,28 @@ This is the **single shareable desk manual** for operators, advisors, and browse
 | ≥ 65 | Allowed | Full access subject to health | Selective → full |
 
 **China SQ3 &lt; 50** flags dual-track impairment — gate chip shows **China Caution** on all nodes.
+
+### SQ3 at a glance
+
+**SQ3** = China Policy Transmission Score (0–100), separate from Global Whinfell Score.
+
+```
+SQ3 = Policy STR. (35%) + State IMP. (35%) + Growth IMP. (30%)
+```
+
+| Input | Range | Notes |
+|-------|-------|-------|
+| Policy Strength | 0–100 | Force of policy hierarchy |
+| State Impulse | −100 … +100 | **+ = more state control** (inverted in formula) |
+| Growth Impulse | 0–100 | Growth / market liquidity impulse |
+
+| SQ3 | Band | Gate impact |
+|-----|------|-------------|
+| &lt; 50 | Impaired | **China Caution** on all mission nodes |
+| 50–64 | Mixed / Fragile | Monitor; client-sized BTC/basis |
+| ≥ 65 | Constructive+ | Dual-track alignment possible |
+
+**Full math, worked examples, China ladder handicap, and unique edge:** [Whinfell_SQ3_Reference_v1.0.md](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/08_Deliverables/Whinfell_SQ3_Reference_v1.0.md)
 
 ---
 
@@ -341,7 +365,8 @@ Standalone file: [hydration_log.json](https://clark-cmyk.github.io/Whinfell_BUIL
 
 ## 7. Data & quant reference
 
-**For G-Quant (CS + quant advisor).**
+**For G-Quant (CS + quant advisor).**  
+**SQ3 deep dive:** [Whinfell_SQ3_Reference_v1.0.md](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/08_Deliverables/Whinfell_SQ3_Reference_v1.0.md) (calculation, bands, dual-track gate, unique edge).
 
 ### Hydration bundle schema (v1.2.0)
 
