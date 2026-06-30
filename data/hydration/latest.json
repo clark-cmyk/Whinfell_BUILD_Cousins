@@ -3,9 +3,9 @@
   "pipeline_version": "1.0.0",
   "bundle_version": "1.0.0",
   "snapshot_id": "global-2026-06-30-raw2wtm-01",
-  "lineage_hash": "sha256:62066f68677ac24da870473d3a00de8762b402fe40d36b524b8069dbb47f633c",
+  "lineage_hash": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
   "validation_status": "parsed",
-  "as_of": "2026-06-30T17:09:57+00:00",
+  "as_of": "2026-06-30T18:20:01+00:00",
   "source": "parquet_hydration",
   "freshness_status": "fresh",
   "global": {
@@ -33,7 +33,7 @@
     "sq3_band": "Impaired",
     "regime_tag": "desk-auto",
     "observation_id": "china-2026-06-30-raw2wtm-01",
-    "as_of": "2026-06-30T17:09:56+00:00",
+    "as_of": "2026-06-30T18:20:00+00:00",
     "source": "manual"
   },
   "china_ladder": {
@@ -73,7 +73,7 @@
   },
   "crypto_sleeve": {
     "version": "1.0.0",
-    "as_of": "2026-06-30T17:09:57.058503+00:00",
+    "as_of": "2026-06-30T18:20:01.081146+00:00",
     "assets": {
       "xrp_spot_usd": {
         "ticker": "XRPUSD",
@@ -266,7 +266,7 @@
     },
     "correlation_series": {},
     "snapshot": {
-      "as_of": "2026-06-30T17:09:56.611513+00:00",
+      "as_of": "2026-06-30T18:20:00.605241+00:00",
       "source_file": "credit_20260630_1149.csv",
       "tickers_found": [
         "BTCUSD",
@@ -332,7 +332,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T17:09:57+00:00",
+      "as_of": "2026-06-30T18:20:01+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "flat",
@@ -358,7 +358,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -369,7 +369,7 @@
           "weight": 0.25,
           "contribution": 25.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -380,7 +380,7 @@
           "weight": 0.2,
           "contribution": 5.0,
           "direction": "flat",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         },
         {
@@ -391,7 +391,7 @@
           "weight": 0.15,
           "contribution": 3.75,
           "direction": "flat",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         },
         {
@@ -402,7 +402,7 @@
           "weight": 0.1,
           "contribution": 2.5,
           "direction": "flat",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         }
       ],
@@ -701,7 +701,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T17:09:57+00:00",
+      "as_of": "2026-06-30T18:20:01+00:00",
       "horizon_marks": {
         "d1": "up",
         "d5": "flat",
@@ -1014,7 +1014,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T17:09:57+00:00",
+      "as_of": "2026-06-30T18:20:01+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "up",
@@ -1040,7 +1040,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1051,7 +1051,7 @@
           "weight": 0.25,
           "contribution": 12.5,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         },
         {
@@ -1062,7 +1062,7 @@
           "weight": 0.2,
           "contribution": -20.0,
           "direction": "down",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1073,7 +1073,7 @@
           "weight": 0.15,
           "contribution": 7.5,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         },
         {
@@ -1084,7 +1084,7 @@
           "weight": 0.1,
           "contribution": 5.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         }
       ],
@@ -1383,7 +1383,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T17:09:57+00:00",
+      "as_of": "2026-06-30T18:20:01+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "flat",
@@ -1409,7 +1409,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1420,7 +1420,7 @@
           "weight": 0.25,
           "contribution": 25.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1431,7 +1431,7 @@
           "weight": 0.2,
           "contribution": -20.0,
           "direction": "down",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1442,7 +1442,7 @@
           "weight": 0.15,
           "contribution": -15.0,
           "direction": "down",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1453,7 +1453,7 @@
           "weight": 0.1,
           "contribution": 2.5,
           "direction": "flat",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "horizon_fallback"
         }
       ],
@@ -1757,7 +1757,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T17:09:57+00:00",
+      "as_of": "2026-06-30T18:20:01+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "flat",
@@ -1783,7 +1783,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1794,7 +1794,7 @@
           "weight": 0.25,
           "contribution": 25.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1805,7 +1805,7 @@
           "weight": 0.2,
           "contribution": 20.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1816,7 +1816,7 @@
           "weight": 0.15,
           "contribution": 15.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         },
         {
@@ -1827,7 +1827,7 @@
           "weight": 0.1,
           "contribution": 10.0,
           "direction": "up",
-          "as_of": "2026-06-30T17:09:57+00:00",
+          "as_of": "2026-06-30T18:20:01+00:00",
           "source": "rv_history"
         }
       ],
@@ -2129,8 +2129,8 @@
     "gate_zone": "green",
     "whinfell_score": 80
   },
-  "wtm_export_v21": "--- WTM EXPORT v2.1 ---\nWhinfell Score: 80\nTransmission State: Normal\nRegime Tag: Confirmed Risk-On\nKey Observation: HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-30T17:09:57\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-30-raw2wtm-01\nLineage Hash: sha256:62066f68677ac24da870473d3a00de8762b402fe40d36b524b8069dbb47f633c\nValidation Status: parsed\nData As Of: 2026-06-30T17:09:57Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.",
-  "wtm_export_v22": "--- WTM EXPORT v2.2 ---\nWhinfell Score: 80\nTransmission State: Normal\nRegime Tag: Confirmed Risk-On\nKey Observation: HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-30T17:09:57\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-30-raw2wtm-01\nLineage Hash: sha256:62066f68677ac24da870473d3a00de8762b402fe40d36b524b8069dbb47f633c\nValidation Status: parsed\nData As Of: 2026-06-30T17:09:57Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.\n\n--- NODE COCKPIT: Liquidity & Rates ---\nNode ID: liquidity\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Liquidity & Rates mixed marks \u2014 prefer RV or reduced size. IEF 5D inflows confirm constructive liquidity transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 2s10s curve trade / SOFR spread (low)\nSelected Implementation: \u2014\nRV Series: usgg2y10y\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China liquidity & rates stage horizon_net -1 (informational)\nKey Observation: Liquidity & Rates horizon_net +0 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IEF 5D inflows confirm constructive liquidity transmission.\n\n--- NODE COCKPIT: Credit Confirmation ---\nNode ID: credit\nComposite Score: 75\nComposite Score Source: horizon_net_fallback\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 2\nHorizon Marks: d1\u2191 d5\u2192 d20\u2191 d60\u2192\nDirectional: long (medium) \u2014 Credit Confirmation horizons confirming risk-on transmission. HYG 5D inflows confirm constructive credit confirmation transmission. (Flows: supportive.)\nRelative Value: long_spread \u2014 HYG vs LQD (or HY\u2212IG OAS proxy) (medium)\nSelected Implementation: \u2014\nRV Series: hy_oas_proxy\nRV Direction: higher_is_cheaper\nRV Horizon: 3m\nRV Quartile: Q4\nRV Percentile: 90.5\nRV Richness: cheap\nChina Parallel: present \u2014 horizon_net -3\nChina Parallel Note: China credit confirmation stage horizon_net -3 (informational)\nKey Observation: Credit Confirmation horizon_net +2 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.06% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: HYG 5D inflows confirm constructive credit confirmation transmission.\n\n--- NODE COCKPIT: Equity Breadth ---\nNode ID: breadth\nComposite Score: 85\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 2\nHorizon Marks: d1\u2192 d5\u2191 d20\u2191 d60\u2192\nDirectional: long (medium) \u2014 Equity Breadth horizons confirming risk-on transmission. IWM 5D inflows confirm constructive equity breadth transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IWM/SPY participation pair (low)\nSelected Implementation: \u2014\nRV Series: iwm_spy_ratio\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net 1\nChina Parallel Note: China equity breadth stage horizon_net +1 (informational)\nKey Observation: Equity Breadth horizon_net +2 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IWM 5D inflows confirm constructive equity breadth transmission.\n\n--- NODE COCKPIT: High-Beta / BTC ---\nNode ID: highbeta\nComposite Score: 72\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 High-Beta / BTC mixed marks \u2014 prefer RV or reduced size. IBIT 5D inflows confirm constructive high-beta / btc transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IBIT vs QQQ beta spread (low)\nSelected Implementation: \u2014\nRV Series: ibit_qqq_beta_spread\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 38.1\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China high-beta / china cyclical transmission stage horizon_net -1 (informational)\nKey Observation: BTC bias Neutral; horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IBIT 5D inflows confirm constructive high-beta / btc transmission.\n\n--- NODE COCKPIT: Basis & Term Structure ---\nNode ID: basis\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Basis & Term Structure mixed marks \u2014 prefer RV or reduced size.\nRelative Value: short_spread \u2014 BT near vs deferred calendar (medium)\nSelected Implementation: \u2014\nRV Series: btc_calendar_bt_near_deferred\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q3\nRV Percentile: 57.1\nRV Richness: rich\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China basis & term structure stage horizon_net -1 (informational)\nKey Observation: Calendar at 58620.00% (Jul/Back); horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: mixed\nFunds Flow 1D: +0.08% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 3/3\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: Mixed allocator sponsorship across IBIT basket.",
+  "wtm_export_v21": "--- WTM EXPORT v2.1 ---\nWhinfell Score: 80\nTransmission State: Normal\nRegime Tag: Confirmed Risk-On\nKey Observation: HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-30T18:20:01\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-30-raw2wtm-01\nLineage Hash: sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed\nValidation Status: parsed\nData As Of: 2026-06-30T18:20:01Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.",
+  "wtm_export_v22": "--- WTM EXPORT v2.2 ---\nWhinfell Score: 80\nTransmission State: Normal\nRegime Tag: Confirmed Risk-On\nKey Observation: HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-30T18:20:01\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-30-raw2wtm-01\nLineage Hash: sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed\nValidation Status: parsed\nData As Of: 2026-06-30T18:20:01Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.\n\n--- NODE COCKPIT: Liquidity & Rates ---\nNode ID: liquidity\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Liquidity & Rates mixed marks \u2014 prefer RV or reduced size. IEF 5D inflows confirm constructive liquidity transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 2s10s curve trade / SOFR spread (low)\nSelected Implementation: \u2014\nRV Series: usgg2y10y\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China liquidity & rates stage horizon_net -1 (informational)\nKey Observation: Liquidity & Rates horizon_net +0 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IEF 5D inflows confirm constructive liquidity transmission.\n\n--- NODE COCKPIT: Credit Confirmation ---\nNode ID: credit\nComposite Score: 75\nComposite Score Source: horizon_net_fallback\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 2\nHorizon Marks: d1\u2191 d5\u2192 d20\u2191 d60\u2192\nDirectional: long (medium) \u2014 Credit Confirmation horizons confirming risk-on transmission. HYG 5D inflows confirm constructive credit confirmation transmission. (Flows: supportive.)\nRelative Value: long_spread \u2014 HYG vs LQD (or HY\u2212IG OAS proxy) (medium)\nSelected Implementation: \u2014\nRV Series: hy_oas_proxy\nRV Direction: higher_is_cheaper\nRV Horizon: 3m\nRV Quartile: Q4\nRV Percentile: 90.5\nRV Richness: cheap\nChina Parallel: present \u2014 horizon_net -3\nChina Parallel Note: China credit confirmation stage horizon_net -3 (informational)\nKey Observation: Credit Confirmation horizon_net +2 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.06% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: HYG 5D inflows confirm constructive credit confirmation transmission.\n\n--- NODE COCKPIT: Equity Breadth ---\nNode ID: breadth\nComposite Score: 85\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 2\nHorizon Marks: d1\u2192 d5\u2191 d20\u2191 d60\u2192\nDirectional: long (medium) \u2014 Equity Breadth horizons confirming risk-on transmission. IWM 5D inflows confirm constructive equity breadth transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IWM/SPY participation pair (low)\nSelected Implementation: \u2014\nRV Series: iwm_spy_ratio\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net 1\nChina Parallel Note: China equity breadth stage horizon_net +1 (informational)\nKey Observation: Equity Breadth horizon_net +2 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IWM 5D inflows confirm constructive equity breadth transmission.\n\n--- NODE COCKPIT: High-Beta / BTC ---\nNode ID: highbeta\nComposite Score: 72\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 High-Beta / BTC mixed marks \u2014 prefer RV or reduced size. IBIT 5D inflows confirm constructive high-beta / btc transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IBIT vs QQQ beta spread (low)\nSelected Implementation: \u2014\nRV Series: ibit_qqq_beta_spread\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 38.1\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China high-beta / china cyclical transmission stage horizon_net -1 (informational)\nKey Observation: BTC bias Neutral; horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IBIT 5D inflows confirm constructive high-beta / btc transmission.\n\n--- NODE COCKPIT: Basis & Term Structure ---\nNode ID: basis\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Basis & Term Structure mixed marks \u2014 prefer RV or reduced size.\nRelative Value: short_spread \u2014 BT near vs deferred calendar (medium)\nSelected Implementation: \u2014\nRV Series: btc_calendar_bt_near_deferred\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q3\nRV Percentile: 57.1\nRV Richness: rich\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China basis & term structure stage horizon_net -1 (informational)\nKey Observation: Calendar at 58620.00% (Jul/Back); horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: mixed\nFunds Flow 1D: +0.08% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 3/3\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: Mixed allocator sponsorship across IBIT basket.",
   "warnings": [],
   "flows_health": {
     "status": "ok",
@@ -2281,7 +2281,7 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.691070+00:00",
+        "staged_at": "2026-06-30T18:20:00.662620+00:00",
         "sha256": "83d52da2c11d37d97f45f2029cb3842b798636db9051703236ca052c0056c226"
       },
       {
@@ -2307,7 +2307,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.511278+00:00",
+        "staged_at": "2026-06-30T18:20:00.505890+00:00",
         "sha256": "ef309356ef7dc517657ce22a5d5ffa035a990c2fb4a6c8dbcf8ede8e8a5ff512"
       },
       {
@@ -2365,8 +2365,8 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.909394+00:00",
-        "sha256": "b533b8070719c41fecdaf39a137faba385b1f800d9f7bac5d5bf03ce5f56164b"
+        "staged_at": "2026-06-30T18:20:00.907324+00:00",
+        "sha256": "5f776fba3a2b1b175638b677ae59cd5b8e050e1e222c875169b80a5e76dd40fb"
       },
       {
         "filename": "futures_intraday_20260628_2322.csv",
@@ -2381,8 +2381,8 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.911433+00:00",
-        "sha256": "498ce23382c147aa75d421363344738d6cfe3f9d62bccb5af6711688be29923e"
+        "staged_at": "2026-06-30T18:20:00.911086+00:00",
+        "sha256": "db860c152399567fa07168e3aa8ca5b07016b96985b7c23c63e094abda3c97ff"
       },
       {
         "filename": "futures_intraday_20260629_0041.csv",
@@ -2397,8 +2397,8 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.913445+00:00",
-        "sha256": "068e982da726b7a1e124501e6b168a7fa255109c90383d7f8c9d0af4b86a4330"
+        "staged_at": "2026-06-30T18:20:00.914699+00:00",
+        "sha256": "c2fdce762722249527ebd1669b6f448b6b1fe7f0cd062a4ff1dc9e4fc166adb9"
       },
       {
         "filename": "futures_intraday_20260629_0948.csv",
@@ -2413,8 +2413,8 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.915240+00:00",
-        "sha256": "205f6d9117399e5128d71b9e8a9e4b1cf762e05f3c365f9c7ed03dc06c43fa83"
+        "staged_at": "2026-06-30T18:20:00.917700+00:00",
+        "sha256": "f850903a872df8d1287d37929e0a8448579ae944835ee1fdb9f59521354dde27"
       },
       {
         "filename": "futures_intraday_20260630_0529.csv",
@@ -2429,8 +2429,8 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.917376+00:00",
-        "sha256": "0535819954d0fdbcdb031866afa0c9aef34d9d1b7def6c89b8a90e3135eaee0d"
+        "staged_at": "2026-06-30T18:20:00.920289+00:00",
+        "sha256": "ea8c948a8d29454842f5042805ecd973ded5d745f30dc616dd47b18db21261a0"
       },
       {
         "filename": "futures_intraday_20260630_0533.csv",
@@ -2442,8 +2442,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.918643+00:00",
-        "sha256": "0801e49e2ebd98aaafe814d40c1c8c358be8a450ed6f8b4c12c4e7c60d6ec505"
+        "staged_at": "2026-06-30T18:20:00.922758+00:00",
+        "sha256": "f769f8d27702156a424d704999a4976dc46e27d09e57f370486754ced36ae624"
       },
       {
         "filename": "futures_intraday_20260630_0556.csv",
@@ -2455,8 +2455,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.920126+00:00",
-        "sha256": "f6f980711ba42dfee04bf6a956877adeb39980d3536fba8c67b4e8f7827d5758"
+        "staged_at": "2026-06-30T18:20:00.925586+00:00",
+        "sha256": "fb3e1508602f0e64eadcf62b268ed3834d9f44b36fcda2c3abd459f232bc4ab5"
       },
       {
         "filename": "futures_intraday_20260630_0947.csv",
@@ -2468,8 +2468,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.921387+00:00",
-        "sha256": "5cfd89fcccb16459df42a78abde3b8b582b99783fc6b1493e9e63a96283502ce"
+        "staged_at": "2026-06-30T18:20:00.927680+00:00",
+        "sha256": "824978dde4ead14464eb30edc899f4b9cbf3aacb74fb91156f7bdd49d87aa5aa"
       },
       {
         "filename": "futures_intraday_20260630_1206.csv",
@@ -2484,8 +2484,8 @@
         "vendor": "barchart",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.923326+00:00",
-        "sha256": "dfe271ddca576667e8d0864e0799e4123e13602b2f58b737c34463d438806d5b"
+        "staged_at": "2026-06-30T18:20:00.929935+00:00",
+        "sha256": "7f9fa73ed14d3ac1c9be3ef221e0f5ba5ff25863103164c33e3e496ed31a00b2"
       },
       {
         "filename": "greeks_20260628_1016.csv",
@@ -2510,7 +2510,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.929570+00:00",
+        "staged_at": "2026-06-30T18:20:00.937299+00:00",
         "sha256": "03393142c18e0e380eea1ced27cf795a125050d41a861909986112d5acb61caa"
       },
       {
@@ -2523,7 +2523,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.931300+00:00",
+        "staged_at": "2026-06-30T18:20:00.939315+00:00",
         "sha256": "7020b0dfd882fb78a963ad61aff1e79993df73db1fdabde7405d62b5b1199d0b"
       },
       {
@@ -2536,7 +2536,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.933000+00:00",
+        "staged_at": "2026-06-30T18:20:00.941285+00:00",
         "sha256": "6f5de7e5425739e771a11d83bbbbd7a387bdbfad1746aa5b49223f467477a9e1"
       },
       {
@@ -2549,7 +2549,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.934816+00:00",
+        "staged_at": "2026-06-30T18:20:00.943350+00:00",
         "sha256": "6aa3e90dccb0d48b1c3113bd401c6ae9e0f952de0b90d6c1b02afdb9c38f65ee"
       },
       {
@@ -2562,7 +2562,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.936448+00:00",
+        "staged_at": "2026-06-30T18:20:00.945316+00:00",
         "sha256": "4125f2d58e6c5828a0d4a99384dadf432e0bfdc973b8db979f871c1b2f0be5e6"
       },
       {
@@ -2575,7 +2575,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.937965+00:00",
+        "staged_at": "2026-06-30T18:20:00.946809+00:00",
         "sha256": "25df75daebb167c24476317e4078549725c5bbdfa34efd7f6d4357ff3ff09f05"
       },
       {
@@ -2588,7 +2588,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.939369+00:00",
+        "staged_at": "2026-06-30T18:20:00.948929+00:00",
         "sha256": "5a885b099e5d75f60f622179025ca14ff1a306abc9156c46489afc9d758ba1dc"
       },
       {
@@ -2601,7 +2601,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.940997+00:00",
+        "staged_at": "2026-06-30T18:20:00.950610+00:00",
         "sha256": "6a7a077a24d09ed8b012decf9fa1307456664acd4abe603995f45947439af97f"
       },
       {
@@ -2614,7 +2614,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.942402+00:00",
+        "staged_at": "2026-06-30T18:20:00.952010+00:00",
         "sha256": "04ae649f42f9cceb87bc7f4e93dab8055f80b4cb85aa914b8308f1e8bdf74463"
       },
       {
@@ -2627,7 +2627,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.943602+00:00",
+        "staged_at": "2026-06-30T18:20:00.954327+00:00",
         "sha256": "ca53900e5c49bf06a8e7873f69f502497c4e5d9df5ca960f8ed50bbd78b44651"
       },
       {
@@ -2640,7 +2640,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.945142+00:00",
+        "staged_at": "2026-06-30T18:20:00.955994+00:00",
         "sha256": "560d1f4557021ff2b3321d1b03e5f24c0db4af1225b5527877de990aa90bde57"
       },
       {
@@ -2653,7 +2653,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.946515+00:00",
+        "staged_at": "2026-06-30T18:20:00.957572+00:00",
         "sha256": "0d0be1f91ee27f436e7743a73c3675114be90b3d74fde3420e238838be95ea43"
       },
       {
@@ -2666,7 +2666,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.947426+00:00",
+        "staged_at": "2026-06-30T18:20:00.958625+00:00",
         "sha256": "f3bbf44aabec579d053f0091b65f8526a1606270b78b4c978facc8296859ebb5"
       },
       {
@@ -2679,7 +2679,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.949014+00:00",
+        "staged_at": "2026-06-30T18:20:00.960672+00:00",
         "sha256": "1c31272c7d45da4902afea2365c82288c5064ca0bb04e0154775908aa40c6759"
       },
       {
@@ -2692,7 +2692,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.950642+00:00",
+        "staged_at": "2026-06-30T18:20:00.962215+00:00",
         "sha256": "cb4c6c5539060cd7c6b09f0bb3d3e2e2a200eed1536ca036556f9d7e5719ff48"
       },
       {
@@ -2705,7 +2705,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.952153+00:00",
+        "staged_at": "2026-06-30T18:20:00.963692+00:00",
         "sha256": "fd1928c087a7100f313b1b5f7bde5667bd7f5f9708b31d0531bd0038ef2a3b25"
       },
       {
@@ -2718,7 +2718,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.953815+00:00",
+        "staged_at": "2026-06-30T18:20:00.965347+00:00",
         "sha256": "95292dc58d5f0423e4e97682b350b5e88abbf3084ca0985961dbe12ba9c42677"
       },
       {
@@ -2731,7 +2731,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.955307+00:00",
+        "staged_at": "2026-06-30T18:20:00.966832+00:00",
         "sha256": "17f3a8609270fd7a0162d580054da35eeb4fd8722696d7923275bf7c2cc4173e"
       },
       {
@@ -2744,7 +2744,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.956401+00:00",
+        "staged_at": "2026-06-30T18:20:00.968349+00:00",
         "sha256": "8f6de768a2082a5e38fa74d15f39628e9d2cb49e3153db7c52584f475dad1961"
       },
       {
@@ -2770,7 +2770,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.976200+00:00",
+        "staged_at": "2026-06-30T18:20:00.992246+00:00",
         "sha256": "af25717dc1e08d8dc0bd6a92d8e7ebeecb5243fb152ce906a6d854a7696c858c"
       },
       {
@@ -2783,7 +2783,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.977410+00:00",
+        "staged_at": "2026-06-30T18:20:00.993702+00:00",
         "sha256": "0b1d51673f4855c717ee749fa1e340a585f469ade4c305e8989d0b6a31c08946"
       },
       {
@@ -2796,7 +2796,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.978819+00:00",
+        "staged_at": "2026-06-30T18:20:00.995246+00:00",
         "sha256": "58350b361522c14687d58a3b578c0ce4f34e975424990e6726d02859bf500ee1"
       },
       {
@@ -2809,7 +2809,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.980375+00:00",
+        "staged_at": "2026-06-30T18:20:00.996596+00:00",
         "sha256": "5d60268e28b895df8f8b44209b7f2bd0bcc650a4b8378ba7ed0cf2f7d0547cc3"
       },
       {
@@ -2822,7 +2822,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.981679+00:00",
+        "staged_at": "2026-06-30T18:20:00.998076+00:00",
         "sha256": "c15c1af230aa30197967371f16687ee1271ca4f4f0ffc2194866bcf6abb41180"
       },
       {
@@ -2835,7 +2835,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.983000+00:00",
+        "staged_at": "2026-06-30T18:20:00.999465+00:00",
         "sha256": "d5f2ea4057fd96becb8f53ad8cba8c936d721bfbe82e0cd84b63dd171c766889"
       },
       {
@@ -2848,7 +2848,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.984338+00:00",
+        "staged_at": "2026-06-30T18:20:01.000916+00:00",
         "sha256": "362f5252f3c4da284a1d91b3635d40edc591955728cee1d67a36f8532bf08249"
       },
       {
@@ -2861,7 +2861,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.985961+00:00",
+        "staged_at": "2026-06-30T18:20:01.002429+00:00",
         "sha256": "ce4205ec792df99f880b2aa39ef0faac74f026ceea70cf351af735b2a82bb680"
       },
       {
@@ -2874,7 +2874,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.987236+00:00",
+        "staged_at": "2026-06-30T18:20:01.003741+00:00",
         "sha256": "904dc05923ae3a9b34265a7b8d6ea5e3e68d4ba53d3cb96b97810827f272ab4c"
       },
       {
@@ -2887,7 +2887,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.988529+00:00",
+        "staged_at": "2026-06-30T18:20:01.004972+00:00",
         "sha256": "a43f63af43092b6092105929902f5b801a4816c44d65cae2d8b51d87befc38ac"
       },
       {
@@ -2900,7 +2900,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.989614+00:00",
+        "staged_at": "2026-06-30T18:20:01.006402+00:00",
         "sha256": "7a9eabc726cb56faa3dacd1da45454235b56f64d48d050ea41a1fbacbb027305"
       },
       {
@@ -2913,7 +2913,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.991143+00:00",
+        "staged_at": "2026-06-30T18:20:01.007948+00:00",
         "sha256": "08bdb26f2cc4d409e9f968edf3a444dfeaeaf321864e8a32bf5831491b0052a0"
       },
       {
@@ -2926,7 +2926,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.992195+00:00",
+        "staged_at": "2026-06-30T18:20:01.009181+00:00",
         "sha256": "1fd6f19c93cfdddcb57ba4bf3d0d016ea91684fd0f51dfe1e4fc1867600f149c"
       },
       {
@@ -2939,7 +2939,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.993228+00:00",
+        "staged_at": "2026-06-30T18:20:01.010407+00:00",
         "sha256": "5a9e01800315e249e264919f741866ddbd35bce0e750542a8e2ad8e643a1599e"
       },
       {
@@ -2952,7 +2952,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.994255+00:00",
+        "staged_at": "2026-06-30T18:20:01.011651+00:00",
         "sha256": "d4496b2196d2905afe90ed78637a0cf6e7cab20dc19929e8823d3e798182fa95"
       },
       {
@@ -2965,7 +2965,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.995737+00:00",
+        "staged_at": "2026-06-30T18:20:01.012979+00:00",
         "sha256": "d035180ff2e350052f6196ecac56c09c5bbca7725f00128a83f6012df5472619"
       },
       {
@@ -2978,7 +2978,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.996945+00:00",
+        "staged_at": "2026-06-30T18:20:01.014257+00:00",
         "sha256": "39906d6255c1b045c239aa0f85be5b49842b479f63dc1aa3c9759d311ac36f92"
       },
       {
@@ -2991,7 +2991,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.998119+00:00",
+        "staged_at": "2026-06-30T18:20:01.015541+00:00",
         "sha256": "f15f853d643292b17a8828fbd5bd778651f631a930204bdfb52cfb628cf16a45"
       },
       {
@@ -3004,7 +3004,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.999152+00:00",
+        "staged_at": "2026-06-30T18:20:01.017215+00:00",
         "sha256": "1386e4d659be33edff52535edb0c3128935df994b0afc0d5e21c4fcec65aa2cb"
       },
       {
@@ -3017,7 +3017,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.000087+00:00",
+        "staged_at": "2026-06-30T18:20:01.018422+00:00",
         "sha256": "ff7bf9b80da4f1f759ca3c71bda9ede355f0b0bfec5c155d46ef7fb887e73aff"
       },
       {
@@ -3062,8 +3062,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.533776+00:00",
-        "sha256": "053210022ec006faca663220a4374dae4cd1ee6276d25aaa43b4767905518b32"
+        "staged_at": "2026-06-30T18:20:00.526785+00:00",
+        "sha256": "14a1e8fca57fe9126a7ecea2b7fb3202495ec222a1dfc3afa4b13e4dad557ec1"
       },
       {
         "filename": "credit_20260629_0917.csv",
@@ -3075,8 +3075,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.538798+00:00",
-        "sha256": "2b2e97b94fa31d3462b661c734e0910ac19a810bd534a3085eaad2628ff67a19"
+        "staged_at": "2026-06-30T18:20:00.531395+00:00",
+        "sha256": "78754da618aa43ac78d593c5b4b86721f506fabf2d4f67c9e8b3477b3253d444"
       },
       {
         "filename": "credit_20260629_0923.csv",
@@ -3088,8 +3088,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.545044+00:00",
-        "sha256": "4edbc0a414aa9c8066711263068f6c7f203a34a17e2e1c7157ae848130dea1cc"
+        "staged_at": "2026-06-30T18:20:00.536986+00:00",
+        "sha256": "f28454e22c01c188f3f5921b1292d6299615a0f092f04cd26f7b9e783441aa77"
       },
       {
         "filename": "credit_20260629_0924.csv",
@@ -3101,8 +3101,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.549181+00:00",
-        "sha256": "11c2ae8ae0d59302137793fc5d99e681ee3a1c09d57bd19bbd891e6bd80dfccd"
+        "staged_at": "2026-06-30T18:20:00.541148+00:00",
+        "sha256": "07a2f6ac5c161efce54e171656ef254ca7ecffb7515f1444954a1f044ed06c36"
       },
       {
         "filename": "credit_20260629_0929.csv",
@@ -3117,8 +3117,8 @@
         "vendor": "koyfin",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.554755+00:00",
-        "sha256": "f7feab92e9ad5adfc0483dbec27086ef2470b01b1b94e4daf12cc519a9b19566"
+        "staged_at": "2026-06-30T18:20:00.546669+00:00",
+        "sha256": "1458fd386f50061d9af7da7f8758650a52adacb6ca59b51f05dccdca37489de8"
       },
       {
         "filename": "credit_20260630_0943.csv",
@@ -3133,8 +3133,8 @@
         "vendor": "koyfin",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.577330+00:00",
-        "sha256": "a2cb26566321918dec843a689e630897bafedb29f36946d35f7b66dba2c5dad3"
+        "staged_at": "2026-06-30T18:20:00.569173+00:00",
+        "sha256": "71628f5dfbcb7cfdb04376c19a1bae350bd886c745d4a406f82800a45423be32"
       },
       {
         "filename": "credit_20260630_1002.csv",
@@ -3149,8 +3149,8 @@
         "vendor": "koyfin",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.595418+00:00",
-        "sha256": "a2a066ba16f30389e404e526faa515722b2e7b6b70603ce8ab2f0c51f7aaad54"
+        "staged_at": "2026-06-30T18:20:00.587357+00:00",
+        "sha256": "606b994c1f49c16befd6d2e8a64a31fdb93fbdfb95df30539a6ddd2cb79f7fcc"
       },
       {
         "filename": "credit_20260630_1149.csv",
@@ -3165,8 +3165,8 @@
         "vendor": "koyfin",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.610900+00:00",
-        "sha256": "0b9251b0c4a31aa03e4873087d7b6664b90755814f346e91fe331e54dfc6c930"
+        "staged_at": "2026-06-30T18:20:00.604011+00:00",
+        "sha256": "575ba5ade8b044edea023752b31924887137e5b28217e85ee1920242f36683c7"
       },
       {
         "filename": "equities_20260628_1053.csv",
@@ -3204,8 +3204,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.628271+00:00",
-        "sha256": "6e51725862563ed5873905a356a570d4abe908fd5f255451b4d83ebb19e0d829"
+        "staged_at": "2026-06-30T18:20:00.621898+00:00",
+        "sha256": "c208308b29c06a7de6e67a163dad4b677a670aa715c02f31922a734075e00544"
       },
       {
         "filename": "equities_20260629_0927.csv",
@@ -3217,8 +3217,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.632236+00:00",
-        "sha256": "10efec4d9055379cbda700e4b5839de51250469b3e23fde27cfa4744041bfa92"
+        "staged_at": "2026-06-30T18:20:00.625937+00:00",
+        "sha256": "4cffb8867c585d506791dcd22500449ae69965b8dda62adcdfd9640a6a5e9a5b"
       },
       {
         "filename": "equities_20260629_0929.csv",
@@ -3230,8 +3230,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.636336+00:00",
-        "sha256": "1078c7cdd70684d61a70ebb172979179e92da6d034467b250cea73f1dbe7ffab"
+        "staged_at": "2026-06-30T18:20:00.629086+00:00",
+        "sha256": "84b2640aa24bda19d58e9ed67ae33a864dca521d2fe91776691fc1f6a3fcacea"
       },
       {
         "filename": "equities_20260630_0527.csv",
@@ -3243,8 +3243,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.639292+00:00",
-        "sha256": "e431399c14235b5293f5aaf548e4280ee2c0b64bd0783059671558ff1d05e754"
+        "staged_at": "2026-06-30T18:20:00.631981+00:00",
+        "sha256": "86205ffca3710d79b94b1aab36e93a9dfa3f441398432a55328b61efcc242a93"
       },
       {
         "filename": "equities_20260630_0532.csv",
@@ -3256,8 +3256,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.643833+00:00",
-        "sha256": "a2cb26566321918dec843a689e630897bafedb29f36946d35f7b66dba2c5dad3"
+        "staged_at": "2026-06-30T18:20:00.636918+00:00",
+        "sha256": "71628f5dfbcb7cfdb04376c19a1bae350bd886c745d4a406f82800a45423be32"
       },
       {
         "filename": "flows_20260629_1017.csv",
@@ -3269,7 +3269,7 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:56.648544+00:00",
+        "staged_at": "2026-06-30T18:20:00.640752+00:00",
         "sha256": "700cebad7f70e6daabd4206642a085794659c5d057c9aed143b35e533a85cf66"
       },
       {
@@ -3303,8 +3303,8 @@
         "vendor": "koyfin",
         "priority": "backup",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.009043+00:00",
-        "sha256": "bbf9191cd637774fbbccf1d511f8bdd10bc37a8de6c017d2736ea32353969827"
+        "staged_at": "2026-06-30T18:20:01.028552+00:00",
+        "sha256": "cb12e5ad0b4b9625ec3b3a7c8415f24efb518ebd6d3136f8ede0078d1f50653a"
       },
       {
         "filename": "rates_20260628_2238.csv",
@@ -3320,8 +3320,8 @@
         "vendor": "koyfin",
         "priority": "backup",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.019034+00:00",
-        "sha256": "34258daee2001eca6aa10536da2f23c3acb59cbf85fe59444e3142f959e1d6f1"
+        "staged_at": "2026-06-30T18:20:01.039610+00:00",
+        "sha256": "fed55104321cc5c2e7a8d9da1632a93afa154caf65ff88b8d6883b748dad46c0"
       },
       {
         "filename": "rates_20260628_2249.csv",
@@ -3333,8 +3333,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.026809+00:00",
-        "sha256": "6f9dac07bad233a8c331b32ecc93c76785a10ee6316b25a680363d8e581827e2"
+        "staged_at": "2026-06-30T18:20:01.047453+00:00",
+        "sha256": "d22fb71b3c89a62d585443ed0ec1a3b60a7053d152588eae186f42a50ea0d9e8"
       },
       {
         "filename": "rates_20260628_2250.csv",
@@ -3350,8 +3350,8 @@
         "vendor": "koyfin",
         "priority": "backup",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.033384+00:00",
-        "sha256": "bad4ffef3348cb9d84a7dfd70462c72eca9cb1a7fd425f0998b75278f476e112"
+        "staged_at": "2026-06-30T18:20:01.054518+00:00",
+        "sha256": "e15c6bdbb96401647e8becd572a94ad0706d303959df82a4ff335e12d0c4a453"
       },
       {
         "filename": "rates_20260629_0038.csv",
@@ -3367,8 +3367,8 @@
         "vendor": "koyfin",
         "priority": "backup",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.054896+00:00",
-        "sha256": "bad4ffef3348cb9d84a7dfd70462c72eca9cb1a7fd425f0998b75278f476e112"
+        "staged_at": "2026-06-30T18:20:01.077295+00:00",
+        "sha256": "e15c6bdbb96401647e8becd572a94ad0706d303959df82a4ff335e12d0c4a453"
       },
       {
         "filename": "rates_20260629_0039.csv",
@@ -3380,8 +3380,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.075405+00:00",
-        "sha256": "6f9dac07bad233a8c331b32ecc93c76785a10ee6316b25a680363d8e581827e2"
+        "staged_at": "2026-06-30T18:20:01.098962+00:00",
+        "sha256": "d22fb71b3c89a62d585443ed0ec1a3b60a7053d152588eae186f42a50ea0d9e8"
       },
       {
         "filename": "rates_20260629_0922.csv",
@@ -3393,8 +3393,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.080842+00:00",
-        "sha256": "f9e86750b39bcad16e1a02a7905fdae41862a8adf62762727468027a7923afc3"
+        "staged_at": "2026-06-30T18:20:01.104708+00:00",
+        "sha256": "8881a411da33cd60ad9ecebbc7067f22d8e47b5af11501aeed65999141930a67"
       },
       {
         "filename": "rates_20260629_0927.csv",
@@ -3406,8 +3406,8 @@
         "vendor": "",
         "priority": "",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.085870+00:00",
-        "sha256": "e2876fb71d0a0dcb9a31e4b6d8d3527c2b18cf724ac205d94e9885bbe7e69dd4"
+        "staged_at": "2026-06-30T18:20:01.110155+00:00",
+        "sha256": "9e651c27b7f2fc8e2144040c2bd006c376944f9530aa99fa14a8666cce6171f8"
       },
       {
         "filename": "rates_20260630_0528.csv",
@@ -3423,8 +3423,8 @@
         "vendor": "koyfin",
         "priority": "backup",
         "canonical_assets": [],
-        "staged_at": "2026-06-30T17:09:57.095935+00:00",
-        "sha256": "d6dd0139dc5c8a004f0a9048c923bca79a15485309cd43cd120b2a90f8468b10"
+        "staged_at": "2026-06-30T18:20:01.120897+00:00",
+        "sha256": "2756753dedd3d11541a06db619e70cc8833f294179def8754bb8796927e6f28c"
       }
     ],
     "output_kinds": {
@@ -3439,6 +3439,759 @@
       "koyfin_snapshot_csv",
       "koyfin_wide_timeseries",
       "unknown"
+    ]
+  },
+  "hydration_audit": {
+    "audit_version": "1.0.0",
+    "generated_at": "2026-06-30T18:22:38.563373+00:00",
+    "snapshot_id": "global-2026-06-30-raw2wtm-01",
+    "lineage_hash": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
+    "summary": {
+      "total_fields": 43,
+      "required_fields": 33,
+      "required_ok": 33,
+      "status_counts": {
+        "ok": 41,
+        "optional_empty": 1,
+        "partial": 1
+      },
+      "bundle_quality_score": 90,
+      "tc_session_level": "ok",
+      "coverage_pct": 100.0
+    },
+    "fields": [
+      {
+        "section": "provenance",
+        "field": "snapshot_id",
+        "bundle_path": "snapshot_id",
+        "ui_target": "command bar \u00b7 provenance",
+        "status": "ok",
+        "required": true,
+        "value": "global-2026-06-30-raw2wtm-01",
+        "value_preview": "global-2026-06-30-raw2wtm-01",
+        "notes": ""
+      },
+      {
+        "section": "provenance",
+        "field": "lineage_hash",
+        "bundle_path": "lineage_hash",
+        "ui_target": "command bar \u00b7 lineage",
+        "status": "ok",
+        "required": true,
+        "value": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
+        "value_preview": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
+        "notes": ""
+      },
+      {
+        "section": "provenance",
+        "field": "as_of",
+        "bundle_path": "as_of",
+        "ui_target": "freshness chip \u00b7 data as-of",
+        "status": "ok",
+        "required": true,
+        "value": "2026-06-30T18:20:01+00:00",
+        "value_preview": "2026-06-30T18:20:01+00:00",
+        "notes": ""
+      },
+      {
+        "section": "provenance",
+        "field": "freshness_status",
+        "bundle_path": "freshness_status",
+        "ui_target": "freshness chip",
+        "status": "ok",
+        "required": true,
+        "value": "fresh",
+        "value_preview": "fresh",
+        "notes": ""
+      },
+      {
+        "section": "provenance",
+        "field": "validation_status",
+        "bundle_path": "validation_status",
+        "ui_target": "import guard",
+        "status": "ok",
+        "required": true,
+        "value": "parsed",
+        "value_preview": "parsed",
+        "notes": ""
+      },
+      {
+        "section": "provenance",
+        "field": "hydration_version",
+        "bundle_path": "hydration_version",
+        "ui_target": "import compatibility",
+        "status": "ok",
+        "required": true,
+        "value": "1.2.0",
+        "value_preview": "1.2.0",
+        "notes": ""
+      },
+      {
+        "section": "global_intake",
+        "field": "whinfell_score",
+        "bundle_path": "global.whinfell_score",
+        "ui_target": "#whinfellScore",
+        "status": "ok",
+        "required": true,
+        "value": 80,
+        "value_preview": "80",
+        "notes": ""
+      },
+      {
+        "section": "global_intake",
+        "field": "transmission_state",
+        "bundle_path": "global.transmission_state",
+        "ui_target": "#transmissionState",
+        "status": "ok",
+        "required": true,
+        "value": "normal",
+        "value_preview": "normal",
+        "notes": ""
+      },
+      {
+        "section": "global_intake",
+        "field": "regime_tag",
+        "bundle_path": "global.regime_tag",
+        "ui_target": "#regimeTag",
+        "status": "ok",
+        "required": true,
+        "value": "Confirmed Risk-On",
+        "value_preview": "Confirmed Risk-On",
+        "notes": ""
+      },
+      {
+        "section": "global_intake",
+        "field": "key_observation",
+        "bundle_path": "global.key_observation",
+        "ui_target": "#keyObservation \u00b7 handover",
+        "status": "ok",
+        "required": true,
+        "value": "HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +",
+        "value_preview": "HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +",
+        "notes": ""
+      },
+      {
+        "section": "global_intake",
+        "field": "gate_status",
+        "bundle_path": "global.gate_status",
+        "ui_target": "gate chip",
+        "status": "optional_empty",
+        "required": false,
+        "value": "",
+        "value_preview": "\u2014",
+        "notes": "Often derived in TC from score + transmission; parquet may leave empty"
+      },
+      {
+        "section": "global_intake",
+        "field": "btc_bias",
+        "bundle_path": "global.btc_bias",
+        "ui_target": "BTC bias \u00b7 execution rail",
+        "status": "ok",
+        "required": true,
+        "value": "Neutral",
+        "value_preview": "Neutral",
+        "notes": ""
+      },
+      {
+        "section": "china_intake",
+        "field": "policy_strength",
+        "bundle_path": "china.policy_strength",
+        "ui_target": "#chinaPolicyStrength",
+        "status": "ok",
+        "required": true,
+        "value": 50,
+        "value_preview": "50",
+        "notes": ""
+      },
+      {
+        "section": "china_intake",
+        "field": "state_impulse_score",
+        "bundle_path": "china.state_impulse_score",
+        "ui_target": "#chinaStateImpulse",
+        "status": "ok",
+        "required": true,
+        "value": 0,
+        "value_preview": "0",
+        "notes": ""
+      },
+      {
+        "section": "china_intake",
+        "field": "growth_impulse_score",
+        "bundle_path": "china.growth_impulse_score",
+        "ui_target": "#chinaGrowthImpulse",
+        "status": "ok",
+        "required": true,
+        "value": 0,
+        "value_preview": "0",
+        "notes": ""
+      },
+      {
+        "section": "china_intake",
+        "field": "sq3_score",
+        "bundle_path": "china.sq3_score",
+        "ui_target": "SQ3 chip \u00b7 command bar",
+        "status": "ok",
+        "required": true,
+        "value": 35,
+        "value_preview": "35",
+        "notes": ""
+      },
+      {
+        "section": "china_intake",
+        "field": "regime_tag",
+        "bundle_path": "china.regime_tag",
+        "ui_target": "#chinaRegimeTag",
+        "status": "ok",
+        "required": true,
+        "value": "desk-auto",
+        "value_preview": "desk-auto",
+        "notes": ""
+      },
+      {
+        "section": "china_intake",
+        "field": "as_of",
+        "bundle_path": "china.as_of",
+        "ui_target": "China freshness",
+        "status": "ok",
+        "required": false,
+        "value": "2026-06-30T18:20:00+00:00",
+        "value_preview": "2026-06-30T18:20:00+00:00",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "near_month",
+        "bundle_path": "execution.near_month",
+        "ui_target": "L3 near month",
+        "status": "ok",
+        "required": true,
+        "value": "Jul",
+        "value_preview": "Jul",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "far_month",
+        "bundle_path": "execution.far_month",
+        "ui_target": "L3 far month",
+        "status": "ok",
+        "required": true,
+        "value": "Back",
+        "value_preview": "Back",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "basis_spread",
+        "bundle_path": "execution.basis_spread",
+        "ui_target": "L3 basis spread",
+        "status": "ok",
+        "required": true,
+        "value": "58620.00",
+        "value_preview": "58620.00",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "ref_low",
+        "bundle_path": "execution.ref_low",
+        "ui_target": "L3 ref low",
+        "status": "ok",
+        "required": true,
+        "value": "46896.00",
+        "value_preview": "46896.00",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "ref_mid",
+        "bundle_path": "execution.ref_mid",
+        "ui_target": "L3 ref mid",
+        "status": "ok",
+        "required": true,
+        "value": "58620.00",
+        "value_preview": "58620.00",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "ref_high",
+        "bundle_path": "execution.ref_high",
+        "ui_target": "L3 ref high",
+        "status": "ok",
+        "required": true,
+        "value": "70344.00",
+        "value_preview": "70344.00",
+        "notes": ""
+      },
+      {
+        "section": "execution_l3",
+        "field": "btc_bias",
+        "bundle_path": "execution.btc_bias",
+        "ui_target": "Layer 2/3 BTC bias",
+        "status": "ok",
+        "required": true,
+        "value": "Neutral",
+        "value_preview": "Neutral",
+        "notes": ""
+      },
+      {
+        "section": "flows",
+        "field": "flows_status",
+        "bundle_path": "flows_sidecar.flows_status",
+        "ui_target": "coverage \u00b7 flows pill",
+        "status": "ok",
+        "required": true,
+        "value": "ok",
+        "value_preview": "ok",
+        "notes": ""
+      },
+      {
+        "section": "flows",
+        "field": "flows_as_of",
+        "bundle_path": "flows_sidecar.as_of",
+        "ui_target": "flows sponsorship as-of",
+        "status": "ok",
+        "required": false,
+        "value": "2026-06-29",
+        "value_preview": "2026-06-29",
+        "notes": "Re-export WTM-Flows-Global.csv when stale"
+      },
+      {
+        "section": "flows",
+        "field": "ticker_count",
+        "bundle_path": "flows_sidecar.ticker_count",
+        "ui_target": "funds-flow card",
+        "status": "ok",
+        "required": false,
+        "value": 15,
+        "value_preview": "15",
+        "notes": ""
+      },
+      {
+        "section": "node_rv",
+        "field": "liquidity.rv_horizons",
+        "bundle_path": "node_cockpits.liquidity.rv_basis",
+        "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 liquidity",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "5/5 horizons on active series"
+      },
+      {
+        "section": "node_signals",
+        "field": "liquidity.component_inputs",
+        "bundle_path": "node_cockpits.liquidity.component_inputs",
+        "ui_target": "mission read diagnostics \u00b7 liquidity",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "2 rv_history \u00b7 5 total components"
+      },
+      {
+        "section": "node_flows",
+        "field": "liquidity.flows_status",
+        "bundle_path": "node_cockpits.liquidity.funds_flows.flows_meta.flows_status",
+        "ui_target": "funds-flow card \u00b7 liquidity",
+        "status": "ok",
+        "required": false,
+        "value": "ok",
+        "value_preview": "ok",
+        "notes": ""
+      },
+      {
+        "section": "node_rv",
+        "field": "credit.rv_horizons",
+        "bundle_path": "node_cockpits.credit.rv_basis",
+        "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 credit",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "5/5 horizons on active series"
+      },
+      {
+        "section": "node_signals",
+        "field": "credit.component_inputs",
+        "bundle_path": "node_cockpits.credit.component_inputs",
+        "ui_target": "mission read diagnostics \u00b7 credit",
+        "status": "partial",
+        "required": false,
+        "value": 0,
+        "value_preview": "0",
+        "notes": "Credit uses authoritative RV + horizon-net composite (C1 doc); component_inputs intentionally empty \u2014 not a ingest failure"
+      },
+      {
+        "section": "node_flows",
+        "field": "credit.flows_status",
+        "bundle_path": "node_cockpits.credit.funds_flows.flows_meta.flows_status",
+        "ui_target": "funds-flow card \u00b7 credit",
+        "status": "ok",
+        "required": false,
+        "value": "ok",
+        "value_preview": "ok",
+        "notes": ""
+      },
+      {
+        "section": "node_rv",
+        "field": "breadth.rv_horizons",
+        "bundle_path": "node_cockpits.breadth.rv_basis",
+        "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 breadth",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "5/5 horizons on active series"
+      },
+      {
+        "section": "node_signals",
+        "field": "breadth.component_inputs",
+        "bundle_path": "node_cockpits.breadth.component_inputs",
+        "ui_target": "mission read diagnostics \u00b7 breadth",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "2 rv_history \u00b7 5 total components"
+      },
+      {
+        "section": "node_flows",
+        "field": "breadth.flows_status",
+        "bundle_path": "node_cockpits.breadth.funds_flows.flows_meta.flows_status",
+        "ui_target": "funds-flow card \u00b7 breadth",
+        "status": "ok",
+        "required": false,
+        "value": "ok",
+        "value_preview": "ok",
+        "notes": ""
+      },
+      {
+        "section": "node_rv",
+        "field": "highbeta.rv_horizons",
+        "bundle_path": "node_cockpits.highbeta.rv_basis",
+        "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 highbeta",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "5/5 horizons on active series"
+      },
+      {
+        "section": "node_signals",
+        "field": "highbeta.component_inputs",
+        "bundle_path": "node_cockpits.highbeta.component_inputs",
+        "ui_target": "mission read diagnostics \u00b7 highbeta",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "4 rv_history \u00b7 5 total components"
+      },
+      {
+        "section": "node_flows",
+        "field": "highbeta.flows_status",
+        "bundle_path": "node_cockpits.highbeta.funds_flows.flows_meta.flows_status",
+        "ui_target": "funds-flow card \u00b7 highbeta",
+        "status": "ok",
+        "required": false,
+        "value": "ok",
+        "value_preview": "ok",
+        "notes": ""
+      },
+      {
+        "section": "node_rv",
+        "field": "basis.rv_horizons",
+        "bundle_path": "node_cockpits.basis.rv_basis",
+        "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 basis",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "5/5 horizons on active series"
+      },
+      {
+        "section": "node_signals",
+        "field": "basis.component_inputs",
+        "bundle_path": "node_cockpits.basis.component_inputs",
+        "ui_target": "mission read diagnostics \u00b7 basis",
+        "status": "ok",
+        "required": true,
+        "value": 5,
+        "value_preview": "5",
+        "notes": "5 rv_history \u00b7 5 total components"
+      },
+      {
+        "section": "node_flows",
+        "field": "basis.flows_status",
+        "bundle_path": "node_cockpits.basis.funds_flows.flows_meta.flows_status",
+        "ui_target": "funds-flow card \u00b7 basis",
+        "status": "ok",
+        "required": false,
+        "value": "ok",
+        "value_preview": "ok",
+        "notes": ""
+      }
+    ],
+    "nodes": {
+      "liquidity": {
+        "composite_score": 100,
+        "composite_score_source": "weighted_components",
+        "rv_horizon_count": 5,
+        "rv_richness": "fair",
+        "component_count": 5,
+        "signals_status": "partial",
+        "flows_status": "ok",
+        "fields": [
+          {
+            "section": "node_rv",
+            "field": "liquidity.rv_horizons",
+            "bundle_path": "node_cockpits.liquidity.rv_basis",
+            "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 liquidity",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "5/5 horizons on active series"
+          },
+          {
+            "section": "node_signals",
+            "field": "liquidity.component_inputs",
+            "bundle_path": "node_cockpits.liquidity.component_inputs",
+            "ui_target": "mission read diagnostics \u00b7 liquidity",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "2 rv_history \u00b7 5 total components"
+          },
+          {
+            "section": "node_flows",
+            "field": "liquidity.flows_status",
+            "bundle_path": "node_cockpits.liquidity.funds_flows.flows_meta.flows_status",
+            "ui_target": "funds-flow card \u00b7 liquidity",
+            "status": "ok",
+            "required": false,
+            "value": "ok",
+            "value_preview": "ok",
+            "notes": ""
+          }
+        ]
+      },
+      "credit": {
+        "composite_score": 75,
+        "composite_score_source": "horizon_net_fallback",
+        "rv_horizon_count": 5,
+        "rv_richness": "cheap",
+        "component_count": 0,
+        "signals_status": "partial",
+        "flows_status": "ok",
+        "fields": [
+          {
+            "section": "node_rv",
+            "field": "credit.rv_horizons",
+            "bundle_path": "node_cockpits.credit.rv_basis",
+            "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 credit",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "5/5 horizons on active series"
+          },
+          {
+            "section": "node_signals",
+            "field": "credit.component_inputs",
+            "bundle_path": "node_cockpits.credit.component_inputs",
+            "ui_target": "mission read diagnostics \u00b7 credit",
+            "status": "partial",
+            "required": false,
+            "value": 0,
+            "value_preview": "0",
+            "notes": "Credit uses authoritative RV + horizon-net composite (C1 doc); component_inputs intentionally empty \u2014 not a ingest failure"
+          },
+          {
+            "section": "node_flows",
+            "field": "credit.flows_status",
+            "bundle_path": "node_cockpits.credit.funds_flows.flows_meta.flows_status",
+            "ui_target": "funds-flow card \u00b7 credit",
+            "status": "ok",
+            "required": false,
+            "value": "ok",
+            "value_preview": "ok",
+            "notes": ""
+          }
+        ]
+      },
+      "breadth": {
+        "composite_score": 85,
+        "composite_score_source": "weighted_components",
+        "rv_horizon_count": 5,
+        "rv_richness": "fair",
+        "component_count": 5,
+        "signals_status": "partial",
+        "flows_status": "ok",
+        "fields": [
+          {
+            "section": "node_rv",
+            "field": "breadth.rv_horizons",
+            "bundle_path": "node_cockpits.breadth.rv_basis",
+            "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 breadth",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "5/5 horizons on active series"
+          },
+          {
+            "section": "node_signals",
+            "field": "breadth.component_inputs",
+            "bundle_path": "node_cockpits.breadth.component_inputs",
+            "ui_target": "mission read diagnostics \u00b7 breadth",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "2 rv_history \u00b7 5 total components"
+          },
+          {
+            "section": "node_flows",
+            "field": "breadth.flows_status",
+            "bundle_path": "node_cockpits.breadth.funds_flows.flows_meta.flows_status",
+            "ui_target": "funds-flow card \u00b7 breadth",
+            "status": "ok",
+            "required": false,
+            "value": "ok",
+            "value_preview": "ok",
+            "notes": ""
+          }
+        ]
+      },
+      "highbeta": {
+        "composite_score": 72,
+        "composite_score_source": "weighted_components",
+        "rv_horizon_count": 5,
+        "rv_richness": "fair",
+        "component_count": 5,
+        "signals_status": "partial",
+        "flows_status": "ok",
+        "fields": [
+          {
+            "section": "node_rv",
+            "field": "highbeta.rv_horizons",
+            "bundle_path": "node_cockpits.highbeta.rv_basis",
+            "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 highbeta",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "5/5 horizons on active series"
+          },
+          {
+            "section": "node_signals",
+            "field": "highbeta.component_inputs",
+            "bundle_path": "node_cockpits.highbeta.component_inputs",
+            "ui_target": "mission read diagnostics \u00b7 highbeta",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "4 rv_history \u00b7 5 total components"
+          },
+          {
+            "section": "node_flows",
+            "field": "highbeta.flows_status",
+            "bundle_path": "node_cockpits.highbeta.funds_flows.flows_meta.flows_status",
+            "ui_target": "funds-flow card \u00b7 highbeta",
+            "status": "ok",
+            "required": false,
+            "value": "ok",
+            "value_preview": "ok",
+            "notes": ""
+          }
+        ]
+      },
+      "basis": {
+        "composite_score": 100,
+        "composite_score_source": "weighted_components",
+        "rv_horizon_count": 5,
+        "rv_richness": "rich",
+        "component_count": 5,
+        "signals_status": "ok",
+        "flows_status": "ok",
+        "fields": [
+          {
+            "section": "node_rv",
+            "field": "basis.rv_horizons",
+            "bundle_path": "node_cockpits.basis.rv_basis",
+            "ui_target": "CURRENT READING \u00b7 RV chart \u00b7 basis",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "5/5 horizons on active series"
+          },
+          {
+            "section": "node_signals",
+            "field": "basis.component_inputs",
+            "bundle_path": "node_cockpits.basis.component_inputs",
+            "ui_target": "mission read diagnostics \u00b7 basis",
+            "status": "ok",
+            "required": true,
+            "value": 5,
+            "value_preview": "5",
+            "notes": "5 rv_history \u00b7 5 total components"
+          },
+          {
+            "section": "node_flows",
+            "field": "basis.flows_status",
+            "bundle_path": "node_cockpits.basis.funds_flows.flows_meta.flows_status",
+            "ui_target": "funds-flow card \u00b7 basis",
+            "status": "ok",
+            "required": false,
+            "value": "ok",
+            "value_preview": "ok",
+            "notes": ""
+          }
+        ]
+      }
+    },
+    "remediation": [
+      {
+        "priority": "medium",
+        "field": "node.liquidity.10Y yield 3M change",
+        "bundle_path": "node_cockpits.liquidity.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 liquidity",
+        "action": "Map RV history for component us10y or accept horizon_fallback"
+      },
+      {
+        "priority": "medium",
+        "field": "node.liquidity.DXY 5D+20D (liquidity conditions)",
+        "bundle_path": "node_cockpits.liquidity.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 liquidity",
+        "action": "Map RV history for component dxy_continuous or accept horizon_fallback"
+      },
+      {
+        "priority": "medium",
+        "field": "node.liquidity.Real rates / duration pressure proxy",
+        "bundle_path": "node_cockpits.liquidity.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 liquidity",
+        "action": "Map RV history for component us10y or accept horizon_fallback"
+      },
+      {
+        "priority": "medium",
+        "field": "node_signals.credit.component_inputs",
+        "bundle_path": "node_cockpits.credit.component_inputs",
+        "ui_target": "mission read diagnostics \u00b7 credit",
+        "action": "Credit uses authoritative RV + horizon-net composite (C1 doc); component_inputs intentionally empty \u2014 not a ingest failure"
+      },
+      {
+        "priority": "medium",
+        "field": "node.highbeta.ETH/BTC high-beta confirmation",
+        "bundle_path": "node_cockpits.highbeta.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 highbeta",
+        "action": "Map RV history for component eth_spot_usd or accept horizon_fallback"
+      }
     ]
   }
 }

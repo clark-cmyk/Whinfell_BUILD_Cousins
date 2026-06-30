@@ -25,6 +25,7 @@ git add \
   08_Deliverables/desk_china_ladder_models.js \
   08_Deliverables/data_dictionary_meta.json \
   data/hydration/latest.json \
+  data/hydration/hydration_log.json \
   scripts/build_desk_preview.sh \
   scripts/publish_desk_preview.sh \
   .github/workflows/desk-preview-pages.yml \

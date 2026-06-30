@@ -2292,6 +2292,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
       <section class="signal-detail-section"><h3>Shock</h3><div id="whyShock" class="why-body"></div></section>
       <section class="signal-detail-section"><h3>Freshness</h3><div id="whyFreshness" class="why-body"></div></section>
       <section class="signal-detail-section"><h3>Ingest audit</h3><div id="ingestProvenanceAudit" class="why-body signal-ingest-audit"></div></section>
+      <section class="signal-detail-section"><h3>Hydration field log</h3><div id="hydrationFieldLog" class="why-body" data-agent-surface="hydration-field-log"></div></section>
       <section class="signal-detail-section"><h3>Data dictionary audit</h3><div id="dataDictionaryAudit" class="why-body" data-agent-surface="dd-audit"></div><div id="ddAuditDetail" class="dd-audit-detail zone-hidden" data-agent-surface="dd-audit-detail"></div></section>
       <div id="signalDetailTech" class="signal-detail-tech"></div>
     </div>
@@ -2885,7 +2886,7 @@ const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
 /** Bump when operator-console UX changes — visible in header for reload verification. */
-const TC_CONSOLE_BUILD = '2.2-UI-AUDIT-2026-06-30';
+const TC_CONSOLE_BUILD = '2.2-HYDRATION-AUDIT-2026-06-30';
 const HYDRATION_BUNDLE_VERSION = '1.2.0';
 const RV_HORIZONS = ['1m', '3m', '6m', '12m', '3y'];
 const RV_HORIZON_LABELS = { '1m': '1M', '3m': '3M', '6m': '6M', '12m': '12M', '3y': '3Y' };
@@ -5431,6 +5432,9 @@ function hydrateFromBundle(bundle, options = {}) {
   if (bundle.ingest_provenance) {
     appState.hydration.ingest_provenance = bundle.ingest_provenance;
   }
+  if (bundle.hydration_audit) {
+    appState.hydration.hydration_audit = bundle.hydration_audit;
+  }
 
   renderAll();
   markDirty();
@@ -6373,6 +6377,52 @@ function renderHydrationImportStatus(state) {
   renderSignalDetailTech(state);
 }
 
+function hydrationFieldStatusChip(status) {
+  const map = {
+    ok: 'status-chip--complete',
+    partial: 'status-chip--amber',
+    empty: 'status-chip--impaired',
+    optional_empty: 'status-chip--info',
+    miss: 'status-chip--impaired',
+  };
+  const cls = map[status] || 'status-chip--info';
+  return `<span class="status-chip ${cls}">${escapeHtml(String(status || '—'))}</span>`;
+}
+
+function renderHydrationFieldLog(state) {
+  const node = el('hydrationFieldLog');
+  if (!node) return;
+  const audit = state?.hydration?.hydration_audit;
+  if (!audit?.summary) {
+    node.textContent = 'Field-by-field hydration log ships in bundle v1.2.0+ (hydration_audit). Re-import latest.json after desk live session.';
+    return;
+  }
+  const s = audit.summary;
+  const rows = (audit.fields || []).map((row, i) => {
+    return `<tr class="hydration-log-row" data-hydration-row="${i}" data-status="${escapeHtml(row.status || '')}">
+      <td>${hydrationFieldStatusChip(row.status)}</td>
+      <td>${escapeHtml(row.section || '')}</td>
+      <td>${escapeHtml(row.field || '')}</td>
+      <td>${escapeHtml(row.ui_target || '')}</td>
+      <td>${escapeHtml(row.value_preview || '—')}</td>
+      <td class="text-[10px] text-wtm-muted">${escapeHtml(row.notes || '')}</td>
+    </tr>`;
+  }).join('');
+  const remediation = (audit.remediation || []).slice(0, 8).map(r =>
+    `<li><strong>${escapeHtml(r.field || '')}</strong> — ${escapeHtml(r.action || '')}</li>`
+  ).join('');
+  node.innerHTML = `
+    <p><strong>Session:</strong> ${escapeHtml(s.tc_session_level || '—')}
+      · <strong>Quality:</strong> ${escapeHtml(String(s.bundle_quality_score ?? '—'))}
+      · <strong>Required OK:</strong> ${escapeHtml(String(s.required_ok ?? '—'))}/${escapeHtml(String(s.required_fields ?? '—'))}
+      (${escapeHtml(String(s.coverage_pct ?? '—'))}%)</p>
+    <table class="ingest-audit-table hydration-field-log-table">
+      <thead><tr><th>Status</th><th>Section</th><th>Field</th><th>TC target</th><th>Value</th><th>Notes</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    ${remediation ? `<p class="text-[10px] mt-2"><strong>Remediation (top):</strong></p><ul class="text-[10px] list-disc pl-4">${remediation}</ul>` : ''}`;
+}
+
 function renderIngestProvenanceAudit(state) {
   const node = el('ingestProvenanceAudit');
   if (!node) return;
@@ -6573,6 +6623,7 @@ function buildUiAuditPayload(state) {
       impact: r.impact,
       next_action: r.action,
     })),
+    hydration_audit: state?.hydration?.hydration_audit?.summary || null,
     flipchart: {
       mode: nav.focus_mode ? 'focus' : nav.view_mode === 'compare' ? 'compare' : 'flipchart',
       active_node: activeNodeId(),
@@ -6601,6 +6652,7 @@ function renderFlipchartState() {
 function renderSignalDetailTech(state) {
   const node = el('signalDetailTech');
   renderIngestProvenanceAudit(state);
+  renderHydrationFieldLog(state);
   renderDataDictionaryAudit(state);
   if (!node) return;
   const prov = state?.provenance || createEmptyProvenance();

@@ -22,8 +22,12 @@ cp "$TC" "$OUT/index.html"
 cp "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "$OUT/"
 cp "${ROOT}/08_Deliverables/data_dictionary_meta.json" "$OUT/"
 
+HYDRATE_LOG="${ROOT}/data/hydration/hydration_log.json"
 if [[ -f "$HYDRATE" ]]; then
   cp "$HYDRATE" "$OUT/data/hydration/latest.json"
+  if [[ -f "$HYDRATE_LOG" ]]; then
+    cp "$HYDRATE_LOG" "$OUT/data/hydration/hydration_log.json"
+  fi
 else
   echo "build_desk_preview: warn — no data/hydration/latest.json; deploying UI-only" >&2
   mkdir -p "$OUT/data/hydration"
