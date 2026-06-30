@@ -1,7 +1,7 @@
 # BUILD Cousins - TODO List
 
 **Maintained by:** BUILD Cousins  
-**Last Updated:** June 29, 2026 (Funds Flow Sponsorship plan locked)
+**Last Updated:** June 29, 2026 (Funds Flow ingest arena — team vote pending)
 **Purpose:** Track all active and planned work for the Whinfell Transmission Map support track.
 
 ---
@@ -28,7 +28,9 @@
 | **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI not started** |
 | **Phase 2 open** | Ambiguity C — trading-day vs calendar-day lookback | Medium | **Open** | TempLibby + desk | Default locked in spec; desk confirm |
 | **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **Planned · Design locked** | Bridge + Clarity | `Phase2_Funds_Flow_Sponsorship_Design.md` · GOAL + PLAN in `08_Deliverables/` |
-| **Phase 2b-data** | `funds_flows.py` + Master DD baskets + Koyfin ingest | High | **Open** | Bridge + Dynamo | PR-1→3 · confirmation layer only · `% AUM` canonical |
+| **Phase 2b-data** | `funds_flows.py` + Master DD baskets + Koyfin ingest | High | **Open** | Bridge + Dynamo | PR-1→3 · **ingest vote:** [Arena Debate](../08_Deliverables/Funds_Flow_Ingest_Arena_Debate.md) |
+| **Phase 2b-ops** | `WTM-Flows` normalize + Koyfin view expansion | High | **Blocked — team vote** | Clark + TempLibby | `WTM-Flows-Global.csv` quarantined Jun 29 · needs `flows_*` rename + ticker list |
+| **Phase 2b-ops** | `normalize_whinfell_drop.sh` — map `WTM-Flows*.csv` | Medium | **Open** | Bridge | Unblock desk drop without manual `mv` |
 | **Phase 3** | TC interface (full-screen Why, flip nav, margin module) | Medium | **Planned** | Clarity + Safeguard | Blocked on Phase 2 UI · flow card ships in 2b-ui |
 | **Phase 4** | Validation & reliability gate | Medium | **Planned** | Hammer + Precision | After Phase 3 |
 
@@ -138,6 +140,7 @@ python3 -m whinfell_pipeline.verify_2_2_final
 ---
 
 ## Notes
+- **June 29, 2026** — **Funds Flow ingest /arena debate** — Options A–E documented; BUILD recommends **Option D hybrid** (primary `WTM-Flows` time-series + credit cross-section 1D fallback). Desk already has `WTM-Flows-Global.csv` (quarantined — wrong filename). Staged `credit_*.csv` has no flow columns post-2.2e. Team vote Q1–Q5 in `08_Deliverables/Funds_Flow_Ingest_Arena_Debate.md`.
 - **June 29, 2026** — **Funds Flow Sponsorship plan locked** — Design v1.0 + `/goal` + `/plan` for node-level `% AUM` confirmation layer (`FundsFlowSponsorshipCard`); flows subordinate to score/gate; Phase **2b-data** (pipeline) then **2b-ui** (TC rail). See `01_Strategy_Docs/Phase2_Funds_Flow_Sponsorship_Design.md`.
 - **June 29, 2026** — **Phase 2 data layer shipped** — `node_cockpits.py` builds all 5 cockpits; hydration bundle **v1.1.0** adds `node_cockpits`, `cockpit_context`, `wtm_export_v22`; WTM EXPORT v2.2 spec locked. Full suite **111 tests PASS** (4 skipped). Commit `cdd677a`.
 - **June 29, 2026** — **Phase 2 prep locked** — Data model v0.2 + `rv_series` (10 series) + interim `node_score_weights` in Master DD; ambiguities A/B/E/F resolved. Commits `c9974fa` · `3293a9b`.

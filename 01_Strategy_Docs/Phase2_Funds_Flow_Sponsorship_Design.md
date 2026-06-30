@@ -419,11 +419,18 @@ Funds Flow Summary: Flows confirm spread stabilization.
 
 ## Open Questions
 
-| # | Question | Default if unanswered |
-|---|----------|----------------------|
-| 1 | Dedicated `WTM-Flows` export vs parse from `WTM-Credit-Confirmation` wide CSV? | Start with credit export columns; add dedicated export if gaps |
+| # | Question | Status / default |
+|---|----------|------------------|
+| 1 | **Flow ingest path** — see [Funds_Flow_Ingest_Arena_Debate.md](../08_Deliverables/Funds_Flow_Ingest_Arena_Debate.md) | **BUILD recommends Option D (hybrid):** primary `WTM-Flows` → `flows_{YYYYMMDD}_{HHMM}.csv`; fallback cross-section `Fund Flows/Periodic (D)` for Credit 1D only. **Team vote pending.** |
 | 2 | Add `GBTC`, `BITO`, `RSP`, `SHY`, `BIL` to `canonical_assets`? | Yes in PR-1 registry |
 | 3 | Desk threshold tuning UI? | YAML-only for MVP |
+| 4 | Flow/AUM units (millions USD)? | Sanity check on HYG row in `WTM-Flows-Global.csv`; desk confirm |
+
+### Why not credit-only ingest?
+
+Staged `credit_*.csv` after 2.2e transform is **WTM observation** format — no flow columns. Raw cross-section credit exports have `Fund Flows/Periodic (D)` + `AUM` but **no dated history** in the daily chain, so **5D cumulative % AUM cannot be computed** without a separate time-series source.
+
+**Desk evidence (Jun 29):** `WTM-Flows-Global.csv` dropped to `whinfell_drop` — correct column shape, **quarantined** for filename (`flows_{YYYYMMDD}_{HHMM}.csv` required). File covers SPY/HYG/LQD/JAAA/BKLN/MCHI only; view must expand for full node baskets.
 
 ---
 

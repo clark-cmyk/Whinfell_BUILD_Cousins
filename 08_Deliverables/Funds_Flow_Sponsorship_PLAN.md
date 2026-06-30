@@ -63,18 +63,33 @@ Desk confirms: flows = confirmation layer only; `% AUM` canonical.
 
 ---
 
-## STEP 3 — Koyfin flow ingest (PR-3)
+## STEP 3 — Koyfin flow ingest (PR-3) — **pending /arena vote**
 
-**Owner:** Integration Dynamo
+**Owner:** Integration Dynamo  
+**Debate:** [Funds_Flow_Ingest_Arena_Debate.md](Funds_Flow_Ingest_Arena_Debate.md)
 
-1. Audit `WTM-Credit-Confirmation` export for `Flow (D)` / `AUM` columns (desk sample)
-2. Extend `raw_csv_transform` or adapter to emit `data/flows/v1/latest_flows.json` sidecar
-3. Optional: add `WTM-Flows` to `collection_manifest.yaml` if credit export insufficient
-4. Hydrate reads sidecar → `flow_inputs` dict keyed by ticker
+### BUILD recommendation: Option D (hybrid)
 
-**Desk action:** Export one credit CSV with flow columns → drop in `whinfell_drop` → verify sidecar
+**PR-3a — Primary path (WTM-Flows)**
+1. Master DD dataset: `flows` → `flows_{YYYYMMDD}_{HHMM}.csv`
+2. `normalize_whinfell_drop.sh`: `WTM-Flows-Global.csv` / `WTM-Flows*.csv` → canonical name
+3. `collection_manifest.yaml`: optional `koyfin_flows` (priority 15, **not** required batch)
+4. Parser: dated `{TICKER} Flow (D)` + `{TICKER} AUM` → `data/flows/v1/latest_flows.json`
+5. Compute `flow_pct_aum_1d`, rolling `flow_pct_aum_5d`, `persistence_score`
 
-**Exit:** Real `flow_pct_aum_1d` non-null for HYG in hydration bundle
+**PR-3b — Fallback (credit cross-section, 1D only)**
+1. When `flows_*.csv` absent: read raw credit `Fund Flows/Periodic (D)` + `AUM` from quarantine/raw path
+2. Credit node only; cap verdict at `neutral`/`mixed`; banner “5D unavailable”
+
+**Clark one-time:** Expand Koyfin WTM-Flows view to full basket tickers (SHY, IEF, TLT, IWM, IBIT, QQQ, RSP, BITO, GBTC, …)
+
+**Desk unblock today:**
+```bash
+mv ~/Downloads/whinfell_drop/WTM-Flows-Global.csv \
+   ~/Downloads/whinfell_drop/flows_$(date +%Y%m%d)_$(date +%H%M).csv
+```
+
+**Exit:** `flow_pct_aum_5d` non-null for HYG when flows file staged; Credit fallback tested when flows absent
 
 ---
 

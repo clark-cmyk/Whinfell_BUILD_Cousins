@@ -208,6 +208,26 @@ Success:
 Non-goals: global flow widget, heatmaps, gate override, browser CSV parse
 ```
 
+### `/arena-funds-flow` (Phase 2b — team debate)
+
+```text
+Repo: ~/Desktop/Whinfell_BUILD_Cousins
+Read: 08_Deliverables/Funds_Flow_Ingest_Arena_Debate.md
+
+Question: How to ingest ETF % AUM flows for node sponsorship?
+
+Options:
+  A — Dedicated WTM-Flows export → flows_{YYYYMMDD}_{HHMM}.csv (BUILD primary)
+  B — Credit cross-section only (1D — insufficient alone)
+  C — Rates wide timeseries (partial — supplement only)
+  D — Hybrid A + B fallback (BUILD recommendation)
+  E — WhinSig merger (reject — scope)
+
+Desk fact: WTM-Flows-Global.csv already in whinfell_drop — QUARANTINED (rename needed).
+
+Vote Q1–Q5 in arena doc · defaults apply if no reply.
+```
+
 ### `/plan-funds-flow` (Phase 2b — BUILD Cousins)
 
 ```text
