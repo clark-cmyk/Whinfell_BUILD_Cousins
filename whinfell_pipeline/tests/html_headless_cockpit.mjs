@@ -39,6 +39,9 @@ globalThis.fetch = () => Promise.resolve({
   let body = ddStub + chinaModels + '\n' + m[0].replace(/^<script>\s*/, '').replace(/\s*<\/script>$/, '');
   const cut = body.indexOf("el('btnSave').onclick");
   if (cut >= 0) body = body.slice(0, cut);
+  const probeMatch = html.match(/window\.__creditMissionProbe[\s\S]*?\n\};\n/);
+  if (!probeMatch) throw new Error('__creditMissionProbe not found in HTML');
+  body += '\n' + probeMatch[0];
   body += `
 appState = createEmptyState();
 this.__test = {
@@ -49,7 +52,8 @@ this.__test = {
   renderFundsFlowSponsorshipCard, assessHydrationImportGuard, scoreHydrationBundleQuality,
   assessHydrationSession, renderHydrationBanner, setSharedHorizon, document,
   assessCockpitHydrationMode, buildNodeGateDecisionSentence, renderNodeCoverageBanner,
-  assessPostImportWorkflow, deriveGate,
+  assessPostImportWorkflow, deriveGate, isMissionSurfaceNode, buildMissionImplicationChips,
+  __creditMissionProbe: window.__creditMissionProbe,
 };
 `;
   return body;
@@ -108,6 +112,8 @@ function makeSandbox() {
       if (this.id === 'cockpitChartCanvas') this._overlay = child;
       return child;
     }
+    get style() { return this._style || (this._style = {}); }
+    set style(v) { this._style = v; }
   }
 
   const els = {};
@@ -167,7 +173,7 @@ function seedCockpitDom(t) {
   const ids = [
     'nodeRail', 'cockpitShell', 'cockpitChartTitle', 'cockpitChartSubtitle',
     'cockpitHorizonRow', 'cockpitHorizonPills', 'cockpitRvCanvas', 'cockpitChartPlaceholder',
-    'basisTacticalBanner', 'basisTacticalSentence', 'basisSummaryStrip',
+    'basisTacticalBanner', 'basisTacticalSentence', 'basisTacticalSuffix', 'basisSummaryStrip',
     'basisReadingValue', 'basisReadingLabel', 'basisStanceRow', 'basisTradeRow',
     'cockpitChartValue', 'cockpitChartRichness', 'cockpitChartPct',
     'cockpitDecisionRail', 'cockpitDetailBand', 'cockpitFocusLayer',
@@ -180,11 +186,15 @@ function seedCockpitDom(t) {
     'nodeCoverageBanner', 'postImportWorkflow', 'postImportSteps', 'sessionReadyChip', 'commandBar',
     'cmdWhinfellScore', 'cmdScoreZone', 'txHealthValue', 'txHealthMeta', 'cmdTxState', 'cmdRegime',
     'cmdSq3Score', 'cmdSq3Band', 'cmdGrossRisk', 'cmdGrossPosture', 'cmdHydrationBadge', 'gateText',
+    'chinaPolicyStrength', 'chinaStateImpulse', 'chinaGrowthImpulse', 'chinaRegimeTag',
     'gateChip', 'gateHelperText', 'shockText', 'shockMeta', 'scoreCard', 'cmdGlobalCluster', 'cmdChinaCluster',
     'gateExplainList', 'gateUnlockList', 'gateHealthSub', 'gateDetailPanel', 'sq3ComputedDisplay', 'sq3BandChip',
     'scoreZoneChip', 'gateStatusChip', 'txChip', 'grossTotal', 'grossMmHint', 'postureWarning',
   ];
   ids.forEach(id => t.document.getElementById(id));
+  const banner = t.document.getElementById('basisTacticalBanner');
+  banner._eyebrowEl = { textContent: '', className: 'basis-tactical-eyebrow' };
+  banner.querySelector = (sel) => (sel === '.basis-tactical-eyebrow' ? banner._eyebrowEl : null);
 }
 
 function boot(script) {
@@ -356,6 +366,51 @@ function testHydrationBanner(t, bundle) {
   return { missingLevel: missing.level, okAfterHydrate: true };
 }
 
+function testCreditMissionSurface(t, bundle) {
+  seedCockpitDom(t);
+  if (typeof t.__creditMissionProbe !== 'function') {
+    throw new Error('__creditMissionProbe missing from headless harness');
+  }
+  const result = t.__creditMissionProbe(bundle);
+  if (result.error) throw new Error(result.error);
+
+  if (!result.tacticalLead || result.tacticalLead === '—') {
+    throw new Error(`credit tactical lead empty: ${result.tacticalLead}`);
+  }
+  if (!/cheap|rich|fair/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing RV richness: ${result.tacticalLead}`);
+  }
+  if (!/long spread|0\.5×/i.test(result.tacticalLead)) {
+    throw new Error(`tactical lead missing expression/gate cap: ${result.tacticalLead}`);
+  }
+  if (result.tacticalLead.includes('SQ3') || result.tacticalLead.includes('constraint')) {
+    throw new Error(`SQ3 must not appear in lead sentence: ${result.tacticalLead}`);
+  }
+  if (!result.tacticalSuffix || !result.tacticalSuffix.includes('SQ3')) {
+    throw new Error(`material SQ3 suffix missing: ${result.tacticalSuffix}`);
+  }
+  if (!result.compositeFallback) {
+    throw new Error(`Composite fallback chip missing: ${result.chips.join(', ')}`);
+  }
+  if (!result.railHasHorizonNet) {
+    throw new Error('horizon-net fallback missing from rail diagnostics HTML');
+  }
+  if (result.gateChip !== 'Tight + China Caution') {
+    throw new Error(`expected Tight + China Caution gate chip, got ${result.gateChip}`);
+  }
+
+  return {
+    creditMissionSurface: true,
+    tacticalLead: result.tacticalLead,
+    tacticalSuffix: result.tacticalSuffix,
+    compositeFallbackVisible: result.compositeFallback,
+    railHasHorizonNet: result.railHasHorizonNet,
+    horizonNetFallbackDiagnostics: result.railHasHorizonNet ? 'horizon-net fallback' : '',
+    gateChipLabel: result.gateChip,
+    chips: result.chips,
+  };
+}
+
 function testImportGuard(t, bundle) {
   hydrateCockpit(t, bundle);
   const healthyScore = t.scoreHydrationBundleQuality(bundle);
@@ -379,6 +434,7 @@ function runSuite(script, bundle, label) {
     compare: testCompareMode(boot(script), bundle),
     navigation: testRailNavigation(boot(script), bundle),
     fundsFlow: testFundsFlowCard(boot(script), bundle),
+    creditMission: testCreditMissionSurface(boot(script), bundle),
     statePreservation: testStatePreservation(boot(script), bundle),
     importGuard: testImportGuard(boot(script), bundle),
     hydrationBanner: testHydrationBanner(boot(script), bundle),
@@ -404,7 +460,7 @@ if (JSON.stringify(snap(run1)) !== JSON.stringify(snap(run2))) {
 const out = [
   'html_headless_cockpit_ok',
   `Required functions: ${REQUIRED_FNS.join(', ')}.`,
-  'Blocks: drawRvBasisChart (5 horizons), toggleFocusMode, toggleCompareMode, setActiveNode/flipNode, fundsFlowCard.',
+  'Blocks: drawRvBasisChart (5 horizons), toggleFocusMode, toggleCompareMode, setActiveNode/flipNode, fundsFlowCard, creditMissionSurface.',
   'Executed twice (run1, run2) with identical snapshots.',
   JSON.stringify(run1, null, 2),
 ].join('\n');

@@ -39,8 +39,19 @@ class TestTransmissionControlCockpit(unittest.TestCase):
             "function formatOrdinalPercentile",
             "function buildBasisTacticalSentence",
             "function renderBasisImplicationRail",
+            "MISSION_SURFACE_NODES",
+            "function isMissionSurfaceNode",
+            "function buildMissionTacticalLead",
+            "function buildMissionChinaSuffix",
+            "function buildMissionImplicationChips",
+            "function resolveMissionGateChipLabel",
+            "function renderMissionImplicationRail",
+            'id="basisTacticalSuffix"',
+            "Composite fallback",
+            "horizon-net fallback",
             'id="basisSummaryStrip"',
             'id="basisTacticalBanner"',
+            "__creditMissionProbe",
             'id="cockpitHorizonRow"',
             "header-instrument-stack",
             "node-coverage-banner--status-rail",
@@ -96,6 +107,12 @@ class TestTransmissionControlCockpit(unittest.TestCase):
             self.assertIn("compareToggle", proc.stdout)
             self.assertIn("railRendered", proc.stdout)
             self.assertIn("fundsFlowCardRendered", proc.stdout)
+            self.assertIn("creditMissionSurface", proc.stdout)
+            self.assertIn("Composite fallback", proc.stdout)
+            self.assertIn("horizon-net fallback", proc.stdout)
+            self.assertIn("tacticalLead", proc.stdout)
+            self.assertIn("tacticalSuffix", proc.stdout)
+            self.assertIn("Tight + China Caution", proc.stdout)
 
 
 if __name__ == "__main__":
