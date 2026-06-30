@@ -84,11 +84,21 @@ function makeSandbox() {
       if (sel === '[data-horizon]') return [];
       return [];
     }
-    querySelector() { return null; }
+    querySelector(sel) {
+      if (sel === '.cockpit-unhydrated-overlay') return this._overlay || null;
+      return null;
+    }
+    appendChild(child) {
+      if (this.id === 'cockpitChartCanvas') this._overlay = child;
+      return child;
+    }
   }
   const els = {};
+  const bodyEl = new El('body');
   return {
     document: {
+      body: bodyEl,
+      createElement() { return new El(''); },
       getElementById(id) { if (!els[id]) els[id] = new El(id); return els[id]; },
       querySelectorAll(sel) {
         if (sel === '[data-node-id]') {
@@ -145,6 +155,9 @@ function seedDom(t) {
     'cockpitDecisionRail', 'cockpitDetailBand', 'cockpitFocusLayer',
     'cockpitCompareLayer', 'btnHeresWhy', 'btnCompareMode', 'nodeCockpitZone',
     'legacyConsoleZone', 'btnWorkspaceToggle',
+    'hydrationBanner', 'hydrationBannerTitle', 'hydrationBannerBody',
+    'btnHydrationBannerImport', 'btnHydrationBannerDismiss', 'cockpitChartCanvas',
+    'hydrationImportStatus', 'btnImportHydration',
   ];
   ids.forEach(id => t.document.getElementById(id));
   t.LADDER.forEach(r => {

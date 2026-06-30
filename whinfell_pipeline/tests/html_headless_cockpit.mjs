@@ -47,7 +47,9 @@ this.__test = {
   renderNodeCockpitShell, flipNode, jumpToNode, activeNodeId, applyWorkspaceView,
   applyCompareSelection, buildStateFromDOM, createEmptyState, createEmptyNavigation,
   renderFundsFlowSponsorshipCard, assessHydrationImportGuard, scoreHydrationBundleQuality,
-  setSharedHorizon, document,
+  assessHydrationSession, renderHydrationBanner, setSharedHorizon, document,
+  assessCockpitHydrationMode, buildNodeGateDecisionSentence, renderNodeCoverageBanner,
+  assessPostImportWorkflow, deriveGate,
 };
 `;
   return body;
@@ -98,7 +100,14 @@ function makeSandbox() {
       if (sel === '[data-horizon]') return [];
       return [];
     }
-    querySelector() { return null; }
+    querySelector(sel) {
+      if (sel === '.cockpit-unhydrated-overlay') return this._overlay || null;
+      return null;
+    }
+    appendChild(child) {
+      if (this.id === 'cockpitChartCanvas') this._overlay = child;
+      return child;
+    }
   }
 
   const els = {};
@@ -117,6 +126,9 @@ function makeSandbox() {
 
   return {
     document: {
+      createElement() {
+        return new El('');
+      },
       getElementById(id) {
         if (!els[id]) els[id] = new El(id);
         const el = els[id];
@@ -155,8 +167,16 @@ function seedCockpitDom(t) {
     'cockpitDecisionRail', 'cockpitDetailBand', 'cockpitFocusLayer',
     'cockpitCompareLayer', 'btnHeresWhy', 'btnCompareMode', 'nodeCockpitZone',
     'legacyConsoleZone', 'btnWorkspaceToggle',
+    'hydrationBanner', 'hydrationBannerTitle', 'hydrationBannerBody',
+    'btnHydrationBannerImport', 'btnHydrationBannerDismiss', 'cockpitChartCanvas',
     'whinfellScore', 'transmissionState', 'regimeTag', 'grossA', 'grossB',
     'cmdFreshnessSubCluster', 'cmdFreshnessMeta', 'cmdFreshnessDot', 'cmdFreshnessCluster', 'cmdFreshness',
+    'nodeCoverageBanner', 'postImportWorkflow', 'postImportSteps', 'sessionReadyChip', 'commandBar',
+    'cmdWhinfellScore', 'cmdScoreZone', 'txHealthValue', 'txHealthMeta', 'cmdTxState', 'cmdRegime',
+    'cmdSq3Score', 'cmdSq3Band', 'cmdGrossRisk', 'cmdGrossPosture', 'cmdHydrationBadge', 'gateText',
+    'gateChip', 'gateHelperText', 'shockText', 'shockMeta', 'scoreCard', 'cmdGlobalCluster', 'cmdChinaCluster',
+    'gateExplainList', 'gateUnlockList', 'gateHealthSub', 'gateDetailPanel', 'sq3ComputedDisplay', 'sq3BandChip',
+    'scoreZoneChip', 'gateStatusChip', 'txChip', 'grossTotal', 'grossMmHint', 'postureWarning',
   ];
   ids.forEach(id => t.document.getElementById(id));
 }
@@ -291,6 +311,45 @@ function testStatePreservation(t, bundle) {
   return { nodePreserved: nodeBefore, horizonPreserved: hzBefore };
 }
 
+function testNodeCoverageBanner(t, bundle) {
+  seedCockpitDom(t);
+  t.appState.ui = t.appState.ui || {};
+  t.appState.ui.workspaceView = 'cockpit';
+  const degraded = t.assessCockpitHydrationMode(t.buildStateFromDOM());
+  if (degraded.mode !== 'degraded') throw new Error('expected degraded mode on fresh session');
+  t.hydrateFromBundle(bundle);
+  const partialOrComplete = t.assessCockpitHydrationMode(t.buildStateFromDOM());
+  if (!['partial', 'complete'].includes(partialOrComplete.mode)) {
+    throw new Error(`expected partial/complete after hydrate, got ${partialOrComplete.mode}`);
+  }
+  const cockpit = t.mergeNodeCockpit('basis', t.buildStateFromDOM());
+  t.renderNodeCoverageBanner(cockpit, t.buildStateFromDOM());
+  const banner = t.document.getElementById('nodeCoverageBanner');
+  if (banner.classList.contains('zone-hidden')) throw new Error('coverage banner should be visible');
+  const gateLine = t.buildNodeGateDecisionSentence(cockpit, t.buildStateFromDOM(), t.deriveGate(t.buildStateFromDOM()));
+  if (!gateLine.includes('Tight Risk') && !gateLine.includes('Blocked') && !gateLine.includes('eligible')) {
+    throw new Error(`unexpected gate sentence: ${gateLine}`);
+  }
+  return { degraded: degraded.mode, hydrated: partialOrComplete.mode, gateLine };
+}
+
+function testHydrationBanner(t, bundle) {
+  seedCockpitDom(t);
+  t.appState.ui = t.appState.ui || {};
+  t.appState.ui.workspaceView = 'cockpit';
+  const missing = t.assessHydrationSession(t.buildStateFromDOM());
+  if (missing.level !== 'missing' || !missing.showBanner) {
+    throw new Error('expected missing hydration assessment on fresh session');
+  }
+  t.renderHydrationBanner(t.buildStateFromDOM());
+  const banner = t.document.getElementById('hydrationBanner');
+  if (banner.classList.contains('zone-hidden')) throw new Error('hydration banner should be visible when missing');
+  t.hydrateFromBundle(bundle);
+  const ok = t.assessHydrationSession(t.buildStateFromDOM());
+  if (ok.level !== 'ok') throw new Error(`expected ok after hydrate, got ${ok.level}`);
+  return { missingLevel: missing.level, okAfterHydrate: true };
+}
+
 function testImportGuard(t, bundle) {
   hydrateCockpit(t, bundle);
   const healthyScore = t.scoreHydrationBundleQuality(bundle);
@@ -316,6 +375,8 @@ function runSuite(script, bundle, label) {
     fundsFlow: testFundsFlowCard(boot(script), bundle),
     statePreservation: testStatePreservation(boot(script), bundle),
     importGuard: testImportGuard(boot(script), bundle),
+    hydrationBanner: testHydrationBanner(boot(script), bundle),
+    nodeCoverage: testNodeCoverageBanner(boot(script), bundle),
   };
 }
 

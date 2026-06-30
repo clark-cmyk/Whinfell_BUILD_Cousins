@@ -64,6 +64,208 @@ window.DICTIONARY_BADGE_DEFAULT = {
     .freshness-sub-sep { opacity: 0.45; user-select: none; }
     .cmd-authority-pipeline { border-color: rgba(61,139,253,0.45); background: rgba(61,139,253,0.08); color: #3d8bfd; }
     .cmd-authority-override { border-color: rgba(245,166,35,0.45); background: rgba(245,166,35,0.1); color: #f5a623; }
+    body.hydration-session-degraded > header {
+      box-shadow: inset 0 3px 0 0 #f5a623, 0 4px 18px rgba(245,166,35,0.12);
+    }
+    body.hydration-session-stale > header {
+      box-shadow: inset 0 3px 0 0 #f56565, 0 4px 18px rgba(245,101,101,0.14);
+    }
+    .hydration-banner {
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(245,166,35,0.45);
+      background: linear-gradient(90deg, rgba(245,166,35,0.14), rgba(207,92,92,0.08));
+      padding: 10px 16px;
+      animation: hydration-banner-enter 0.35s ease-out;
+    }
+    @keyframes hydration-banner-enter {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hydration-banner--stale {
+      border-bottom-color: rgba(207,92,92,0.5);
+      background: linear-gradient(90deg, rgba(207,92,92,0.12), rgba(245,166,35,0.08));
+    }
+    .hydration-banner-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 14px;
+      max-width: 1200px;
+    }
+    .hydration-banner-title { font-size: 12px; font-weight: 800; color: #f5a623; letter-spacing: 0.02em; }
+    .hydration-banner--stale .hydration-banner-title { color: #f56565; }
+    .hydration-banner-body { font-size: 11px; color: #c5d0dc; flex: 1; min-width: 200px; line-height: 1.4; }
+    .hydration-import-status-warn { color: #f5a623 !important; font-weight: 700; }
+    .hydration-import-status-critical { color: #f56565 !important; font-weight: 700; }
+    .btn-import-pulse {
+      animation: import-pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(61,139,253,0.5);
+    }
+    @keyframes import-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(61,139,253,0.35); }
+      50% { box-shadow: 0 0 0 6px rgba(61,139,253,0); }
+    }
+    .cockpit-unhydrated-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 2;
+      padding: 12px;
+      text-align: center;
+      background: rgba(15,19,24,0.55);
+      border: 1px dashed rgba(245,166,35,0.45);
+      border-radius: 8px;
+    }
+    .cockpit-unhydrated-overlay p { font-size: 11px; color: #f5a623; font-weight: 600; max-width: 320px; line-height: 1.45; }
+    .node-coverage-banner {
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+    .node-coverage-banner--degraded {
+      background: linear-gradient(90deg, rgba(207,92,92,0.14), rgba(245,166,35,0.06));
+      border-bottom-color: rgba(207,92,92,0.45);
+    }
+    .node-coverage-banner--partial {
+      background: linear-gradient(90deg, rgba(245,166,35,0.12), rgba(76,142,217,0.06));
+      border-bottom-color: rgba(245,166,35,0.45);
+    }
+    .node-coverage-banner--complete {
+      background: linear-gradient(90deg, rgba(61,221,140,0.08), rgba(76,142,217,0.05));
+      border-bottom-color: rgba(61,221,140,0.35);
+    }
+    .node-coverage-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 8px 12px;
+      margin-bottom: 6px;
+    }
+    .node-coverage-mode {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .node-coverage-banner--degraded .node-coverage-mode { color: #f56565; }
+    .node-coverage-banner--partial .node-coverage-mode { color: #f5a623; }
+    .node-coverage-banner--complete .node-coverage-mode { color: #3dd68c; }
+    .node-coverage-stamp { font-size: 9px; color: #8b9cb3; font-variant-numeric: tabular-nums; }
+    .node-coverage-headline { flex: 1; min-width: 200px; color: #c5d0dc; font-weight: 600; font-size: 10px; }
+    .node-coverage-summary { margin: 0 0 4px; color: #e8edf3; font-weight: 700; font-size: 10px; }
+    .node-coverage-context { margin: 0 0 3px; font-size: 9px; color: #9eacbb; line-height: 1.35; }
+    .node-coverage-tradable { color: #3dd68c; font-weight: 800; text-transform: uppercase; font-size: 8px; }
+    .node-coverage-blocked { color: #f56565; font-weight: 800; text-transform: uppercase; font-size: 8px; }
+    .node-coverage-upstream { margin: 4px 0 2px; font-size: 9px; font-weight: 600; color: #f5a623; line-height: 1.35; }
+    .node-coverage-impact { margin: 0 0 6px; font-size: 9px; color: #c5d0dc; line-height: 1.35; }
+    .coverage-checklist {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .coverage-check { display: inline-flex; align-items: center; gap: 3px; }
+    .coverage-check--ok { color: #3dd68c; }
+    .coverage-check--partial { color: #f5a623; }
+    .coverage-check--miss { color: #f56565; }
+    .post-import-workflow {
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(76,142,217,0.35);
+      background: rgba(76,142,217,0.08);
+      padding: 8px 16px;
+    }
+    .post-import-workflow-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+      max-width: 1200px;
+    }
+    .post-import-workflow-title {
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #4c8ed9;
+    }
+    .post-import-steps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .workflow-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .workflow-step--done { border-color: rgba(61,221,140,0.45); color: #3dd68c; }
+    .workflow-step--active { border-color: rgba(76,142,217,0.55); color: #9ec5f0; }
+    .workflow-step--blocked { opacity: 0.45; pointer-events: none; }
+    .workflow-step-btn {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid rgba(76,142,217,0.45);
+      background: rgba(76,142,217,0.12);
+      color: #4c8ed9;
+      cursor: pointer;
+    }
+    .workflow-step-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .session-ready-chip {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(61,221,140,0.45);
+      background: rgba(61,221,140,0.1);
+      color: #3dd68c;
+      white-space: nowrap;
+    }
+    .gate-decision-sentence {
+      font-size: 11px;
+      font-weight: 600;
+      color: #d6e2ef;
+      line-height: 1.45;
+      margin: 0 0 6px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.2);
+      border-left: 3px solid rgba(76,142,217,0.55);
+    }
+    .funds-flow-upstream {
+      font-size: 10px;
+      font-weight: 600;
+      color: #f5a623;
+      margin: 0 0 4px;
+      line-height: 1.4;
+    }
+    .funds-flow-impact {
+      font-size: 10px;
+      color: #c5d0dc;
+      margin: 0;
+      line-height: 1.4;
+    }
+    #cockpitShell.cockpit-mode-diagnostic .cockpit-actions .keyboard-hint { opacity: 0.55; }
+    #cockpitShell.cockpit-mode-diagnostic .funds-flow-diagnostic { display: block; }
+    #cockpitShell.cockpit-mode-trade .funds-flow-diagnostic { display: none; }
+    #cockpitShell.cockpit-mode-trade .node-coverage-banner--complete { opacity: 0.92; }
     .tracer-flow-suggested { border-color: rgba(245,166,35,0.55) !important; box-shadow: 0 0 12px rgba(245,166,35,0.08); }
     .tracer-flow-confirmed { border-color: rgba(61,221,140,0.45) !important; }
     .tracer-flow-override { border-color: rgba(245,166,35,0.65) !important; background: rgba(245,166,35,0.06); }
@@ -1077,6 +1279,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
       <div class="flex items-center gap-2.5 flex-wrap">
         <h1 class="text-[15px] font-semibold tracking-tight">Whinfell Transmission Control</h1>
         <span class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/30 px-2 py-0.5 rounded">Phase 2.2</span>
+        <span id="tcConsoleBuildBadge" class="text-[8px] font-bold uppercase tracking-wider text-wtm-green bg-emerald-500/10 border border-wtm-green/35 px-2 py-0.5 rounded" title="Operator-console UX build — hard-refresh if missing coverage banner">—</span>
         <span id="ddVersionBadge" class="text-[9px] font-bold uppercase tracking-wider text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></span>
         <button type="button" id="btnWorkspaceToggle" class="text-[9px] font-bold uppercase tracking-wider text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20">Node Cockpits</button>
       </div>
@@ -1096,6 +1299,15 @@ window.DICTIONARY_BADGE_DEFAULT = {
     </div>
   </header>
 
+  <section id="hydrationBanner" class="hydration-banner zone-hidden" role="alert" aria-live="polite" aria-label="Hydration status">
+    <div class="hydration-banner-inner">
+      <span id="hydrationBannerTitle" class="hydration-banner-title">Hydration required</span>
+      <p id="hydrationBannerBody" class="hydration-banner-body">Import a v1.2.0 hydration bundle to load RV quartiles, CURRENT READING, and funds flow.</p>
+      <button type="button" id="btnHydrationBannerImport" class="text-xs px-3 py-1.5 rounded-md border border-wtm-accent/60 text-wtm-accent bg-wtm-accent/20 hover:bg-wtm-accent/30 font-bold">Import Now</button>
+      <button type="button" id="btnHydrationBannerDismiss" class="text-[10px] px-2 py-1 rounded text-wtm-muted hover:text-wtm-text">Dismiss</button>
+    </div>
+  </section>
+
   <!-- Decision Strip + Command Bar -->
   <section id="commandBar" class="shrink-0 border-b border-wtm-border bg-wtm-surface gate-glow-amber transition-all px-4 py-2">
     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
@@ -1112,6 +1324,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
         <span id="cmdGrossRisk" class="tabular-nums text-wtm-accent">—</span>
         <span id="cmdGrossPosture" class="text-[9px]">—</span>
         <span id="cmdHydrationBadge" class="hidden text-[7px] font-bold uppercase px-1 py-0.5 rounded border">—</span>
+        <span id="sessionReadyChip" class="session-ready-chip zone-hidden" role="status" aria-live="polite">—</span>
         <a href="whinfell-transmission-ladder-deep-dive.html" target="_blank" rel="noopener" class="text-[9px] text-wtm-accent hover:underline font-bold uppercase tracking-wide">Deep Dive</a>
         <button type="button" id="btnToggleGateDetail" class="text-[9px] text-wtm-accent hover:underline">Gate detail</button>
       </div>
@@ -1189,6 +1402,13 @@ window.DICTIONARY_BADGE_DEFAULT = {
   <!-- Phase 2 Node Cockpit Shell (UI-1) -->
   <section id="nodeCockpitZone" class="flex-1 min-h-0 flex flex-col overflow-hidden" aria-label="Node cockpit workspace">
     <nav id="nodeRail" class="node-rail" aria-label="Risk curve navigation"></nav>
+    <div id="nodeCoverageBanner" class="node-coverage-banner zone-hidden" role="status" aria-live="polite" aria-label="Hydration and coverage"></div>
+    <section id="postImportWorkflow" class="post-import-workflow zone-hidden" aria-label="Post-import workflow">
+      <div class="post-import-workflow-inner">
+        <span class="post-import-workflow-title">Desk checklist</span>
+        <ol id="postImportSteps" class="post-import-steps"></ol>
+      </div>
+    </section>
     <div id="cockpitShell" class="flex-1 min-h-0 flex flex-col overflow-hidden">
       <div class="cockpit-main flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-12 gap-px bg-wtm-border overflow-hidden">
         <div id="cockpitChartArea" class="cockpit-chart-area xl:col-span-8 bg-wtm-bg flex flex-col min-h-0 overflow-hidden">
@@ -1618,6 +1838,8 @@ window.DICTIONARY_BADGE_DEFAULT = {
 const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
+/** Bump when operator-console UX changes — visible in header for reload verification. */
+const TC_CONSOLE_BUILD = '2.2-ux-2026-06-29';
 const HYDRATION_BUNDLE_VERSION = '1.2.0';
 const RV_HORIZONS = ['1m', '3m', '6m', '12m', '3y'];
 const RV_HORIZON_LABELS = { '1m': '1M', '3m': '3M', '6m': '6M', '12m': '12M', '3y': '3Y' };
@@ -2725,6 +2947,7 @@ function createEmptyHydration() {
     node_cockpits: null,
     cockpit_context: null,
     flows_sidecar: null,
+    flows_health: null,
     china_as_of: null,
     barchart_as_of: null,
   };
@@ -2743,7 +2966,14 @@ function createEmptyState() {
     chart: createEmptyChartState(),
     panel: createEmptyPanelState(),
     node_cockpit_overrides: {},
-    ui: { trackView: 'both', gateDetailOpen: false, expandedPrompt: null, workspaceView: 'cockpit' },
+    ui: {
+      trackView: 'both',
+      gateDetailOpen: false,
+      expandedPrompt: null,
+      workspaceView: 'cockpit',
+      hydrationBannerDismissed: false,
+      postImportWorkflow: null,
+    },
     grossRisk: { bookA: '', bookB: '', capitalBaseMm: '', posture: '', postureManual: false, handoverNote: '' },
     research: { keyObservation: '', importedObservation: '', grossRiskRecommendation: '', btcBias: '', timestamp: '' },
     operator: createEmptyOperator(),
@@ -3926,7 +4156,7 @@ function acceptSuggestedTracer() {
   renderTracerFlowChrome();
   renderTracerVisual();
   renderProvenancePanel(buildStateFromDOM());
-  renderCommandBar(buildStateFromDOM(), deriveGate(buildStateFromDOM()));
+  renderAll();
   markDirty();
   showToast('Operator Confirmed — suggestions applied to horizon matrix');
 }
@@ -3936,6 +4166,8 @@ function dismissSuggestedTracer() {
   if (appState.tracer.flow === 'suggested') appState.tracer.flow = 'empty';
   renderSuggestedTracerPanel();
   renderTracerFlowChrome();
+  renderPostImportWorkflowStrip(buildStateFromDOM());
+  markDirty();
   showToast('Tracer suggestions dismissed — matrix unchanged');
 }
 
@@ -4098,6 +4330,9 @@ function hydrateFromBundle(bundle, options = {}) {
   if (bundle.flows_sidecar) {
     appState.hydration.flows_sidecar = bundle.flows_sidecar;
   }
+  if (bundle.flows_health) {
+    appState.hydration.flows_health = bundle.flows_health;
+  }
   if (bundle.china?.as_of) {
     appState.hydration.china_as_of = bundle.china.as_of;
   }
@@ -4107,6 +4342,9 @@ function hydrateFromBundle(bundle, options = {}) {
   }
   if (bundle.node_cockpits) {
     appState.hydration.node_cockpits = bundle.node_cockpits;
+    appState.ui = appState.ui || createEmptyState().ui;
+    appState.ui.hydrationBannerDismissed = false;
+    startPostImportWorkflow();
   }
   if (bundle.cockpit_context) {
     appState.hydration.cockpit_context = bundle.cockpit_context;
@@ -4440,9 +4678,18 @@ function loadState() {
 
 function persistState() {
   appState = buildStateFromDOM();
+  const wf = appState.ui?.postImportWorkflow;
+  if (wf?.importAt) {
+    const assessment = assessPostImportWorkflow(appState);
+    if (assessment.steps[0]?.done && assessment.steps[1]?.done) {
+      wf.savedAfterImport = true;
+    }
+  }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
   setSaveIndicator('Saved · ' + new Date().toLocaleString(), true);
   flashSave();
+  renderPostImportWorkflowStrip(appState);
+  renderSessionReadyChip(appState);
 }
 
 function renderPrompts() {
@@ -4902,20 +5149,116 @@ function updateGrossDisplay(state, gate) {
   el('postureWarning').classList.toggle('hidden', !warn);
 }
 
+function assessHydrationSession(state) {
+  const prov = state?.provenance || createEmptyProvenance();
+  const hydration = state?.hydration || createEmptyHydration();
+  const cockpits = hydration.node_cockpits;
+  const hasCockpits = cockpits && LADDER.every(r => cockpits[r.id]);
+  if (!prov.hydratedAt) {
+    return {
+      level: 'missing',
+      title: 'Hydration required — cockpit panels degraded',
+      body: 'No pipeline bundle imported. Run ./scripts/desk_live_session.sh (or Daily AM), then Import latest.json v1.2.0. CURRENT READING and RV quartiles stay empty until import.',
+      showBanner: true,
+      pulseImport: true,
+    };
+  }
+  if (!hasCockpits) {
+    return {
+      level: 'stale',
+      title: 'Stale or incomplete bundle in session',
+      body: 'Session has a timestamp but no node cockpits (likely v1.0.0 or pre–Phase 2). Re-import data/hydration/latest.json or Desktop/Whinfell_Hydration_latest.json.',
+      showBanner: true,
+      pulseImport: true,
+    };
+  }
+  const quality = scoreHydrationBundleQuality({
+    node_cockpits: cockpits,
+    flows_sidecar: hydration.flows_sidecar,
+  });
+  if (quality < 45) {
+    return {
+      level: 'incomplete',
+      title: 'Hydration bundle quality low',
+      body: 'Bundle imported but RV/flows data is thin. Re-run desk live session and re-import for full quartiles.',
+      showBanner: true,
+      pulseImport: false,
+    };
+  }
+  return { level: 'ok', title: '', body: '', showBanner: false, pulseImport: false };
+}
+
+function renderHydrationBanner(state) {
+  const banner = el('hydrationBanner');
+  if (!banner) return;
+  const assessment = assessHydrationSession(state);
+  const dismissed = appState.ui?.hydrationBannerDismissed && assessment.level === 'missing';
+  const show = assessment.showBanner && !dismissed;
+  banner.classList.toggle('zone-hidden', !show);
+  banner.classList.toggle('hydration-banner--stale', assessment.level === 'stale' || assessment.level === 'incomplete');
+  if (show) {
+    el('hydrationBannerTitle').textContent = assessment.title;
+    el('hydrationBannerBody').textContent = assessment.body;
+  }
+  const importBtn = el('btnImportHydration');
+  if (importBtn) importBtn.classList.toggle('btn-import-pulse', assessment.pulseImport && !dismissed);
+  if (document.body?.classList) {
+    document.body.classList.toggle('hydration-session-degraded', assessment.level === 'missing' && !dismissed);
+    document.body.classList.toggle('hydration-session-stale', assessment.level === 'stale' || assessment.level === 'incomplete');
+  }
+}
+
+const HYDRATION_IMPORT_HINT = [
+  'Select the hydration JSON file:',
+  '',
+  'EASIEST: Whinfell_Hydration_latest.json',
+  '  → Desktop or Downloads folder',
+  '',
+  'OR: Desktop → Whinfell_BUILD_Cousins → data → hydration → latest.json',
+  '',
+  'NOT whinfell_drop (that folder is CSV downloads only).',
+].join('\n');
+
+function buildHydrationImportConfirmMessage(actionLabel) {
+  return `${HYDRATION_IMPORT_HINT}\n\nClick OK to ${actionLabel}.`;
+}
+
+function maybePromptFirstHydrationImport(state) {
+  try {
+    if (sessionStorage.getItem('whinfell_hydration_prompt_v1')) return;
+    const assessment = assessHydrationSession(state);
+    if (!assessment.showBanner) return;
+    if (assessment.level === 'missing' && appState.ui?.hydrationBannerDismissed) return;
+    sessionStorage.setItem('whinfell_hydration_prompt_v1', '1');
+    setTimeout(() => {
+      const msg = buildHydrationImportConfirmMessage('choose the file now');
+      if (window.confirm(msg)) openHydrationFilePicker(false);
+    }, 700);
+  } catch (_) { /* sessionStorage unavailable */ }
+}
+
 function renderHydrationImportStatus(state) {
   const node = el('hydrationImportStatus');
   if (!node) return;
+  const assessment = assessHydrationSession(state);
   const prov = state?.provenance || createEmptyProvenance();
-  if (!prov.hydratedAt) {
-    node.textContent = 'No bundle imported · run_csv_download.py daily first';
-    node.className = 'text-[9px] text-wtm-muted max-w-[220px] text-right leading-tight';
+  if (assessment.level === 'missing') {
+    node.textContent = '⚠ No bundle imported — panels degraded';
+    node.className = 'text-[9px] hydration-import-status-critical max-w-[240px] text-right leading-tight';
+    node.title = 'Import data/hydration/latest.json after desk live session';
+    return;
+  }
+  if (assessment.level === 'stale' || assessment.level === 'incomplete') {
+    node.textContent = '⚠ Stale bundle — re-import v1.2.0';
+    node.className = 'text-[9px] hydration-import-status-warn max-w-[240px] text-right leading-tight';
+    node.title = assessment.body;
     return;
   }
   const fresh = prov.freshnessStatus || computeFreshnessFromIso(prov.dataAsOf).status;
   const when = prov.hydratedAt ? new Date(prov.hydratedAt).toLocaleTimeString() : '—';
   const snap = prov.snapshotId ? prov.snapshotId.slice(0, 18) : '—';
-  node.textContent = `Imported ${when} · ${freshnessLabelFromStatus(fresh)} · ${snap}`;
-  node.className = `text-[9px] max-w-[220px] text-right leading-tight ${fresh === 'fresh' ? 'text-wtm-green' : fresh === 'stale' ? 'text-wtm-red' : 'text-wtm-amber'}`;
+  node.textContent = `✓ Imported ${when} · ${freshnessLabelFromStatus(fresh)} · ${snap}`;
+  node.className = `text-[9px] max-w-[240px] text-right leading-tight ${fresh === 'fresh' ? 'text-wtm-green' : fresh === 'stale' ? 'text-wtm-red' : 'text-wtm-amber'}`;
   node.title = `Data as-of: ${prov.dataAsOf || '—'} · Source: ${prov.sourceChannel || '—'}`;
 }
 
@@ -5267,6 +5610,315 @@ function setSharedHorizon(horizon) {
   markDirty();
 }
 
+const COVERAGE_NODE_KEYS = [
+  ['credit', 'Credit'],
+  ['breadth', 'Breadth'],
+  ['highbeta', 'BTC'],
+  ['basis', 'Basis'],
+];
+
+function nodeHasRvHistory(cockpit) {
+  const seriesMap = cockpit?.rv_basis?.series || {};
+  const seriesId = cockpit?.rv_basis?.active_series_id || Object.keys(seriesMap)[0];
+  const hz = seriesId ? seriesMap[seriesId]?.horizons : null;
+  return !!(hz && Object.keys(hz).length >= 3);
+}
+
+function nodeFlowsCoverageStatus(cockpits, nodeId) {
+  const status = cockpits?.[nodeId]?.funds_flows?.flows_meta?.flows_status || 'unavailable';
+  if (status === 'ok') return 'ok';
+  if (status === 'partial' || status === 'fallback_1d') return 'partial';
+  return 'miss';
+}
+
+function assessCockpitHydrationMode(state) {
+  const prov = state?.provenance || createEmptyProvenance();
+  const hydration = state?.hydration || createEmptyHydration();
+  const cockpits = hydration.node_cockpits;
+  const hasCockpits = cockpits && LADDER.every(r => cockpits[r.id]);
+
+  if (!prov.hydratedAt || !hasCockpits) {
+    return {
+      mode: 'degraded',
+      title: 'Degraded',
+      headline: 'No hydration — tracers only, CURRENT READING disabled.',
+      tradable: 'Tracers and export only.',
+      blocked: 'CURRENT READING, RV quartiles, Funds Flow, sized ideas.',
+    };
+  }
+
+  const globalFlows = resolveFlowsStatusFromState(state);
+  const nodeStatuses = COVERAGE_NODE_KEYS.map(([id]) => nodeFlowsCoverageStatus(cockpits, id));
+  const allFlowsOk = globalFlows === 'ok' && nodeStatuses.every(s => s === 'ok');
+
+  if (allFlowsOk) {
+    return {
+      mode: 'complete',
+      title: 'Complete',
+      headline: 'Hydration + flows — all panels eligible.',
+      tradable: 'Trade reads: rich/cheap, directional vs RV, sponsorship, gate.',
+      blocked: '',
+    };
+  }
+
+  return {
+    mode: 'partial',
+    title: 'Partial',
+    headline: 'Hydration loaded, flows missing — RV active, sponsorship blocked, size capped.',
+    tradable: 'RV history, ladder, and gate reads — half size or less.',
+    blocked: 'Missing flows are blocked, not neutral.',
+  };
+}
+
+function buildCoverageChecklist(state) {
+  const cockpits = state?.hydration?.node_cockpits;
+  const globalFlows = resolveFlowsStatusFromState(state);
+  const historyOk = cockpits && LADDER.some(r => nodeHasRvHistory(cockpits[r.id]));
+  const items = [
+    { key: 'history', label: 'History', status: historyOk ? 'ok' : 'miss' },
+    { key: 'flows', label: 'Flows', status: globalFlows === 'ok' ? 'ok' : (globalFlows === 'unavailable' ? 'miss' : 'partial') },
+  ];
+  COVERAGE_NODE_KEYS.forEach(([id, label]) => {
+    items.push({ key: id, label, status: nodeFlowsCoverageStatus(cockpits, id) });
+  });
+  return items;
+}
+
+function renderCoverageChecklistHtml(items) {
+  return items.map(item => {
+    const mark = item.status === 'ok' ? '✓' : item.status === 'partial' ? '◐' : '✕';
+    const cls = item.status === 'ok' ? 'coverage-check--ok' : item.status === 'partial' ? 'coverage-check--partial' : 'coverage-check--miss';
+    return `<span class="coverage-check ${cls}" title="${escapeHtml(item.label)} ${item.status}">${escapeHtml(item.label)} ${mark}</span>`;
+  }).join('');
+}
+
+function buildNodeCoverageSummary(cockpit, modeInfo) {
+  const nodeId = cockpit.node_id;
+  const row = LADDER.find(r => r.id === nodeId);
+  const flowsStatus = cockpit.funds_flows?.flows_meta?.flows_status || 'unavailable';
+  if (modeInfo.mode === 'degraded') {
+    return 'Import hydration before sizing from this node.';
+  }
+  if (modeInfo.mode === 'complete') {
+    return `${row?.short || 'Node'}: all panels eligible — size follows gate sentence below.`;
+  }
+  if (nodeId === 'basis' && flowsStatus === 'unavailable') {
+    return 'Basis is running RV-only, no flows sponsorship — size capped.';
+  }
+  if (flowsStatus === 'unavailable') {
+    return `${row?.short || 'Node'}: RV active, flows unavailable — size capped.`;
+  }
+  if (flowsStatus === 'partial' || flowsStatus === 'fallback_1d') {
+    return `${row?.short || 'Node'}: partial flows — sponsorship degraded, size capped.`;
+  }
+  return modeInfo.tradable;
+}
+
+function buildCoverageBannerContextLines(cockpit, modeInfo, state) {
+  if (modeInfo.mode === 'complete') return '';
+  if (modeInfo.mode === 'degraded') {
+    return `<p class="node-coverage-context"><span class="node-coverage-blocked">Blocked:</span> ${escapeHtml(modeInfo.blocked)}</p>`;
+  }
+  const flowsStatus = cockpit.funds_flows?.flows_meta?.flows_status || 'unavailable';
+  let nodeLines = '';
+  if (flowsStatus !== 'ok') {
+    const impact = flowsStatus === 'unavailable'
+      ? buildFlowsImpactLine(cockpit)
+      : `${cockpit.display_name || 'Node'}: sponsorship degraded — do not treat as neutral.`;
+    nodeLines = `
+    <p class="node-coverage-upstream">${escapeHtml(describeFlowsUpstreamGap(cockpit, state))}</p>
+    <p class="node-coverage-impact">${escapeHtml(impact)}</p>`;
+  }
+  return `
+    <p class="node-coverage-context"><span class="node-coverage-tradable">Tradable:</span> ${escapeHtml(modeInfo.tradable)}</p>
+    <p class="node-coverage-context"><span class="node-coverage-blocked">Blocked:</span> ${escapeHtml(modeInfo.blocked)}</p>${nodeLines}`;
+}
+
+function renderNodeCoverageBanner(cockpit, state) {
+  const banner = el('nodeCoverageBanner');
+  const shell = el('cockpitShell');
+  if (!banner) return;
+  const modeInfo = assessCockpitHydrationMode(state);
+  const metrics = resolveCommandBarMetrics(state, deriveGate(state), state.provenance || createEmptyProvenance());
+  const stamp = metrics.snapshotId || state.provenance?.snapshotId || '—';
+  const checklist = renderCoverageChecklistHtml(buildCoverageChecklist(state));
+  const summary = buildNodeCoverageSummary(cockpit, modeInfo);
+  const contextLines = buildCoverageBannerContextLines(cockpit, modeInfo, state);
+
+  banner.className = `node-coverage-banner node-coverage-banner--${modeInfo.mode}`;
+  banner.innerHTML = `
+    <div class="node-coverage-head">
+      <span class="node-coverage-mode">${escapeHtml(modeInfo.title)}</span>
+      <span class="node-coverage-stamp">${escapeHtml(stamp)}</span>
+      <p class="node-coverage-headline">${escapeHtml(modeInfo.headline)}</p>
+    </div>
+    <p class="node-coverage-summary">${escapeHtml(summary)}</p>
+    ${contextLines}
+    <div class="coverage-checklist" aria-label="Coverage checklist">${checklist}</div>`;
+  banner.classList.remove('zone-hidden');
+
+  if (shell) {
+    shell.classList.toggle('cockpit-mode-diagnostic', modeInfo.mode !== 'complete');
+    shell.classList.toggle('cockpit-mode-trade', modeInfo.mode === 'complete');
+  }
+}
+
+function describeFlowsUpstreamGap(cockpit, state) {
+  const meta = cockpit?.funds_flows?.flows_meta || {};
+  const sidecar = state?.hydration?.flows_sidecar || {};
+  const health = state?.hydration?.flows_health || sidecar.basket_health || {};
+  const reason = meta.fallback_reason || '';
+  const warnings = [...(sidecar.warnings || []), ...(health.warnings || [])];
+  const missing = health.missing_tickers || sidecar.basket_health?.missing_tickers || [];
+
+  if (reason === 'missing_basket_etfs' || warnings.some(w => String(w).includes('missing_basket_etfs'))) {
+    const tickers = missing.length ? missing.join(', ') : 'basket ETF(s)';
+    return `Quarantine CSV missing ${tickers} — partial basket (expected in current fixture).`;
+  }
+  if (reason === 'missing_wtm_flows_file' || warnings.includes('missing_wtm_flows_file')) {
+    if (cockpit.node_id === 'basis') {
+      return 'Basis flows basket not attached — WTM-Flows file missing for warehouse/ETF proxy sleeve.';
+    }
+    return 'WTM-Flows quarantine CSV not ingested for this sleeve.';
+  }
+  if (reason === 'flows_parse_failed' || warnings.includes('flows_parse_failed')) {
+    return 'Flows parse failed — L1 sidecar could not be built from quarantine CSV.';
+  }
+  if (reason === 'credit_cross_section_1d_only') {
+    return 'Flows ingested with 1D cross-section only — 5D persistence unavailable.';
+  }
+  if (reason === 'non_credit_node_no_fallback') {
+    return 'No flows fallback configured for this node basket.';
+  }
+  return 'Flows pipeline step did not populate this sleeve — check desk live session and quarantine ingest.';
+}
+
+function buildFlowsImpactLine(cockpit) {
+  if (cockpit.node_id === 'basis') {
+    return 'Basis RV relies solely on history; no sponsorship or crowding signal for this session.';
+  }
+  return `${cockpit.display_name || 'This node'}: RV history usable; sponsorship and crowding signals blocked for this session.`;
+}
+
+function buildNodeGateDecisionSentence(cockpit, state, gate) {
+  const china = computeChinaLadderRead(state);
+  const health = computeHealthScore(state);
+  const row = LADDER.find(r => r.id === cockpit.node_id);
+  const nodeShort = row?.short || cockpit.display_name || 'Node';
+  const mode = assessCockpitHydrationMode(state);
+
+  const ladderPart = china.finalScore != null
+    ? `China ladder ${china.finalScore} · ${china.band}`
+    : 'China ladder —';
+  const sq3Part = gate.sq3Result
+    ? ` under SQ3 ${gate.sq3Score} (${gate.sq3Band})`
+    : '';
+
+  let riskPart;
+  if (gate.blocked) {
+    riskPart = ` → Blocked: no new ${nodeShort === 'Basis' ? 'Basis RV' : nodeShort + ' RV'} risk.`;
+  } else if (gate.tight || health.score < TX_HEALTH_OPEN_THRESHOLD) {
+    riskPart = ` → Tight Risk: new ${nodeShort === 'Basis' ? 'Basis RV' : nodeShort} ideas allowed only at ≤ 0.5× normal size.`;
+  } else {
+    riskPart = ` → ${gate.displayLabel || gate.label}: ${nodeShort} RV eligible within desk policy.`;
+  }
+  const flowsStatus = cockpit.funds_flows?.flows_meta?.flows_status || 'unavailable';
+  if (mode.mode === 'partial' && flowsStatus === 'unavailable' && cockpit.node_id === 'basis') {
+    riskPart += ' Running RV-only (no flows).';
+  }
+  return `${ladderPart}${sq3Part}${riskPart}`;
+}
+
+function assessPostImportWorkflow(state) {
+  const wf = state.ui?.postImportWorkflow;
+  if (!wf?.importAt) return { active: false, complete: false, steps: [] };
+  const prov = state.provenance || {};
+  if (!prov.hydratedAt || !state.hydration?.node_cockpits) {
+    return { active: false, complete: false, steps: [] };
+  }
+
+  const pendingSuggestions = state.suggestedTracer && Object.keys(state.suggestedTracer).length > 0;
+  const tracer = state.tracer || {};
+  const step1Done = !pendingSuggestions
+    && (tracer.flow === 'confirmed' || tracer.flow === 'override' || tracer.flow === 'empty');
+  const step2Done = !!wf.ladderReviewed;
+  const step3Done = !!wf.savedAfterImport;
+
+  const steps = [
+    { id: 1, label: 'Review & apply tracer suggestions', done: step1Done, blocked: false, action: 'tracer' },
+    { id: 2, label: 'Review ladder & gate impact', done: step2Done, blocked: !step1Done, action: 'ladder' },
+    { id: 3, label: 'Save State for this session', done: step3Done, blocked: !(step1Done && step2Done), action: 'save' },
+  ];
+  return { active: true, complete: steps.every(s => s.done), steps };
+}
+
+function markPostImportLadderReviewed() {
+  appState.ui = appState.ui || createEmptyState().ui;
+  appState.ui.postImportWorkflow = appState.ui.postImportWorkflow || {};
+  appState.ui.postImportWorkflow.ladderReviewed = true;
+  appState.ui.gateDetailOpen = true;
+  renderAll();
+  markDirty();
+}
+
+function startPostImportWorkflow() {
+  appState.ui = appState.ui || createEmptyState().ui;
+  appState.ui.postImportWorkflow = {
+    importAt: new Date().toISOString(),
+    ladderReviewed: false,
+    savedAfterImport: false,
+  };
+}
+
+function renderPostImportWorkflowStrip(state) {
+  const section = el('postImportWorkflow');
+  const list = el('postImportSteps');
+  if (!section || !list) return;
+  const wf = assessPostImportWorkflow(state);
+  const cockpitOn = appState.ui?.workspaceView === 'cockpit';
+  if (!cockpitOn || !wf.active || wf.complete) {
+    section.classList.add('zone-hidden');
+    return;
+  }
+  section.classList.remove('zone-hidden');
+  list.innerHTML = wf.steps.map(step => {
+    const cls = step.done ? 'workflow-step--done' : step.blocked ? 'workflow-step--blocked' : 'workflow-step--active';
+    const icon = step.done ? '✓' : String(step.id);
+    const btn = step.done
+      ? ''
+      : `<button type="button" class="workflow-step-btn" data-workflow-action="${step.action}" ${step.blocked ? 'disabled' : ''}>${step.action === 'save' ? 'Save' : 'Review'}</button>`;
+    return `<li class="workflow-step ${cls}"><span>${icon}</span><span>${escapeHtml(step.label)}</span>${btn}</li>`;
+  }).join('');
+  list.querySelectorAll('[data-workflow-action]').forEach(btn => {
+    btn.onclick = () => {
+      const action = btn.dataset.workflowAction;
+      if (action === 'tracer') {
+        el('suggestionTray')?.classList.remove('hidden');
+        el('suggestionTray')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else if (action === 'ladder') {
+        markPostImportLadderReviewed();
+      } else if (action === 'save') {
+        persistState();
+      }
+    };
+  });
+}
+
+function renderSessionReadyChip(state) {
+  const chip = el('sessionReadyChip');
+  if (!chip) return;
+  const wf = assessPostImportWorkflow(state);
+  if (!wf.active || !wf.complete) {
+    chip.classList.add('zone-hidden');
+    return;
+  }
+  const snap = state.provenance?.snapshotId || appState.commandBarAuthority?.snapshotId || 'bundle';
+  const mode = assessCockpitHydrationMode(state);
+  chip.textContent = `Session ready — using bundle ${snap}`;
+  chip.title = `Desk-ready under ${mode.title} coverage — workflow complete, not all datasets required.`;
+  chip.classList.remove('zone-hidden');
+}
+
 function flowsDegradeChip(cockpit) {
   const meta = cockpit?.funds_flows?.flows_meta;
   if (!meta || meta.flows_status === 'ok') return '';
@@ -5344,13 +5996,16 @@ function renderFundsFlowSponsorshipCard(cockpit, opts = {}) {
   const showVerdict = !isUnavailable && ['ok', 'partial', 'fallback_1d'].includes(flowsStatus);
 
   if (isUnavailable) {
-    const notice = interpretation.degrade_notice || 'Flows unavailable — degraded, not neutral.';
+    const state = buildStateFromDOM();
+    const upstream = describeFlowsUpstreamGap(cockpit, state);
+    const impact = buildFlowsImpactLine(cockpit);
     return `<section class="funds-flow-card funds-flow-card--unavailable" data-variant="${escapeHtml(variant)}" data-degrade="unavailable">
       <div class="funds-flow-card-header">
         <h4 class="funds-flow-card-title">Funds Flow Sponsorship</h4>
-        ${flowsStatus !== 'ok' ? `<span class="funds-flow-meta-chip">${escapeHtml(flowsStatus)} · ${escapeHtml(formatFlowsSourceLabel(meta.flows_source))}</span>` : ''}
+        <span class="funds-flow-meta-chip">${escapeHtml(flowsStatus)} · ${escapeHtml(formatFlowsSourceLabel(meta.flows_source))}</span>
       </div>
-      <p class="funds-flow-interpretation">${escapeHtml(notice)}</p>
+      <p class="funds-flow-upstream">${escapeHtml(upstream)}</p>
+      <p class="funds-flow-impact">${escapeHtml(impact)}</p>
     </section>`;
   }
 
@@ -5364,8 +6019,14 @@ function renderFundsFlowSponsorshipCard(cockpit, opts = {}) {
     parts.push(`<span class="funds-flow-meta-chip">${escapeHtml(meta.flows_status)} · ${escapeHtml(formatFlowsSourceLabel(meta.flows_source))}</span>`);
   }
 
-  if (meta.flows_degraded && interpretation.degrade_notice) {
-    parts.push(`<div class="funds-flow-degrade-banner">${escapeHtml(interpretation.degrade_notice)}</div>`);
+  if (meta.flows_degraded) {
+    const state = buildStateFromDOM();
+    const upstream = describeFlowsUpstreamGap(cockpit, state);
+    const impact = flowsStatus === 'partial' || flowsStatus === 'fallback_1d'
+      ? `${cockpit.display_name || 'Node'}: sponsorship degraded — size cap applies; do not treat as neutral.`
+      : buildFlowsImpactLine(cockpit);
+    parts.push(`<p class="funds-flow-upstream">${escapeHtml(upstream)}</p>`);
+    parts.push(`<p class="funds-flow-impact">${escapeHtml(impact)}</p>`);
   }
 
   if (showVerdict && aggregate.verdict) {
@@ -5476,9 +6137,12 @@ function renderNodeRail(state) {
   });
 }
 
-function renderCockpitDecisionRail(cockpit) {
+function renderCockpitDecisionRail(cockpit, state) {
   const rail = el('cockpitDecisionRail');
   if (!rail) return;
+  const domState = state || buildStateFromDOM();
+  const derivedGate = deriveGate(domState);
+  const gateSentence = buildNodeGateDecisionSentence(cockpit, domState, derivedGate);
   const dir = cockpit.directional || {};
   const rv = cockpit.relative_value || {};
   const gate = cockpit.gate_interaction || {};
@@ -5504,6 +6168,7 @@ function renderCockpitDecisionRail(cockpit) {
     ${flowsBlock}
     <div class="cockpit-card">
       <h4>Gate</h4>
+      <p class="gate-decision-sentence">${escapeHtml(gateSentence)}</p>
       <p class="cockpit-sub">${escapeHtml(gate.note || '—')}</p>
     </div>`;
 }
@@ -5623,6 +6288,21 @@ function renderCockpitChart(cockpit) {
     el('cockpitChartRichness').textContent = cockpit.rv_basis?.quartile_context || 'Awaiting history';
     el('cockpitChartRichness').className = 'text-[11px] font-semibold text-wtm-muted';
     el('cockpitChartPct').textContent = cockpit.composite_score_source === 'horizon_net_fallback' ? 'Tracer fallback score' : '—';
+  }
+
+  const session = assessHydrationSession(buildStateFromDOM());
+  const chartCanvas = el('cockpitChartCanvas');
+  let unhydratedOverlay = chartCanvas?.querySelector('.cockpit-unhydrated-overlay');
+  if (session.level !== 'ok' && chartCanvas) {
+    if (!unhydratedOverlay) {
+      unhydratedOverlay = document.createElement('div');
+      unhydratedOverlay.className = 'cockpit-unhydrated-overlay';
+      chartCanvas.appendChild(unhydratedOverlay);
+    }
+    unhydratedOverlay.innerHTML = `<p>${escapeHtml(session.level === 'missing' ? 'Import hydration bundle to populate CURRENT READING and RV quartiles.' : 'Re-import v1.2.0 bundle — session data incomplete.')}</p>`;
+    unhydratedOverlay.classList.remove('zone-hidden');
+  } else if (unhydratedOverlay) {
+    unhydratedOverlay.classList.add('zone-hidden');
   }
 
   const drawResult = drawRvBasisChart(cockpit, canvas);
@@ -5785,6 +6465,7 @@ function renderNodeCockpitShell(state) {
   const compare = el('cockpitCompareLayer');
 
   renderNodeRail(state);
+  renderNodeCoverageBanner(mergeNodeCockpit(activeNodeId(), state), state);
 
   main?.classList.toggle('zone-hidden', focusOn || compareOn);
   detail?.classList.toggle('zone-hidden', focusOn || compareOn);
@@ -5804,7 +6485,7 @@ function renderNodeCockpitShell(state) {
     return;
   }
   renderCockpitChart(cockpit);
-  renderCockpitDecisionRail(cockpit);
+  renderCockpitDecisionRail(cockpit, state);
   renderCockpitDetailBand(cockpit);
 }
 
@@ -5863,6 +6544,9 @@ function renderAll() {
 
   renderCommandBar(state, gate);
   renderHydrationImportStatus(state);
+  renderHydrationBanner(state);
+  renderPostImportWorkflowStrip(state);
+  renderSessionReadyChip(state);
 
   el('sq3ComputedDisplay').textContent = gate.sq3Result ? String(gate.sq3Score) : '—';
   el('sq3BandChip').textContent = gate.sq3Result ? gate.sq3Band : '—';
@@ -6045,22 +6729,24 @@ async function copyText(text, btn, label) {
 el('btnSave').onclick = persistState;
 el('btnExport').onclick = exportForPerplexity;
 el('btnExportPipeline').onclick = exportPipelineBundle;
+function openHydrationFilePicker(shiftKey) {
+  _hydrationImportForce = !!shiftKey;
+  el('hydrationFileInput').click();
+}
+
 let _hydrationImportForce = false;
 el('btnImportHydration').onclick = (e) => {
   _hydrationImportForce = !!(e && e.shiftKey);
-  const hint = [
-    'Select the hydration JSON file:',
-    '',
-    'EASIEST: Whinfell_Hydration_latest.json',
-    '  → Desktop or Downloads folder',
-    '',
-    'OR: Desktop → Whinfell_BUILD_Cousins → data → hydration → latest.json',
-    '',
-    'NOT whinfell_drop (that folder is CSV downloads only).',
-  ].join('\n');
-  if (window.confirm(hint + '\n\nClick OK to choose the file.')) {
-    el('hydrationFileInput').click();
+  if (window.confirm(buildHydrationImportConfirmMessage('choose the file'))) {
+    openHydrationFilePicker(_hydrationImportForce);
   }
+};
+el('btnHydrationBannerImport').onclick = () => openHydrationFilePicker(false);
+el('btnHydrationBannerDismiss').onclick = () => {
+  appState.ui = appState.ui || createEmptyState().ui;
+  appState.ui.hydrationBannerDismissed = true;
+  renderHydrationBanner(buildStateFromDOM());
+  markDirty();
 };
 el('hydrationFileInput').onchange = e => {
   const f = e.target.files?.[0];
@@ -6122,6 +6808,9 @@ el('posture').onchange = () => { appState.grossRisk.postureManual = !!el('postur
 el('btnToggleGateDetail').onclick = () => {
   appState.ui = appState.ui || createEmptyState().ui;
   appState.ui.gateDetailOpen = !appState.ui.gateDetailOpen;
+  if (appState.ui.gateDetailOpen && appState.ui.postImportWorkflow?.importAt) {
+    appState.ui.postImportWorkflow.ladderReviewed = true;
+  }
   renderAll();
 };
 document.querySelectorAll('.track-toggle').forEach(btn => {
@@ -6149,13 +6838,21 @@ el('btnHeresWhy').onclick = () => toggleFocusMode();
 el('btnCompareMode').onclick = () => toggleCompareMode();
 document.addEventListener('keydown', handleCockpitKeyboard);
 
+const tcBuildBadge = el('tcConsoleBuildBadge');
+if (tcBuildBadge) tcBuildBadge.textContent = TC_CONSOLE_BUILD;
 renderPrompts();
 renderShockStageChecks();
 renderTracerHorizonTable();
 initScenarioLoop();
 applyStateToDOM(loadState());
+if (!appState.provenance?.hydratedAt || !appState.hydration?.node_cockpits) {
+  appState.ui = appState.ui || createEmptyState().ui;
+  appState.ui.hydrationBannerDismissed = false;
+}
 applyWorkspaceView(appState.ui?.workspaceView || 'cockpit');
 applyTrackView(appState.ui?.trackView || 'both');
+renderAll();
+maybePromptFirstHydrationImport(buildStateFromDOM());
 if (scenarioLoop.variants[0]) {
   const s = buildStateFromDOM();
   scenarioLoop.variants[0].whinfellScore = s.intake.whinfellScore;
