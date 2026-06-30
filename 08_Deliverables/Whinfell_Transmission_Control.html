@@ -274,19 +274,20 @@ window.DICTIONARY_BADGE_DEFAULT = {
       gap: 6px;
       flex-wrap: wrap;
     }
+    .basis-summary-strip {
+      flex-shrink: 0;
+      padding: 10px 16px 6px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,.12);
+    }
     .basis-summary {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 4px;
       width: 100%;
-      max-width: 420px;
-    }
-    .basis-reading-row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
+      max-width: 480px;
+      margin: 0 auto;
     }
     .basis-reading-value {
       font-size: 32px;
@@ -294,14 +295,15 @@ window.DICTIONARY_BADGE_DEFAULT = {
       color: var(--text);
       font-variant-numeric: tabular-nums;
       line-height: 1;
+      letter-spacing: -0.02em;
     }
     .basis-reading-label {
-      font-size: 10px;
-      color: var(--muted);
+      font-size: 11px;
+      color: var(--text);
       font-weight: 600;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
     }
-    .basis-stance-row,
+    .basis-interpret-row,
     .basis-trade-row {
       display: flex;
       flex-wrap: wrap;
@@ -309,6 +311,12 @@ window.DICTIONARY_BADGE_DEFAULT = {
       justify-content: center;
       gap: 6px 10px;
       font-size: 10px;
+    }
+    .basis-interpret-row {
+      color: #9eacbb;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.35;
     }
     .basis-pill {
       font-size: 9px;
@@ -1206,6 +1214,13 @@ window.DICTIONARY_BADGE_DEFAULT = {
       gap: 8px;
       padding: 24px;
       text-align: center;
+      pointer-events: none;
+    }
+    .cockpit-chart-header {
+      flex-shrink: 0;
+    }
+    .cockpit-chart-header .horizon-pill {
+      flex-shrink: 0;
     }
 
     .cockpit-chart-placeholder .chart-value {
@@ -1539,24 +1554,25 @@ window.DICTIONARY_BADGE_DEFAULT = {
     <div id="cockpitShell" class="flex-1 min-h-0 flex flex-col overflow-hidden">
       <div class="cockpit-main flex-1 min-h-0 grid grid-cols-1 xl:grid-cols-12 gap-px bg-wtm-border overflow-hidden">
         <div id="cockpitChartArea" class="cockpit-chart-area xl:col-span-8 bg-wtm-bg flex flex-col min-h-0 overflow-hidden">
-          <div class="px-3 py-2 border-b border-wtm-border bg-wtm-surface shrink-0 flex items-center justify-between gap-2 flex-wrap">
-            <div>
+          <div class="cockpit-chart-header px-3 py-2 border-b border-wtm-border bg-wtm-surface flex items-center justify-between gap-3 flex-wrap">
+            <div class="min-w-0">
               <h2 id="cockpitChartTitle" class="text-[12px] font-bold">Relative Value · Basis</h2>
               <p id="cockpitChartSubtitle" class="text-[9px] text-wtm-muted">—</p>
             </div>
-            <div id="cockpitHorizonPills" class="flex gap-1 flex-wrap" role="group" aria-label="RV horizon"></div>
+            <div id="cockpitHorizonPills" class="flex gap-1 flex-wrap shrink-0" role="group" aria-label="RV horizon"></div>
+          </div>
+          <div id="basisSummaryStrip" class="basis-summary-strip zone-hidden">
+            <div id="basisSummary" class="basis-summary">
+              <div id="basisReadingValue" class="basis-reading-value">—</div>
+              <div id="basisReadingLabel" class="basis-reading-label">Current reading</div>
+              <div id="basisStanceRow" class="basis-interpret-row"></div>
+              <div id="basisTradeRow" class="basis-trade-row"></div>
+            </div>
           </div>
           <div id="cockpitChartCanvas" class="cockpit-chart-canvas">
             <canvas id="cockpitRvCanvas" aria-label="RV basis chart"></canvas>
             <div id="cockpitChartPlaceholder" class="cockpit-chart-placeholder">
-              <div id="basisSummary" class="basis-summary">
-                <div class="basis-reading-row">
-                  <span id="basisReadingValue" class="basis-reading-value">—</span>
-                  <span id="basisReadingLabel" class="basis-reading-label">Current reading</span>
-                </div>
-                <div id="basisStanceRow" class="basis-stance-row"></div>
-                <div id="basisTradeRow" class="basis-trade-row"></div>
-              </div>
+              <p class="text-[10px] text-wtm-muted">Import hydration to populate RV quartiles and basis history.</p>
               <span id="cockpitChartValue" class="zone-hidden">—</span>
               <span id="cockpitChartRichness" class="zone-hidden">—</span>
               <span id="cockpitChartPct" class="zone-hidden">—</span>
@@ -5803,24 +5819,45 @@ function ordinalSuffixWhole(n) {
   return 'th';
 }
 
+function formatPercentile(value) {
+  if (!Number.isFinite(value)) return 'Percentile unavailable';
+  if (!Number.isInteger(value)) return `${value.toFixed(1)}th percentile`;
+
+  const mod10 = value % 10;
+  const mod100 = value % 100;
+  if (mod10 === 1 && mod100 !== 11) return `${value}st percentile`;
+  if (mod10 === 2 && mod100 !== 12) return `${value}nd percentile`;
+  if (mod10 === 3 && mod100 !== 13) return `${value}rd percentile`;
+  return `${value}th percentile`;
+}
+
 function formatOrdinalPercentile(pct) {
   const n = Number(pct);
   if (!Number.isFinite(n)) return '—';
-  const rounded = Math.round(n * 10) / 10;
-  const whole = Math.floor(rounded);
-  const hasFrac = Math.abs(rounded - whole) > 0.001;
-  if (hasFrac) return `${rounded.toFixed(1)}st percentile`;
-  return `${whole}${ordinalSuffixWhole(whole)} percentile`;
+  return formatPercentile(n);
 }
 
-function getBasisDomain(series, padRatio = 0.12) {
-  const vals = (series || []).filter(v => Number.isFinite(v));
-  if (!vals.length) return [0, 1];
-  const min = Math.min(...vals);
-  const max = Math.max(...vals);
-  const span = Math.max(max - min, 0.10);
+function basisRefsAvailable(refs) {
+  return refs && [refs.low, refs.mid, refs.high].every(v => Number.isFinite(v));
+}
+
+function getBasisDomain(vals, padRatio = 0.08) {
+  const series = (vals || []).filter(v => Number.isFinite(v));
+  if (!series.length) return [0, 1];
+  const min = Math.min(...series);
+  const max = Math.max(...series);
+  const center = (min + max) / 2;
+  const dataSpan = max - min;
+  const minSpan = Math.max(0.20, Math.abs(center) * 0.15, dataSpan || 0.20);
+  const span = Math.max(dataSpan, minSpan);
   const pad = span * padRatio;
-  return [min - pad, max + pad];
+  let yMin = center - span / 2 - pad;
+  let yMax = center + span / 2 + pad;
+  if (min <= 0 && max >= 0) {
+    yMin = Math.min(yMin, -pad * 0.5);
+    yMax = Math.max(yMax, pad * 0.5);
+  }
+  return [yMin, yMax];
 }
 
 function parseBasisRef(value) {
@@ -5893,32 +5930,67 @@ function renderMissingDiagnostic(message) {
   </div>`;
 }
 
+function buildBasisInterpretLine(hz, cockpit) {
+  if (!hz) return escapeHtml(cockpit.rv_basis?.quartile_context || 'Awaiting history');
+  const stance = hz.richness_label || cockpit.rv_basis?.richness_label;
+  const parts = [
+    richnessPillLabel(stance),
+    `Q${hz.quartile || '—'}`,
+    formatPercentile(Number(hz.percentile)),
+    `n=${hz.n_observations ?? '—'}`,
+  ];
+  return escapeHtml(parts.join(' · '));
+}
+
+function buildBasisChartDiagnosis(cockpit, state, gate) {
+  const ff = cockpit.funds_flows || {};
+  const ffMeta = ff.flows_meta || {};
+  const rv = cockpit.relative_value || {};
+  const tags = [];
+
+  const signal = String(cockpit.band || cockpit.band_key || '').trim();
+  if (signal) tags.push(humanizeValue(signal).toUpperCase());
+
+  if (rv.posture) tags.push(humanizeValue(rv.posture).toUpperCase());
+
+  const flowsStatus = ffMeta.flows_status || 'unavailable';
+  if (flowsStatus === 'ok' || flowsStatus === 'partial' || flowsStatus === 'fallback_1d') {
+    const verdict = ff.aggregate?.verdict || 'mixed';
+    if (verdict === 'mixed' || verdict === 'neutral') tags.push('FLOWS NEUTRAL');
+    else if (verdict === 'supportive') tags.push('FLOWS SUPPORTIVE');
+    else if (verdict === 'diverging') tags.push('FLOWS DIVERGING');
+  }
+
+  if (gate?.blocked) tags.push('BLOCKED');
+  else if (gate?.tight) tags.push('TIGHT RISK');
+
+  return tags.slice(0, 4);
+}
+
 function renderBasisSummaryRows(cockpit, hz, series, state, gate) {
   const health = computeHealthScore(state);
   const label = series?.label || 'Current reading';
-  const stance = hz?.richness_label || cockpit.rv_basis?.richness_label;
-  const quartile = hz?.quartile || '—';
   const rv = cockpit.relative_value || {};
   const expression = rv.posture ? humanizeValue(rv.posture) : '—';
+  const isBasis = cockpit.node_id === 'basis';
+  const strip = el('basisSummaryStrip');
 
   el('basisReadingValue').textContent = formatReadingValue(hz);
   el('basisReadingLabel').textContent = label;
 
   const stanceRow = el('basisStanceRow');
-  if (stanceRow) {
-    stanceRow.innerHTML = hz
-      ? `<span class="basis-pill ${richnessPillClass(stance)}">${escapeHtml(richnessPillLabel(stance))}</span>
-         <span class="basis-meta">Q${quartile}</span>
-         <span class="basis-meta">${escapeHtml(formatOrdinalPercentile(hz.percentile))}</span>
-         <span class="basis-meta">n=${hz.n_observations ?? '—'}</span>`
-      : `<span class="basis-meta">${escapeHtml(cockpit.rv_basis?.quartile_context || 'Awaiting history')}</span>`;
-  }
+  if (stanceRow) stanceRow.innerHTML = buildBasisInterpretLine(hz, cockpit);
 
   const tradeRow = el('basisTradeRow');
   if (tradeRow) {
     tradeRow.innerHTML = `
       <span class="basis-expression">Preferred expression: ${escapeHtml(expression)}</span>
       <span class="basis-riskcap">${escapeHtml(resolveSizeCapLabel(cockpit, gate, health))}</span>`;
+  }
+
+  if (strip) {
+    if (isBasis && hz) strip.classList.remove('zone-hidden');
+    else strip.classList.add('zone-hidden');
   }
 }
 
@@ -6568,9 +6640,11 @@ function renderCockpitDecisionRail(cockpit, state) {
     ${blocks.gate}`;
 }
 
-function drawRvBasisChart(cockpit, canvas, state) {
+function drawRvBasisChart(cockpit, canvas, state, gate) {
   if (!canvas || !canvas.getContext) return { drew: false, pointCount: 0 };
   const ctx = canvas.getContext('2d');
+  const domState = state || buildStateFromDOM();
+  const gateState = gate || deriveGate(domState);
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.parentElement?.getBoundingClientRect?.() || { width: 400, height: 240 };
   const w = Math.max(200, Math.floor(rect.width));
@@ -6596,13 +6670,16 @@ function drawRvBasisChart(cockpit, canvas, state) {
   if (!points.length) return { drew: false, pointCount: 0 };
 
   const isBasis = cockpit.node_id === 'basis';
-  const pad = { l: isBasis ? 52 : 44, r: 16, t: 16, b: 36 };
+  const diagTags = isBasis ? buildBasisChartDiagnosis(cockpit, domState, gateState) : [];
+  const pad = { l: isBasis ? 52 : 44, r: 16, t: isBasis ? 22 : 16, b: 36 };
   const plotW = w - pad.l - pad.r;
   const plotH = h - pad.t - pad.b;
   const vals = points.map(p => p.value);
-  const refs = isBasis ? resolveBasisRefLines(state || buildStateFromDOM()) : {};
-  const refLineVals = [refs.low, refs.mid, refs.high].filter(v => Number.isFinite(v));
-  const domainSource = isBasis ? [...vals, 0, ...refLineVals] : vals;
+  const refs = isBasis ? resolveBasisRefLines(domState) : {};
+  const refsReady = isBasis && basisRefsAvailable(refs);
+  const domainSource = isBasis
+    ? (refsReady ? [...vals, 0, refs.low, refs.mid, refs.high] : [...vals, 0])
+    : vals;
   const domain = isBasis ? getBasisDomain(domainSource) : [Math.min(...vals), Math.max(...vals)];
   const [yMin, yMax] = domain;
   const yBase = isBasis && yMin <= 0 && yMax >= 0 ? 0 : yMin;
@@ -6637,20 +6714,16 @@ function drawRvBasisChart(cockpit, canvas, state) {
     ctx.setLineDash([]);
   }
 
-  if (isBasis && Number.isFinite(refs.low) && Number.isFinite(refs.high) && refs.low < refs.high) {
+  if (refsReady && refs.low < refs.high) {
     const yLo = basisValueToY(refs.low, domain, pad, plotH);
     const yHi = basisValueToY(refs.high, domain, pad, plotH);
     ctx.fillStyle = 'rgba(214,168,95,0.08)';
     ctx.fillRect(pad.l, Math.min(yLo, yHi), plotW, Math.abs(yHi - yLo));
-  }
-
-  if (isBasis) {
     [
       { v: refs.low, a: 0.20 },
       { v: refs.mid, a: 0.32 },
       { v: refs.high, a: 0.20 },
     ].forEach(ref => {
-      if (!Number.isFinite(ref.v)) return;
       const y = basisValueToY(ref.v, domain, pad, plotH);
       ctx.strokeStyle = `rgba(214,168,95,${ref.a})`;
       ctx.setLineDash([2, 2]);
@@ -6660,6 +6733,11 @@ function drawRvBasisChart(cockpit, canvas, state) {
       ctx.stroke();
       ctx.setLineDash([]);
     });
+  } else if (isBasis) {
+    ctx.fillStyle = 'rgba(142,156,179,0.55)';
+    ctx.font = '8px system-ui,sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('History-only — ref band unavailable', pad.l, pad.t - 6);
   }
 
   const activeIdx = points.findIndex(p => p.key === horizon);
@@ -6677,9 +6755,14 @@ function drawRvBasisChart(cockpit, canvas, state) {
     ctx.fillStyle = q >= 4 ? 'rgba(255,140,105,.85)' : q <= 1 ? 'rgba(79,179,122,.85)' : 'rgba(76,142,217,.75)';
     ctx.fillRect(x, Math.min(yTop, yBot), bw, Math.max(4, Math.abs(yBot - yTop)));
     ctx.fillStyle = '#9eacbb';
-    ctx.font = '10px system-ui,sans-serif';
+    ctx.font = '9px system-ui,sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(RV_HORIZON_LABELS[p.key] || p.key, x + bw / 2, h - pad.b + 14);
+    ctx.fillText(RV_HORIZON_LABELS[p.key] || p.key, x + bw / 2, h - pad.b + 12);
+    if (isBasis && i === activeIdx) {
+      ctx.fillStyle = '#d6e4f5';
+      ctx.font = 'bold 9px system-ui,sans-serif';
+      ctx.fillText(`${p.value.toFixed(2)}${unitSuffix}`, x + bw / 2, Math.min(yTop, yBot) - 4);
+    }
   });
 
   if (!isBasis) {
@@ -6693,14 +6776,28 @@ function drawRvBasisChart(cockpit, canvas, state) {
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
-  } else {
-    points.forEach((p, i) => {
-      const x = pad.l + i * barW + barW / 2;
-      const pctY = pad.t + plotH - ((p.percentile || 50) / 100) * plotH * 0.35;
-      ctx.fillStyle = 'rgba(214,163,74,0.75)';
-      ctx.beginPath();
-      ctx.arc(x, pctY, 2.5, 0, Math.PI * 2);
-      ctx.fill();
+  } else if (diagTags.length) {
+    const fontSize = 7;
+    const gap = 5;
+    let xCursor = pad.l;
+    const yDiag = h - 6;
+    ctx.font = `${fontSize}px system-ui,sans-serif`;
+    ctx.textAlign = 'left';
+    diagTags.forEach((tag, idx) => {
+      const textW = ctx.measureText(tag).width + 10;
+      if (xCursor + textW > w - pad.r) return;
+      ctx.fillStyle = idx === diagTags.length - 1 && tag === 'TIGHT RISK'
+        ? 'rgba(245,166,35,0.18)'
+        : 'rgba(0,0,0,0.28)';
+      ctx.strokeStyle = idx === diagTags.length - 1 && tag === 'TIGHT RISK'
+        ? 'rgba(245,166,35,0.45)'
+        : 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = 1;
+      ctx.fillRect(xCursor, yDiag - fontSize - 4, textW, fontSize + 6);
+      ctx.strokeRect(xCursor, yDiag - fontSize - 4, textW, fontSize + 6);
+      ctx.fillStyle = idx === diagTags.length - 1 && tag === 'TIGHT RISK' ? '#f5a623' : '#8b9cb3';
+      ctx.fillText(tag, xCursor + 5, yDiag);
+      xCursor += textW + gap;
     });
   }
 
@@ -6728,7 +6825,7 @@ function renderCockpitChart(cockpit, state) {
   if (hz) {
     el('cockpitChartValue').textContent = formatReadingValue(hz);
     el('cockpitChartRichness').textContent = `${hz.richness_label || '—'} · Q${hz.quartile || '—'}`;
-    el('cockpitChartPct').textContent = `${formatOrdinalPercentile(hz.percentile)} · n=${hz.n_observations ?? '—'}`;
+    el('cockpitChartPct').textContent = `${formatPercentile(Number(hz.percentile))} · n=${hz.n_observations ?? '—'}`;
   }
 
   const session = assessHydrationSession(buildStateFromDOM());
@@ -6746,8 +6843,11 @@ function renderCockpitChart(cockpit, state) {
     unhydratedOverlay.classList.add('zone-hidden');
   }
 
-  const drawResult = drawRvBasisChart(cockpit, canvas, domState);
-  if (placeholder) placeholder.style.opacity = drawResult.drew ? '0.92' : '1';
+  const drawResult = drawRvBasisChart(cockpit, canvas, domState, gate);
+  if (placeholder) {
+    if (drawResult.drew) placeholder.classList.add('zone-hidden');
+    else placeholder.classList.remove('zone-hidden');
+  }
 
   const pills = el('cockpitHorizonPills');
   if (pills) {
