@@ -25,7 +25,7 @@
 | **Phase 2a** | `rv_series` + interim node score weights | High | **Complete** | Bridge | Master DD registry · `3293a9b` |
 | **Phase 2b-data** | WTM EXPORT v2.2 + `node_cockpits` hydration builder | High | **Shipped** | Bridge | `cdd677a` · bundle v1.1.0 · 111 tests PASS |
 | **Phase 2b** | ARCH-1 component routing + Koyfin history for RV quartiles | High | **Open** | Integration Dynamo | Replaces tracer-derived component stubs |
-| **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI not started** |
+| **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI not started** · interaction standard locked |
 | **Phase 2 open** | Ambiguity C — trading-day vs calendar-day lookback | Medium | **Open** | TempLibby + desk | Default locked in spec; desk confirm |
 | **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **PR-1 shipped** | Bridge + Clarity | Registry locked · **PR-3a/b → PR-2 → PR-4/5** |
 | **Phase 2b-data** | PR-1 registry + PR-3a/b ingest + PR-2 `funds_flows.py` | High | **PR-1 done · PR-3 next** | Bridge + Dynamo | Option D locked · L0/L1/L2 model · sidecar `latest_flows.json` |
