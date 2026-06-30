@@ -192,23 +192,29 @@ run one Python command, and report results. Ask Clark before terminal commands.
 
 ### `/goal-funds-flow` (Phase 2b — BUILD Cousins)
 
+**Authority:** `01_Strategy_Docs/Phase2_Flows_Implementation_Spec.md` (implementation) · Option D locked
+
 ```text
 Funds Flow Sponsorship — node cockpit confirmation layer
 
-Authority: 08_Deliverables/Funds_Flow_Sponsorship_GOAL.md
-Design:    01_Strategy_Docs/Phase2_Funds_Flow_Sponsorship_Design.md
+Gate: Spec §7 checklist signed → PR-1 + PR-3a may start
+
+Layers:
+  L0  flows_*.csv / credit raw
+  L1  data/flows/v1/latest_flows.json
+  L2  node_cockpit.funds_flows
 
 Success:
-  • funds_flow_baskets in Master DD (5 nodes, % AUM canonical)
-  • node_cockpit.funds_flows in hydration bundle v1.2.0
-  • Verdict: supportive | neutral | mixed | diverging
-  • confidence_delta only — never override score/transmission/gate
-  • FundsFlowSponsorshipCard in TC right rail (calm, institutional)
+  • funds_flow_baskets + thresholds in Master DD
+  • flow_pct_aum_5d = sum of 5 daily % AUM
+  • degrade_mode: full | partial_basket | fallback_1d_credit | unavailable
+  • confidence_delta only — never score/gate
+  • FundsFlowSponsorshipCard reads L2 only
 
-Non-goals: global flow widget, heatmaps, gate override, browser CSV parse
+/roles: Blueprint spec · Bridge PR-1/2 · Dynamo PR-3 · Clarity PR-4 · Clark WTM-Flows view
 ```
 
-### `/arena-funds-flow` (Phase 2b — team debate)
+### `/arena-funds-flow` (Phase 2b — resolved: Option D)
 
 ```text
 Repo: ~/Desktop/Whinfell_BUILD_Cousins
@@ -225,7 +231,7 @@ Options:
 
 Desk fact: WTM-Flows-Global.csv already in whinfell_drop — QUARANTINED (rename needed).
 
-Vote Q1–Q5 in arena doc · defaults apply if no reply.
+**Resolved:** Option D (Hybrid). Implementation: Phase2_Flows_Implementation_Spec.md
 ```
 
 ### `/plan-funds-flow` (Phase 2b — BUILD Cousins)

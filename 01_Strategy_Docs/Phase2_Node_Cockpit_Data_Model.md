@@ -586,6 +586,19 @@ A node is **cockpit-ready** when these are non-empty:
 | Sizing | `sizing.enabled`, `sizing.kelly_fraction` (defaults OK) |
 | RV / Basis | `rv_basis.active_horizon`, `rv_basis.active_series_id`, ≥1 series with ≥1 populated horizon; each series carries `quartile_direction` |
 | China (optional) | `china_parallel` may be absent; cockpit valid without it |
+| Funds flow (optional) | `funds_flows.enabled` or graceful `degrade_mode: unavailable` — see §9.1 |
+
+### 9.1 Funds Flow Sponsorship (Phase 2b — optional block)
+
+**Implementation authority:** [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md)
+
+Each `node_cockpit` may include `funds_flows` — a read-only confirmation layer (% AUM, 1D + 5D). Flows adjust `confidence` and rationale suffix only; they do not override `composite_score`, gate, or transmission.
+
+| Field | MVP |
+|-------|-----|
+| `funds_flows.degrade_mode` | `full` \| `partial_basket` \| `fallback_1d_credit` \| `unavailable` |
+| `funds_flows.aggregate.verdict` | Required when `enabled: true` |
+| `funds_flows.interpretation.degrade_notice` | Required when not `full` |
 
 ---
 
@@ -599,6 +612,7 @@ A node is **cockpit-ready** when these are non-empty:
 | `implementations` | Pipeline catalog per `node_id` | TC picker |
 | `sizing`, `selected_implementation_id` | Operator | TC + export |
 | `horizon_marks` (initial) | `suggested_tracer` → Accept flow | Node signal sync |
+| `funds_flows` | Pipeline (`flows_parser` + `funds_flows.py`) | TC `FundsFlowSponsorshipCard` — read-only |
 
 ---
 

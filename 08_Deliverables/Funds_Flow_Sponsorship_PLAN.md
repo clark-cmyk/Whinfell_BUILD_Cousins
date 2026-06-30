@@ -63,10 +63,10 @@ Desk confirms: flows = confirmation layer only; `% AUM` canonical.
 
 ---
 
-## STEP 3 — Koyfin flow ingest (PR-3) — **pending /arena vote**
+## STEP 3 — Koyfin flow ingest (PR-3) — **Option D locked · see Implementation Spec**
 
 **Owner:** Integration Dynamo  
-**Debate:** [Funds_Flow_Ingest_Arena_Debate.md](Funds_Flow_Ingest_Arena_Debate.md)
+**Spec:** [Phase2_Flows_Implementation_Spec.md](../01_Strategy_Docs/Phase2_Flows_Implementation_Spec.md) · **Debate:** [Funds_Flow_Ingest_Arena_Debate.md](Funds_Flow_Ingest_Arena_Debate.md) (Option D)
 
 ### BUILD recommendation: Option D (hybrid)
 

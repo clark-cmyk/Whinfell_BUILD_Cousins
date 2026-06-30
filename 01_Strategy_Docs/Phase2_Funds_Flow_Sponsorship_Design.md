@@ -3,7 +3,7 @@
 **Version:** 1.0 (design locked for implementation)  
 **Date:** June 29, 2026  
 **Authors:** BUILD Cousins (Blueprint + Bridge + Clarity)  
-**Status:** Approved for implementation planning  
+**Status:** Approved — implementation detail in [Phase2_Flows_Implementation_Spec.md](Phase2_Flows_Implementation_Spec.md)
 **Prerequisites:** [Phase2_Node_Cockpit_Data_Model.md](Phase2_Node_Cockpit_Data_Model.md) v0.2, hydration bundle v1.1.0, Master Data Dictionary v1.0
 
 ---

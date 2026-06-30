@@ -2,7 +2,9 @@
 
 **Project:** Whinfell Transmission Control  
 **Track:** BUILD Cousins · Phase 2b  
-**Date:** June 29, 2026
+**Date:** June 29, 2026  
+**Ingest:** Option D (Hybrid) — **locked**  
+**Implementation authority:** [Phase2_Flows_Implementation_Spec.md](../01_Strategy_Docs/Phase2_Flows_Implementation_Spec.md)
 
 ---
 
@@ -10,58 +12,74 @@
 
 Add a **Funds Flow Sponsorship** subsystem to each node cockpit so the operator can judge whether a node-level move is **sponsored by allocator flows** (% AUM), not price action alone — without displacing score, transmission, gate, or shock as primary authority.
 
+**Gate:** Implementation spec v1.0 **desk-locked** → then PR-1 + PR-3a start.
+
 ---
 
 ## Success criteria
 
-### Data / pipeline
+### Data / pipeline (L1 sidecar + L2 node block)
 
-- [ ] `funds_flow_baskets` registered in Master DD with ETF mapping for all 5 nodes
-- [ ] Each `node_cockpit` in hydration bundle includes `funds_flows` block when Koyfin flow inputs present
-- [ ] `% AUM` is canonical; 1D and 5D cumulative computed deterministically
-- [ ] Verdict ∈ `{supportive, neutral, mixed, diverging}` with stable thresholds in YAML
-- [ ] `confidence_delta` (−1/0/+1) applied to node conviction — **not** composite score or gate
-- [ ] Graceful degrade: `funds_flows.enabled: false` when inputs missing; cockpit still valid
-- [ ] Unit tests cover aggregate, verdict, divergence overlay, and per-node baskets
+- [ ] `funds_flow_baskets` + `funds_flow_thresholds` in Master DD (PR-1)
+- [ ] `data/flows/v1/latest_flows.json` written from `flows_{YYYYMMDD}_{HHMM}.csv` (PR-3a)
+- [ ] Credit cross-section fallback patches 1D only when flows file absent (PR-3b)
+- [ ] Each `node_cockpit.funds_flows` built by `funds_flows.py` with `degrade_mode` set correctly
+- [ ] `% AUM` canonical; `flow_pct_aum_5d` = sum of last 5 daily % AUM (not average)
+- [ ] `basket_role` (`primary` / `supporting` / `proxy`) + `asset_id` link to `canonical_assets`
+- [ ] Verdict ∈ `{supportive, neutral, mixed, diverging}`; caps in `fallback_1d_credit` mode
+- [ ] `confidence_delta` (−1/0/+1) applied to node tier — **not** composite score or gate
+- [ ] Hydration bundle **v1.2.0** with optional `flows_sidecar` metadata block
+- [ ] Tests: `test_funds_flows.py`, parser fixture from `WTM-Flows-Global.csv`
 
-### UI (Phase 2 cockpit rail)
+### UI (PR-4)
 
-- [ ] `FundsFlowSponsorshipCard` renders in **right rail** below driver checklist
-- [ ] Operator answers in <2s: sponsorship? persistent? confirms or contradicts?
-- [ ] Visual treatment: institutional, calm, tabular nums, no heatmaps
-- [ ] Compare mode: one compact card per node, synchronized horizon
-- [ ] Full-screen “Here’s Why”: sponsorship section subordinate to node rationale
+- [ ] `FundsFlowSponsorshipCard` in right rail; reads `cockpit.funds_flows` only
+- [ ] Degrade banner verbatim: `5D flows unavailable — using 1D Credit cross-section fallback.`
+- [ ] Credit + Breadth worked examples match spec §2.2–2.3
+- [ ] Compare + fullscreen variants per implementation spec §2.4
 
-### Export / round-trip
+### Export (PR-5)
 
-- [ ] Flow verdict + 5D aggregate exportable in WTM block (v2.2 addendum or v2.3)
-- [ ] Rationale / change-mind text derives from same deterministic logic as UI
+- [ ] NODE COCKPIT block includes Funds Flow Verdict / 5D / Summary lines
+- [ ] Omit 5D lines when `degrade_mode: fallback_1d_credit`
 
 ---
 
-## Non-goals (this goal)
+## Non-goals
 
-- Flows as top-level command-bar authority
-- Flashing alerts, oversized charts, or global flow heatmap
-- Options flow or futures flow (ETF % AUM only for MVP)
-- Replacing WhinSig — may reuse column patterns, not merge codebases
-- Auto-trading or gate override from flow signals
+- Flows as command-bar authority
+- Heatmaps, gate override, browser CSV parse
+- 5D synthesis from credit cross-section alone
+- WhinSig code merge
 
 ---
 
 ## Definition of done
 
-1. `python3 -m pytest whinfell_pipeline/tests/test_funds_flows.py` PASS  
-2. Hydrate produces `node_cockpits.*.funds_flows` with real credit-export flow columns (or fixture)  
-3. TC renders card in node cockpit view with verdict + 3–5 ETF rows  
-4. BUILD TODO + Progress Log updated; design doc locked at v1.0  
+1. Spec [Phase2_Flows_Implementation_Spec.md](../01_Strategy_Docs/Phase2_Flows_Implementation_Spec.md) signed off (§7 checklist)
+2. `pytest whinfell_pipeline/tests/test_funds_flows.py` PASS
+3. Hydrate v1.2.0: `node_cockpits.credit.funds_flows` populated from flows fixture
+4. TC card renders with degrade_notice when fallback active
 
 ---
 
 ## Authority hierarchy (locked)
 
 ```
-1. Whinfell Score + Transmission + Gate + Shock   ← primary
-2. Node composite_score + directional / RV        ← node verdict
-3. funds_flows.verdict + interpretation           ← confirmation only
+1. Whinfell Score + Transmission + Gate + Shock
+2. Node composite_score + directional / RV
+3. funds_flows.verdict + interpretation (confirmation only)
 ```
+
+---
+
+## /roles (BUILD Cousins ownership)
+
+| Role | PR ownership |
+|------|----------------|
+| **Blueprint** | Spec lock, Phase2 cockpit §9.1, WTM export copy |
+| **Bridge** | PR-1 registry, PR-2 `funds_flows.py`, node_cockpits wire |
+| **Integration Dynamo** | PR-3a parser, PR-3b fallback, batch_collect hook, normalize |
+| **Clarity** | PR-4 `FundsFlowSponsorshipCard` |
+| **Clark** | WTM-Flows Koyfin view expansion, desk drops `flows_*.csv` |
+| **TempLibby** | Sign-off §7 review checklist |

@@ -3,6 +3,7 @@
 **Date:** June 29, 2026  
 **Facilitator:** BUILD Cousins  
 **Question:** How should Whinfell ingest ETF flow data for the Funds Flow Sponsorship layer?  
+**Resolution:** **Option D (Hybrid) accepted** — see [Phase2_Flows_Implementation_Spec.md](../01_Strategy_Docs/Phase2_Flows_Implementation_Spec.md)  
 **Authority:** [Phase2_Funds_Flow_Sponsorship_Design.md](../01_Strategy_Docs/Phase2_Funds_Flow_Sponsorship_Design.md)
 
 ---

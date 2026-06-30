@@ -1,7 +1,7 @@
 # Whinfell BUILD Cousins - Progress Log
 
 **Started:** June 26, 2026  
-**Last Updated:** June 29, 2026 (Funds Flow ingest arena — vote pending)
+**Last Updated:** June 29, 2026 (Flows implementation spec — review for lock)
 
 ---
 
@@ -63,12 +63,14 @@
 | **Phase2_Funds_Flow_Sponsorship_Design.md** | **1.0** | **Node-level % AUM confirmation layer — design locked** |
 | **Funds_Flow_Sponsorship_GOAL.md** | **1.0** | **`/goal` — success criteria + authority hierarchy** |
 | **Funds_Flow_Sponsorship_PLAN.md** | **1.0** | **`/plan` — PR-1→5 implementation steps** |
-| **Funds_Flow_Ingest_Arena_Debate.md** | **1.0** | **`/arena` — ingest options A–E · team vote Q1–Q5** |
+| **Funds_Flow_Ingest_Arena_Debate.md** | **1.0** | **`/arena` — Option D locked** |
+| **Phase2_Flows_Implementation_Spec.md** | **1.0 draft** | **L1 sidecar + L2 node model · degrade modes · PR ownership** |
 
 ---
 
 ## Notes
 
+- **June 29, 2026** — **FLOWS IMPLEMENTATION SPEC (DRAFT)** — `Phase2_Flows_Implementation_Spec.md` covers: three-layer data model (`flows_*.csv` → `latest_flows.json` → `node_cockpit.funds_flows`), `basket_role`/`node_affiliation`, Credit & Breadth sponsorship examples, `degrade_mode` UI strings, PR-1/3a/3b/2/4/5 ownership split, full Master DD delta. Phase2 cockpit §9.1 added. **Awaiting §7 desk lock before implementation.**
 - **June 29, 2026** — **FUNDS FLOW INGEST /ARENA** — Debate doc ships five options. **Key finding:** `WTM-Flows-Global.csv` on desk (750+ dated rows, `Flow (D)` + `AUM`) but quarantined for filename; staged credit is observation-only. BUILD recommends **Option D hybrid**: optional `flows_{YYYYMMDD}_{HHMM}.csv` primary + credit cross-section 1D fallback. Vote template for Clark/TempLibby in arena doc.
 - **June 29, 2026** — **FUNDS FLOW SPONSORSHIP PLAN LOCKED** — Node-level confirmation subsystem: `% AUM` canonical, verdicts `supportive|neutral|mixed|diverging`, `FundsFlowSponsorshipCard` in right rail, 5 node ETF baskets in proposed Master DD registry. Flows affect conviction/rationale only — not score/gate. Phase **2b-data** (PR-1→3) then **2b-ui** (PR-4→5). Deliverables: design doc + `08_Deliverables/Funds_Flow_Sponsorship_GOAL.md` + `Funds_Flow_Sponsorship_PLAN.md`.
 - **June 29, 2026** — **PHASE 2 DATA LAYER SHIPPED** — `whinfell_pipeline/node_cockpits.py` builds all five `node_cockpit` objects from `node_score_weights` + `rv_series` + `suggested_tracer`; `hydrate.py` emits bundle **v1.1.0** with `node_cockpits`, `cockpit_context`, `wtm_export_v22`; `export_contract.py` adds `build_node_cockpit_export_block()` / `build_wtm_export_v22()`. Credit uses `horizon_net_fallback`; non-credit uses weighted components (tracer-derived MVP stubs until ARCH-1). RV quartiles compute when Barchart history available; basis degrades gracefully from execution sidecar. **111 tests PASS.** Commit `cdd677a`.
