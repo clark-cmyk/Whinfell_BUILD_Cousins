@@ -161,7 +161,18 @@ def canonical_filename_patterns(data: dict[str, Any] | None = None) -> list[str]
     """Glob patterns for already-canonical staged filenames."""
     datasets = canonical_dataset_names(data)
     patterns = [f"{ds}_*" for ds in datasets]
-    patterns.extend(["btc_price_chart_*", "btc_correl_chart_*", "eth_correl_chart_*", "xrp_correl_chart_*", "sol_correl_chart_*", "options_*", "greeks_*"])
+    patterns.extend(
+        [
+            "flows_*",
+            "btc_price_chart_*",
+            "btc_correl_chart_*",
+            "eth_correl_chart_*",
+            "xrp_correl_chart_*",
+            "sol_correl_chart_*",
+            "options_*",
+            "greeks_*",
+        ]
+    )
     return patterns
 
 
@@ -270,3 +281,50 @@ def badge_default_payload(data: dict[str, Any] | None = None) -> dict[str, str]:
         "source": "whinfell_pipeline/data_dictionary.yaml",
         "loadingLabel": "Loading dictionary…",
     }
+
+
+def get_funds_flow_baskets(data: dict[str, Any] | None = None) -> dict[str, Any]:
+    dd = data or load_data_dictionary()
+    return dict(dd.get("funds_flow_baskets") or {})
+
+
+def funds_flow_basket_for_node(node_id: str, data: dict[str, Any] | None = None) -> dict[str, Any] | None:
+    """Return locked basket spec for a ladder node (includes node_id)."""
+    nodes = (get_funds_flow_baskets(data).get("nodes") or {})
+    spec = nodes.get(node_id)
+    if not spec:
+        return None
+    return {"node_id": node_id, **dict(spec)}
+
+
+def funds_flow_node_ids(data: dict[str, Any] | None = None) -> list[str]:
+    return list((get_funds_flow_baskets(data).get("nodes") or {}).keys())
+
+
+def funds_flow_thresholds(data: dict[str, Any] | None = None) -> dict[str, Any]:
+    dd = data or load_data_dictionary()
+    return dict(dd.get("funds_flow_thresholds") or {})
+
+
+def get_funds_flow_thresholds(data: dict[str, Any] | None = None) -> dict[str, Any]:
+    return funds_flow_thresholds(data)
+
+
+def funds_flow_column_map(data: dict[str, Any] | None = None) -> dict[str, list[str]]:
+    dd = data or load_data_dictionary()
+    raw = dd.get("funds_flow_column_patterns") or {}
+    return {str(k): list(v) for k, v in raw.items()}
+
+
+def get_funds_flow_column_patterns(data: dict[str, Any] | None = None) -> dict[str, list[str]]:
+    return funds_flow_column_map(data)
+
+
+def get_funds_flow_ingest(data: dict[str, Any] | None = None) -> dict[str, Any]:
+    dd = data or load_data_dictionary()
+    return dict(dd.get("funds_flow_ingest") or {})
+
+
+def funds_flow_sidecar_path(data: dict[str, Any] | None = None) -> str:
+    ingest = get_funds_flow_ingest(data)
+    return str(ingest.get("sidecar_path") or "data/flows/v1/latest_flows.json")

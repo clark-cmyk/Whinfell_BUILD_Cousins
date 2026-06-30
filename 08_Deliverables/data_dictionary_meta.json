@@ -12,7 +12,8 @@
     "WTM-China-Policy",
     "WTM-Crypto-Price",
     "WTM-Crypto-Correl",
-    "WTM-BTC-Basis"
+    "WTM-BTC-Basis",
+    "WTM-Flows"
   ],
   "validated": true,
   "source": "whinfell_pipeline/data_dictionary.yaml"

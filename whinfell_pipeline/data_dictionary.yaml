@@ -35,6 +35,7 @@ project_structure:
     "data/china_policy/v1": "China policy observations parquet"
     "data/crypto/v1": "Crypto sleeve sidecar JSON"
     "data/execution/v1": "Execution L3 sidecar JSON"
+    "data/flows/v1": "Funds flow sidecar (latest_flows.json)"
     "data/hydration": "Hydration bundle (latest.json)"
     "whinfell_pipeline": "Ingestion, transform, hydrate pipeline"
     "scripts": "Desk shell scripts and launchers"
@@ -70,6 +71,12 @@ watchlist_names:
     WTM-BTC-Basis:
       dataset: btc_basis
       filename_pattern: "btc_basis_{YYYYMMDD}.csv"
+    WTM-Flows:
+      dataset: flows
+      filename_pattern: "flows_{YYYYMMDD}_{HHMM}.csv"
+      vendor_detect_glob: "WTM-Flows*.csv"
+      optional: true
+      clicks: 2
   koyfin_watchlists:
     WTM-Import-Core:
       role: source_of_truth
@@ -132,6 +139,10 @@ file_naming_conventions:
     - detect_glob: "futures-spreads-btm*"
       canonical_template: "btc_basis_{YYYYMMDD}.csv"
       dataset: btc_basis
+    - detect_glob: "WTM-Flows*.csv"
+      canonical_template: "flows_{YYYYMMDD}_{HHMM}.csv"
+      dataset: flows
+      saved_view: WTM-Flows
   vendor_to_canonical:
     credit_vendor_snapshot: "credit_{YYYYMMDD}_{HHMM}.csv"
     equities_vendor_snapshot: "equities_{YYYYMMDD}_{HHMM}.csv"
@@ -139,10 +150,12 @@ file_naming_conventions:
     correl_vendor_export: "crypto_corr_series_{YYYYMMDD}_{HHMM}.csv"
     futures_daily_vendor: "futures_daily_{YYYYMMDD}_{HHMM}.csv"
     btc_basis_vendor: "btc_basis_{YYYYMMDD}.csv"
+    flows_vendor_timeseries: "flows_{YYYYMMDD}_{HHMM}.csv"
   canonical_datasets:
     - rates
     - equities
     - credit
+    - flows
     - china_policy
     - futures_intraday
     - futures_daily
@@ -161,7 +174,7 @@ json_structures:
   hydration_bundle:
     path: "data/hydration/latest.json"
     version_field: hydration_version
-    expected_version: "1.1.0"
+    expected_version: "1.2.0"
     blocks:
       global: [whinfell_score, transmission_state, regime_tag, key_observation, btc_bias]
       china: [sq3_score, sq3_band, policy_strength, state_impulse_score]
@@ -171,6 +184,10 @@ json_structures:
       suggested_tracer: [marks, confirm_required]
       node_cockpits: [liquidity, credit, breadth, highbeta, basis]
       cockpit_context: [transmission_health_score, weakest_node_id, gate_zone, whinfell_score]
+      flows_sidecar: [as_of, source_file, ingest_mode, ticker_count, warnings]
+  flows_sidecar:
+    path: "data/flows/v1/latest_flows.json"
+    version_field: version
   wtm_export:
     format: "WTM EXPORT v2.2"
     legacy_format: "WTM EXPORT v2.0"
@@ -371,6 +388,17 @@ canonical_assets:
   btc_vehicle_gbtc:
     class: crypto_vehicle
     sources: {koyfin: GBTC, barchart: GBTC}
+  ibit:
+    class: btc_vehicle
+    sources: {koyfin: IBIT, barchart: IBIT}
+    note: Alias for funds-flow basket resolution; prefer btc_vehicle_ibit for transmission
+  bito:
+    class: btc_vehicle
+    sources: {koyfin: BITO, barchart: BITO}
+  gbtc:
+    class: btc_vehicle
+    sources: {koyfin: GBTC, barchart: GBTC}
+    note: Alias for funds-flow basket resolution; prefer btc_vehicle_gbtc for transmission
 
   # Rates / macro
   us10y:
@@ -385,6 +413,18 @@ canonical_assets:
   sofr_index:
     class: rates_index
     sources: {barchart: SOFR}
+  shy:
+    class: rates_etf
+    sources: {koyfin: SHY, barchart: SHY}
+  ief:
+    class: rates_etf
+    sources: {koyfin: IEF, barchart: IEF}
+  tlt:
+    class: rates_etf
+    sources: {koyfin: TLT, barchart: TLT}
+  bil:
+    class: rates_etf
+    sources: {koyfin: BIL, barchart: BIL}
   hsi_index:
     class: equity_index
     sources: {barchart: "$HSI"}
@@ -431,6 +471,12 @@ canonical_assets:
   spy:
     class: equity_index
     sources: {koyfin: SPY, barchart: null}
+  iwm:
+    class: equity_etf
+    sources: {koyfin: IWM, barchart: IWM}
+  rsp:
+    class: equity_etf
+    sources: {koyfin: RSP, barchart: RSP}
   qqq:
     class: equity_index
     sources: {koyfin: QQQ, barchart: null}
@@ -852,11 +898,108 @@ node_score_weights:
       component_count: 8
 
 # ---------------------------------------------------------------------------
+# Funds flow sponsorship — baskets, thresholds, ingest (Phase 2b PR-1)
+# ---------------------------------------------------------------------------
+funds_flow_baskets:
+  version: "1.0"
+  status: Locked
+  normalization: flow_pct_aum
+  horizons:
+    display: [1d, 5d]
+    persistence_lookback_sessions: 20
+  nodes:
+    liquidity:
+      basket_id: liquidity_duration
+      basket_label: "Duration & front-end sponsorship"
+      primary_ticker: IEF
+      etfs:
+        - {ticker: SHY, asset_id: shy, role: front_end, primary: false, weight: 0.2}
+        - {ticker: IEF, asset_id: ief, role: intermediate_duration, primary: true, weight: 0.35}
+        - {ticker: TLT, asset_id: tlt, role: long_duration, primary: false, weight: 0.25}
+        - {ticker: BIL, asset_id: bil, role: t_bill, primary: false, weight: 0.2}
+    credit:
+      basket_id: credit_hy_ig
+      basket_label: "Credit ETF sponsorship"
+      primary_ticker: HYG
+      etfs:
+        - {ticker: HYG, asset_id: hyg, role: hy_high_yield, primary: true, weight: 0.35}
+        - {ticker: LQD, asset_id: jaaa, role: ig_investment_grade, primary: false, weight: 0.30}
+        - {ticker: BKLN, asset_id: bkln, role: leveraged_loan, primary: false, weight: 0.20}
+        - {ticker: CWB, asset_id: cwb, role: convertibles, primary: false, weight: 0.15}
+    breadth:
+      basket_id: breadth_participation
+      basket_label: "Equity participation sponsorship"
+      primary_ticker: IWM
+      etfs:
+        - {ticker: IWM, asset_id: iwm, role: small_cap, primary: true, weight: 0.35}
+        - {ticker: SPY, asset_id: spy, role: large_cap, primary: false, weight: 0.25}
+        - {ticker: QQQ, asset_id: qqq, role: growth_tech, primary: false, weight: 0.20}
+        - {ticker: RSP, asset_id: rsp, role: equal_weight, primary: false, weight: 0.20}
+    highbeta:
+      basket_id: highbeta_crypto_beta
+      basket_label: "High-beta & crypto vehicle sponsorship"
+      primary_ticker: IBIT
+      etfs:
+        - {ticker: IBIT, asset_id: btc_vehicle_ibit, role: btc_spot_vehicle, primary: true, weight: 0.40}
+        - {ticker: QQQ, asset_id: qqq, role: growth_beta, primary: false, weight: 0.30}
+        - {ticker: SPY, asset_id: spy, role: market_beta, primary: false, weight: 0.20}
+        - {ticker: BITO, asset_id: bito, role: btc_futures_vehicle, primary: false, weight: 0.10}
+    basis:
+      basket_id: basis_warehouse_proxy
+      basket_label: "Warehouse / ETF basis proxy sponsorship"
+      primary_ticker: IBIT
+      etfs:
+        - {ticker: IBIT, asset_id: btc_vehicle_ibit, role: primary_warehouse, primary: true, weight: 0.50}
+        - {ticker: BITO, asset_id: bito, role: futures_linked, primary: false, weight: 0.25}
+        - {ticker: GBTC, asset_id: gbtc, role: trust_proxy, primary: false, weight: 0.25}
+
+funds_flow_thresholds:
+  version: "1.0"
+  supportive_5d_pct: 0.15
+  weak_5d_pct: 0.05
+  divergence_5d_pct: -0.05
+  breadth_supportive_ratio: 0.60
+  concentration_single_etf: 0.70
+  primary_divergence_weight: 2.0
+
+funds_flow_column_patterns:
+  flow_usd_1d: ["{TICKER} Flow (D)", "Fund Flows/Periodic (D)"]
+  aum_usd: ["{TICKER} AUM", "AUM"]
+  flow_pct_aum_1d: ["{TICKER} Flow % AUM (D)"]
+  date: ["Date"]
+
+funds_flow_ingest:
+  version: "1.0"
+  status: Locked
+  sidecar_path: "data/flows/v1/latest_flows.json"
+  sidecar_version: "1.0.0"
+  source_channel_primary: koyfin_wtm_flows
+  source_channel_fallback: credit_cross_section_fallback
+  ingest_modes: [timeseries_primary, fallback_1d_only, disabled]
+  units:
+    flow_usd: millions_usd
+    aum_usd: millions_usd
+    flow_pct_aum: percent
+  basket_coverage_min_ratio: 0.60
+  series_tail_sessions: 20
+  flows_meta:
+    flows_status: [ok, partial, fallback_1d, unavailable]
+    flows_source: [wtm_flows_timeseries, credit_cross_section, none]
+    degrade_modes: [full, partial_basket, fallback_1d_credit, unavailable]
+    fallback_reasons:
+      - missing_wtm_flows_file
+      - credit_cross_section_1d_only
+      - missing_basket_etfs
+      - ticker_columns_absent
+      - non_credit_node_no_fallback
+    flows_confidence_penalty_range: [0, 2]
+
+# ---------------------------------------------------------------------------
 # Transmission output blocks (hydration bundle + WTM export extensions)
 # ---------------------------------------------------------------------------
 transmission_outputs:
   hydration_bundle:
-    version: "1.1.0"
+    version: "1.2.0"
     blocks:
       global: {source: parquet, fields: [whinfell_score, transmission_state, regime_tag, key_observation, btc_bias]}
       china: {source: parquet, fields: [sq3_score, sq3_band, policy_strength, state_impulse_score]}
@@ -866,6 +1009,9 @@ transmission_outputs:
       suggested_tracer: {source: derived, confirm_required: true}
       node_cockpits: {source: derived, nodes: [liquidity, credit, breadth, highbeta, basis]}
       cockpit_context: {source: derived, fields: [weakest_node_id, gate_zone, whinfell_score]}
+  flows_sidecar:
+    source: data/flows/v1/latest_flows.json
+    fields: [as_of, ingest_mode, tickers]
   output_kinds:
     snapshot: cross_sectional current-state validation
     historical_timeseries: dated price/level series

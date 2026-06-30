@@ -16,9 +16,18 @@ from whinfell_pipeline.data_dictionary import (
     barchart_instrument_class_map,
     barchart_spread_symbols,
     canonical_asset_for_ticker,
+    canonical_dataset_names,
+    canonical_filename_patterns,
     canonical_saved_view_names,
+    funds_flow_basket_for_node,
+    funds_flow_column_map,
+    funds_flow_node_ids,
+    funds_flow_sidecar_path,
+    funds_flow_thresholds,
     get_canonical_filename_patterns,
     get_column_mappings,
+    get_funds_flow_baskets,
+    get_funds_flow_ingest,
     get_json_field_map,
     get_node_score_weights,
     get_project_structure,
@@ -58,6 +67,10 @@ class TestDataDictionary(unittest.TestCase):
             "ticker_standards",
             "rv_series",
             "node_score_weights",
+            "funds_flow_baskets",
+            "funds_flow_thresholds",
+            "funds_flow_column_patterns",
+            "funds_flow_ingest",
         ):
             self.assertIn(key, dd, key)
         self.assertEqual(get_project_structure()["repo_root"], "~/Desktop/Whinfell_BUILD_Cousins")
@@ -142,6 +155,69 @@ class TestDataDictionary(unittest.TestCase):
             self.assertEqual(len(comps), 5)
             self.assertEqual(sum(c["weight_pct"] for c in comps), 100)
         self.assertEqual(nsw["design"]["fallback_min_components"], 2)
+
+    def test_funds_flow_baskets_locked(self):
+        baskets = get_funds_flow_baskets()
+        self.assertEqual(baskets["version"], "1.0")
+        self.assertEqual(baskets["status"], "Locked")
+        self.assertEqual(baskets["normalization"], "flow_pct_aum")
+        node_ids = funds_flow_node_ids()
+        self.assertEqual(len(node_ids), 5)
+        self.assertEqual(
+            set(node_ids),
+            {"liquidity", "credit", "breadth", "highbeta", "basis"},
+        )
+        credit = funds_flow_basket_for_node("credit")
+        self.assertIsNotNone(credit)
+        assert credit is not None
+        self.assertEqual(credit["basket_id"], "credit_hy_ig")
+        self.assertEqual(credit["primary_ticker"], "HYG")
+        self.assertEqual(len(credit["etfs"]), 4)
+        primary = [e for e in credit["etfs"] if e.get("primary")]
+        self.assertEqual(len(primary), 1)
+        self.assertEqual(primary[0]["ticker"], "HYG")
+        thresholds = funds_flow_thresholds()
+        self.assertEqual(thresholds["supportive_5d_pct"], 0.15)
+        self.assertEqual(thresholds["divergence_5d_pct"], -0.05)
+        colmap = funds_flow_column_map()
+        self.assertIn("{TICKER} Flow (D)", colmap["flow_usd_1d"])
+        self.assertIn("Date", colmap["date"])
+        ingest = get_funds_flow_ingest()
+        self.assertEqual(ingest["units"]["flow_usd"], "millions_usd")
+        self.assertIn("ok", ingest["flows_meta"]["flows_status"])
+        self.assertEqual(funds_flow_sidecar_path(), "data/flows/v1/latest_flows.json")
+        self.assertEqual(canonical_asset_for_ticker("koyfin", "SHY"), "shy")
+        self.assertEqual(canonical_asset_for_ticker("koyfin", "IWM"), "iwm")
+        self.assertEqual(canonical_asset_for_ticker("koyfin", "BITO"), "bito")
+
+    def test_flows_filename_pattern(self):
+        datasets = canonical_dataset_names()
+        self.assertIn("flows", datasets)
+        patterns = get_canonical_filename_patterns()
+        self.assertEqual(
+            patterns["vendor_to_canonical"]["flows_vendor_timeseries"],
+            "flows_{YYYYMMDD}_{HHMM}.csv",
+        )
+        rules = normalize_glob_rules()
+        flows_rules = [r for r in rules if r.get("dataset") == "flows"]
+        self.assertEqual(len(flows_rules), 1)
+        self.assertEqual(flows_rules[0]["detect_glob"], "WTM-Flows*.csv")
+        self.assertEqual(
+            flows_rules[0]["canonical_template"],
+            "flows_{YYYYMMDD}_{HHMM}.csv",
+        )
+        wl = get_watchlist_names()
+        self.assertIn("WTM-Flows", wl["koyfin_saved_views"])
+        flows_view = wl["koyfin_saved_views"]["WTM-Flows"]
+        self.assertEqual(flows_view["dataset"], "flows")
+        self.assertTrue(flows_view.get("optional"))
+        self.assertIn("flows_*", canonical_filename_patterns())
+        jfm = get_json_field_map()
+        self.assertEqual(jfm["hydration_bundle"]["expected_version"], "1.2.0")
+        self.assertIn("flows_sidecar", jfm["hydration_bundle"]["blocks"])
+        self.assertEqual(jfm["flows_sidecar"]["path"], "data/flows/v1/latest_flows.json")
+        ps = get_project_structure()
+        self.assertIn("data/flows/v1", ps["directories"])
 
 
 if __name__ == "__main__":

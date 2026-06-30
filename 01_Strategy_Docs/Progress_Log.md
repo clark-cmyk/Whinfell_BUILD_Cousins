@@ -34,7 +34,7 @@
 | **Phase 2b-data** | WTM EXPORT v2.2 + node cockpit hydration builder | **Shipped** | Bridge | June 29, 2026 |
 | **Phase 2** | Node architecture (5 trading cockpits) | **In progress** | Bridge + Edge + Clarity | June 29, 2026 |
 | **Phase 2b** | ARCH-1 routing + live component inputs | **Open** | Integration Dynamo | June 29, 2026 |
-| **Phase 2b** | Funds Flow Sponsorship layer | **Planned · Design locked** | Bridge + Clarity | June 29, 2026 |
+| **Phase 2b** | Funds Flow Sponsorship layer | **PR-1 registry shipped** | Bridge + Clarity | June 29, 2026 |
 
 ---
 
@@ -70,6 +70,7 @@
 
 ## Notes
 
+- **June 29, 2026** — **FLOWS PR-1 SHIPPED** — Master DD registry: `funds_flow_baskets` (5 nodes), `funds_flow_thresholds`, `funds_flow_column_patterns`, `funds_flow_ingest` (`flows_meta` codes), `flows` dataset + `WTM-Flows*.csv` normalize rule, `canonical_assets` extensions (SHY/IEF/TLT/BIL/IWM/RSP/BITO/GBTC), hydration target v1.2.0 blocks, optional `koyfin_flows` in collection manifest. Helpers: `funds_flow_basket_for_node()`, `funds_flow_thresholds()`, `funds_flow_column_map()`, `get_funds_flow_ingest()`. **113 tests PASS.** Next: PR-3a `flows_parser.py`.
 - **June 29, 2026** — **FLOWS IMPLEMENTATION SPEC (DRAFT)** — `Phase2_Flows_Implementation_Spec.md` covers: three-layer data model (`flows_*.csv` → `latest_flows.json` → `node_cockpit.funds_flows`), `basket_role`/`node_affiliation`, Credit & Breadth sponsorship examples, `degrade_mode` UI strings, PR-1/3a/3b/2/4/5 ownership split, full Master DD delta. Phase2 cockpit §9.1 added. **Awaiting §7 desk lock before implementation.**
 - **June 29, 2026** — **FUNDS FLOW INGEST /ARENA** — Debate doc ships five options. **Key finding:** `WTM-Flows-Global.csv` on desk (750+ dated rows, `Flow (D)` + `AUM`) but quarantined for filename; staged credit is observation-only. BUILD recommends **Option D hybrid**: optional `flows_{YYYYMMDD}_{HHMM}.csv` primary + credit cross-section 1D fallback. Vote template for Clark/TempLibby in arena doc.
 - **June 29, 2026** — **FUNDS FLOW SPONSORSHIP PLAN LOCKED** — Node-level confirmation subsystem: `% AUM` canonical, verdicts `supportive|neutral|mixed|diverging`, `FundsFlowSponsorshipCard` in right rail, 5 node ETF baskets in proposed Master DD registry. Flows affect conviction/rationale only — not score/gate. Phase **2b-data** (PR-1→3) then **2b-ui** (PR-4→5). Deliverables: design doc + `08_Deliverables/Funds_Flow_Sponsorship_GOAL.md` + `Funds_Flow_Sponsorship_PLAN.md`.

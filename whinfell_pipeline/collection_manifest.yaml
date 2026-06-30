@@ -234,6 +234,26 @@ batch_exports:
       - "koyfin_*-*-??.csv"
     notes: "Non-crypto pairwise correlation series (credit vs SPY)."
 
+  - id: koyfin_flows
+    priority: 15
+    optional: true
+    source: koyfin
+    dataset: flows
+    saved_view: WTM-Flows
+    url: "${KOYFIN_VIEW_FLOWS_URL}"
+    fallback_url: "https://app.koyfin.com/"
+    clicks: 2
+    steps:
+      - "Open saved view WTM-Flows (expand to full basket tickers)."
+      - "Export CSV → whinfell_drop/ (normalize → flows_{YYYYMMDD}_{HHMM}.csv)"
+    canonical_name: "flows_{YYYYMMDD}_{HHMM}.csv"
+    dictionary_dataset: flows
+    raw_filename_patterns:
+      - "WTM-Flows*.csv"
+    notes: >
+      Optional confirmation layer — not in required_batch_ids.
+      Vendor rename: whinfell_pipeline/data_dictionary.yaml normalize_rules.
+
 # Minimum files before auto-pipeline runs (required batch ids)
 required_batch_ids:
   - koyfin_rates

@@ -27,10 +27,10 @@
 | **Phase 2b** | ARCH-1 component routing + Koyfin history for RV quartiles | High | **Open** | Integration Dynamo | Replaces tracer-derived component stubs |
 | **Phase 2** | Node architecture redesign (5 trading cockpits) | High | **In progress** | Bridge + Edge + Clarity | Data/pipeline done · **TC UI not started** |
 | **Phase 2 open** | Ambiguity C — trading-day vs calendar-day lookback | Medium | **Open** | TempLibby + desk | Default locked in spec; desk confirm |
-| **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **Spec v1.1 ready** | Bridge + Clarity | Companion spec + `flows_meta` + Appendix A JSON — **§8 sign-off → PR-1/PR-3** |
-| **Phase 2b-data** | PR-1 registry + PR-3a/b ingest + PR-2 `funds_flows.py` | High | **Blocked — spec lock** | Bridge + Dynamo | Option D locked · L0/L1/L2 model · sidecar `latest_flows.json` |
-| **Phase 2b-ops** | `WTM-Flows` normalize + Koyfin view expansion | High | **Open** | Clark | Expand view tickers per spec §5 · normalize `WTM-Flows*.csv` |
-| **Phase 2b-ops** | `normalize_whinfell_drop.sh` — map `WTM-Flows*.csv` | Medium | **Open** | Bridge | Unblock desk drop without manual `mv` |
+| **Phase 2b** | Funds Flow Sponsorship layer (`FundsFlowSponsorshipCard`) | High | **PR-1 shipped** | Bridge + Clarity | Registry locked · **PR-3a/b → PR-2 → PR-4/5** |
+| **Phase 2b-data** | PR-1 registry + PR-3a/b ingest + PR-2 `funds_flows.py` | High | **PR-1 done · PR-3 next** | Bridge + Dynamo | Option D locked · L0/L1/L2 model · sidecar `latest_flows.json` |
+| **Phase 2b-ops** | `WTM-Flows` normalize + Koyfin view expansion | High | **Normalize shipped** | Clark | Expand view tickers per spec §5 · `WTM-Flows*.csv` → `flows_*` via Master DD |
+| **Phase 2b-ops** | `normalize_whinfell_drop.sh` — map `WTM-Flows*.csv` | Medium | **Shipped (via DD rule)** | Bridge | `batch_collect.py normalize` reads `WTM-Flows*.csv` rule |
 | **Phase 3** | TC interface (full-screen Why, flip nav, margin module) | Medium | **Planned** | Clarity + Safeguard | Blocked on Phase 2 UI · flow card ships in 2b-ui |
 | **Phase 4** | Validation & reliability gate | Medium | **Planned** | Hammer + Precision | After Phase 3 |
 
