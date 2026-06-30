@@ -1,7 +1,7 @@
 # Whinfell BUILD Cousins - Progress Log
 
 **Started:** June 26, 2026  
-**Last Updated:** June 29, 2026 (Phase 2 data layer shipped)
+**Last Updated:** June 29, 2026 (Funds Flow Sponsorship plan locked)
 
 ---
 
@@ -34,6 +34,7 @@
 | **Phase 2b-data** | WTM EXPORT v2.2 + node cockpit hydration builder | **Shipped** | Bridge | June 29, 2026 |
 | **Phase 2** | Node architecture (5 trading cockpits) | **In progress** | Bridge + Edge + Clarity | June 29, 2026 |
 | **Phase 2b** | ARCH-1 routing + live component inputs | **Open** | Integration Dynamo | June 29, 2026 |
+| **Phase 2b** | Funds Flow Sponsorship layer | **Planned · Design locked** | Bridge + Clarity | June 29, 2026 |
 
 ---
 
@@ -59,11 +60,15 @@
 | **Phase2_Node_Cockpit_Data_Model.md** | **0.2 locked** | **A/B/E/F resolved — data layer in pipeline** |
 | **WTM_EXPORT_v2.2_SPEC.md** | **1.0 locked** | **Per-node NODE COCKPIT blocks — `cdd677a`** |
 | **Phase2_Interim_Node_Score_Weights.md** | **1.0-interim** | **Non-credit composite weights — `3293a9b`** |
+| **Phase2_Funds_Flow_Sponsorship_Design.md** | **1.0** | **Node-level % AUM confirmation layer — design locked** |
+| **Funds_Flow_Sponsorship_GOAL.md** | **1.0** | **`/goal` — success criteria + authority hierarchy** |
+| **Funds_Flow_Sponsorship_PLAN.md** | **1.0** | **`/plan` — PR-1→5 implementation steps** |
 
 ---
 
 ## Notes
 
+- **June 29, 2026** — **FUNDS FLOW SPONSORSHIP PLAN LOCKED** — Node-level confirmation subsystem: `% AUM` canonical, verdicts `supportive|neutral|mixed|diverging`, `FundsFlowSponsorshipCard` in right rail, 5 node ETF baskets in proposed Master DD registry. Flows affect conviction/rationale only — not score/gate. Phase **2b-data** (PR-1→3) then **2b-ui** (PR-4→5). Deliverables: design doc + `08_Deliverables/Funds_Flow_Sponsorship_GOAL.md` + `Funds_Flow_Sponsorship_PLAN.md`.
 - **June 29, 2026** — **PHASE 2 DATA LAYER SHIPPED** — `whinfell_pipeline/node_cockpits.py` builds all five `node_cockpit` objects from `node_score_weights` + `rv_series` + `suggested_tracer`; `hydrate.py` emits bundle **v1.1.0** with `node_cockpits`, `cockpit_context`, `wtm_export_v22`; `export_contract.py` adds `build_node_cockpit_export_block()` / `build_wtm_export_v22()`. Credit uses `horizon_net_fallback`; non-credit uses weighted components (tracer-derived MVP stubs until ARCH-1). RV quartiles compute when Barchart history available; basis degrades gracefully from execution sidecar. **111 tests PASS.** Commit `cdd677a`.
 - **June 29, 2026** — **PHASE 2 PREP LOCKED** — Data model v0.2 decisions (composite authority, per-series quartile direction, options defer, China soft coupling); `rv_series` (10 series) + `node_score_weights` registered in Master DD. Commits `c9974fa` · `3293a9b`.
 - **June 29, 2026** — **PHASE 1 VERIFIED** — Full test suite **104 PASS** (4 skipped); operator naming gate **0 violations**; `sync_dictionary_meta.py` chains yaml → HTML badge injection + `data_dictionary_meta.json`; disk-backed badge evidence (`dd_badge_file_evidence.mjs`) PASS. Evidence runner: `generate_phase1_evidence.py`. Commit `194506a`.

@@ -190,6 +190,36 @@ You open saved Koyfin/Barchart screens, export CSV only, save to whinfell_drop,
 run one Python command, and report results. Ask Clark before terminal commands.
 ```
 
+### `/goal-funds-flow` (Phase 2b — BUILD Cousins)
+
+```text
+Funds Flow Sponsorship — node cockpit confirmation layer
+
+Authority: 08_Deliverables/Funds_Flow_Sponsorship_GOAL.md
+Design:    01_Strategy_Docs/Phase2_Funds_Flow_Sponsorship_Design.md
+
+Success:
+  • funds_flow_baskets in Master DD (5 nodes, % AUM canonical)
+  • node_cockpit.funds_flows in hydration bundle v1.2.0
+  • Verdict: supportive | neutral | mixed | diverging
+  • confidence_delta only — never override score/transmission/gate
+  • FundsFlowSponsorshipCard in TC right rail (calm, institutional)
+
+Non-goals: global flow widget, heatmaps, gate override, browser CSV parse
+```
+
+### `/plan-funds-flow` (Phase 2b — BUILD Cousins)
+
+```text
+STEP 0 — Read 08_Deliverables/Funds_Flow_Sponsorship_PLAN.md
+STEP 1 — PR-1: funds_flow_baskets in data_dictionary.yaml
+STEP 2 — PR-2: whinfell_pipeline/funds_flows.py + node_cockpits wire-up
+STEP 3 — PR-3: Koyfin Flow (D) / AUM ingest → flows sidecar
+STEP 4 — PR-4: FundsFlowSponsorshipCard in TC node rail
+STEP 5 — PR-5: WTM export flow lines + docs
+STEP 6 — pytest + hydrate inspect node_cockpits.credit.funds_flows
+```
+
 ### `/goal`
 
 ```text
