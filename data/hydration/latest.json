@@ -2,27 +2,27 @@
   "hydration_version": "1.2.0",
   "pipeline_version": "1.0.0",
   "bundle_version": "1.0.0",
-  "snapshot_id": "global-2026-06-30-raw2wtm-01",
-  "lineage_hash": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
+  "snapshot_id": "global-2026-07-01-raw2wtm-01",
+  "lineage_hash": "sha256:9480b5bc465bbbd636e3a7687f79ce44a3acc43a913d4ba7059350c08140676d",
   "validation_status": "parsed",
-  "as_of": "2026-06-30T18:20:01+00:00",
+  "as_of": "2026-07-01T11:02:42+00:00",
   "source": "parquet_hydration",
   "freshness_status": "fresh",
   "global": {
-    "observation_id": "global-2026-06-30-raw2wtm-01",
-    "whinfell_score": 80,
-    "transmission_state": "normal",
-    "regime_tag": "Confirmed Risk-On",
-    "key_observation": "HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +",
+    "observation_id": "global-2026-07-01-raw2wtm-01",
+    "whinfell_score": 46,
+    "transmission_state": "stressed",
+    "regime_tag": "Fragile Risk-On",
+    "key_observation": "USDCNY -; USDCNH -; CN10Y +; CN2Y -; US2Y +",
     "gate_status": "",
     "sq3_score": 35,
     "sq3_band": "Impaired",
-    "near_month": "Jul",
+    "near_month": "Front",
     "far_month": "Back",
-    "basis_spread": "58620.00",
-    "ref_low": "46896.00",
-    "ref_mid": "58620.00",
-    "ref_high": "70344.00",
+    "basis_spread": "100.23",
+    "ref_low": "80.19",
+    "ref_mid": "100.23",
+    "ref_high": "120.28",
     "btc_bias": "Neutral"
   },
   "china": {
@@ -73,148 +73,156 @@
   },
   "crypto_sleeve": {
     "version": "1.0.0",
-    "as_of": "2026-06-30T18:20:01.081146+00:00",
+    "as_of": "2026-07-01T11:02:42.796407+00:00",
     "assets": {
       "xrp_spot_usd": {
         "ticker": "XRPUSD",
         "asset_key": "xrp_spot_usd",
-        "last_price": 1.0383,
+        "last_price": 1.0436,
         "name": "Ripple - United States Dollar",
-        "1_day": "-0.0225",
-        "tr_1m": -0.2287,
-        "tr_3m": -0.2171,
-        "total_return_ytd": "-0.4353",
-        "tr_1w": -0.0587,
-        "total_return_5d": "0.0065",
-        "chg_1d": -0.0225,
-        "tr_6m": -0.4452,
-        "tr_1y": -0.5477,
-        "total_return_3y": "1.1873",
-        "total_return_5y": "0.4675",
-        "total_return_qtd": "-0.2269",
+        "1_day": "0.0032",
+        "vol_1m": 53.16,
+        "tr_1m": -0.1956,
+        "tr_3m": -0.226,
+        "total_return_ytd": "-0.4324",
+        "tr_1w": -0.0276,
+        "total_return_5d": "0.0005",
+        "chg_1d": 0.0032,
+        "tr_6m": -0.4415,
+        "tr_1y": -0.5195,
+        "total_return_3y": "1.1895",
+        "total_return_5y": "0.5227",
+        "total_return_qtd": "0.0032",
         "_raw": {
           "Ticker": "XRPUSD",
-          "Last Price": "1.0383",
+          "Last Price": "1.0436",
           "Name": "Ripple - United States Dollar",
-          "1-Day %": "-0.0225",
-          "Total Return (1M)": "-0.2287",
-          "Total Return (3M)": "-0.2171",
-          "Total Return (YTD)": "-0.4353",
-          "Total Return (1W)": "-0.0587",
-          "Total Return (5D)": "0.0065",
-          "Total Return (1D)": "-0.0225",
-          "Total Return (6M)": "-0.4452",
-          "Total Return (1Y)": "-0.5477",
-          "Total Return (3Y)": "1.1873",
-          "Total Return (5Y)": "0.4675",
-          "Total Return (QTD)": "-0.2269"
+          "1-Day %": "0.0032",
+          "Volatility (1M)": "53.16",
+          "Total Return (1M)": "-0.1956",
+          "Total Return (3M)": "-0.2260",
+          "Total Return (YTD)": "-0.4324",
+          "Total Return (1W)": "-0.0276",
+          "Total Return (5D)": "0.0005",
+          "Total Return (1D)": "0.0032",
+          "Total Return (6M)": "-0.4415",
+          "Total Return (1Y)": "-0.5195",
+          "Total Return (3Y)": "1.1895",
+          "Total Return (5Y)": "0.5227",
+          "Total Return (QTD)": "0.0032"
         }
       },
       "btc_spot_usd": {
         "ticker": "BTCUSD",
         "asset_key": "btc_spot_usd",
-        "last_price": 58313.02,
+        "last_price": 58801.83,
         "name": "Bitcoin - United States Dollar",
-        "1_day": "-0.0327",
-        "tr_1m": -0.2106,
-        "tr_3m": -0.1243,
-        "total_return_ytd": "-0.3364",
-        "tr_1w": -0.0653,
-        "total_return_5d": "-0.0176",
-        "chg_1d": -0.0327,
-        "tr_6m": -0.3399,
-        "tr_1y": -0.4581,
-        "total_return_3y": "0.9186",
-        "total_return_5y": "0.6130",
-        "total_return_10y": "86.6538",
-        "total_return_qtd": "-0.1447",
+        "1_day": "0.0029",
+        "vol_1m": 33.93,
+        "tr_1m": -0.1759,
+        "tr_3m": -0.1376,
+        "total_return_ytd": "-0.3309",
+        "tr_1w": -0.034,
+        "total_return_5d": "-0.0137",
+        "chg_1d": 0.0029,
+        "tr_6m": -0.3339,
+        "tr_1y": -0.4449,
+        "total_return_3y": "0.9349",
+        "total_return_5y": "0.7001",
+        "total_return_10y": "85.8103",
+        "total_return_qtd": "0.0029",
         "_raw": {
           "Ticker": "BTCUSD",
-          "Last Price": "58313.02",
+          "Last Price": "58801.83",
           "Name": "Bitcoin - United States Dollar",
-          "1-Day %": "-0.0327",
-          "Total Return (1M)": "-0.2106",
-          "Total Return (3M)": "-0.1243",
-          "Total Return (YTD)": "-0.3364",
-          "Total Return (1W)": "-0.0653",
-          "Total Return (5D)": "-0.0176",
-          "Total Return (1D)": "-0.0327",
-          "Total Return (6M)": "-0.3399",
-          "Total Return (1Y)": "-0.4581",
-          "Total Return (3Y)": "0.9186",
-          "Total Return (5Y)": "0.6130",
-          "Total Return (10Y)": "86.6538",
-          "Total Return (QTD)": "-0.1447"
+          "1-Day %": "0.0029",
+          "Volatility (1M)": "33.93",
+          "Total Return (1M)": "-0.1759",
+          "Total Return (3M)": "-0.1376",
+          "Total Return (YTD)": "-0.3309",
+          "Total Return (1W)": "-0.0340",
+          "Total Return (5D)": "-0.0137",
+          "Total Return (1D)": "0.0029",
+          "Total Return (6M)": "-0.3339",
+          "Total Return (1Y)": "-0.4449",
+          "Total Return (3Y)": "0.9349",
+          "Total Return (5Y)": "0.7001",
+          "Total Return (10Y)": "85.8103",
+          "Total Return (QTD)": "0.0029"
         }
       },
       "eth_spot_usd": {
         "ticker": "ETHUSD",
         "asset_key": "eth_spot_usd",
-        "last_price": 1567.57,
+        "last_price": 1576.74,
         "name": "Ethereum - United States Dollar",
-        "1_day": "-0.0308",
-        "tr_1m": -0.2255,
-        "tr_3m": -0.2246,
-        "total_return_ytd": "-0.4736",
-        "tr_1w": -0.0567,
-        "total_return_5d": "0.0063",
-        "chg_1d": -0.0308,
-        "tr_6m": -0.4715,
-        "tr_1y": -0.3739,
-        "total_return_3y": "-0.1523",
-        "total_return_5y": "-0.2846",
-        "total_return_qtd": "-0.2556",
+        "1_day": "0.0021",
+        "vol_1m": 55.02,
+        "tr_1m": -0.2136,
+        "tr_3m": -0.2642,
+        "total_return_ytd": "-0.4705",
+        "tr_1w": -0.0213,
+        "total_return_5d": "0.0054",
+        "chg_1d": 0.0021,
+        "tr_6m": -0.4719,
+        "tr_1y": -0.3472,
+        "total_return_3y": "-0.1817",
+        "total_return_5y": "-0.2956",
+        "total_return_qtd": "0.0021",
         "_raw": {
           "Ticker": "ETHUSD",
-          "Last Price": "1567.57",
+          "Last Price": "1576.74",
           "Name": "Ethereum - United States Dollar",
-          "1-Day %": "-0.0308",
-          "Total Return (1M)": "-0.2255",
-          "Total Return (3M)": "-0.2246",
-          "Total Return (YTD)": "-0.4736",
-          "Total Return (1W)": "-0.0567",
-          "Total Return (5D)": "0.0063",
-          "Total Return (1D)": "-0.0308",
-          "Total Return (6M)": "-0.4715",
-          "Total Return (1Y)": "-0.3739",
-          "Total Return (3Y)": "-0.1523",
-          "Total Return (5Y)": "-0.2846",
-          "Total Return (QTD)": "-0.2556"
+          "1-Day %": "0.0021",
+          "Volatility (1M)": "55.02",
+          "Total Return (1M)": "-0.2136",
+          "Total Return (3M)": "-0.2642",
+          "Total Return (YTD)": "-0.4705",
+          "Total Return (1W)": "-0.0213",
+          "Total Return (5D)": "0.0054",
+          "Total Return (1D)": "0.0021",
+          "Total Return (6M)": "-0.4719",
+          "Total Return (1Y)": "-0.3472",
+          "Total Return (3Y)": "-0.1817",
+          "Total Return (5Y)": "-0.2956",
+          "Total Return (QTD)": "0.0021"
         }
       },
       "sol_spot_usd": {
         "ticker": "SOLUSD",
         "asset_key": "sol_spot_usd",
-        "last_price": 73.25,
+        "last_price": 75.09,
         "name": "Solana - United States Dollar",
-        "1_day": "-0.0268",
-        "tr_1m": -0.1158,
-        "tr_3m": -0.1145,
-        "total_return_ytd": "-0.4104",
-        "tr_1w": 0.0627,
-        "total_return_5d": "0.1068",
-        "chg_1d": -0.0268,
-        "tr_6m": -0.4085,
-        "tr_1y": -0.5324,
-        "total_return_3y": "3.1762",
-        "total_return_5y": "1.1390",
-        "total_return_qtd": "-0.1184",
+        "1_day": "0.0207",
+        "vol_1m": 69.1,
+        "tr_1m": -0.0733,
+        "tr_3m": -0.0903,
+        "total_return_ytd": "-0.3956",
+        "tr_1w": 0.1113,
+        "total_return_5d": "0.0420",
+        "chg_1d": 0.0207,
+        "tr_6m": -0.4005,
+        "tr_1y": -0.4873,
+        "total_return_3y": "2.9294",
+        "total_return_5y": "1.1673",
+        "total_return_qtd": "0.0207",
         "_raw": {
           "Ticker": "SOLUSD",
-          "Last Price": "73.2500",
+          "Last Price": "75.0900",
           "Name": "Solana - United States Dollar",
-          "1-Day %": "-0.0268",
-          "Total Return (1M)": "-0.1158",
-          "Total Return (3M)": "-0.1145",
-          "Total Return (YTD)": "-0.4104",
-          "Total Return (1W)": "0.0627",
-          "Total Return (5D)": "0.1068",
-          "Total Return (1D)": "-0.0268",
-          "Total Return (6M)": "-0.4085",
-          "Total Return (1Y)": "-0.5324",
-          "Total Return (3Y)": "3.1762",
-          "Total Return (5Y)": "1.1390",
-          "Total Return (QTD)": "-0.1184"
+          "1-Day %": "0.0207",
+          "Volatility (1M)": "69.10",
+          "Total Return (1M)": "-0.0733",
+          "Total Return (3M)": "-0.0903",
+          "Total Return (YTD)": "-0.3956",
+          "Total Return (1W)": "0.1113",
+          "Total Return (5D)": "0.0420",
+          "Total Return (1D)": "0.0207",
+          "Total Return (6M)": "-0.4005",
+          "Total Return (1Y)": "-0.4873",
+          "Total Return (3Y)": "2.9294",
+          "Total Return (5Y)": "1.1673",
+          "Total Return (QTD)": "0.0207"
         }
       }
     },
@@ -266,8 +274,8 @@
     },
     "correlation_series": {},
     "snapshot": {
-      "as_of": "2026-06-30T18:20:00.605241+00:00",
-      "source_file": "credit_20260630_1149.csv",
+      "as_of": "2026-07-01T11:02:42.520164+00:00",
+      "source_file": "credit_20260701_0450.csv",
       "tickers_found": [
         "BTCUSD",
         "ETHUSD",
@@ -279,12 +287,12 @@
   },
   "execution": {
     "btc_bias": "Neutral",
-    "near_month": "Jul",
+    "near_month": "Front",
     "far_month": "Back",
-    "basis_spread": "58620.00",
-    "ref_low": "46896.00",
-    "ref_mid": "58620.00",
-    "ref_high": "70344.00",
+    "basis_spread": "100.23",
+    "ref_low": "80.19",
+    "ref_mid": "100.23",
+    "ref_high": "120.28",
     "policy_strength": 50,
     "state_impulse_score": 0,
     "growth_impulse_score": 0,
@@ -294,19 +302,19 @@
     "liquidity": {
       "d1": "flat",
       "d5": "flat",
-      "d20": "flat",
+      "d20": "down",
       "d60": "flat"
     },
     "credit": {
-      "d1": "up",
-      "d5": "flat",
-      "d20": "up",
+      "d1": "down",
+      "d5": "down",
+      "d20": "down",
       "d60": "flat"
     },
     "breadth": {
       "d1": "flat",
-      "d5": "up",
-      "d20": "up",
+      "d5": "flat",
+      "d20": "flat",
       "d60": "flat"
     },
     "highbeta": {
@@ -332,22 +340,22 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T18:20:01+00:00",
+      "as_of": "2026-07-01T11:02:42+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "flat",
-        "d20": "flat",
+        "d20": "down",
         "d60": "flat"
       },
-      "horizon_net": 0,
+      "horizon_net": -1,
       "is_weakest_link": false,
-      "key_observation": "Liquidity & Rates horizon_net +0 from suggested tracer marks.",
+      "key_observation": "Liquidity & Rates horizon_net -1 from suggested tracer marks.",
       "confidence": "high",
       "gate_interaction": {
-        "zone": "green",
+        "zone": "amber",
         "blocks_directional": false,
         "blocks_rv": false,
-        "note": ""
+        "note": "Health below 70 \u2014 size_hint capped at half."
       },
       "component_inputs": [
         {
@@ -358,7 +366,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -369,40 +377,40 @@
           "weight": 0.25,
           "contribution": 25.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
           "asset_id": "us10y",
           "label": "10Y yield 3M change",
-          "value": "unavailable",
+          "value": "mixed",
           "unit": "signal",
           "weight": 0.2,
           "contribution": 5.0,
           "direction": "flat",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         },
         {
           "asset_id": "dxy_continuous",
           "label": "DXY 5D+20D (liquidity conditions)",
-          "value": "unavailable",
+          "value": "mixed",
           "unit": "signal",
           "weight": 0.15,
           "contribution": 3.75,
           "direction": "flat",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         },
         {
           "asset_id": "us10y",
           "label": "Real rates / duration pressure proxy",
-          "value": "unavailable",
+          "value": "mixed",
           "unit": "signal",
           "weight": 0.1,
           "contribution": 2.5,
           "direction": "flat",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         }
       ],
@@ -412,7 +420,7 @@
         "rationale": "Liquidity & Rates mixed marks \u2014 prefer RV or reduced size. IEF 5D inflows confirm constructive liquidity transmission. (Flows: supportive.)",
         "horizon": "20d",
         "invalidation": "",
-        "size_hint": "probe",
+        "size_hint": "half",
         "blocked": false,
         "block_reason": ""
       },
@@ -602,7 +610,7 @@
         "enabled": true,
         "source": "derived",
         "degrade_mode": "full",
-        "as_of": "2026-06-30",
+        "as_of": "2026-07-01",
         "horizon_display": "5d",
         "basket_id": "liquidity_duration",
         "basket_label": "Duration & front-end sponsorship",
@@ -696,36 +704,36 @@
     "credit": {
       "node_id": "credit",
       "display_name": "Credit Confirmation",
-      "composite_score": 75,
+      "composite_score": 12,
       "composite_score_source": "horizon_net_fallback",
-      "band": "Supportive",
-      "band_key": "supportive",
+      "band": "Blocked",
+      "band_key": "blocked",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T18:20:01+00:00",
+      "as_of": "2026-07-01T11:02:42+00:00",
       "horizon_marks": {
-        "d1": "up",
-        "d5": "flat",
-        "d20": "up",
+        "d1": "down",
+        "d5": "down",
+        "d20": "down",
         "d60": "flat"
       },
-      "horizon_net": 2,
-      "is_weakest_link": false,
-      "key_observation": "Credit Confirmation horizon_net +2 from suggested tracer marks.",
-      "confidence": "medium",
+      "horizon_net": -3,
+      "is_weakest_link": true,
+      "key_observation": "Credit Confirmation horizon_net -3 from suggested tracer marks.",
+      "confidence": "low",
       "gate_interaction": {
-        "zone": "green",
+        "zone": "amber",
         "blocks_directional": false,
         "blocks_rv": false,
-        "note": ""
+        "note": "Health below 70 \u2014 size_hint capped at half."
       },
       "component_inputs": [],
       "directional": {
-        "posture": "long",
+        "posture": "short",
         "conviction": "medium",
-        "rationale": "Credit Confirmation horizons confirming risk-on transmission. HYG 5D inflows confirm constructive credit confirmation transmission. (Flows: supportive.)",
+        "rationale": "Credit Confirmation horizons impairing transmission.",
         "horizon": "20d",
         "invalidation": "",
-        "size_hint": "probe",
+        "size_hint": "half",
         "blocked": false,
         "block_reason": ""
       },
@@ -733,7 +741,7 @@
         "posture": "long_spread",
         "structure": "HYG vs LQD (or HY\u2212IG OAS proxy)",
         "conviction": "medium",
-        "rationale": "Cheap vs history on HY OAS proxy. HYG 5D inflows confirm constructive credit confirmation transmission. (Flows: supportive.)",
+        "rationale": "Cheap vs history on HY OAS proxy.",
         "leg_long": "",
         "leg_short": "",
         "hedge_ratio": 1.0,
@@ -911,11 +919,16 @@
         "composite_score": 32,
         "note": "China credit confirmation stage horizon_net -3 (informational)"
       },
+      "weakest_context": {
+        "global_health_score": 46,
+        "transmission_state": "stressed",
+        "key_observation": "USDCNY -; USDCNH -; CN10Y +; CN2Y -; US2Y +"
+      },
       "funds_flows": {
         "enabled": true,
         "source": "derived",
         "degrade_mode": "full",
-        "as_of": "2026-06-30",
+        "as_of": "2026-07-01",
         "horizon_display": "5d",
         "basket_id": "credit_hy_ig",
         "basket_label": "Credit ETF sponsorship",
@@ -939,8 +952,8 @@
           "primary_ticker": "HYG",
           "primary_flow_pct_aum_5d": 0.35,
           "concentration_flag": false,
-          "verdict": "supportive",
-          "confidence_delta": 1
+          "verdict": "mixed",
+          "confidence_delta": 0
         },
         "etfs": [
           {
@@ -997,9 +1010,9 @@
           }
         ],
         "interpretation": {
-          "supports_node_thesis": true,
+          "supports_node_thesis": false,
           "divergence_flag": false,
-          "summary": "HYG 5D inflows confirm constructive credit confirmation transmission.",
+          "summary": "Mixed allocator sponsorship across HYG basket.",
           "caution_line": "",
           "change_mind_trigger": "HYG 5D % AUM turns negative while node posture stays constructive.",
           "degrade_notice": ""
@@ -1009,27 +1022,27 @@
     "breadth": {
       "node_id": "breadth",
       "display_name": "Equity Breadth",
-      "composite_score": 85,
+      "composite_score": 72,
       "composite_score_source": "weighted_components",
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T18:20:01+00:00",
+      "as_of": "2026-07-01T11:02:42+00:00",
       "horizon_marks": {
         "d1": "flat",
-        "d5": "up",
-        "d20": "up",
+        "d5": "flat",
+        "d20": "flat",
         "d60": "flat"
       },
-      "horizon_net": 2,
+      "horizon_net": 0,
       "is_weakest_link": false,
-      "key_observation": "Equity Breadth horizon_net +2 from suggested tracer marks.",
+      "key_observation": "Equity Breadth horizon_net +0 from suggested tracer marks.",
       "confidence": "high",
       "gate_interaction": {
-        "zone": "green",
+        "zone": "amber",
         "blocks_directional": false,
         "blocks_rv": false,
-        "note": ""
+        "note": "Health below 70 \u2014 size_hint capped at half."
       },
       "component_inputs": [
         {
@@ -1040,18 +1053,18 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
           "asset_id": "spy",
           "label": "Equal-weight vs cap-weight participation",
-          "value": "bullish",
+          "value": "unavailable",
           "unit": "signal",
           "weight": 0.25,
-          "contribution": 12.5,
-          "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "contribution": 6.25,
+          "direction": "flat",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         },
         {
@@ -1062,39 +1075,39 @@
           "weight": 0.2,
           "contribution": -20.0,
           "direction": "down",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
           "asset_id": "spy",
           "label": "Cyclicals keeping pace with index",
-          "value": "bullish",
+          "value": "unavailable",
           "unit": "signal",
           "weight": 0.15,
-          "contribution": 7.5,
-          "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "contribution": 3.75,
+          "direction": "flat",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         },
         {
           "asset_id": "spy",
           "label": "Multi-sector participation breadth",
-          "value": "bullish",
+          "value": "unavailable",
           "unit": "signal",
           "weight": 0.1,
-          "contribution": 5.0,
-          "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "contribution": 2.5,
+          "direction": "flat",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         }
       ],
       "directional": {
-        "posture": "long",
-        "conviction": "medium",
-        "rationale": "Equity Breadth horizons confirming risk-on transmission. IWM 5D inflows confirm constructive equity breadth transmission. (Flows: supportive.)",
+        "posture": "neutral",
+        "conviction": "low",
+        "rationale": "Equity Breadth mixed marks \u2014 prefer RV or reduced size. IWM 5D inflows confirm constructive equity breadth transmission. (Flows: supportive.)",
         "horizon": "20d",
         "invalidation": "",
-        "size_hint": "probe",
+        "size_hint": "half",
         "blocked": false,
         "block_reason": ""
       },
@@ -1284,7 +1297,7 @@
         "enabled": true,
         "source": "derived",
         "degrade_mode": "full",
-        "as_of": "2026-06-30",
+        "as_of": "2026-07-01",
         "horizon_display": "5d",
         "basket_id": "breadth_participation",
         "basket_label": "Equity participation sponsorship",
@@ -1383,7 +1396,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T18:20:01+00:00",
+      "as_of": "2026-07-01T11:02:42+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "flat",
@@ -1391,14 +1404,14 @@
         "d60": "flat"
       },
       "horizon_net": 0,
-      "is_weakest_link": true,
+      "is_weakest_link": false,
       "key_observation": "BTC bias Neutral; horizon_net +0.",
       "confidence": "high",
       "gate_interaction": {
-        "zone": "green",
+        "zone": "amber",
         "blocks_directional": false,
         "blocks_rv": false,
-        "note": ""
+        "note": "Health below 70 \u2014 size_hint capped at half."
       },
       "component_inputs": [
         {
@@ -1409,7 +1422,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1420,7 +1433,7 @@
           "weight": 0.25,
           "contribution": 25.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1431,7 +1444,7 @@
           "weight": 0.2,
           "contribution": -20.0,
           "direction": "down",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1442,7 +1455,7 @@
           "weight": 0.15,
           "contribution": -15.0,
           "direction": "down",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1453,7 +1466,7 @@
           "weight": 0.1,
           "contribution": 2.5,
           "direction": "flat",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "horizon_fallback"
         }
       ],
@@ -1463,7 +1476,7 @@
         "rationale": "High-Beta / BTC mixed marks \u2014 prefer RV or reduced size. IBIT 5D inflows confirm constructive high-beta / btc transmission. (Flows: supportive.)",
         "horizon": "20d",
         "invalidation": "",
-        "size_hint": "probe",
+        "size_hint": "half",
         "blocked": false,
         "block_reason": ""
       },
@@ -1649,16 +1662,11 @@
         "composite_score": 44,
         "note": "China high-beta / china cyclical transmission stage horizon_net -1 (informational)"
       },
-      "weakest_context": {
-        "global_health_score": 80,
-        "transmission_state": "normal",
-        "key_observation": "HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +"
-      },
       "funds_flows": {
         "enabled": true,
         "source": "derived",
         "degrade_mode": "full",
-        "as_of": "2026-06-30",
+        "as_of": "2026-07-01",
         "horizon_display": "5d",
         "basket_id": "highbeta_crypto_beta",
         "basket_label": "High-beta & crypto vehicle sponsorship",
@@ -1757,7 +1765,7 @@
       "band": "Supportive",
       "band_key": "supportive",
       "freshness_status": "fresh",
-      "as_of": "2026-06-30T18:20:01+00:00",
+      "as_of": "2026-07-01T11:02:42+00:00",
       "horizon_marks": {
         "d1": "flat",
         "d5": "flat",
@@ -1766,13 +1774,13 @@
       },
       "horizon_net": 0,
       "is_weakest_link": false,
-      "key_observation": "Calendar at 58620.00% (Jul/Back); horizon_net +0.",
+      "key_observation": "Calendar at 100.23% (Front/Back); horizon_net +0.",
       "confidence": "medium",
       "gate_interaction": {
-        "zone": "green",
+        "zone": "amber",
         "blocks_directional": false,
         "blocks_rv": false,
-        "note": ""
+        "note": "Health below 70 \u2014 size_hint capped at half."
       },
       "component_inputs": [
         {
@@ -1783,7 +1791,7 @@
           "weight": 0.3,
           "contribution": 30.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1794,7 +1802,7 @@
           "weight": 0.25,
           "contribution": 25.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1805,7 +1813,7 @@
           "weight": 0.2,
           "contribution": 20.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1816,7 +1824,7 @@
           "weight": 0.15,
           "contribution": 15.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         },
         {
@@ -1827,7 +1835,7 @@
           "weight": 0.1,
           "contribution": 10.0,
           "direction": "up",
-          "as_of": "2026-06-30T18:20:01+00:00",
+          "as_of": "2026-07-01T11:02:42+00:00",
           "source": "rv_history"
         }
       ],
@@ -1837,7 +1845,7 @@
         "rationale": "Basis & Term Structure mixed marks \u2014 prefer RV or reduced size.",
         "horizon": "20d",
         "invalidation": "",
-        "size_hint": "probe",
+        "size_hint": "half",
         "blocked": false,
         "block_reason": ""
       },
@@ -2043,7 +2051,7 @@
         "enabled": true,
         "source": "derived",
         "degrade_mode": "full",
-        "as_of": "2026-06-30",
+        "as_of": "2026-07-01",
         "horizon_display": "5d",
         "basket_id": "basis_warehouse_proxy",
         "basket_label": "Warehouse / ETF basis proxy sponsorship",
@@ -2123,14 +2131,14 @@
     }
   },
   "cockpit_context": {
-    "transmission_health_score": 80,
-    "transmission_state": "normal",
-    "weakest_node_id": "highbeta",
-    "gate_zone": "green",
-    "whinfell_score": 80
+    "transmission_health_score": 46,
+    "transmission_state": "stressed",
+    "weakest_node_id": "credit",
+    "gate_zone": "amber",
+    "whinfell_score": 46
   },
-  "wtm_export_v21": "--- WTM EXPORT v2.1 ---\nWhinfell Score: 80\nTransmission State: Normal\nRegime Tag: Confirmed Risk-On\nKey Observation: HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-30T18:20:01\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-30-raw2wtm-01\nLineage Hash: sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed\nValidation Status: parsed\nData As Of: 2026-06-30T18:20:01Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.",
-  "wtm_export_v22": "--- WTM EXPORT v2.2 ---\nWhinfell Score: 80\nTransmission State: Normal\nRegime Tag: Confirmed Risk-On\nKey Observation: HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-06-30T18:20:01\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-06-30-raw2wtm-01\nLineage Hash: sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed\nValidation Status: parsed\nData As Of: 2026-06-30T18:20:01Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.\n\n--- NODE COCKPIT: Liquidity & Rates ---\nNode ID: liquidity\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Liquidity & Rates mixed marks \u2014 prefer RV or reduced size. IEF 5D inflows confirm constructive liquidity transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 2s10s curve trade / SOFR spread (low)\nSelected Implementation: \u2014\nRV Series: usgg2y10y\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China liquidity & rates stage horizon_net -1 (informational)\nKey Observation: Liquidity & Rates horizon_net +0 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IEF 5D inflows confirm constructive liquidity transmission.\n\n--- NODE COCKPIT: Credit Confirmation ---\nNode ID: credit\nComposite Score: 75\nComposite Score Source: horizon_net_fallback\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 2\nHorizon Marks: d1\u2191 d5\u2192 d20\u2191 d60\u2192\nDirectional: long (medium) \u2014 Credit Confirmation horizons confirming risk-on transmission. HYG 5D inflows confirm constructive credit confirmation transmission. (Flows: supportive.)\nRelative Value: long_spread \u2014 HYG vs LQD (or HY\u2212IG OAS proxy) (medium)\nSelected Implementation: \u2014\nRV Series: hy_oas_proxy\nRV Direction: higher_is_cheaper\nRV Horizon: 3m\nRV Quartile: Q4\nRV Percentile: 90.5\nRV Richness: cheap\nChina Parallel: present \u2014 horizon_net -3\nChina Parallel Note: China credit confirmation stage horizon_net -3 (informational)\nKey Observation: Credit Confirmation horizon_net +2 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.06% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: HYG 5D inflows confirm constructive credit confirmation transmission.\n\n--- NODE COCKPIT: Equity Breadth ---\nNode ID: breadth\nComposite Score: 85\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 2\nHorizon Marks: d1\u2192 d5\u2191 d20\u2191 d60\u2192\nDirectional: long (medium) \u2014 Equity Breadth horizons confirming risk-on transmission. IWM 5D inflows confirm constructive equity breadth transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IWM/SPY participation pair (low)\nSelected Implementation: \u2014\nRV Series: iwm_spy_ratio\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net 1\nChina Parallel Note: China equity breadth stage horizon_net +1 (informational)\nKey Observation: Equity Breadth horizon_net +2 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IWM 5D inflows confirm constructive equity breadth transmission.\n\n--- NODE COCKPIT: High-Beta / BTC ---\nNode ID: highbeta\nComposite Score: 72\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 High-Beta / BTC mixed marks \u2014 prefer RV or reduced size. IBIT 5D inflows confirm constructive high-beta / btc transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IBIT vs QQQ beta spread (low)\nSelected Implementation: \u2014\nRV Series: ibit_qqq_beta_spread\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 38.1\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China high-beta / china cyclical transmission stage horizon_net -1 (informational)\nKey Observation: BTC bias Neutral; horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IBIT 5D inflows confirm constructive high-beta / btc transmission.\n\n--- NODE COCKPIT: Basis & Term Structure ---\nNode ID: basis\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Basis & Term Structure mixed marks \u2014 prefer RV or reduced size.\nRelative Value: short_spread \u2014 BT near vs deferred calendar (medium)\nSelected Implementation: \u2014\nRV Series: btc_calendar_bt_near_deferred\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q3\nRV Percentile: 57.1\nRV Richness: rich\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China basis & term structure stage horizon_net -1 (informational)\nKey Observation: Calendar at 58620.00% (Jul/Back); horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: mixed\nFunds Flow 1D: +0.08% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 3/3\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: Mixed allocator sponsorship across IBIT basket.",
+  "wtm_export_v21": "--- WTM EXPORT v2.1 ---\nWhinfell Score: 46\nTransmission State: Stressed\nRegime Tag: Fragile Risk-On\nKey Observation: USDCNY -; USDCNH -; CN10Y +; CN2Y -; US2Y +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-07-01T11:02:42\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-07-01-raw2wtm-01\nLineage Hash: sha256:9480b5bc465bbbd636e3a7687f79ce44a3acc43a913d4ba7059350c08140676d\nValidation Status: parsed\nData As Of: 2026-07-01T11:02:42Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.",
+  "wtm_export_v22": "--- WTM EXPORT v2.2 ---\nWhinfell Score: 46\nTransmission State: Stressed\nRegime Tag: Fragile Risk-On\nKey Observation: USDCNY -; USDCNH -; CN10Y +; CN2Y -; US2Y +\nGross Risk Recommendation: \u2014\nBTC Bias: Neutral\nTimestamp: 2026-07-01T11:02:42\nSQ3 Score: 35\nSQ3 Band: Impaired\nPolicy Strength: 50\nState Impulse Score: 0\nGrowth Impulse Score: 0\nChina Regime Tag: desk-auto\nSnapshot ID: global-2026-07-01-raw2wtm-01\nLineage Hash: sha256:9480b5bc465bbbd636e3a7687f79ce44a3acc43a913d4ba7059350c08140676d\nValidation Status: parsed\nData As Of: 2026-07-01T11:02:42Z\nSource Channel: koyfin\nFreshness Status: fresh\nOutput Kind: unknown\n--- CHINA LADDER EXPORT v1.1 ---\nChina Raw Score: 43\nChina Final Score: 26\nChina Final Band: Impaired\nSQ3 Policy Score: 35\nWeakest China Stage: Credit Confirmation\nKey China Observation: Weakest stage Credit Confirmation at 32/100 \u2014 avoid new China-linked exposure until composite clears 50.\n\n--- NODE COCKPIT: Liquidity & Rates ---\nNode ID: liquidity\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: -1\nHorizon Marks: d1\u2192 d5\u2192 d20\u2193 d60\u2192\nDirectional: neutral (low) \u2014 Liquidity & Rates mixed marks \u2014 prefer RV or reduced size. IEF 5D inflows confirm constructive liquidity transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 2s10s curve trade / SOFR spread (low)\nSelected Implementation: \u2014\nRV Series: usgg2y10y\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China liquidity & rates stage horizon_net -1 (informational)\nKey Observation: Liquidity & Rates horizon_net -1 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IEF 5D inflows confirm constructive liquidity transmission.\n\n--- NODE COCKPIT: Credit Confirmation ---\nNode ID: credit\nComposite Score: 12\nComposite Score Source: horizon_net_fallback\nBand: Blocked\nBand Key: blocked\nFreshness Status: fresh\nHorizon Net: -3\nHorizon Marks: d1\u2193 d5\u2193 d20\u2193 d60\u2192\nDirectional: short (medium) \u2014 Credit Confirmation horizons impairing transmission.\nRelative Value: long_spread \u2014 HYG vs LQD (or HY\u2212IG OAS proxy) (medium)\nSelected Implementation: \u2014\nRV Series: hy_oas_proxy\nRV Direction: higher_is_cheaper\nRV Horizon: 3m\nRV Quartile: Q4\nRV Percentile: 90.5\nRV Richness: cheap\nChina Parallel: present \u2014 horizon_net -3\nChina Parallel Note: China credit confirmation stage horizon_net -3 (informational)\nKey Observation: Credit Confirmation horizon_net -3 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: mixed\nFunds Flow 1D: +0.06% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: Mixed allocator sponsorship across HYG basket.\n\n--- NODE COCKPIT: Equity Breadth ---\nNode ID: breadth\nComposite Score: 72\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Equity Breadth mixed marks \u2014 prefer RV or reduced size. IWM 5D inflows confirm constructive equity breadth transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IWM/SPY participation pair (low)\nSelected Implementation: \u2014\nRV Series: iwm_spy_ratio\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 44.4\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net 1\nChina Parallel Note: China equity breadth stage horizon_net +1 (informational)\nKey Observation: Equity Breadth horizon_net +0 from suggested tracer marks.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IWM 5D inflows confirm constructive equity breadth transmission.\n\n--- NODE COCKPIT: High-Beta / BTC ---\nNode ID: highbeta\nComposite Score: 72\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 High-Beta / BTC mixed marks \u2014 prefer RV or reduced size. IBIT 5D inflows confirm constructive high-beta / btc transmission. (Flows: supportive.)\nRelative Value: neutral \u2014 IBIT vs QQQ beta spread (low)\nSelected Implementation: \u2014\nRV Series: ibit_qqq_beta_spread\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q2\nRV Percentile: 38.1\nRV Richness: fair\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China high-beta / china cyclical transmission stage horizon_net -1 (informational)\nKey Observation: BTC bias Neutral; horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: supportive\nFunds Flow 1D: +0.07% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 4/4\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: IBIT 5D inflows confirm constructive high-beta / btc transmission.\n\n--- NODE COCKPIT: Basis & Term Structure ---\nNode ID: basis\nComposite Score: 100\nComposite Score Source: weighted_components\nBand: Supportive\nBand Key: supportive\nFreshness Status: fresh\nHorizon Net: 0\nHorizon Marks: d1\u2192 d5\u2192 d20\u2192 d60\u2192\nDirectional: neutral (low) \u2014 Basis & Term Structure mixed marks \u2014 prefer RV or reduced size.\nRelative Value: short_spread \u2014 BT near vs deferred calendar (medium)\nSelected Implementation: \u2014\nRV Series: btc_calendar_bt_near_deferred\nRV Direction: higher_is_richer\nRV Horizon: 3m\nRV Quartile: Q3\nRV Percentile: 57.1\nRV Richness: rich\nChina Parallel: present \u2014 horizon_net -1\nChina Parallel Note: China basis & term structure stage horizon_net -1 (informational)\nKey Observation: Calendar at 100.23% (Front/Back); horizon_net +0.\nFunds Flow Enabled: true\nFunds Flow Status: ok\nFunds Flow Source: wtm_flows_timeseries\nFunds Flow Degraded: false\nFunds Flow Fallback Reason: \nFunds Flow Verdict: mixed\nFunds Flow 1D: +0.08% AUM\nFunds Flow 5D: +0.35% AUM\nFunds Flow Breadth: 3/3\nFunds Flow Confidence Penalty: 0\nFunds Flow Summary: Mixed allocator sponsorship across IBIT basket.",
   "warnings": [],
   "flows_health": {
     "status": "ok",
@@ -2154,7 +2162,7 @@
   },
   "ingest_provenance": {
     "window_hours": 48,
-    "staged_count": 91,
+    "staged_count": 134,
     "entries": [
       {
         "filename": "futures_daily_20260628_1015.csv",
@@ -2309,6 +2317,19 @@
         "canonical_assets": [],
         "staged_at": "2026-06-30T18:20:00.505890+00:00",
         "sha256": "ef309356ef7dc517657ce22a5d5ffa035a990c2fb4a6c8dbcf8ede8e8a5ff512"
+      },
+      {
+        "filename": "btc_basis_20260701.csv",
+        "dataset": "futures_intraday",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.495258+00:00",
+        "sha256": "cc50b4ba1d9f029ab6bf81dbe9b1a7e0f579b8ebc40f8623a15a1f6ccf61245e"
       },
       {
         "filename": "futures_intraday_20260628_1146.csv",
@@ -2486,6 +2507,35 @@
         "canonical_assets": [],
         "staged_at": "2026-06-30T18:20:00.929935+00:00",
         "sha256": "7f9fa73ed14d3ac1c9be3ef221e0f5ba5ff25863103164c33e3e496ed31a00b2"
+      },
+      {
+        "filename": "futures_intraday_20260701_0452.csv",
+        "dataset": "futures_intraday",
+        "source": "barchart",
+        "source_class": "barchart_quote_snapshot",
+        "output_kind": "quote_snapshot",
+        "output_kinds": [
+          "quote_snapshot",
+          "execution_l3"
+        ],
+        "vendor": "barchart",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.712827+00:00",
+        "sha256": "37291f56fbf383beffc6e93c720cb305579bef68b4e8c9c106c7f40abe5b0a67"
+      },
+      {
+        "filename": "futures_intraday_20260701_0527.csv",
+        "dataset": "futures_intraday",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.714001+00:00",
+        "sha256": "7a7cd10e996cd50455d5367f6a76ee860f009b50398823014b65611a6bfb0931"
       },
       {
         "filename": "greeks_20260628_1016.csv",
@@ -2746,6 +2796,214 @@
         "canonical_assets": [],
         "staged_at": "2026-06-30T18:20:00.968349+00:00",
         "sha256": "8f6de768a2082a5e38fa74d15f39628e9d2cb49e3153db7c52584f475dad1961"
+      },
+      {
+        "filename": "greeks_20260701_0523.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.717389+00:00",
+        "sha256": "1996051815b89dcf17b63307c5ac2af93f6e6f2e51c5d4d5a085ce9bf6ccac95"
+      },
+      {
+        "filename": "greeks_20260701_0526.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.718069+00:00",
+        "sha256": "e8566a96a19e0f5b51224d6897e3ba0941f155c6d7591fc0fb78e7ecd1369a0e"
+      },
+      {
+        "filename": "greeks_20260701_0528.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.719125+00:00",
+        "sha256": "b2140bd916ee7e3076e307e92165521144f495eb632f1dbf59000631fa9b47d0"
+      },
+      {
+        "filename": "greeks_20260701_0529.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.720249+00:00",
+        "sha256": "d40645c0a228d781b94e081923c763a48671a8764010e1e6d0e4ed20b07e3518"
+      },
+      {
+        "filename": "greeks_20260701_0530.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.721261+00:00",
+        "sha256": "da6246097de62add6d475dccd0f837c144ac6825246dece39cd35f40cae8c41c"
+      },
+      {
+        "filename": "greeks_20260701_0531.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.722256+00:00",
+        "sha256": "458a05d9ef90576b0c7cc73a59d5c7a0dbb2016dbeb726912c43c43186070015"
+      },
+      {
+        "filename": "greeks_20260701_0532.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.723251+00:00",
+        "sha256": "3791ed614066110fd0e6d56265d3122c4f3ac59754aefb9256f3533c9a6cc35b"
+      },
+      {
+        "filename": "greeks_20260701_0534.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.723955+00:00",
+        "sha256": "8d7186e6180cb347d2b35bf70bcb04de132c12d790b9023f8f333b3e26547389"
+      },
+      {
+        "filename": "greeks_20260701_0535.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.725082+00:00",
+        "sha256": "b4c29d2ebdd5902a2d88eb56b7749f030ebfdc72227a6e37f4ed9860fe52ad6f"
+      },
+      {
+        "filename": "greeks_20260701_0536.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.726346+00:00",
+        "sha256": "15847e3ba8f6163a241b0f8a0e905c8f53f63d1674c1a02e8084752ce7b1e1cb"
+      },
+      {
+        "filename": "greeks_20260701_0537.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.727456+00:00",
+        "sha256": "926147a8265cfcd22fa935584183b39ad9b731e6de66aa38365016c5214c79c9"
+      },
+      {
+        "filename": "greeks_20260701_0538.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.730158+00:00",
+        "sha256": "33c05e26c08671513b8206ba07fe3b62d3ac49ad5242d8249f8b544778f609c1"
+      },
+      {
+        "filename": "greeks_20260701_0539.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.731305+00:00",
+        "sha256": "8145251602846c19f5e13922068de9ca31cc2d9bac40a516b8b6669c607f2086"
+      },
+      {
+        "filename": "greeks_20260701_0556.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.732451+00:00",
+        "sha256": "02d8265b56f52450f914e77f068f1da6f770195a726d3c90ead31d216ddbfd47"
+      },
+      {
+        "filename": "greeks_20260701_0557.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.733558+00:00",
+        "sha256": "402c2f0159881c09118892eac183b3c7265c47bfe4ba57938eb62398d606e47a"
+      },
+      {
+        "filename": "greeks_20260701_0558.csv",
+        "dataset": "greeks",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.734665+00:00",
+        "sha256": "2b1144246c4b1fc55536e3032a5e75b9ea88aa59772192f8cebe3491dd939840"
       },
       {
         "filename": "options_20260628_1016.csv",
@@ -3021,6 +3279,227 @@
         "sha256": "ff7bf9b80da4f1f759ca3c71bda9ede355f0b0bfec5c155d46ef7fb887e73aff"
       },
       {
+        "filename": "options_20260701_0523.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.764845+00:00",
+        "sha256": "b917ec70c72a4497ca195421e034ae4d05e3e3bc42d6a62b82930671615db31e"
+      },
+      {
+        "filename": "options_20260701_0526.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.765951+00:00",
+        "sha256": "3664350421cf44b9c8015b9fb761ff15cf54969299ec397584a591ede129856a"
+      },
+      {
+        "filename": "options_20260701_0528.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.766983+00:00",
+        "sha256": "f56ca34620b472e623da133ad0defa47dfb328c9888966fd15614a3582b0508b"
+      },
+      {
+        "filename": "options_20260701_0529.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.767961+00:00",
+        "sha256": "69eddfd628795a941071c667658e37aae531cebf08cc69c3ff5740949e437ec6"
+      },
+      {
+        "filename": "options_20260701_0530.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.768819+00:00",
+        "sha256": "92fbdebddc999c4c9e00d31083213df81cf96025b427b9d4a97686c485b5493b"
+      },
+      {
+        "filename": "options_20260701_0531.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.769759+00:00",
+        "sha256": "fb0b91be514d94b08ff6e9843287b429363dba1060157c027ae974284755cbe8"
+      },
+      {
+        "filename": "options_20260701_0532.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.770963+00:00",
+        "sha256": "b3bfa1fc5774f337db6aa5987bce64feea2c12909d7b9f9209de287c8c05b672"
+      },
+      {
+        "filename": "options_20260701_0533.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.771765+00:00",
+        "sha256": "e6d3eeb5f78f3f5f4e342229eda35fcd60bc148da5d175e6db4bab216aaf7b27"
+      },
+      {
+        "filename": "options_20260701_0534.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.772347+00:00",
+        "sha256": "f9bb3aa49245fcb77750c4f757b88da0a35bb362266c5b5f3a079ede3a875269"
+      },
+      {
+        "filename": "options_20260701_0535.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.773323+00:00",
+        "sha256": "be548eb793a8c499344937cc32d11679ba7e16181801a1e7e5dbc4caf9a4f4ed"
+      },
+      {
+        "filename": "options_20260701_0536.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.774314+00:00",
+        "sha256": "c4f1e64afb44cc3a0a336a8074133175a9ab05430c9e9424a05c97f005b34ccf"
+      },
+      {
+        "filename": "options_20260701_0537.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.775286+00:00",
+        "sha256": "bb6c7f79f9b9b2f04e22e1a6c0f23eebefa306e92db9f3d88b2e35ac415c8b96"
+      },
+      {
+        "filename": "options_20260701_0538.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.776445+00:00",
+        "sha256": "bb04620bf4d19a0024aeb53dd0f76b7ef6ae6a40519a197b5aba41e713578150"
+      },
+      {
+        "filename": "options_20260701_0539.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.777619+00:00",
+        "sha256": "a3e66053d0ce6744da283238b2fe4764852b829e5e90d55c89903e5361eba41d"
+      },
+      {
+        "filename": "options_20260701_0556.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.780137+00:00",
+        "sha256": "ec6b331d9cffb5919e3b4b01da237746c7a2e3adf08f711d0781c84e81e6761a"
+      },
+      {
+        "filename": "options_20260701_0557.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.781552+00:00",
+        "sha256": "9941348fa0f82f6f674b9df6d9bb60a482f5de38f327358f3a4b31991e98c26a"
+      },
+      {
+        "filename": "options_20260701_0558.csv",
+        "dataset": "options",
+        "source": "barchart",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.782531+00:00",
+        "sha256": "85ed0a78d8606ee9eca10048fde217d2c91c7c8c52b6b8feb2e53818a30c0eff"
+      },
+      {
         "filename": "credit_20260628_1047.csv",
         "dataset": "credit",
         "source": "koyfin",
@@ -3167,6 +3646,38 @@
         "canonical_assets": [],
         "staged_at": "2026-06-30T18:20:00.604011+00:00",
         "sha256": "575ba5ade8b044edea023752b31924887137e5b28217e85ee1920242f36683c7"
+      },
+      {
+        "filename": "credit_20260701_0449.csv",
+        "dataset": "credit",
+        "source": "koyfin",
+        "source_class": "koyfin_snapshot_csv",
+        "output_kind": "snapshot",
+        "output_kinds": [
+          "snapshot_validation",
+          "universe_membership"
+        ],
+        "vendor": "koyfin",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.502707+00:00",
+        "sha256": "a93d366d9b5c07433ca2d09f7248068fe15293b6465f82cc8adb52943162b495"
+      },
+      {
+        "filename": "credit_20260701_0450.csv",
+        "dataset": "credit",
+        "source": "koyfin",
+        "source_class": "koyfin_snapshot_csv",
+        "output_kind": "snapshot",
+        "output_kinds": [
+          "snapshot_validation",
+          "universe_membership"
+        ],
+        "vendor": "koyfin",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.519382+00:00",
+        "sha256": "a93d366d9b5c07433ca2d09f7248068fe15293b6465f82cc8adb52943162b495"
       },
       {
         "filename": "equities_20260628_1053.csv",
@@ -3425,13 +3936,86 @@
         "canonical_assets": [],
         "staged_at": "2026-06-30T18:20:01.120897+00:00",
         "sha256": "2756753dedd3d11541a06db619e70cc8833f294179def8754bb8796927e6f28c"
+      },
+      {
+        "filename": "rates_20260701_0501.csv",
+        "dataset": "rates",
+        "source": "koyfin",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.785602+00:00",
+        "sha256": "c123eb13349fc3d07df2824ffb15a94f390d6b3023aa51676ddd63c866397bde"
+      },
+      {
+        "filename": "rates_20260701_0504.csv",
+        "dataset": "rates",
+        "source": "koyfin",
+        "source_class": "koyfin_wide_timeseries",
+        "output_kind": "historical_timeseries",
+        "output_kinds": [
+          "historical_timeseries",
+          "correlation_series",
+          "global_score_proxy"
+        ],
+        "vendor": "koyfin",
+        "priority": "backup",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.792740+00:00",
+        "sha256": "3e64e2a323f487e47fb8cace17415c962c70acde31b44abe28786cc427c03ed9"
+      },
+      {
+        "filename": "rates_20260701_0505.csv",
+        "dataset": "rates",
+        "source": "koyfin",
+        "source_class": "koyfin_wide_timeseries",
+        "output_kind": "historical_timeseries",
+        "output_kinds": [
+          "historical_timeseries",
+          "correlation_series",
+          "global_score_proxy"
+        ],
+        "vendor": "koyfin",
+        "priority": "backup",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.826253+00:00",
+        "sha256": "92889ef5fe40b229ff9a315018421f3dc79e5251990a5f9e92a355e0910f5c24"
+      },
+      {
+        "filename": "rates_20260701_0506.csv",
+        "dataset": "rates",
+        "source": "koyfin",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.836140+00:00",
+        "sha256": "285937e8015f99ca4c3e31a2daec689bf0560123ff47f7b9fa6b54730a38f70f"
+      },
+      {
+        "filename": "rates_20260701_0508.csv",
+        "dataset": "rates",
+        "source": "koyfin",
+        "source_class": "unknown",
+        "output_kind": "unknown",
+        "output_kinds": [],
+        "vendor": "",
+        "priority": "",
+        "canonical_assets": [],
+        "staged_at": "2026-07-01T11:02:42.845969+00:00",
+        "sha256": "ec61f5cd5b1eb4b3ba6644329911846ca86c42e23fb9651620d439a3b6b6faae"
       }
     ],
     "output_kinds": {
-      "quote_snapshot": 15,
-      "unknown": 64,
-      "snapshot": 6,
-      "historical_timeseries": 6
+      "quote_snapshot": 16,
+      "unknown": 102,
+      "snapshot": 8,
+      "historical_timeseries": 8
     },
     "primary_output_kind": "unknown",
     "source_classes": [
@@ -3443,9 +4027,9 @@
   },
   "hydration_audit": {
     "audit_version": "1.0.0",
-    "generated_at": "2026-06-30T18:22:38.563373+00:00",
-    "snapshot_id": "global-2026-06-30-raw2wtm-01",
-    "lineage_hash": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
+    "generated_at": "2026-07-01T11:02:43.962314+00:00",
+    "snapshot_id": "global-2026-07-01-raw2wtm-01",
+    "lineage_hash": "sha256:9480b5bc465bbbd636e3a7687f79ce44a3acc43a913d4ba7059350c08140676d",
     "summary": {
       "total_fields": 43,
       "required_fields": 33,
@@ -3467,8 +4051,8 @@
         "ui_target": "command bar \u00b7 provenance",
         "status": "ok",
         "required": true,
-        "value": "global-2026-06-30-raw2wtm-01",
-        "value_preview": "global-2026-06-30-raw2wtm-01",
+        "value": "global-2026-07-01-raw2wtm-01",
+        "value_preview": "global-2026-07-01-raw2wtm-01",
         "notes": ""
       },
       {
@@ -3478,8 +4062,8 @@
         "ui_target": "command bar \u00b7 lineage",
         "status": "ok",
         "required": true,
-        "value": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
-        "value_preview": "sha256:40a464ae4c07c99eccf8db49d9ed7adbad46245c7cfc577f8cd3d4f568633fed",
+        "value": "sha256:9480b5bc465bbbd636e3a7687f79ce44a3acc43a913d4ba7059350c08140676d",
+        "value_preview": "sha256:9480b5bc465bbbd636e3a7687f79ce44a3acc43a913d4ba7059350c08140676d",
         "notes": ""
       },
       {
@@ -3489,8 +4073,8 @@
         "ui_target": "freshness chip \u00b7 data as-of",
         "status": "ok",
         "required": true,
-        "value": "2026-06-30T18:20:01+00:00",
-        "value_preview": "2026-06-30T18:20:01+00:00",
+        "value": "2026-07-01T11:02:42+00:00",
+        "value_preview": "2026-07-01T11:02:42+00:00",
         "notes": ""
       },
       {
@@ -3533,8 +4117,8 @@
         "ui_target": "#whinfellScore",
         "status": "ok",
         "required": true,
-        "value": 80,
-        "value_preview": "80",
+        "value": 46,
+        "value_preview": "46",
         "notes": ""
       },
       {
@@ -3544,8 +4128,8 @@
         "ui_target": "#transmissionState",
         "status": "ok",
         "required": true,
-        "value": "normal",
-        "value_preview": "normal",
+        "value": "stressed",
+        "value_preview": "stressed",
         "notes": ""
       },
       {
@@ -3555,8 +4139,8 @@
         "ui_target": "#regimeTag",
         "status": "ok",
         "required": true,
-        "value": "Confirmed Risk-On",
-        "value_preview": "Confirmed Risk-On",
+        "value": "Fragile Risk-On",
+        "value_preview": "Fragile Risk-On",
         "notes": ""
       },
       {
@@ -3566,8 +4150,8 @@
         "ui_target": "#keyObservation \u00b7 handover",
         "status": "ok",
         "required": true,
-        "value": "HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +",
-        "value_preview": "HYG +; MBB +; MUB +; AGG +; US10Y +; US10YT +",
+        "value": "USDCNY -; USDCNH -; CN10Y +; CN2Y -; US2Y +",
+        "value_preview": "USDCNY -; USDCNH -; CN10Y +; CN2Y -; US2Y +",
         "notes": ""
       },
       {
@@ -3665,8 +4249,8 @@
         "ui_target": "L3 near month",
         "status": "ok",
         "required": true,
-        "value": "Jul",
-        "value_preview": "Jul",
+        "value": "Front",
+        "value_preview": "Front",
         "notes": ""
       },
       {
@@ -3687,8 +4271,8 @@
         "ui_target": "L3 basis spread",
         "status": "ok",
         "required": true,
-        "value": "58620.00",
-        "value_preview": "58620.00",
+        "value": "100.23",
+        "value_preview": "100.23",
         "notes": ""
       },
       {
@@ -3698,8 +4282,8 @@
         "ui_target": "L3 ref low",
         "status": "ok",
         "required": true,
-        "value": "46896.00",
-        "value_preview": "46896.00",
+        "value": "80.19",
+        "value_preview": "80.19",
         "notes": ""
       },
       {
@@ -3709,8 +4293,8 @@
         "ui_target": "L3 ref mid",
         "status": "ok",
         "required": true,
-        "value": "58620.00",
-        "value_preview": "58620.00",
+        "value": "100.23",
+        "value_preview": "100.23",
         "notes": ""
       },
       {
@@ -3720,8 +4304,8 @@
         "ui_target": "L3 ref high",
         "status": "ok",
         "required": true,
-        "value": "70344.00",
-        "value_preview": "70344.00",
+        "value": "120.28",
+        "value_preview": "120.28",
         "notes": ""
       },
       {
@@ -3980,7 +4564,7 @@
         ]
       },
       "credit": {
-        "composite_score": 75,
+        "composite_score": 12,
         "composite_score_source": "horizon_net_fallback",
         "rv_horizon_count": 5,
         "rv_richness": "cheap",
@@ -4024,7 +4608,7 @@
         ]
       },
       "breadth": {
-        "composite_score": 85,
+        "composite_score": 72,
         "composite_score_source": "weighted_components",
         "rv_horizon_count": 5,
         "rv_richness": "fair",
@@ -4159,31 +4743,31 @@
     "remediation": [
       {
         "priority": "medium",
-        "field": "node.liquidity.10Y yield 3M change",
-        "bundle_path": "node_cockpits.liquidity.component_inputs",
-        "ui_target": "mission diagnostics \u00b7 liquidity",
-        "action": "Map RV history for component us10y or accept horizon_fallback"
-      },
-      {
-        "priority": "medium",
-        "field": "node.liquidity.DXY 5D+20D (liquidity conditions)",
-        "bundle_path": "node_cockpits.liquidity.component_inputs",
-        "ui_target": "mission diagnostics \u00b7 liquidity",
-        "action": "Map RV history for component dxy_continuous or accept horizon_fallback"
-      },
-      {
-        "priority": "medium",
-        "field": "node.liquidity.Real rates / duration pressure proxy",
-        "bundle_path": "node_cockpits.liquidity.component_inputs",
-        "ui_target": "mission diagnostics \u00b7 liquidity",
-        "action": "Map RV history for component us10y or accept horizon_fallback"
-      },
-      {
-        "priority": "medium",
         "field": "node_signals.credit.component_inputs",
         "bundle_path": "node_cockpits.credit.component_inputs",
         "ui_target": "mission read diagnostics \u00b7 credit",
         "action": "Credit uses authoritative RV + horizon-net composite (C1 doc); component_inputs intentionally empty \u2014 not a ingest failure"
+      },
+      {
+        "priority": "medium",
+        "field": "node.breadth.Equal-weight vs cap-weight participation",
+        "bundle_path": "node_cockpits.breadth.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 breadth",
+        "action": "Map RV history for component spy or accept horizon_fallback"
+      },
+      {
+        "priority": "medium",
+        "field": "node.breadth.Cyclicals keeping pace with index",
+        "bundle_path": "node_cockpits.breadth.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 breadth",
+        "action": "Map RV history for component spy or accept horizon_fallback"
+      },
+      {
+        "priority": "medium",
+        "field": "node.breadth.Multi-sector participation breadth",
+        "bundle_path": "node_cockpits.breadth.component_inputs",
+        "ui_target": "mission diagnostics \u00b7 breadth",
+        "action": "Map RV history for component spy or accept horizon_fallback"
       },
       {
         "priority": "medium",

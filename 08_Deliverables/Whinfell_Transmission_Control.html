@@ -2346,6 +2346,84 @@ window.DICTIONARY_BADGE_DEFAULT = {
       color: var(--muted);
     }
     .component-failure-strip { display: flex; flex-direction: column; gap: 6px; }
+
+    /* WTM BasisWatch bottom panel */
+    .basis-watch-panel {
+      flex-shrink: 0;
+      border-top: 1px solid rgba(76,142,217,0.35);
+      background: linear-gradient(180deg, rgba(13,20,32,0.98) 0%, rgba(9,14,22,1) 100%);
+      max-height: 42vh;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: max-height 0.25s ease, min-height 0.25s ease;
+    }
+    .basis-watch-panel--collapsed { max-height: 36px; min-height: 36px; }
+    .basis-watch-panel--collapsed .basis-watch-body { display: none; }
+    .basis-watch-head {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+      padding: 6px 12px; border-bottom: 1px solid var(--border);
+      background: rgba(0,0,0,0.2);
+    }
+    .basis-watch-title { font-size: 11px; font-weight: 800; letter-spacing: 0.04em; color: #9ec5f0; }
+    .basis-watch-sub { font-size: 9px; color: var(--muted); }
+    .bw-view-tab, .bw-asset-btn {
+      font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+      border: 1px solid var(--border); background: rgba(0,0,0,0.15); color: var(--muted);
+    }
+    .bw-view-tab--active, .bw-asset-btn--active {
+      border-color: rgba(61,139,253,0.55); color: #9ec5f0; background: rgba(61,139,253,0.12);
+    }
+    .bw-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; }
+    .bw-toolbar select, .bw-toolbar button {
+      font-size: 9px; padding: 3px 8px; border-radius: 4px;
+      border: 1px solid var(--border); background: var(--card); color: var(--text);
+    }
+    .bw-status-chip { font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+    .bw-status-chip--live { color: #4fb37a; border-color: rgba(79,179,122,0.4); }
+    .bw-status-chip--snapshot { color: #f5a623; border-color: rgba(245,166,35,0.4); }
+    .basis-watch-body {
+      flex: 1; min-height: 0; display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 0;
+      overflow: hidden;
+    }
+    @media (max-width: 1024px) {
+      .basis-watch-body { grid-template-columns: 1fr; overflow-y: auto; }
+    }
+    .basis-watch-main { min-height: 0; overflow: auto; padding: 8px 10px; border-right: 1px solid var(--border); }
+    .basis-watch-rail { min-height: 0; overflow: auto; padding: 8px 10px; display: flex; flex-direction: column; gap: 8px; }
+    #bwCurveCanvas { width: 100%; height: 120px; display: block; margin-bottom: 8px; background: rgba(0,0,0,0.18); border-radius: 6px; border: 1px solid var(--border); }
+    .bw-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    @media (max-width: 640px) { .bw-summary-grid { grid-template-columns: repeat(2, 1fr); } }
+    .bw-card { padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border); background: rgba(0,0,0,0.12); }
+    .bw-card-label { display: block; font-size: 8px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+    .bw-card-value { display: block; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 2px; }
+    .bw-card-meta { display: block; font-size: 8px; color: var(--muted); margin-top: 2px; }
+    .bw-table { width: 100%; border-collapse: collapse; font-size: 9px; }
+    .bw-table th, .bw-table td { padding: 4px 6px; border-bottom: 1px solid var(--border); text-align: left; }
+    .bw-table th { font-size: 8px; text-transform: uppercase; color: var(--muted); }
+    .bw-row-front { background: rgba(61,139,253,0.08); }
+    .bw-heatmap { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+    .bw-heat-cell { min-width: 52px; padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border); text-align: center; font-size: 8px; }
+    .bw-heat--hot { background: rgba(224,123,57,0.22); border-color: rgba(224,123,57,0.45); color: #e07b39; }
+    .bw-heat--warm { background: rgba(245,166,35,0.15); border-color: rgba(245,166,35,0.35); color: #f5a623; }
+    .bw-heat--flat { background: rgba(76,142,217,0.1); color: #9ec5f0; }
+    .bw-heat--cold { background: rgba(79,179,122,0.12); border-color: rgba(79,179,122,0.35); color: #4fb37a; }
+    .bw-heat-sym { display: block; font-weight: 700; }
+    .bw-heat-val { display: block; font-variant-numeric: tabular-nums; }
+    .bw-heat-dte { display: block; color: var(--muted); }
+    .bw-implied-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 768px) { .bw-implied-grid { grid-template-columns: 1fr; } }
+    .bw-subhead { font-size: 9px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+    .bw-cross-strip { display: flex; flex-wrap: wrap; gap: 4px; }
+    .bw-cross-pill { font-size: 8px; padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border); background: rgba(0,0,0,0.1); }
+    .bw-cross-label { display: block; color: var(--muted); }
+    .bw-cross-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .bw-links { display: flex; flex-wrap: wrap; gap: 6px; }
+    .bw-empty { font-size: 9px; color: var(--muted); padding: 8px 0; }
+    #bwDataNote { font-size: 8px; color: var(--muted); max-width: 280px; }
   </style>
 </head>
 <body class="bg-wtm-bg text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
@@ -2354,13 +2432,14 @@ window.DICTIONARY_BADGE_DEFAULT = {
     <div class="console-topbar-zone console-topbar-zone--identity">
       <div class="console-title-row">
         <h1 class="console-title">Whinfell Transmission Control</h1>
-        <span class="console-phase-badge">Phase 2.2</span>
+        <span class="console-phase-badge">Phase 2.3</span>
       </div>
       <p id="headerRegimeLine" class="console-regime-line">—</p>
       <p id="headerRegimeSub" class="console-regime-sub">Import hydration or enter intake to populate regime summary.</p>
       <div class="console-tech-meta">
         <span id="tcConsoleBuildBadge" class="header-build-badge text-[8px] font-bold text-wtm-green bg-emerald-500/10 border border-wtm-green/35 px-2 py-0.5 rounded" title="Operator-console build — hard-refresh if stale">—</span>
         <a id="ddVersionBadge" href="https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/whinfell_pipeline/data_dictionary.yaml" target="_blank" rel="noopener noreferrer" class="header-dictionary-badge text-[9px] font-bold text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></a>
+        <a id="headerLinkLiveDesk" href="https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/" target="_blank" rel="noopener noreferrer" class="header-source-link text-wtm-green" title="Rendered desk preview (not raw GitHub HTML)">Live desk ↗</a>
         <button type="button" id="btnDeskDocs" class="text-[9px] font-bold text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20" title="Open desk documentation links">Docs</button>
         <a id="headerLinkKoyfin" href="https://app.koyfin.com/" target="_blank" rel="noopener noreferrer" class="header-source-link" title="Open Koyfin desk">Koyfin ↗</a>
         <a id="headerLinkBarchart" href="https://www.barchart.com/futures/major-commodities" target="_blank" rel="noopener noreferrer" class="header-source-link" title="Open Barchart futures">Barchart ↗</a>
@@ -2607,6 +2686,59 @@ window.DICTIONARY_BADGE_DEFAULT = {
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- WTM BasisWatch + Implied Rate (CME-style crypto bridge) -->
+  <section id="basisWatchPanel" class="basis-watch-panel" aria-label="BasisWatch and implied rate">
+    <div class="basis-watch-head">
+      <div>
+        <span class="basis-watch-title">WTM BasisWatch</span>
+        <span class="basis-watch-sub"> · TradFi ↔ Crypto bridge</span>
+      </div>
+      <button type="button" class="bw-view-tab bw-view-tab--active" data-bw-view="basis">Basis Watch</button>
+      <button type="button" class="bw-view-tab" data-bw-view="implied">Implied Rate</button>
+      <button type="button" class="bw-asset-btn bw-asset-btn--active" data-bw-asset="BTC">BTC</button>
+      <button type="button" class="bw-asset-btn" data-bw-asset="ETH">ETH</button>
+      <span id="bwStatusChip" class="bw-status-chip bw-status-chip--live">Live</span>
+      <span id="bwDataNote"></span>
+      <div class="bw-toolbar">
+        <label class="text-[8px] text-wtm-muted">Roll
+          <select id="bwRollLogic" class="ml-1">
+            <option value="nearest">Nearest</option>
+            <option value="constant">Constant maturity</option>
+            <option value="manual">Manual (L3)</option>
+          </select>
+        </label>
+        <label class="text-[8px] text-wtm-muted">Mode
+          <select id="bwModeToggle" class="ml-1">
+            <option value="live">Live</option>
+            <option value="snapshot">Snapshot</option>
+          </select>
+        </label>
+        <button type="button" id="btnBwRefresh" title="Refresh curve + sync dashboard">Refresh all panes</button>
+        <button type="button" id="btnBwExportCsv">CSV</button>
+        <button type="button" id="btnBwExportPng">PNG</button>
+        <button type="button" id="btnBwBarchart">Barchart ↗</button>
+        <button type="button" id="btnBwKoyfin">Koyfin ↗</button>
+        <button type="button" id="btnBwCollapse" title="Collapse panel">▾</button>
+      </div>
+    </div>
+    <div class="basis-watch-body">
+      <div class="basis-watch-main">
+        <canvas id="bwCurveCanvas" aria-label="Futures curve vs spot"></canvas>
+        <div id="bwMainView"></div>
+      </div>
+      <aside class="basis-watch-rail">
+        <div id="bwSummaryCards" class="bw-summary-grid"></div>
+        <div>
+          <p class="bw-subhead">Cross-asset context</p>
+          <div id="bwCrossAsset" class="bw-cross-strip"></div>
+        </div>
+        <div class="bw-links text-[9px] text-wtm-muted">
+          <span>HYG/LQD vs BTC: use Koyfin credit view · USDCNH NDF: wire in ARCH-4</span>
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -3005,6 +3137,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
   <div id="toast" class="fixed bottom-4 right-4 max-w-sm px-4 py-3 rounded-lg border border-wtm-border bg-wtm-card text-xs shadow-xl translate-y-20 opacity-0 transition-all z-50 pointer-events-none"></div>
 
 <script src="desk_china_ladder_models.js"></script>
+<script src="basis_watch_panel.js"></script>
 <script>
 /** Whinfell Transmission Control — Phase 2 · Storage v7 (node cockpit navigation) */
 
@@ -3012,7 +3145,7 @@ const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
 /** Bump when operator-console UX changes — visible in header for reload verification. */
-const TC_CONSOLE_BUILD = '2.2-UX-TIPS-2026-06-30';
+const TC_CONSOLE_BUILD = '2.3-BASISWATCH-2026-07-01';
 const DESK_GITHUB_BLOB = 'https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/';
 const DESK_GITHUB_RAW = 'https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/';
 const DESK_PAGES_URL = 'https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/';
@@ -3033,7 +3166,8 @@ const DESK_DOC_CATALOG = [
     { label: 'Operator dashboard setup', path: '08_Deliverables/Whinfell_Operator_Dashboard_Setup_Guide.md' },
     { label: 'Operator dashboard (legacy HTML)', path: '08_Deliverables/Whinfell_Operator_Dashboard.html' },
 
-    { label: 'Transmission Control source HTML', path: '08_Deliverables/Whinfell_Transmission_Control.html' },
+    { label: 'Transmission Control (live desk)', path: DESK_PAGES_URL, external: true },
+    { label: 'Transmission Control source HTML (dev only)', path: '08_Deliverables/Whinfell_Transmission_Control.html', audience: 'Clark' },
   ]},
   { group: 'Daily operations', docs: [
     { label: 'Simple data update (Clark)', path: '08_Deliverables/Whinfell_Data_Update_Simple_Guide.md', audience: 'Clark' },
@@ -3254,7 +3388,12 @@ function deskDocHref(entry) {
   if (entry.local) return 'whinfell-transmission-ladder-deep-dive.html';
   const path = entry.path || '';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
-  return DESK_GITHUB_BLOB + path.replace(/^\//, '');
+  const rel = path.replace(/^\//, '');
+  if (/\.html?$/i.test(rel)) {
+    if (/Whinfell_Transmission_Control\.html$/i.test(rel)) return DESK_PAGES_URL;
+    if (location.protocol !== 'file:' && !rel.includes('/')) return rel;
+  }
+  return DESK_GITHUB_BLOB + rel;
 }
 
 function deskDocRawHref(path) {
@@ -4344,6 +4483,7 @@ function createEmptyState() {
     chinaLadder: { horizons: createEmptyChinaHorizons() },
     snapshots: [],
     btcL3: { nearMonth: '', farMonth: '', basisSpread: '', refLow: '', refMid: '', refHigh: '', lastScan: {} },
+    basisWatch: { view: 'basis', asset: 'BTC', rollLogic: 'nearest', mode: 'live', collapsed: false, snapshot: null },
     urls: { ...DEFAULTS.urls },
     meta: { savedAt: null, lastKoyfin: null, lastBarchart: null },
   };
@@ -5707,6 +5847,10 @@ function hydrateFromBundle(bundle, options = {}) {
   }
 
   appState.hydration = appState.hydration || createEmptyHydration();
+  if (bundle.crypto_sleeve) appState.hydration.crypto_sleeve = bundle.crypto_sleeve;
+  if (bundle.global) appState.hydration.global = bundle.global;
+  if (bundle.execution) appState.hydration.execution = bundle.execution;
+  if (bundle.as_of) appState.hydration.as_of = bundle.as_of;
   if (bundle.flows_sidecar) {
     appState.hydration.flows_sidecar = bundle.flows_sidecar;
   }
@@ -5742,6 +5886,9 @@ function hydrateFromBundle(bundle, options = {}) {
     appState.hydration.hydration_audit = bundle.hydration_audit;
   }
 
+  if (typeof WTM_BasisWatch !== 'undefined') {
+    WTM_BasisWatch.refresh(appState, { renderAll });
+  }
   renderAll();
   markDirty();
   const label = isHydration ? 'Parquet hydration' : (isPipeline ? 'Pipeline bundle' : 'Hydration');
@@ -5910,6 +6057,7 @@ function normalizeLegacyState(raw) {
       horizons: { ...createEmptyChinaHorizons(), ...(raw.chinaLadder?.horizons || {}) },
     },
     btcL3: { ...createEmptyState().btcL3, ...(raw.btcL3 || {}) },
+    basisWatch: { ...createEmptyState().basisWatch, ...(raw.basisWatch || {}) },
   };
 
   const s = createEmptyState();
@@ -5976,15 +6124,8 @@ function buildStateFromDOM() {
     provenance: { ...(appState.provenance || createEmptyProvenance()) },
     commandBarAuthority: { ...(appState.commandBarAuthority || createEmptyCommandBarAuthority()) },
     suggestedTracer: appState.suggestedTracer || null,
-    hydration: {
-      node_cockpits: appState.hydration?.node_cockpits || null,
-      cockpit_context: appState.hydration?.cockpit_context || null,
-      flows_sidecar: appState.hydration?.flows_sidecar || null,
-      flows_health: appState.hydration?.flows_health || null,
-      china_as_of: appState.hydration?.china_as_of || null,
-      barchart_as_of: appState.hydration?.barchart_as_of || null,
-      ingest_provenance: appState.hydration?.ingest_provenance || null,
-    },
+    hydration: { ...(appState.hydration || createEmptyHydration()) },
+    basisWatch: { ...(appState.basisWatch || createEmptyState().basisWatch) },
     navigation: { ...createEmptyNavigation(), ...(appState.navigation || {}) },
     chart: { ...createEmptyChartState(), ...(appState.chart || {}) },
     panel: { ...createEmptyPanelState(), ...(appState.panel || {}) },
@@ -9362,6 +9503,10 @@ function renderAll() {
   renderTracerFlowChrome();
   renderTracerVisual();
   renderNodeCockpitShell(state);
+  if (typeof WTM_BasisWatch !== 'undefined') {
+    const bwState = { ...state, hydration: { ...(appState.hydration || {}) }, basisWatch: appState.basisWatch };
+    WTM_BasisWatch.render(bwState);
+  }
 }
 
 function applyShock(shockId, skipSnapshot) {
@@ -9662,7 +9807,15 @@ if (!appState.provenance?.hydratedAt || !appState.hydration?.node_cockpits) {
 }
 applyWorkspaceView(appState.ui?.workspaceView || 'cockpit');
 applyTrackView(appState.ui?.trackView || 'both');
+if (typeof WTM_BasisWatch !== 'undefined') {
+  WTM_BasisWatch.init({
+    getState: () => appState,
+    renderAll,
+    markDirty,
+  });
+}
 tryAutoHydrateFromDeploy().finally(() => {
+  if (typeof WTM_BasisWatch !== 'undefined') WTM_BasisWatch.refresh(appState, { renderAll });
   renderAll();
   maybePromptFirstHydrationImport(buildStateFromDOM());
   if (scenarioLoop.variants[0]) {
