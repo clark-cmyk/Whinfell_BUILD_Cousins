@@ -36,6 +36,13 @@ jobs:
       - name: Build static desk preview
         run: bash scripts/build_desk_preview.sh
 
+      - name: Verify BasisWatch in artifact
+        run: |
+          test -f _desk_preview_out/Whinfell_BasisWatch.html
+          test -f _desk_preview_out/basis_watch.css
+          test -f _desk_preview_out/basis_watch_panel.js
+          ls -la _desk_preview_out/
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -44,6 +51,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
@@ -51,3 +59,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v4
+        timeout-minutes: 8
