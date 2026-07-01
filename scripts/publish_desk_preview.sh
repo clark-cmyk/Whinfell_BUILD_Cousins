@@ -20,8 +20,27 @@ fi
 
 bash scripts/build_desk_preview.sh
 
+# Pages must be enabled once per repo (Settings → Pages → GitHub Actions).
+# Without this, deploy-pages returns 404 and the site shows "There isn't a GitHub Pages site here."
+if command -v gh >/dev/null 2>&1; then
+  if ! gh api repos/clark-cmyk/Whinfell_BUILD_Cousins/pages --silent 2>/dev/null; then
+    echo "publish_desk_preview: enabling GitHub Pages (workflow source)…" >&2
+    if gh api -X POST repos/clark-cmyk/Whinfell_BUILD_Cousins/pages -f build_type=workflow 2>/dev/null; then
+      echo "publish_desk_preview: Pages enabled → https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/" >&2
+    else
+      echo "publish_desk_preview: WARN — could not auto-enable Pages." >&2
+      echo "  Manual: repo → Settings → Pages → Build: GitHub Actions → save" >&2
+      echo "  Then: gh workflow run desk-preview-pages.yml --ref main" >&2
+    fi
+  fi
+else
+  echo "publish_desk_preview: install gh CLI to auto-enable Pages on first publish." >&2
+fi
+
 git add \
   08_Deliverables/Whinfell_Transmission_Control.html \
+  08_Deliverables/Whinfell_BasisWatch.html \
+  08_Deliverables/basis_watch.css \
   08_Deliverables/desk_china_ladder_models.js \
   08_Deliverables/basis_watch_panel.js \
   08_Deliverables/data_dictionary_meta.json \
@@ -35,7 +54,13 @@ git add \
 
 if git diff --cached --quiet; then
   echo "publish_desk_preview: nothing to commit — desk preview already up to date on this branch."
-  echo "  Trigger manual deploy: GitHub → Actions → Desk preview → Run workflow"
+  if command -v gh >/dev/null 2>&1; then
+    echo "  Redeploying latest main to Pages…"
+    gh workflow run desk-preview-pages.yml --ref main 2>/dev/null || true
+    echo "  Watch: gh run watch \$(gh run list --workflow=desk-preview-pages.yml --limit 1 --json databaseId -q '.[0].databaseId')"
+  else
+    echo "  Trigger manual deploy: GitHub → Actions → Desk preview → Run workflow"
+  fi
   exit 0
 fi
 

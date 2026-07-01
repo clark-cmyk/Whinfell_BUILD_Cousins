@@ -8,7 +8,9 @@ OUT="${ROOT}/_desk_preview_out"
 TC="${ROOT}/08_Deliverables/Whinfell_Transmission_Control.html"
 HYDRATE="${ROOT}/data/hydration/latest.json"
 
-for f in "$TC" "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "${ROOT}/08_Deliverables/basis_watch_panel.js" "${ROOT}/08_Deliverables/data_dictionary_meta.json"; do
+BW="${ROOT}/08_Deliverables/Whinfell_BasisWatch.html"
+BWC="${ROOT}/08_Deliverables/basis_watch.css"
+for f in "$TC" "$BW" "$BWC" "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "${ROOT}/08_Deliverables/basis_watch_panel.js" "${ROOT}/08_Deliverables/data_dictionary_meta.json"; do
   if [[ ! -f "$f" ]]; then
     echo "build_desk_preview: missing required file: $f" >&2
     exit 1
@@ -19,6 +21,8 @@ rm -rf "$OUT"
 mkdir -p "$OUT/data/hydration"
 
 cp "$TC" "$OUT/index.html"
+cp "$BW" "$OUT/Whinfell_BasisWatch.html"
+cp "$BWC" "$OUT/basis_watch.css"
 cp "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "$OUT/"
 cp "${ROOT}/08_Deliverables/basis_watch_panel.js" "$OUT/"
 cp "${ROOT}/08_Deliverables/data_dictionary_meta.json" "$OUT/"

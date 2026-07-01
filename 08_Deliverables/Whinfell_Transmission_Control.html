@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whinfell Transmission Control — Phase 2.2 Operator Console</title>
+  <title>Whinfell Transmission Control — Phase 2.3 Operator Console</title>
+  <link rel="stylesheet" href="basis_watch.css" />
   <script src="https://cdn.tailwindcss.com"></script>
 
 <!-- DD_BADGE_SYNC_START -->
@@ -2347,84 +2348,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
     }
     .component-failure-strip { display: flex; flex-direction: column; gap: 6px; }
 
-    /* WTM BasisWatch bottom panel */
-    .basis-watch-panel {
-      flex-shrink: 0;
-      border-top: 1px solid rgba(76,142,217,0.35);
-      background: linear-gradient(180deg, rgba(13,20,32,0.98) 0%, rgba(9,14,22,1) 100%);
-      max-height: 42vh;
-      min-height: 200px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transition: max-height 0.25s ease, min-height 0.25s ease;
-    }
-    .basis-watch-panel--collapsed { max-height: 36px; min-height: 36px; }
-    .basis-watch-panel--collapsed .basis-watch-body { display: none; }
-    .basis-watch-head {
-      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
-      padding: 6px 12px; border-bottom: 1px solid var(--border);
-      background: rgba(0,0,0,0.2);
-    }
-    .basis-watch-title { font-size: 11px; font-weight: 800; letter-spacing: 0.04em; color: #9ec5f0; }
-    .basis-watch-sub { font-size: 9px; color: var(--muted); }
-    .bw-view-tab, .bw-asset-btn {
-      font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
-      border: 1px solid var(--border); background: rgba(0,0,0,0.15); color: var(--muted);
-    }
-    .bw-view-tab--active, .bw-asset-btn--active {
-      border-color: rgba(61,139,253,0.55); color: #9ec5f0; background: rgba(61,139,253,0.12);
-    }
-    .bw-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-left: auto; }
-    .bw-toolbar select, .bw-toolbar button {
-      font-size: 9px; padding: 3px 8px; border-radius: 4px;
-      border: 1px solid var(--border); background: var(--card); color: var(--text);
-    }
-    .bw-status-chip { font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
-    .bw-status-chip--live { color: #4fb37a; border-color: rgba(79,179,122,0.4); }
-    .bw-status-chip--snapshot { color: #f5a623; border-color: rgba(245,166,35,0.4); }
-    .basis-watch-body {
-      flex: 1; min-height: 0; display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 0;
-      overflow: hidden;
-    }
-    @media (max-width: 1024px) {
-      .basis-watch-body { grid-template-columns: 1fr; overflow-y: auto; }
-    }
-    .basis-watch-main { min-height: 0; overflow: auto; padding: 8px 10px; border-right: 1px solid var(--border); }
-    .basis-watch-rail { min-height: 0; overflow: auto; padding: 8px 10px; display: flex; flex-direction: column; gap: 8px; }
-    #bwCurveCanvas { width: 100%; height: 120px; display: block; margin-bottom: 8px; background: rgba(0,0,0,0.18); border-radius: 6px; border: 1px solid var(--border); }
-    .bw-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    @media (max-width: 640px) { .bw-summary-grid { grid-template-columns: repeat(2, 1fr); } }
-    .bw-card { padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border); background: rgba(0,0,0,0.12); }
-    .bw-card-label { display: block; font-size: 8px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
-    .bw-card-value { display: block; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 2px; }
-    .bw-card-meta { display: block; font-size: 8px; color: var(--muted); margin-top: 2px; }
-    .bw-table { width: 100%; border-collapse: collapse; font-size: 9px; }
-    .bw-table th, .bw-table td { padding: 4px 6px; border-bottom: 1px solid var(--border); text-align: left; }
-    .bw-table th { font-size: 8px; text-transform: uppercase; color: var(--muted); }
-    .bw-row-front { background: rgba(61,139,253,0.08); }
-    .bw-heatmap { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
-    .bw-heat-cell { min-width: 52px; padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border); text-align: center; font-size: 8px; }
-    .bw-heat--hot { background: rgba(224,123,57,0.22); border-color: rgba(224,123,57,0.45); color: #e07b39; }
-    .bw-heat--warm { background: rgba(245,166,35,0.15); border-color: rgba(245,166,35,0.35); color: #f5a623; }
-    .bw-heat--flat { background: rgba(76,142,217,0.1); color: #9ec5f0; }
-    .bw-heat--cold { background: rgba(79,179,122,0.12); border-color: rgba(79,179,122,0.35); color: #4fb37a; }
-    .bw-heat-sym { display: block; font-weight: 700; }
-    .bw-heat-val { display: block; font-variant-numeric: tabular-nums; }
-    .bw-heat-dte { display: block; color: var(--muted); }
-    .bw-implied-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    @media (max-width: 768px) { .bw-implied-grid { grid-template-columns: 1fr; } }
-    .bw-subhead { font-size: 9px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-    .bw-cross-strip { display: flex; flex-wrap: wrap; gap: 4px; }
-    .bw-cross-pill { font-size: 8px; padding: 4px 6px; border-radius: 4px; border: 1px solid var(--border); background: rgba(0,0,0,0.1); }
-    .bw-cross-label { display: block; color: var(--muted); }
-    .bw-cross-val { font-weight: 700; font-variant-numeric: tabular-nums; }
-    .bw-links { display: flex; flex-wrap: wrap; gap: 6px; }
-    .bw-empty { font-size: 9px; color: var(--muted); padding: 8px 0; }
-    #bwDataNote { font-size: 8px; color: var(--muted); max-width: 280px; }
-  </style>
+
 </head>
 <body class="bg-wtm-bg text-slate-100 font-sans h-screen flex flex-col overflow-hidden">
 
@@ -2439,6 +2363,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
       <div class="console-tech-meta">
         <span id="tcConsoleBuildBadge" class="header-build-badge text-[8px] font-bold text-wtm-green bg-emerald-500/10 border border-wtm-green/35 px-2 py-0.5 rounded" title="Operator-console build — hard-refresh if stale">—</span>
         <a id="ddVersionBadge" href="https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/whinfell_pipeline/data_dictionary.yaml" target="_blank" rel="noopener noreferrer" class="header-dictionary-badge text-[9px] font-bold text-wtm-muted bg-wtm-card border border-wtm-border px-2 py-0.5 rounded"></a>
+        <a id="headerLinkBasisWatch" href="Whinfell_BasisWatch.html" target="_blank" rel="noopener noreferrer" class="header-source-link" title="Full-screen BasisWatch">BasisWatch ↗</a>
         <a id="headerLinkLiveDesk" href="https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/" target="_blank" rel="noopener noreferrer" class="header-source-link text-wtm-green" title="Rendered desk preview (not raw GitHub HTML)">Live desk ↗</a>
         <button type="button" id="btnDeskDocs" class="text-[9px] font-bold text-wtm-accent bg-wtm-accent/10 border border-wtm-accent/35 px-2 py-0.5 rounded hover:bg-wtm-accent/20" title="Open desk documentation links">Docs</button>
         <a id="headerLinkKoyfin" href="https://app.koyfin.com/" target="_blank" rel="noopener noreferrer" class="header-source-link" title="Open Koyfin desk">Koyfin ↗</a>
@@ -2716,7 +2641,8 @@ window.DICTIONARY_BADGE_DEFAULT = {
             <option value="snapshot">Snapshot</option>
           </select>
         </label>
-        <button type="button" id="btnBwRefresh" title="Refresh curve + sync dashboard">Refresh all panes</button>
+        <button type="button" id="btnBwPopOut" class="bw-btn bw-btn--popout" title="Open full-screen BasisWatch">Pop out ↗</button>
+        <button type="button" id="btnBwRefresh" title="Refresh curve + sync dashboard">Refresh</button>
         <button type="button" id="btnBwExportCsv">CSV</button>
         <button type="button" id="btnBwExportPng">PNG</button>
         <button type="button" id="btnBwBarchart">Barchart ↗</button>
@@ -3145,7 +3071,7 @@ const STORAGE_KEY = 'whinfell_transmission_control_v7';
 const LEGACY_KEYS = ['whinfell_transmission_control_v1', 'whinfell_transmission_control_v0', 'whinfell_operator_v1_1'];
 const STATE_VERSION = 7;
 /** Bump when operator-console UX changes — visible in header for reload verification. */
-const TC_CONSOLE_BUILD = '2.3-BASISWATCH-2026-07-01';
+const TC_CONSOLE_BUILD = '2.4-BASISWATCH-STANDALONE-2026-07-01';
 const DESK_GITHUB_BLOB = 'https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/';
 const DESK_GITHUB_RAW = 'https://raw.githubusercontent.com/clark-cmyk/Whinfell_BUILD_Cousins/main/';
 const DESK_PAGES_URL = 'https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/';
@@ -3167,6 +3093,7 @@ const DESK_DOC_CATALOG = [
     { label: 'Operator dashboard (legacy HTML)', path: '08_Deliverables/Whinfell_Operator_Dashboard.html' },
 
     { label: 'Transmission Control (live desk)', path: DESK_PAGES_URL, external: true },
+    { label: 'BasisWatch (standalone)', path: 'Whinfell_BasisWatch.html', local: true },
     { label: 'Transmission Control source HTML (dev only)', path: '08_Deliverables/Whinfell_Transmission_Control.html', audience: 'Clark' },
   ]},
   { group: 'Daily operations', docs: [
@@ -3385,7 +3312,12 @@ function escapeHtml(s) {
 
 function deskDocHref(entry) {
   if (!entry) return DESK_REPO_URL;
-  if (entry.local) return 'whinfell-transmission-ladder-deep-dive.html';
+  if (entry.local) {
+    if (/BasisWatch/i.test(entry.label || '') || /Whinfell_BasisWatch/i.test(entry.path || '')) {
+      return location.protocol === 'file:' ? 'Whinfell_BasisWatch.html' : 'Whinfell_BasisWatch.html';
+    }
+    return 'whinfell-transmission-ladder-deep-dive.html';
+  }
   const path = entry.path || '';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   const rel = path.replace(/^\//, '');
@@ -9647,6 +9579,7 @@ function applyConsoleTheme(theme) {
   const next = theme === 'light' ? 'light' : 'dark';
   if (!document.documentElement?.setAttribute) return;
   document.documentElement.setAttribute('data-theme', next);
+  if (typeof WTM_BasisWatch !== 'undefined' && WTM_BasisWatch.applyTheme) WTM_BasisWatch.applyTheme(next);
   const btn = el('btnTheme');
   if (btn) {
     btn.textContent = next === 'dark' ? 'Light mode' : 'Dark mode';
