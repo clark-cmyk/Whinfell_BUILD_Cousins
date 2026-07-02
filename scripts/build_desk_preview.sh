@@ -10,7 +10,7 @@ HYDRATE="${ROOT}/data/hydration/latest.json"
 
 BW="${ROOT}/08_Deliverables/Whinfell_BasisWatch.html"
 BWC="${ROOT}/08_Deliverables/basis_watch.css"
-for f in "$TC" "$BW" "$BWC" "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "${ROOT}/08_Deliverables/basis_watch_panel.js" "${ROOT}/08_Deliverables/data_dictionary_meta.json"; do
+for f in "$TC" "$BW" "$BWC" "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "${ROOT}/08_Deliverables/basis_watch_panel.js" "${ROOT}/08_Deliverables/basis_watch_analytics.js" "${ROOT}/08_Deliverables/data_dictionary_meta.json"; do
   if [[ ! -f "$f" ]]; then
     echo "build_desk_preview: missing required file: $f" >&2
     exit 1
@@ -25,9 +25,12 @@ cp "$BW" "$OUT/Whinfell_BasisWatch.html"
 cp "$BWC" "$OUT/basis_watch.css"
 cp "${ROOT}/08_Deliverables/desk_china_ladder_models.js" "$OUT/"
 cp "${ROOT}/08_Deliverables/basis_watch_panel.js" "$OUT/"
+cp "${ROOT}/08_Deliverables/basis_watch_analytics.js" "$OUT/"
 cp "${ROOT}/08_Deliverables/data_dictionary_meta.json" "$OUT/"
 BARCHART_CURVE="${ROOT}/data/barchart/v1/barchart_curve_history.json"
 if [[ -f "$BARCHART_CURVE" ]]; then
+  mkdir -p "$OUT/data/barchart/v1"
+  cp "$BARCHART_CURVE" "$OUT/data/barchart/v1/barchart_curve_history.json"
   mkdir -p "$OUT/data/barchart"
   cp "$BARCHART_CURVE" "$OUT/data/barchart/barchart_curve_history.json"
 fi

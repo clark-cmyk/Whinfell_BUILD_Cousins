@@ -11,6 +11,7 @@ on:
       - '08_Deliverables/basis_watch.css'
       - '08_Deliverables/desk_china_ladder_models.js'
       - '08_Deliverables/basis_watch_panel.js'
+      - '08_Deliverables/basis_watch_analytics.js'
       - '08_Deliverables/data_dictionary_meta.json'
       - 'data/hydration/latest.json'
       - 'data/barchart/v1/barchart_curve_history.json'
@@ -39,6 +40,8 @@ jobs:
           test -f _desk_preview_out/Whinfell_BasisWatch.html
           test -f _desk_preview_out/basis_watch.css
           test -f _desk_preview_out/basis_watch_panel.js
+          test -f _desk_preview_out/basis_watch_analytics.js
+          test -f _desk_preview_out/data/barchart/v1/barchart_curve_history.json
           ls -la _desk_preview_out/
 
       - name: Deploy to gh-pages branch
