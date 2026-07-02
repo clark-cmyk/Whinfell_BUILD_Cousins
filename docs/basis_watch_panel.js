@@ -68,7 +68,7 @@
   let curveCache = null;
   let curveFetchPromise = null;
   let standaloneState = null;
-  const isStandalone = () => document.body?.dataset?.bwLayout;
+  const isStandalone = () => true;
 
   function el(id) { return document.getElementById(id); }
 
