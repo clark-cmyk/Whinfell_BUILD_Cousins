@@ -1299,7 +1299,7 @@
     runBasisWatchValidation, DESK_LINKS, BW_BUILD,
   };
 
-  if (document.body?.dataset?.bwLayout) {
+  if (true) {
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(location.search);
       if (params.get('selftest') === '1') {
