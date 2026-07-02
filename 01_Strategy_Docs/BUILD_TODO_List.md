@@ -1,8 +1,26 @@
 # BUILD Cousins - TODO List
 
 **Maintained by:** BUILD Cousins  
-**Last Updated:** June 30, 2026 (Goals 1–6 **done** · **desk preview live** · **docs + UX fix shipped** · badge `2.2-UX-FIX-2026-06-30` · next **7–11**)
+**Last Updated:** July 2, 2026 (Goal **7** flows Jul 2 **done (fallback_1d)** · Clark **#8–9–13** · BUILD **#10–11** · `run_csv_download.py` restored)
 **Purpose:** Track all active and planned work for the Whinfell Transmission Map support track.
+
+---
+
+## Module backlog (post BasisWatch v3)
+
+| Module | Priority | Notes |
+|--------|----------|-------|
+| BasisWatch multi-day curve history | Medium | Accumulate `points[]` in `barchart_curve_history.json` so per-contract quartiles are native (not hydration RV fallback) |
+| Margin & Sizing | High | CME/IBKR tables · feeds gross risk % |
+| Trade Book / Position Ledger | Medium | Prompts C/D · localStorage or sidecar |
+| Income Projection (Prompt D surface) | Medium | Needs book ledger |
+| Arb / Calendar Scanner (L3 companion) | Medium | `rv_history` + Barchart curve · partial overlap with BasisWatch forward quartiles |
+| Scenario Compare (persistent) | Low | Extend snapshot schema v3 |
+| Funds Flow Mission Surface | Medium | Trade-facing `funds_flows.py` card |
+| Alert / Watchlist Monitor | Low | Human-in-the-loop only · no auto-trade |
+| Per-node Here's Why (full-screen) | Medium | Phase 3 UI |
+
+**Shipped:** WTM BasisWatch + Implied Rate · build `3.0-BASISWATCH-QUARTILES-2026-07-01` · `basis_watch_analytics.js` + `basis_watch_panel.js` · embedded TC + standalone `Whinfell_BasisWatch.html`
 
 ---
 
@@ -10,13 +28,15 @@
 
 | # | Goal | Priority | Owner | Effort | Done when |
 |---|------|----------|-------|--------|-----------|
-| **7** | **Fresh flows export** — `WTM-Flows-Global.csv` from wired URL → normalize → re-chain | **High** | Clark | 10 min | `flows_sidecar.as_of` = today · not Jun 29 stale |
-| **8** | **Live TC Focus confirm** — Clark visual pass on `latest.json` · update ratings if needed | **High** | Clark | 15 min | Proxy ratings in `Desk_Feedback_Log.md` confirmed or revised |
-| **9** | **ARCH-4 desk run** — 16-symbol Barchart core historical batch (`WTM-Barchart-Core`) | Medium | Clark | 1 session | Core symbols staged · `barchart_core_history` in provenance |
-| **10** | **Phase 2.1** — WTC-2.0 import round-trip · scenario loop scope | Medium | Bridge + Edge | 1–2 sessions | Export → edit tracer → re-import without bundle downgrade |
-| **11** | **Collect noise fix** — Barchart options/greeks/daily raw passthrough adapter (stops `collect_exit=1`) | Medium | Integration Dynamo | 1 session | Daily chain `chain_ok: true` with optional Barchart files in drop |
+| **8** | **Live TC Focus confirm** — visual pass on `latest.json` · BasisWatch rail spot-check | **High** | Clark | 20 min | Ratings in `Desk_Feedback_Log.md` · BW mission cards + xasset table OK |
+| **9** | **ARCH-4 + curve history** — Barchart core batch · multi-day `points[]` in curve JSON | **High** | Clark + BUILD | 1 session | Native per-tenor quartiles (not RV fallback only) |
+| **10** | **Phase 2.1** — WTC-2.0 import round-trip · scenario loop | Medium | Bridge + Edge | 1–2 sessions | Re-import without bundle downgrade |
+| **11** | **Collect noise fix** — Barchart options/greeks/daily passthrough | Medium | Integration Dynamo | 1 session | `chain_ok: true` · `collect_exit=0` |
+| **13** | **BasisWatch publish** — commit + Pages deploy · `?selftest=1` on live URL | Medium | Clark | 15 min | GitHub Pages shows build `3.0-…` |
 
-**BUILD Cousins:** P1 unlocked — start **#10–#11** in parallel while Clark runs **#7–#9**.
+**Parallel tracks:** Clark **#8 → #9 → #13** · BUILD **#10 + #11** · Molokai **EXP-001 / UX-STEP7** (separate repo).
+
+**Clark CSV collect (current):** **Manual Koyfin** (Clark exports) + optional Perplexity **Barchart only** · `08_Deliverables/Perplexity_Computer_Barchart_Only_Prompt.txt` · full Koyfin+Barchart prompt in `Perplexity_Computer_Collection_Prompt.txt`
 
 ### Completed (Goals 1–6 — June 30)
 
@@ -28,6 +48,18 @@
 | 4 | Desk sign-off | walkthrough 6/6 · operator confirm 8/8 (proxy) |
 | 5 | TempLibby close | ARCH-3 accepted · sign-off block filled |
 | 6 | Koyfin watchlist trim (UI) | `credit_20260630_1149.csv` · 16/16 from `WTM-Import-Core` watchlist · section labels OK |
+
+### Completed (Flows + manual chain — July 2)
+
+| # | Goal | Result |
+|---|------|--------|
+| 7 | Fresh flows export + re-chain | `koyfin_WTM-Flows-Global_2026.07.02_*.csv` in drop · normalize `*WTM-Flows*` · `flows_as_of=2026-07-02` · `flows_status=fallback_1d` · `run_csv_download.py` restored |
+
+### Completed (BasisWatch v3 — July 1)
+
+| # | Goal | Result |
+|---|------|--------|
+| 12 | BasisWatch CME separation + quartiles P1–P5 | Build `3.0-BASISWATCH-QUARTILES-2026-07-01` · `basis_watch_analytics.js` · self-test 15/15 · TC + standalone |
 
 ### Completed (Desk share + docs + UX — June 30 PM)
 
@@ -76,14 +108,15 @@
 | **Desk ops** | Barchart native-export normalize rules | High | **Shipped** | Bridge | daily/options/greeks/spreads → canonical · ~60% quarantine coverage |
 | **Desk ops** | Desk validation log (mission surfaces + UI) | High | **Automated + operator confirm** | Bridge | `desk_walkthrough.py` · 6/6 · `desk_operator_confirm` 8/8 |
 | **Desk ops** | `whinfell_daily_am.sh` default `--window today` → `48h` | **High** | **Shipped** | Bridge | Normalize + 48h + `--overwrite` wired in AM script |
-| **Desk ops** | Clark AM hydration chain (48h) — report to TempLibby | High | **Validated** | Clark | 91 staged routes · 5 nodes · `fresh` · flows `ok` (stale Jun 29) |
+| **Desk ops** | Clark AM hydration chain (48h) — report to TempLibby | High | **Validated Jul 2** | Clark | Manual Koyfin chain · `fresh` · `flows_as_of=2026-07-02` · `fallback_1d` |
 | **Desk ops** | `normalize_whinfell_drop.sh` bash portability fix | Medium | **Shipped** | Bridge | Was zsh-only (`${0:A:h:h}`); now runs under `bash` per Perplexity playbook |
 | **Phase 1** | Master Data Dictionary v1.0 + naming rectification | **High** | **Complete · Verified** | Bridge + Precision | 104 tests PASS · 0 naming violations · `194506a` |
 | **Phase 2 prep** | Node cockpit data model spec | High | **Complete · Locked v0.2** | Blueprint | `c9974fa` · ambiguities A/B/E/F locked |
 | **Phase 2a** | `rv_series` + interim node score weights | High | **Complete** | Bridge | Master DD registry · `3293a9b` |
 | **Phase 2b-data** | WTM EXPORT v2.2 + `node_cockpits` hydration builder | High | **Shipped** | Bridge | `cdd677a` · bundle v1.1.0 · 111 tests PASS |
 | **Phase 2b** | ARCH-1 component routing + Koyfin history for RV quartiles | High | **M2 shipped** | Integration Dynamo | Live components + Koyfin RV series · credit still horizon fallback |
-| **Phase 2.2-mission** | Basis node mission-surface (operator console) | High | **Shipped · Accepted** | Bridge + Clarity | Badge `2.2-MISSION-2026-06-29` · commits `54cc2b9`→`2d2c847` · no further Basis polish |
+| **Phase 2.2-mission** | Basis node mission-surface (operator console) | High | **Shipped · Accepted** | Bridge + Clarity | Badge `2.2-MISSION-2026-06-29` · commits `54cc2b9`→`2d2c847` |
+| **BasisWatch** | CME-style basis + implied rate + quartiles (TC embed + standalone) | High | **Shipped v3.0** | Bridge + Clarity | Build `3.0-BASISWATCH-QUARTILES-2026-07-01` · self-test 15/15 · spec P1–P5 |
 | **Phase 2.2-mission** | Credit node mission-surface (extend Basis pattern) | High | **Shipped · Desk testing** | Bridge + Clarity | Handoff: `08_Deliverables/Credit_Mission_Surface_Desk_Handoff.md` |
 | **Phase 2.2-mission** | Liquidity node mission-surface (extend Credit pattern) | High | **Shipped · Desk testing** | Bridge + Clarity | Plan: `01_Strategy_Docs/Liquidity_Mission_Surface_v1_Plan.md` · Handoff: `08_Deliverables/Liquidity_Mission_Surface_Desk_Handoff.md` |
 | **Phase 2.2-mission** | RV/Basis spot-fallback table (Credit `horizon_net_fallback`) | Medium-High | **Shipped** | Bridge | Presentation-only — value once on active horizon; pct/Q/rich per lookback |
@@ -101,7 +134,7 @@
 | **Phase 2b-ops** | `WTM-*.csv` normalize rules (desk exports) | High | **Shipped** | Bridge | Global-Rates, Equities-Breath, Credit-Confirmation, China-Policy, MAS-KOY |
 | **Phase 2.2-mission** | Breadth node mission-surface | High | **Shipped · Desk testing** | Bridge + Clarity | `MISSION_SURFACE_NODES` + `__breadthMissionProbe` |
 | **Phase 2.2-mission** | Highbeta node mission-surface | High | **Shipped · Desk testing** | Bridge + Clarity | `MISSION_SURFACE_NODES` + `__highbetaMissionProbe` · IBIT vs QQQ beta spread |
-| **Phase 2b-ops** | `WTM-Flows` normalize + Koyfin view expansion | High | **Normalize shipped** | Clark | Expand view tickers per spec §5 · `WTM-Flows*.csv` → `flows_*` via Master DD |
+| **Phase 2b-ops** | `WTM-Flows` normalize + Koyfin view expansion | High | **Shipped Jul 2** | Clark + Dynamo | `*WTM-Flows*.csv` → `flows_*` · snapshot `fallback_1d` ingest |
 | **Phase 2b-ops** | `normalize_whinfell_drop.sh` — map `WTM-Flows*.csv` | Medium | **Shipped (via DD rule)** | Bridge | `batch_collect.py normalize` reads `WTM-Flows*.csv` rule |
 | **Phase 3** | TC interface (full-screen Why, flip nav, margin module) | Medium | **Planned** | Clarity + Safeguard | Blocked on Phase 2 UI · flow card ships in 2b-ui |
 | **Phase 4** | Validation & reliability gate | Medium | **Planned** | Hammer + Precision | After Phase 3 |
@@ -123,6 +156,44 @@
 
 ---
 
+## Report for TempLibby (July 1, 2026 — BasisWatch v3.0 CME-grade quartiles)
+
+**Build:** `3.0-BASISWATCH-QUARTILES-2026-07-01` · **Self-test:** 15/15 PASS (`?selftest=1` or Node harness).
+
+**Spec delivered (P1–P5 from `whinfell_basiswatch_grok_spec.md`):**
+
+| Priority | Deliverable | Status |
+|----------|-------------|--------|
+| P1 | Historical Basis % quartiles per contract · rank · Q1/Med/Q3 · heat | **Shipped** |
+| P2 | Mission metrics feature Basis % + rank (dollars secondary) | **Shipped** |
+| P3 | Forward table quartiles · flattest + steepest calendar callouts | **Shipped** |
+| P4 | Cross-asset % panel (`bw-xasset`) · BTC anchor · peer table · desk read | **Shipped** |
+| P5 | Tooltip library + mobile popover (`initTooltips`) | **Shipped** |
+
+**Files:**
+
+| File | Role |
+|------|------|
+| `08_Deliverables/basis_watch_analytics.js` | Quartile engine (`BasisWatchAnalytics`) |
+| `08_Deliverables/basis_watch_panel.js` | Panel integration · v3.0 build badge |
+| `08_Deliverables/basis_watch.css` | xasset · quartile badges · tooltips |
+| `08_Deliverables/Whinfell_BasisWatch.html` | Standalone pop-out |
+| `08_Deliverables/Whinfell_Transmission_Control.html` | Embedded rail panel |
+| `data/barchart/v1/barchart_curve_history.json` | Curve history (canonical path) |
+| `data/barchart/barchart_curve_history.json` | Symlink → v1 (backward compat) |
+
+**Desk links (Clark):** Barchart watchlist `viewName=197689` · Koyfin MYD `55782528-369d-4f09-a6fb-4b1d041a6656`.
+
+**Hydration fallback:** When curve `row_count < 5`, front-contract ranks pull from `node_cockpits.basis.rv_basis` (`btc_basis_vs_refs`, `btc_calendar_bt_near_deferred`). Credit peer HYG/LQD uses `node_cockpits.credit.rv_basis` (`hy_oas_proxy`).
+
+**Clark verify:** Serve desk from `Whinfell_BUILD_Cousins` root → open TC or `Whinfell_BasisWatch.html` → Import `latest.json` → BasisWatch rail: mission cards show Basis % rank · cross-asset table · flattest calendar callout · `?` tooltips.
+
+**Next (non-blocking):** Multi-day Barchart curve batch (ARCH-4 / daily chain) to populate native per-tenor quartiles without RV fallback.
+
+**Clark → TempLibby message:** *"BasisWatch now separates spot carry from calendar forward yield CME-style, with quartile context and cross-asset % panel. Build 3.0 on desk."*
+
+---
+
 ## Report for TempLibby (June 30, 2026 — desk share + UX fix)
 
 **Live desk:** [clark-cmyk.github.io/Whinfell_BUILD_Cousins](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/) · build **`2.2-UX-FIX-2026-06-30`**.
@@ -138,11 +209,11 @@
 
 **Tests:** `pytest test_transmission_control_cockpit.py` 3/3 · headless cockpit PASS.
 
-**Still open (Clark):** TODO **#7** fresh `WTM-Flows-Global.csv` · **#8** live Focus visual confirm · **#9** ARCH-4 core batch (optional).
+**Still open (Clark):** TODO **#8** live Focus visual confirm · **#9** ARCH-4 core batch · **#13** BasisWatch Pages publish. Optional: re-export flows **chart time-series** (wide `Date` column) for full 5D rolling (`flows_status: ok` not `fallback_1d`).
 
 **Still open (BUILD):** TODO **#10** WTC-2.0 round-trip · **#11** Barchart collect noise (`collect_exit=1`).
 
-**Clark → TempLibby message:** *"Desk is shareable via URL with today's hydration. Docs + chart UX fixed on live Pages. Flows export still Jun 29 until #7."*
+**Clark → TempLibby message:** *"Manual Koyfin chain live Jul 2 — flows_as_of updated (fallback_1d). Import latest.json + live Focus pass (#8)."*
 
 ---
 
@@ -330,6 +401,7 @@
 | AM hydration chain (`--window 48h`) | **Validated Jun 30** — 37 staged · 5 nodes · flows `ok` |
 | Phase 2.2 UI refactor | **Shipped Jun 30** — badge `2.2-UI-2026-06-30` |
 | Mission surfaces (5/5 nodes) | **Shipped Jun 30** — Basis · Credit · Liquidity · Breadth · Highbeta |
+| BasisWatch v3.0 (quartiles + cross-asset + tooltips) | **Shipped Jul 1** — `basis_watch_analytics.js` · build `3.0-BASISWATCH-QUARTILES-2026-07-01` |
 | WTM data dictionary v1.0.0 + ARCH build plan | **Shipped** |
 | C4 Prompt Testing | **Signed off — 20/20** |
 | TempLibby production sign-off (Phase 2) | **Approved** |
@@ -384,6 +456,8 @@
 | **Desk ops** | Quick Reference Card v1.5 | June 30, 2026 | `.md` + `.docx` |
 | **Desk ops** | TC ingest audit drawer | June 30, 2026 | Signal drawer · `renderIngestProvenanceAudit` |
 | **Desk ops** | `desk_operator_confirm` + walkthrough on `latest.json` | June 30, 2026 | 8/8 + 6/6 automated |
+| **BasisWatch** | v2.6–2.8 CME separation + desk links | July 1, 2026 | Spot vs forward curves · `DESK_LINKS` |
+| **BasisWatch** | v3.0 quartile analytics + cross-asset panel | July 1, 2026 | `basis_watch_analytics.js` · self-test 15/15 · spec P1–P5 |
 
 ---
 
@@ -438,6 +512,7 @@ python3 -m whinfell_pipeline.verify_2_2_final
 ---
 
 ## Notes
+- **July 1, 2026** — **BasisWatch v3.0 shipped** — quartile engine · Basis % mission prominence · flattest/steepest calendar · `bw-xasset` cross-asset % panel · tooltips · CURVE_URL `data/barchart/v1/…` · hydration RV fallback when history thin.
 - **June 30, 2026 (Clark chain 17:09)** — Goals 1–6 done · `credit_20260630_1149` ingested · lineage `62066f686…` · flows stale Jun 29 · `collect_exit=1` known. Next: fresh flows export + live Focus confirm.
 - **June 30, 2026 (session close)** — BUILD backlog for Phase 2.2 **complete**. Clark gate: ARCH-3 watchlist + live desk ratings. Next BUILD work: Phase 2.1 after feedback.
 - **June 30, 2026 (goals 1–6 + TODO 3–6)** — ARCH-3 criteria · M3 provenance · PR-5 · quarantine transform · ARCH-4 manifest · audit drawer · Quick Ref v1.5.docx.

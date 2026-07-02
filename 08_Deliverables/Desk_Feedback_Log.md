@@ -88,7 +88,11 @@ Open Transmission Control → Import `data/hydration/latest.json` → confirm `l
 
 | Issue | Severity | Description | Screenshot / Steps | Status |
 |-------|----------|-------------|--------------------|--------|
-| | | | | |
+| `run_csv_download.py` missing at repo root | **Major** | `run_batch_collect.py run` failed · `init_daily_csv.sh` broken | Local clone after cleanup | **Fixed Jul 2** — restored from GitHub main |
+| Koyfin flows not ingested (`koyfin_WTM-Flows-Global_*`) | **Major** | Files in `whinfell_drop` but normalize rule only matched `WTM-Flows*.csv` · `flows_as_of` stuck Jun 29 | Drop had `koyfin_WTM-Flows-Global_2026.07.02_*.csv` | **Fixed Jul 2** — `*WTM-Flows*.csv` normalize rule |
+| Flows snapshot export not parsed | **Major** | Koyfin watchlist CSV has `Ticker` rows, no `Date` column · wide parser rejected | Export from WTM-Flows-Global watchlist ⋮ → CSV | **Fixed Jul 2** — `flows_fallback` snapshot path · `flows_status=fallback_1d` |
+| Flows sidecar written to wrong path | **Major** | Ingest wrote `staged_raw/data/flows/v1/` · hydrate read stale Jun 29 fixture | After `daily` chain | **Fixed Jul 2** — `staged_csv.py` uses repo root for sidecar |
+| `collect_exit=1` on Barchart options/greeks | Minor | Adapter mismatch on vendor column layout · does not block hydrate | Daily manifest | **Open** — BUILD TODO **#11** |
 
 **Severity:** Blocker · Major · Minor · Cosmetic
 
@@ -162,3 +166,20 @@ Open Transmission Control → Import `data/hydration/latest.json` → confirm `l
 | funds_flow_export_lines | PASS | PR-5 flow lines in export |
 
 **Note:** `collect_exit=1` from optional Barchart options/greeks adapter noise — hydration succeeded (`hydrate_exit=0`).
+
+## BUILD Operator Confirm — Manual Koyfin chain (2026-07-02)
+
+**Bundle:** `data/hydration/latest.json`  
+**flows_sidecar.as_of:** `2026-07-02`  
+**flows_status:** `fallback_1d` (snapshot ingest — credit basket 1D flows; no 5D rolling)  
+**freshness_status:** `fresh` · **hydrate_exit:** `0`
+
+| Check | Result | Detail |
+|-------|--------|--------|
+| `run_csv_download.py` | PASS | Restored · `daily` chain runs |
+| Koyfin flows in drop | PASS | `koyfin_WTM-Flows-Global_2026.07.02_*.csv` normalized |
+| flows_as_of | PASS | Jul 2 (was Jun 29) |
+| flows ingest mode | PARTIAL | `fallback_1d` — chart time-series export upgrades to `ok` + 5D |
+| collect_exit | WARN | `1` — Barchart options/greeks noise (non-blocking) |
+
+**Clark action:** Import `latest.json` in TC · live Focus walk (#8) · optional: re-export flows from **chart view** with `Date` column for full timeseries.

@@ -1,9 +1,9 @@
 # Whinfell Desk User Manual
 
-**Version:** 1.0  
-**Date:** June 30, 2026  
+**Version:** 1.0.1  
+**Date:** July 2, 2026  
 **Status:** Production  
-**Build badge:** `2.2-HYDRATION-AUDIT-2026-06-30`  
+**Build badge:** `2.2-HYDRATION-AUDIT-2026-06-30` · flows patch `FLOWS-SNAPSHOT-2026-07-02`  
 **Authority:** Clark · BUILD Cousins · TempLibby (system owner)
 
 ---
@@ -26,6 +26,7 @@ This is the **single shareable desk manual** for operators, advisors, and browse
 | Resource | Link |
 |----------|------|
 | **Transmission Control (auto-hydrated)** | [clark-cmyk.github.io/Whinfell_BUILD_Cousins](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/) |
+| **BasisWatch (standalone pop-out)** | [Whinfell_BasisWatch.html](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/Whinfell_BasisWatch.html) |
 | Latest hydration bundle (JSON) | [latest.json](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/data/hydration/latest.json) |
 | Field-by-field audit log (JSON) | [hydration_log.json](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/data/hydration/hydration_log.json) |
 | GitHub repo | [github.com/clark-cmyk/Whinfell_BUILD_Cousins](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins) |
@@ -136,6 +137,8 @@ Use the URL shown in the repo **Settings → Pages** after Clark enables private
 
 Sign in to GitHub first, then open the link. Transmission Control auto-loads the co-hosted hydration bundle — no file picker, no git, no terminal.
 
+**Do not** open `Whinfell_Transmission_Control.html` from the GitHub **Code** tab — that view shows **raw HTML** (unstyled source), not the live desk. Use the **Live desk** link in the console header or the Pages URL above.
+
 ### What reviewers should see
 
 1. Command bar: Whinfell Score, transmission state, SQ3, gate, freshness
@@ -164,6 +167,16 @@ GitHub Actions redeploys in ~1–2 minutes. Same URL, new data.
 ---
 
 ## 3. Clark daily workflow
+
+### Collection mode (pick one)
+
+| Mode | Who exports Koyfin | Who exports Barchart | Terminal |
+|------|-------------------|---------------------|----------|
+| **Manual (current)** | Clark (wired saved views) | Clark or Perplexity | `normalize` → `run_csv_download.py daily` |
+| **Perplexity Barchart-only** | Clark | Perplexity Computer | Same terminal after drop fills |
+| **Perplexity full** | Perplexity | Perplexity | `Perplexity_Computer_Collection_Prompt.txt` |
+
+**Drop folder (all modes):** `~/Downloads/whinfell_drop` — never `~/Downloads` root.
 
 ### Morning (recommended — one script)
 
@@ -249,9 +262,23 @@ python3 -m whinfell_pipeline.hydrate -o data/hydration/latest.json
 | WTM-Futures-Intraday | `futures_intraday_YYYYMMDD_HHMM.csv` |
 | WTM-Futures-Daily | `futures_daily_YYYYMMDD_HHMM.csv` |
 | WTM-BTC-Basis | `btc_basis_YYYYMMDD.csv` |
-| WTM-Flows-Global (optional) | `flows_YYYYMMDD_HHMM.csv` |
+| WTM-Flows-Global | `flows_YYYYMMDD_HHMM.csv` |
 
 **Export path:** always `~/Downloads/whinfell_drop` — not Downloads root.
+
+### WTM-Flows-Global — two export formats
+
+Koyfin may save either name; normalize handles both:
+
+| Raw filename (examples) | After normalize | Parser mode | `flows_status` |
+|-------------------------|-----------------|-------------|----------------|
+| `WTM-Flows-Global.csv` | `flows_YYYYMMDD_HHMM.csv` | Wide time series (`Date` column) | `ok` — full 5D rolling |
+| `koyfin_WTM-Flows-Global_2026.07.02_06.23.34.280.csv` | `flows_YYYYMMDD_HHMM.csv` | Snapshot (`Ticker`, `Fund Flows/Periodic (D)`) | `fallback_1d` — credit basket 1D only |
+
+**Preferred for sponsorship cards:** open **WTM-Flows-Global** saved view → switch to **chart / time series** (rows = dates, columns = `{TICKER} Flow (D)` + `{TICKER} AUM`) → ⋮ → Export CSV.  
+**Watchlist table export** (rows = tickers) still works — pipeline ingests via fallback; `flows_sidecar.as_of` updates but 5D metrics stay empty.
+
+**Wired URL:** `https://app.koyfin.com/myw/afb1f314-4de4-47b6-b02f-0de2601b62b9`
 
 ### Comet supervised prompt (paste at shift start)
 
@@ -435,15 +462,17 @@ Credit **does not** use weighted `component_inputs` (authoritative doc: [Whinfel
 
 - Normalized: `flow_pct_aum` per ETF basket per node
 - `flows_status`: `ok` · `partial` · `fallback_1d` · `unavailable`
-- Global flows file: `WTM-Flows-Global.csv` → `flows_sidecar.as_of` — refresh when stale
+- `fallback_1d` = snapshot export ingested (1D credit-basket flows; no 5D persistence)
+- Global flows: any `*WTM-Flows*.csv` in drop → `flows_sidecar.as_of` — refresh when stale
 
-### Known partial states (June 30 production)
+### Known partial states (July 2026 production)
 
 | Item | Status | Action |
 |------|--------|--------|
 | Liquidity 10Y / DXY components | `horizon_fallback` | Map RV history keys when series available |
-| Flows as-of | May lag 1 day | Re-export `WTM-Flows-Global.csv` |
+| Flows `fallback_1d` | Snapshot export | Re-export chart time-series for `flows_status: ok` + 5D |
 | Barchart options/greeks collect | Often `collect_exit=1` noise | Does not block hydrate; core Koyfin + basis paths OK |
+| `run_csv_download.py` missing | Fixed Jul 2 | Must exist at repo root; restore from GitHub main if absent |
 | `gate_status` in parquet | Often empty | TC derives from score + transmission |
 
 ### Machine registry
@@ -501,7 +530,9 @@ Full prompt file: [Whinfell_Grok_Operator_Prompt.txt](https://raw.githubusercont
 |---------|-------|-----|
 | TC shows "Hydration required" | No bundle in session | Import [latest.json](https://github.com/clark-cmyk/Whinfell_BUILD_Cousins/blob/main/data/hydration/latest.json) or use [Pages URL](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/) |
 | Field log shows `empty` on required field | [hydration_log.json](https://clark-cmyk.github.io/Whinfell_BUILD_Cousins/data/hydration/hydration_log.json) remediation | Re-run AM chain; check quarantine `.meta.json` |
-| Flows ✕ on all nodes | `flows_sidecar.flows_status` | Stage `flows_*.csv`; re-export WTM-Flows-Global |
+| Flows ✕ on all nodes | `flows_sidecar.flows_status` | Export WTM-Flows-Global to `whinfell_drop` (any `*WTM-Flows*.csv`); normalize → daily chain |
+| Flows found but `as_of` stale | File named `koyfin_WTM-Flows-*` not normalized | Run `normalize_whinfell_drop.sh`; confirm `flows_*.csv` appears in drop |
+| `run_csv_download.py` not found | Repo cleanup | `git checkout main -- run_csv_download.py` or copy from GitHub main |
 | RV chart empty | `rv_horizon_count` in audit | Re-run barchart history; verify Koyfin exports staged |
 | `collect_exit=1` in daily manifest | Barchart options/greeks noise | OK if hydrate_exit=0; core paths still populate |
 | Import blocked (downgrade guard) | Incoming quality &lt; current session | Shift+click Import to force, or dismiss stale session |

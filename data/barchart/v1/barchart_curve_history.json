@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "bucket": "curve",
-  "as_of": "2026-07-01T11:02:45.832623+00:00",
+  "as_of": "2026-07-02T12:01:23.856443+00:00",
   "symbol_count": 57,
   "records": [
     {
@@ -919,7 +919,7 @@
         "volume": 20919.0,
         "open_interest": 20743.0
       },
-      "source_file": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/quarantine/20260628/162529__btm26_daily-nearby_historical-data-06-28-2026 2.csv"
+      "source_file": "/Users/clarksonwthornburgh/Desktop/Whinfell_BUILD_Cousins/staged_raw/quarantine/20260628/162529__btm26_daily-nearby_historical-data-06-28-2026.csv"
     },
     {
       "raw_symbol": "BTQ26",

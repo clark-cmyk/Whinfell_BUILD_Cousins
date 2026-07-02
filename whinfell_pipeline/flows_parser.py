@@ -390,18 +390,25 @@ def assess_flows_basket_health(
 
 
 def _sidecar_is_viable(payload: Mapping[str, Any] | None) -> bool:
-    """Minimum production parse — timeseries sidecar with at least one ticker."""
+    """Minimum production parse — timeseries or dated snapshot fallback."""
     if not payload or not isinstance(payload, dict):
         return False
-    if str(payload.get("ingest_mode") or "") != "timeseries_primary":
-        return False
-    return len(payload.get("tickers") or {}) >= 1
+    mode = str(payload.get("ingest_mode") or "")
+    tickers = (payload or {}).get("tickers") or {}
+    if mode == "fallback_1d_only":
+        return len(tickers) >= 1 and bool(str(payload.get("as_of") or "").strip())
+    if mode == "timeseries_primary":
+        return len(tickers) >= 1
+    return False
 
 
 def _sidecar_is_healthy(payload: Mapping[str, Any] | None) -> bool:
     if not _sidecar_is_viable(payload):
         return False
+    mode = str(payload.get("ingest_mode") or "")
     tickers = (payload or {}).get("tickers") or {}
+    if mode == "fallback_1d_only":
+        return len(tickers) >= 1
     return len(tickers) >= 10
 
 

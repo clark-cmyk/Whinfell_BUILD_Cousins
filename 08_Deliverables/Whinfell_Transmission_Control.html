@@ -2654,12 +2654,14 @@ window.DICTIONARY_BADGE_DEFAULT = {
       <div class="basis-watch-main">
         <canvas id="bwCurveCanvas" aria-label="Futures curve vs spot"></canvas>
         <div id="bwMainView"></div>
+        <aside class="bw-methodology bw-methodology--compact" id="bwMethodology" aria-label="Methodology"></aside>
       </div>
       <aside class="basis-watch-rail">
         <div id="bwSummaryCards" class="bw-summary-grid"></div>
+        <div id="bwCallouts"></div>
         <div>
           <p class="bw-subhead">Cross-asset context</p>
-          <div id="bwCrossAsset" class="bw-cross-strip"></div>
+          <div id="bwCrossAsset" class="bw-xasset-host"></div>
         </div>
         <div class="bw-links text-[9px] text-wtm-muted">
           <span>HYG/LQD vs BTC: use Koyfin credit view · USDCNH NDF: wire in ARCH-4</span>
@@ -3063,6 +3065,7 @@ window.DICTIONARY_BADGE_DEFAULT = {
   <div id="toast" class="fixed bottom-4 right-4 max-w-sm px-4 py-3 rounded-lg border border-wtm-border bg-wtm-card text-xs shadow-xl translate-y-20 opacity-0 transition-all z-50 pointer-events-none"></div>
 
 <script src="desk_china_ladder_models.js"></script>
+<script src="basis_watch_analytics.js"></script>
 <script src="basis_watch_panel.js"></script>
 <script>
 /** Whinfell Transmission Control — Phase 2 · Storage v7 (node cockpit navigation) */

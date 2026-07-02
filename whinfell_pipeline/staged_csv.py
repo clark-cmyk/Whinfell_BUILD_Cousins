@@ -197,6 +197,16 @@ def _header_check(source: str, dataset: str | None, headers: list[str]) -> Stage
             if req not in norm:
                 missing_core.append(req)
     elif source == SOURCE_BARCHART:
+        vendor_native = (
+            ({"symbol", "time"} <= norm or "time" in norm)
+            and "latest" in norm
+        ) or (
+            {"leg1", "leg2", "type", "latest"} <= norm
+        ) or (
+            "strike" in "".join(norm) and "latest" in norm
+        )
+        if vendor_native:
+            return out
         if "timestamp" not in norm:
             missing_core.append("timestamp")
         if not ({"near_month", "basis_spread"} & norm):
@@ -204,14 +214,17 @@ def _header_check(source: str, dataset: str | None, headers: list[str]) -> Stage
     elif source == SOURCE_CRYPTO:
         return out
     elif dataset == "flows":
-        if "date" not in norm:
-            missing_core.append("date")
-        has_flow_col = any(
+        snapshot_fmt = "ticker" in norm and any(
+            "fund flows/periodic (d)" in h for h in norm
+        )
+        wide_fmt = "date" in norm and any(
             "flow" in h and ("(d)" in h or "periodic" in h)
             for h in norm
         )
-        if not has_flow_col:
-            missing_core.append("flow column (e.g. '{TICKER} Flow (D)')")
+        if not snapshot_fmt and not wide_fmt:
+            missing_core.append(
+                "date + flow columns (wide timeseries) or Ticker + Fund Flows/Periodic (D) (snapshot)"
+            )
     else:
         if "timestamp" not in norm:
             missing_core.append("timestamp")
@@ -368,11 +381,45 @@ def ingest_staged_root(
                 result.file_results.append(fr)
                 continue
             try:
-                from whinfell_pipeline.flows_parser import default_flows_sidecar_path, parse_and_write
+                from datetime import datetime, timezone
 
-                payload = parse_and_write(staged.path, default_flows_sidecar_path(root))
+                from whinfell_pipeline.flows_parser import (
+                    default_flows_sidecar_path,
+                    parse_and_write,
+                    try_parse_flows_csv,
+                    write_flows_sidecar,
+                )
+
+                repo_root = Path(__file__).resolve().parents[1]
+                out_path = default_flows_sidecar_path(repo_root)
+                payload = try_parse_flows_csv(staged.path)
+                adapter_id = "flows_parser"
+                if payload is None:
+                    from whinfell_pipeline.flows_fallback import (
+                        merge_fallback_into_sidecar,
+                        parse_credit_cross_section_flows,
+                    )
+                    from whinfell_pipeline.funds_flows import load_flows_sidecar
+
+                    credit_rows = parse_credit_cross_section_flows(staged.path)
+                    if not credit_rows:
+                        raise ValueError("unsupported flows format: invalid")
+                    as_of = datetime.fromtimestamp(
+                        staged.path.stat().st_mtime, tz=timezone.utc
+                    ).date().isoformat()
+                    payload = merge_fallback_into_sidecar(
+                        load_flows_sidecar(repo_root),
+                        credit_rows,
+                        as_of=as_of,
+                        source_file=staged.filename,
+                    )
+                    write_flows_sidecar(payload, out_path)
+                    adapter_id = "flows_fallback"
+                    fr.warnings.append("flows_snapshot_1d_fallback")
+                else:
+                    write_flows_sidecar(payload, out_path)
                 fr.validation_status = "parsed"
-                fr.adapter_id = "flows_parser"
+                fr.adapter_id = adapter_id
                 fr.warnings.append(f"flows_sidecar tickers={len(payload.get('tickers') or {})}")
                 result.files_processed += 1
                 if archive:

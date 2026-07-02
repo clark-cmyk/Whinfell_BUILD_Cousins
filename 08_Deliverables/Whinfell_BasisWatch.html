@@ -59,8 +59,8 @@
         <button type="button" id="btnBwRefresh" class="bw-btn bw-btn--primary">Refresh</button>
         <button type="button" id="btnBwExportCsv" class="bw-btn">CSV</button>
         <button type="button" id="btnBwExportPng" class="bw-btn">PNG</button>
-        <button type="button" id="btnBwBarchart" class="bw-btn">Barchart ↗</button>
-        <button type="button" id="btnBwKoyfin" class="bw-btn">Koyfin ↗</button>
+        <button type="button" id="btnBwBarchart" class="bw-btn" title="Open Clark Barchart watchlist">Barchart ↗</button>
+        <button type="button" id="btnBwKoyfin" class="bw-btn" title="Open Clark Koyfin MYD">Koyfin ↗</button>
       </div>
     </div>
 
@@ -79,6 +79,7 @@
           </div>
         </div>
         <div class="bw-main-body" id="bwMainView"></div>
+        <aside class="bw-methodology" id="bwMethodology" aria-label="Methodology"></aside>
       </section>
 
       <aside class="bw-panel" style="display:flex;flex-direction:column">
@@ -86,7 +87,7 @@
         <div id="bwSummaryCards" class="bw-summary-grid"></div>
         <div id="bwCallouts"></div>
         <div class="bw-panel-head" style="margin-top:auto"><span class="bw-panel-title">Cross-asset context</span></div>
-        <div id="bwCrossAsset" class="bw-cross-strip"></div>
+        <div id="bwCrossAsset" class="bw-xasset-host"></div>
         <div class="bw-links-bar">
           <span>HYG/LQD vs BTC: <a href="https://app.koyfin.com/etf/HYG.US" target="_blank" rel="noopener">Koyfin credit</a></span>
           <span>·</span>
@@ -104,6 +105,7 @@
     <span>CME-inspired basis &amp; implied rate · desk hydration</span>
   </footer>
 
+  <script src="basis_watch_analytics.js"></script>
   <script src="basis_watch_panel.js"></script>
 </body>
 </html>

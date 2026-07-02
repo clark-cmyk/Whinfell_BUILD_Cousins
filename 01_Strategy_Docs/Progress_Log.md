@@ -1,7 +1,7 @@
 # Whinfell BUILD Cousins - Progress Log
 
 **Started:** June 26, 2026  
-**Last Updated:** June 30, 2026 (GitHub Pages live · docs + UX fix · badge `2.2-UX-FIX-2026-06-30`)
+**Last Updated:** July 2, 2026 (Goal **7** flows Jul 2 · Clark **#8–9–13** · BUILD **#10–11**)
 
 ---
 
@@ -25,7 +25,7 @@
 | **Phase 2.2d** | Comet CSV Download Runbook | **Shipped** | Integration Dynamo + Hammer | June 27, 2026 |
 | **Phase 2.2 Final** | Browser blueprint + daily workflow | **Shipped** | Visual Vanguard + Clarity | June 27, 2026 |
 | **Daily Launcher** | `Whinfell_Daily_Launcher.py` | **Shipped** | Hammer + Integration Dynamo | June 27, 2026 |
-| **Desk issue** | Staged CSV classifier / raw export naming | **Mitigated — header gap open** | Integration Dynamo | June 28, 2026 |
+| **Desk issue** | Staged CSV classifier / raw export naming | **Mitigated — flows snapshot path shipped Jul 2** | Integration Dynamo | July 2, 2026 |
 | **Desk fix** | Desktop launcher double-click (`.app` / `.command`) | **Fixed** | Hammer | June 28, 2026 |
 | **Session** | BUILD Cousins role adoption (`/arena /role /plan`) | **Complete** | BUILD Cousins | June 29, 2026 |
 | **Phase 1** | Master Data Dictionary v1.0 + naming rectification | **Complete · Verified** | Bridge + Precision | June 29, 2026 |
@@ -34,6 +34,7 @@
 | **Phase 2b-data** | WTM EXPORT v2.2 + node cockpit hydration builder | **Shipped** | Bridge | June 29, 2026 |
 | **Phase 2** | Node architecture (5 trading cockpits) | **In progress** | Bridge + Edge + Clarity | June 30, 2026 |
 | **Phase 2.2-mission** | Basis node mission-surface (TC operator console) | **Shipped · Accepted** | Bridge + Clarity | June 29, 2026 |
+| **BasisWatch** | CME-style basis + implied rate + quartiles (TC + standalone) | **Shipped v3.0** | Bridge + Clarity | July 1, 2026 |
 | **Phase 2.2-mission** | Credit node mission-surface | **Next — plan approved** | Bridge + Clarity | June 30, 2026 |
 | **Phase 2b** | ARCH-1 routing + live component inputs | **Open** | Integration Dynamo | June 29, 2026 |
 | **Phase 2b** | Funds Flow Sponsorship layer | **PR-1 registry shipped** | Bridge + Clarity | June 29, 2026 |
@@ -44,7 +45,10 @@
 
 | File | Version | Status |
 |------|---------|--------|
-| **Whinfell_Transmission_Control.html** | **v1.2 + Phase 2.2 + 2.2-MISSION** | **Production rollout — desk · Basis mission-surface live** |
+| **Whinfell_Transmission_Control.html** | **v1.2 + Phase 2.2 + 2.2-MISSION + BasisWatch v3** | **Production rollout — desk · Basis mission-surface + BasisWatch rail** |
+| **Whinfell_BasisWatch.html** | **v3.0** | **Standalone pop-out — CME-style basis + implied rate + quartiles** |
+| **basis_watch_panel.js** + **basis_watch_analytics.js** | **3.0-BASISWATCH-QUARTILES-2026-07-01** | **Embedded panel + quartile engine · self-test 15/15** |
+| **basis_watch.css** | **v3** | **xasset cross-asset panel · quartile badges · tooltips** |
 | **Whinfell_Quick_Reference_Card_v1.4.docx** | **1.4** | **Production — daily CSV chain** |
 | **Whinfell_Expanded_Operators_Guide_v1.4.md** | **1.4** | **Master reference — Phase 2.2 Final** |
 | **Comet_Browser_Operations_Blueprint.md** | **1.0** | **Backup views + shortcuts + supervised prompt** |
@@ -72,6 +76,8 @@
 
 ## Notes
 
+- **July 2, 2026** — **CLARK MANUAL KOYFIN CHAIN** — Restored missing `run_csv_download.py` at repo root. Full daily chain on `~/Downloads/whinfell_drop`: normalize → stage → collect → hydrate → barchart history. **Flows fix shipped:** normalize `*WTM-Flows*.csv` (Koyfin exports `koyfin_WTM-Flows-Global_*.csv`); snapshot ingest via `flows_fallback` when wide `Date` column absent; sidecar write path fixed (`data/flows/v1/` not `staged_raw/data/`); `ensure_flows_sidecar` no longer overwrites fresh `fallback_1d` with Jun 29 fixture. **Result:** `flows_sidecar.as_of=2026-07-02` · `flows_status=fallback_1d` · `hydrate_exit=0`. **Open:** `collect_exit=1` Barchart options/greeks noise (TODO **#11**); full 5D flows rolling needs chart time-series export (`Date` + `{TICKER} Flow (D)` columns). **Next Clark:** TC import + live Focus (#8).
+- **July 1, 2026** — **BASISWATCH v3.0 SHIPPED** — Full Grok spec P1–P5: historical Basis % quartiles per tenor; mission cards lead with Basis % + rank; forward curve table with quartile ranks; flattest + steepest calendar callouts; `bw-xasset` cross-asset % panel (BTC anchor, DX/HG/ZM/TA/HYG/LQD/USDCNH); tooltip library + mobile popover. New `basis_watch_analytics.js`. `CURVE_URL` → `data/barchart/v1/barchart_curve_history.json`. Hydration RV fallback when curve history `n < 5`. Self-test **15/15 PASS**. Clark desk links wired (Barchart `197689`, Koyfin MYD). **Next:** multi-day curve history batch for native per-contract quartiles.
 - **June 30, 2026** — **PHASE 2.2 BASIS MISSION-SURFACE ACCEPTED** — Hydration/coverage banner, gate sentence, funds-flow copy, post-import workflow, and Basis mission read (tactical banner, summary strip, implication rail) shipped in `Whinfell_Transmission_Control.html`. Badge `2.2-MISSION-2026-06-29`. Commits `54cc2b9`→`2d2c847`. **Basis polish frozen.** Next: Credit mission-surface (HTML/JS generalization, ~1–2 sessions); Liquidity/Breadth deferred.
 - **June 29, 2026** — **FLOWS PR-1 SHIPPED** — Master DD registry: `funds_flow_baskets` (5 nodes), `funds_flow_thresholds`, `funds_flow_column_patterns`, `funds_flow_ingest` (`flows_meta` codes), `flows` dataset + `WTM-Flows*.csv` normalize rule, `canonical_assets` extensions (SHY/IEF/TLT/BIL/IWM/RSP/BITO/GBTC), hydration target v1.2.0 blocks, optional `koyfin_flows` in collection manifest. Helpers: `funds_flow_basket_for_node()`, `funds_flow_thresholds()`, `funds_flow_column_map()`, `get_funds_flow_ingest()`. **113 tests PASS.** Next: PR-3a `flows_parser.py`.
 - **June 29, 2026** — **FLOWS IMPLEMENTATION SPEC (DRAFT)** — `Phase2_Flows_Implementation_Spec.md` covers: three-layer data model (`flows_*.csv` → `latest_flows.json` → `node_cockpit.funds_flows`), `basket_role`/`node_affiliation`, Credit & Breadth sponsorship examples, `degrade_mode` UI strings, PR-1/3a/3b/2/4/5 ownership split, full Master DD delta. Phase2 cockpit §9.1 added. **Awaiting §7 desk lock before implementation.**
@@ -82,7 +88,7 @@
 - **June 29, 2026** — **PHASE 1 VERIFIED** — Full test suite **104 PASS** (4 skipped); operator naming gate **0 violations**; `sync_dictionary_meta.py` chains yaml → HTML badge injection + `data_dictionary_meta.json`; disk-backed badge evidence (`dd_badge_file_evidence.mjs`) PASS. Evidence runner: `generate_phase1_evidence.py`. Commit `194506a`.
 - **June 29, 2026** — **PHASE 1 COMPLETE: MASTER DATA DICTIONARY v1.0 LOCKED** — Extended `data_dictionary.yaml` with project_structure, watchlist_names, file_naming_conventions, json_structures, column_mappings, ticker_standards. Human companion + phased plan shipped. Transmission Control displays **Master Data Dictionary v1.0 · Locked · Aligned** on load/refresh. Comet shortcuts aligned to canonical `WTM-*` names (WhinPump → legacy alias).
 - **June 29, 2026** — **BUILD COUSINS SESSION ACTIVATED** — Agent adopted BUILD Cousins role at `~/Desktop/Whinfell_BUILD_Cousins`; loaded Comet shortcut canon (`/roles`, `/role`, `/goal`, `/arena`, `/plan`, `/wtm-morning`) from `08_Deliverables/Comet_Shortcuts_WTM.md`; authority YAML read (`collection_manifest.yaml`, `data_dictionary.yaml`). Scope: support-only (docs, logic, fallback tools, reference, testing) — no Comet live code edits. Deliverable: `08_Deliverables/BUILD_Cousins_Session_Activation.md` + How to Use.
-- **June 28, 2026** — **DESK ISSUE: STAGED CSV CLASSIFIER** — Clark's first live drop (`~/Downloads/whinfell_drop`, 7 Barchart/Koyfin exports) quarantined: native filenames (`btm26_daily-nearby_...`, `koyfin_WhinPump...`, etc.) do not match staged contract `{dataset}_{YYYYMMDD}_{HHMM}.csv` or `{product}_{flavor}_{YYYYMMDD}.csv`. **Mitigation shipped:** `scripts/normalize_whinfell_drop.sh` maps desk exports → canonical names (e.g. `futures_daily_20260628_1015.csv`, `rates_20260628_1119.csv`, `btc_basis_20260628.csv`). **Remaining gap:** rename passes filename check but raw vendor column layouts (`Symbol,Time,Open...` / `Ticker,Name,AUM...`) still fail header validation — pipeline expects WTM observation rows per `whinfell_pipeline/examples/staged/` (`timestamp` + `whinfell_score`/`regime_tag` for Koyfin; `timestamp` + `near_month`/`basis_spread` for Barchart). Perplexity engaged on response; raw→WTM converter or operator re-export path TBD.
+- **June 28, 2026** — **DESK ISSUE: STAGED CSV CLASSIFIER** — native filenames quarantined before normalize. **Mitigation:** `normalize_whinfell_drop.sh` + `source_router` + snapshot adapters. **Jul 2 update:** flows path closed for `koyfin_WTM-Flows-Global_*` snapshot exports (`fallback_1d`). **Still open:** Barchart options/greeks adapter noise (`collect_exit=1`, TODO **#11**).
 - **June 28, 2026** — **DESK FIX: DAILY LAUNCHER** — Desktop `.command` / `.app` double-click showed nothing (stale wrappers called `open` on broken shell bundles). Redeployed AppleScript apps (`Whinfell Daily AM.app`) + foreground `.command` files; `scripts/deploy_desktop_launchers.sh`.
 - **June 27, 2026** — **DAILY LAUNCHER SHIPPED** — `Whinfell_Daily_Launcher.py` (Tkinter): Run Daily AM, live log, Open Hydration/Project folders; wraps `whinfell_daily_am.sh`.
 - **June 27, 2026** — **PHASE 2.2 FINAL SHIPPED** — Browser Operations Blueprint, Import Latest Hydration Bundle UX, `scripts/morning_daily.sh`, `verify_2_2_final` PASS.

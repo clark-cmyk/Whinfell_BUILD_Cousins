@@ -201,7 +201,7 @@ class TestDataDictionary(unittest.TestCase):
         rules = normalize_glob_rules()
         flows_rules = [r for r in rules if r.get("dataset") == "flows"]
         self.assertEqual(len(flows_rules), 1)
-        self.assertEqual(flows_rules[0]["detect_glob"], "WTM-Flows*.csv")
+        self.assertEqual(flows_rules[0]["detect_glob"], "*WTM-Flows*.csv")
         self.assertEqual(
             flows_rules[0]["canonical_template"],
             "flows_{YYYYMMDD}_{HHMM}.csv",

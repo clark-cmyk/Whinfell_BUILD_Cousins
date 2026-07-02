@@ -53,11 +53,19 @@ watchlist_names:
       dataset: equities
       filename_pattern: "equities_{YYYYMMDD}_{HHMM}.csv"
       vendor_detect_glob: "koyfin_simplify_all_etfs_*"
+    WTM-Import-Core:
+      dataset: credit
+      filename_pattern: "credit_{YYYYMMDD}_{HHMM}.csv"
+      vendor_detect_glob: "koyfin_wtm-import-core*"
+      feeds: [crypto_sleeve_snapshot, global_score_proxy]
+      replaces: WTM-Credit-Confirmation
+      status: active
     WTM-Credit-Confirmation:
       dataset: credit
       filename_pattern: "credit_{YYYYMMDD}_{HHMM}.csv"
       vendor_detect_glob: "koyfin_whinpump*"
       feeds: [crypto_sleeve_snapshot, global_score_proxy]
+      status: legacy_interim
     WTM-China-Policy:
       dataset: china_policy
       filename_pattern: "china_policy_{YYYYMMDD}_{HHMM}.csv"
@@ -74,14 +82,15 @@ watchlist_names:
     WTM-Flows:
       dataset: flows
       filename_pattern: "flows_{YYYYMMDD}_{HHMM}.csv"
-      vendor_detect_glob: "WTM-Flows*.csv"
+      vendor_detect_glob: "*WTM-Flows*.csv"
       optional: true
       clicks: 2
   koyfin_watchlists:
     WTM-Import-Core:
       role: source_of_truth
-      status: planned
+      status: active
       replaces: WhinPump
+      tickers_ref: koyfin_import_core
     WTM-Import-Curves:
       role: curve_only
       status: planned
@@ -125,6 +134,14 @@ file_naming_conventions:
       canonical_template: "futures_daily_{YYYYMMDD}_{HHMM}.csv"
       dataset: futures_daily
       saved_view: WTM-Futures-Daily
+    - detect_glob: "*_daily_historical-data-*"
+      canonical_template: "futures_daily_{YYYYMMDD}_{HHMM}.csv"
+      dataset: futures_daily
+      saved_view: WTM-Futures-Daily
+    - detect_glob: "*daily_historical-data*"
+      canonical_template: "futures_daily_{YYYYMMDD}_{HHMM}.csv"
+      dataset: futures_daily
+      saved_view: WTM-Futures-Daily
     - detect_glob: "*-prices-intraday-*"
       canonical_template: "futures_intraday_{YYYYMMDD}_{HHMM}.csv"
       dataset: futures_intraday
@@ -139,10 +156,79 @@ file_naming_conventions:
     - detect_glob: "futures-spreads-btm*"
       canonical_template: "btc_basis_{YYYYMMDD}.csv"
       dataset: btc_basis
-    - detect_glob: "WTM-Flows*.csv"
+    - detect_glob: "futures-spreads-*"
+      canonical_template: "btc_basis_{YYYYMMDD}.csv"
+      dataset: btc_basis
+      saved_view: WTM-BTC-Basis
+    - detect_glob: "*-volatility-greeks-*"
+      canonical_template: "greeks_{YYYYMMDD}_{HHMM}.csv"
+      dataset: greeks
+      saved_view: WTM-Options-Greeks
+    - detect_glob: "*volatility-greeks*"
+      canonical_template: "greeks_{YYYYMMDD}_{HHMM}.csv"
+      dataset: greeks
+      saved_view: WTM-Options-Greeks
+    - detect_glob: "*-options-*"
+      canonical_template: "options_{YYYYMMDD}_{HHMM}.csv"
+      dataset: options
+      saved_view: WTM-Options-Greeks
+    - detect_glob: "*options*exp*"
+      canonical_template: "options_{YYYYMMDD}_{HHMM}.csv"
+      dataset: options
+      saved_view: WTM-Options-Greeks
+    - detect_glob: "*WTM-Flows*.csv"
       canonical_template: "flows_{YYYYMMDD}_{HHMM}.csv"
       dataset: flows
       saved_view: WTM-Flows
+    - detect_glob: "WTM-Global-Rates.csv"
+      canonical_template: "rates_{YYYYMMDD}_{HHMM}.csv"
+      dataset: rates
+      saved_view: WTM-Global-Rates
+    - detect_glob: "WTM-Rates-Credit.csv"
+      canonical_template: "rates_{YYYYMMDD}_{HHMM}.csv"
+      dataset: rates
+      saved_view: WTM-Rates-Credit
+    - detect_glob: "WTM-Equities-Breath.csv"
+      canonical_template: "equities_{YYYYMMDD}_{HHMM}.csv"
+      dataset: equities
+      saved_view: WTM-Equities-Breadth
+    - detect_glob: "WTM-Equities-Breadth.csv"
+      canonical_template: "equities_{YYYYMMDD}_{HHMM}.csv"
+      dataset: equities
+      saved_view: WTM-Equities-Breadth
+    - detect_glob: "WTM-Credit-Confirmation*.csv"
+      canonical_template: "credit_{YYYYMMDD}_{HHMM}.csv"
+      dataset: credit
+      saved_view: WTM-Credit-Confirmation
+    - detect_glob: "WTM-China-Policy.csv"
+      canonical_template: "china_policy_{YYYYMMDD}_{HHMM}.csv"
+      dataset: china_policy
+      saved_view: WTM-China-Policy
+    - detect_glob: "WTM-China-Credit*.csv"
+      canonical_template: "credit_{YYYYMMDD}_{HHMM}.csv"
+      dataset: credit
+      saved_view: WTM-China-Credit
+    - detect_glob: "koyfin_wtm-mas-koy_*.csv"
+      canonical_template: "equities_{YYYYMMDD}_{HHMM}.csv"
+      dataset: equities
+      saved_view: WTM-MAS-KOY
+    - detect_glob: "koyfin_wtm-import-core*"
+      canonical_template: "credit_{YYYYMMDD}_{HHMM}.csv"
+      dataset: credit
+      saved_view: WTM-Import-Core
+    - detect_glob: "koyfin_????-??-?? (*.csv"
+      canonical_template: "rates_{YYYYMMDD}_{HHMM}.csv"
+      dataset: rates
+      saved_view: WTM-Rates-Credit
+      note: browser duplicate suffix — prefer strip in batch_collect
+    - detect_glob: "koyfin_????-??-??*.csv"
+      canonical_template: "rates_{YYYYMMDD}_{HHMM}.csv"
+      dataset: rates
+      saved_view: WTM-Rates-Credit
+    - detect_glob: "*weekly_historical-data*"
+      canonical_template: "futures_daily_{YYYYMMDD}_{HHMM}.csv"
+      dataset: futures_daily
+      saved_view: WTM-Futures-Daily
   vendor_to_canonical:
     credit_vendor_snapshot: "credit_{YYYYMMDD}_{HHMM}.csv"
     equities_vendor_snapshot: "equities_{YYYYMMDD}_{HHMM}.csv"
@@ -562,8 +648,9 @@ universes:
     WTM-Import-Core:
       role: source_of_truth
       description: Canonical cross-section import universe (limited WTM operating set)
-      status: planned
+      status: active
       replaces: ad_hoc WhinPump-only validation
+      tickers_ref: koyfin_import_core
     WTM-Import-Curves:
       role: curve_only
       description: Term-structure and curve proxy symbols for ladder/basis context

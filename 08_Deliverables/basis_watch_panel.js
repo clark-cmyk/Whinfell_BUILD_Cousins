@@ -1,23 +1,44 @@
 /**
  * WTM BasisWatch + Implied Rate
  * Embedded panel (Transmission Control) · Standalone page (Whinfell_BasisWatch.html)
+ *
+ * ── Formula reference (CME-style separation) ──
+ *
+ * Spot curve (futures vs spot, per contract tenor):
+ *   absBasis_i           = F_i - S
+ *   spotBasisPct_i       = (F_i - S) / S × 100
+ *   spotAnnualizedCarry_i = ((F_i / S) - 1) × (365 / dte_i) × 100
+ *
+ * Forward curve (adjacent calendar pairs only):
+ *   calendarSpread_i     = F_{i+1} - F_i
+ *   intervalDays_i       = dte_{i+1} - dte_i  (≈ days between expiries)
+ *   forwardAnnualizedYield_i = ((F_{i+1} / F_i) - 1) × (365 / intervalDays_i) × 100
+ *
+ * Basis Watch view  → spot curve only (no forward mixing).
+ * Implied Rate view → spot curve table + forward curve table.
  */
 (function basisWatchPanel(global) {
   'use strict';
 
-  const BW_BUILD = '2.5-BASISWATCH-STANDALONE-2026-07-01';
+  const BW_BUILD = '3.0-BASISWATCH-QUARTILES-2026-07-01';
   const THEME_COLORS = { dark: '#090d12', light: '#eef1f5' };
   const PREFS_KEY = 'whinfell_basiswatch_prefs';
   const THEME_KEY = 'whinfell_tc_theme';
   const HYDRATION_URL = 'data/hydration/latest.json';
-  const CURVE_URL = 'data/barchart/barchart_curve_history.json';
+  const CURVE_URL = 'data/barchart/v1/barchart_curve_history.json';
+
+  /** Clark desk shortcuts — saved Barchart watchlist + Koyfin MYD */
+  const DESK_LINKS = {
+    barchart: 'https://www.barchart.com/my/watchlist?viewName=197689',
+    koyfin: 'https://app.koyfin.com/myd/55782528-369d-4f09-a6fb-4b1d041a6656',
+  };
 
   const CME_MONTH = { F: 0, G: 1, H: 2, J: 3, K: 4, M: 5, N: 6, Q: 7, U: 8, V: 9, X: 10, Z: 11 };
   const MONTH_LABEL = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   const ASSETS = {
-    BTC: { root: 'BT', spotKey: 'btc_spot_usd', label: 'Bitcoin', barchartSpread: 'https://www.barchart.com/futures/quotes/BTM26/spreads', koyfin: 'https://app.koyfin.com/crypto/BTCUSD' },
-    ETH: { root: 'ETH', spotKey: 'eth_spot_usd', label: 'Ethereum', barchartSpread: 'https://www.barchart.com/futures/quotes/ETHM26/spreads', koyfin: 'https://app.koyfin.com/crypto/ETHUSD' },
+    BTC: { root: 'BT', spotKey: 'btc_spot_usd', label: 'Bitcoin' },
+    ETH: { root: 'ETH', spotKey: 'eth_spot_usd', label: 'Ethereum' },
   };
 
   const CROSS_ASSET_ROOTS = [
@@ -26,6 +47,23 @@
     { root: 'ZM', label: 'Soybean Meal (ZM)', role: 'Ag complex' },
     { root: 'TA', label: 'Iron Ore (TA)', role: 'China industrial' },
   ];
+
+  const CROSS_PEERS = [
+    ...CROSS_ASSET_ROOTS,
+    { root: 'HYG_LQD', label: 'HYG/LQD', role: 'Credit beta', kind: 'credit' },
+    { root: 'USDCNH', label: 'USDCNH', role: 'China FX', kind: 'fx' },
+  ];
+
+  const TOOLTIP_CONTENT = {
+    basisPct: 'Basis % vs spot: (Futures − Spot) ÷ Spot × 100. The cleanest cross-tenor and cross-asset anchor. Higher = richer futures vs spot. Not annualized.',
+    annBasis: 'Spot Curve % (ann.): Basis % × (365 ÷ DTE). CME BasisWatch-style carry if held to expiry. Short DTE can inflate annualized readings.',
+    forwardCurve: 'Forward Curve % (ann.): ((F_far ÷ F_near) − 1) × (365 ÷ interval days). Marginal roll yield between adjacent expiries — not spot carry.',
+    quartileRank: 'Quartile rank vs history: Q1 = cheap (bottom quartile), Q4 = rich (top quartile). Distinguishes extreme readings from merely positive values.',
+    crossAssetContext: 'Compares BTC basis to TradFi carry-sensitive bridges (DX, HG, ZM, TA, HYG/LQD, USDCNH). Directional context — not exact arbitrage equivalence.',
+    crossAssetMetric: 'Peer carry or spread proxy. Δ vs BTC is the signed gap vs BTC front ann. basis where comparable. Use for relative richness, not precision.',
+  };
+
+  const A = () => global.BasisWatchAnalytics;
 
   let curveCache = null;
   let curveFetchPromise = null;
@@ -68,6 +106,132 @@
     if (ann >= 6) return 'bw-heat--warm';
     if (ann >= 0) return 'bw-heat--flat';
     return 'bw-heat--cold';
+  }
+
+  function quartileRichnessLabel(q) {
+    if (q === 1) return 'Cheap';
+    if (q === 2) return 'Fair';
+    if (q === 3) return 'Warm';
+    if (q === 4) return 'Rich';
+    return '—';
+  }
+
+  function fmtPercentile(p) {
+    if (!Number.isFinite(p)) return '—';
+    return `${Math.round(p)}th pct`;
+  }
+
+  function quartileBadge(q, label) {
+    const cls = A()?.quartileHeatClass(q) || 'bw-quartile--na';
+    const text = Number.isFinite(q)
+      ? (label ? `Q${q} · ${label}` : `Q${q}`)
+      : '—';
+    return `<span class="bw-quartile ${cls}">${text}</span>`;
+  }
+
+  function interpretationFromPercentile(p, kind = 'basis') {
+    if (!Number.isFinite(p)) return 'Insufficient history for quartile context.';
+    if (p >= 75) {
+      return kind === 'forward'
+        ? 'Front-end roll is historically steep.'
+        : 'This basis is rich relative to its own history.';
+    }
+    if (p >= 25) {
+      return kind === 'forward'
+        ? 'Roll slope is within normal range.'
+        : 'This basis is near its historical middle range.';
+    }
+    return kind === 'forward'
+      ? 'Roll slope is historically flat.'
+      : 'This basis is cheap relative to its own history.';
+  }
+
+  function rvHorizon(hydration, nodeKey, seriesId, horizon = '3m') {
+    const series = hydration?.node_cockpits?.[nodeKey]?.rv_basis?.series?.[seriesId];
+    return series?.horizons?.[horizon] || null;
+  }
+
+  function applyHydrationQuartileFallback(contracts, front, hydration) {
+    if (!front || !hydration) return;
+    const h = rvHorizon(hydration, 'basis', 'btc_basis_vs_refs');
+    if (!h || !Number.isFinite(h.percentile)) return;
+    contracts.forEach(c => {
+      if (c.symbol !== front.symbol || !c.insufficientHistory) return;
+      c.basisPercentile = h.percentile;
+      c.basisQuartile = h.quartile;
+      c.basisHeatClass = A()?.quartileHeatClass(h.quartile) || 'bw-quartile--na';
+      c.insufficientHistory = false;
+      c.historySource = 'hydration_rv';
+      c.historyN = h.n_observations || null;
+    });
+  }
+
+  function applyHydrationForwardFallback(pairs, frontPair, hydration) {
+    if (!pairs.length || !hydration) return;
+    const h = rvHorizon(hydration, 'basis', 'btc_calendar_bt_near_deferred');
+    if (!h || !Number.isFinite(h.percentile)) return;
+    const target = frontPair || pairs[0];
+    pairs.forEach(p => {
+      if (p.nearSymbol !== target.nearSymbol || p.farSymbol !== target.farSymbol || !p.insufficientHistory) return;
+      p.forwardPercentile = h.percentile;
+      p.forwardQuartile = h.quartile;
+      p.forwardHeatClass = A()?.quartileHeatClass(h.quartile) || 'bw-quartile--na';
+      p.insufficientHistory = false;
+      p.historySource = 'hydration_rv';
+      p.historyN = h.n_observations || null;
+    });
+  }
+
+  function peerMetricFromRecords(records, spec) {
+    if (spec.kind === 'credit') {
+      const h = rvHorizon(global._bwHydrationRef, 'credit', 'hy_oas_proxy');
+      if (h) {
+        return {
+          metric: `${fmtNum(h.current_value, 1)} bps`,
+          chg: null,
+          percentile: h.percentile,
+          quartile: h.quartile,
+          interpretation: interpretationFromPercentile(h.percentile),
+          rowClass: 'bw-xasset-row--credit',
+        };
+      }
+    }
+    const recs = recordsForRoot(records, spec.root);
+    const latest = recs.map(r => r.latest).filter(Boolean).sort((a, b) => String(b.date).localeCompare(String(a.date)))[0];
+    const pctChg = Number(latest?.pct_change);
+    const price = Number(latest?.close);
+    const points = recs[0]?.points || [];
+    const chgSeries = points.map(p => Number(p.pct_change)).filter(Number.isFinite);
+    const rank = A() ? A().percentileRank(chgSeries, pctChg) : null;
+    const q = A() ? A().quartileFromPercentile(rank) : null;
+    return {
+      metric: Number.isFinite(pctChg) ? `${fmtPct(pctChg)} 1d` : (Number.isFinite(price) ? fmtNum(price, price < 10 ? 4 : 2) : '—'),
+      chg: pctChg,
+      percentile: rank,
+      quartile: q,
+      interpretation: interpretationFromPercentile(rank),
+      rowClass: spec.kind === 'fx' ? 'bw-xasset-row--fx' : '',
+    };
+  }
+
+  function buildCrossAssetInterpretation(model) {
+    const front = model.front;
+    const ann = front?.spotAnnualizedCarry;
+    const fq = front?.basisQuartile;
+    const fl = quartileRichnessLabel(fq);
+    const credit = model.crossPeers?.find(p => p.root === 'HYG_LQD');
+    const cheapPeers = (model.crossPeers || []).filter(p => p.quartile === 1).map(p => p.label.split(' ')[0]);
+    const richPeers = (model.crossPeers || []).filter(p => p.quartile === 4).map(p => p.label.split(' ')[0]);
+    let text = `${model.assetKey} front basis screens `;
+    text += Number.isFinite(fq)
+      ? `<strong>${fl.toLowerCase()} (Q${fq}${Number.isFinite(front.basisPercentile) ? ', ' + fmtPercentile(front.basisPercentile) : ''})</strong>`
+      : '<strong>without quartile context</strong>';
+    if (Number.isFinite(ann)) text += ` at <strong>${fmtPct(ann)} ann.</strong>`;
+    if (credit?.quartile === 4) text += '; credit beta via HYG/LQD is <strong>rich (Q4)</strong>';
+    if (cheapPeers.length) text += `; ${cheapPeers.join(', ')} screen <strong>cheap vs history</strong>`;
+    if (richPeers.length) text += `; ${richPeers.join(', ')} screen <strong>rich vs history</strong>`;
+    text += '. Use for relative carry context — not prop size-up without gate confirmation.';
+    return text;
   }
 
   function shapeBadgeClass(shape) {
@@ -188,16 +352,18 @@
     return records.map(r => {
       const parsed = parseCmeSymbol(r.raw_symbol);
       if (!parsed) return null;
-      const price = Number(r.latest?.close ?? r.points?.[r.points.length - 1]?.close);
-      if (!Number.isFinite(price) || price <= 0) return null;
+      const futuresPrice = Number(r.latest?.close ?? r.points?.[r.points.length - 1]?.close);
+      if (!Number.isFinite(futuresPrice) || futuresPrice <= 0) return null;
       const dte = daysToExpiry(parsed.expiry, asOf);
       if (dte < 0) return null;
-      const absBasis = price - spot;
-      const pctBasis = spot > 0 ? (absBasis / spot) * 100 : null;
-      const annBasis = spot > 0 && dte > 0 ? ((price / spot) - 1) * (365 / dte) * 100 : null;
+      const absBasis = futuresPrice - spot;
+      const spotBasisPct = spot > 0 ? (absBasis / spot) * 100 : null;
+      const spotAnnualizedCarry = spot > 0 && dte > 0 ? ((futuresPrice / spot) - 1) * (365 / dte) * 100 : null;
       return {
-        symbol: r.raw_symbol, label: parsed.label, expiry: parsed.expiry, dte, price,
-        absBasis, pctBasis, annBasis,
+        symbol: r.raw_symbol, label: parsed.label, expiry: parsed.expiry, dte,
+        futuresPrice, spotPrice: spot,
+        absBasis, spotBasisPct, spotAnnualizedCarry,
+        price: futuresPrice, pctBasis: spotBasisPct, annBasis: spotAnnualizedCarry,
         chg: Number(r.latest?.change), pctChg: Number(r.latest?.pct_change),
       };
     }).filter(Boolean).sort((a, b) => a.expiry - b.expiry);
@@ -206,10 +372,18 @@
   function synthesizeEthCurve(btcContracts, ethSpot, btcSpot) {
     if (!btcContracts.length || !ethSpot || !btcSpot) return [];
     const ratio = ethSpot / btcSpot;
-    return btcContracts.map(c => ({
-      ...c, symbol: c.symbol.replace(/^BT/, 'ETH'), price: c.price * ratio,
-      absBasis: c.price * ratio - ethSpot, pctBasis: ((c.price * ratio - ethSpot) / ethSpot) * 100, annBasis: c.annBasis, synthetic: true,
-    }));
+    return btcContracts.map(c => {
+      const futuresPrice = c.futuresPrice * ratio;
+      const absBasis = futuresPrice - ethSpot;
+      const spotBasisPct = (absBasis / ethSpot) * 100;
+      return {
+        ...c, symbol: c.symbol.replace(/^BT/, 'ETH'),
+        futuresPrice, spotPrice: ethSpot, price: futuresPrice,
+        absBasis, spotBasisPct, pctBasis: spotBasisPct,
+        spotAnnualizedCarry: c.spotAnnualizedCarry, annBasis: c.spotAnnualizedCarry,
+        synthetic: true,
+      };
+    });
   }
 
   function pickFrontContract(contracts, rollLogic, manualNear) {
@@ -229,22 +403,51 @@
     return contracts.find(c => c.dte >= 7) || contracts[0];
   }
 
-  function forwardRates(contracts) {
+  function buildCalendarPairs(contracts) {
     const out = [];
     for (let i = 1; i < contracts.length; i++) {
-      const a = contracts[i - 1], b = contracts[i];
-      const days = daysBetween(a.expiry, b.expiry);
-      out.push({ from: a.symbol, to: b.symbol, days, fwd: a.price > 0 ? ((b.price / a.price) - 1) * (365 / days) * 100 : null, calendar: b.price - a.price });
+      const near = contracts[i - 1], far = contracts[i];
+      const intervalDays = daysBetween(near.expiry, far.expiry);
+      const forwardAnnualizedYield = near.futuresPrice > 0
+        ? ((far.futuresPrice / near.futuresPrice) - 1) * (365 / intervalDays) * 100
+        : null;
+      const calendarSpread = far.futuresPrice - near.futuresPrice;
+      out.push({
+        nearSymbol: near.symbol, farSymbol: far.symbol,
+        nearDte: near.dte, farDte: far.dte, intervalDays,
+        nearPrice: near.futuresPrice, farPrice: far.futuresPrice,
+        calendarSpread, forwardAnnualizedYield,
+        from: near.symbol, to: far.symbol, days: intervalDays,
+        fwd: forwardAnnualizedYield, calendar: calendarSpread,
+      });
     }
     return out;
   }
 
   function richestTenor(contracts) {
-    return contracts.length ? contracts.reduce((b, c) => (!b || (c.annBasis || -999) > (b.annBasis || -999) ? c : b), null) : null;
+    return contracts.length
+      ? contracts.reduce((b, c) => (!b || (c.spotAnnualizedCarry ?? -999) > (b.spotAnnualizedCarry ?? -999) ? c : b), null)
+      : null;
   }
 
-  function steepestCalendar(forwards) {
-    return forwards.length ? forwards.reduce((b, f) => (!b || Math.abs(f.fwd || 0) > Math.abs(b.fwd || 0) ? f : b), null) : null;
+  function steepestCalendar(pairs) {
+    return pairs.length
+      ? pairs.reduce((b, p) => (!b || (p.forwardAnnualizedYield ?? -999) > (b.forwardAnnualizedYield ?? -999) ? p : b), null)
+      : null;
+  }
+
+  function flattestCalendar(pairs) {
+    return pairs.length
+      ? pairs.reduce((b, p) => (!b || (p.forwardAnnualizedYield ?? 999) < (b.forwardAnnualizedYield ?? 999) ? p : b), null)
+      : null;
+  }
+
+  function spotCurveVector(contracts) {
+    return contracts.map(c => c.spotAnnualizedCarry).filter(Number.isFinite);
+  }
+
+  function forwardCurveVector(pairs) {
+    return pairs.map(p => p.forwardAnnualizedYield).filter(Number.isFinite);
   }
 
   function crossAssetStrip(records) {
@@ -286,38 +489,104 @@
     }
 
     const rollLogic = prefs.rollLogic || 'nearest';
-    const front = pickFrontContract(contracts, rollLogic, state.btcL3?.nearMonth || '');
-    const forwards = forwardRates(contracts);
-    const richest = richestTenor(contracts);
-    const steepest = steepestCalendar(forwards);
+    let front = pickFrontContract(contracts, rollLogic, state.btcL3?.nearMonth || '');
+    let calendarPairs = buildCalendarPairs(contracts);
+
+    global._bwHydrationRef = state.hydration;
+    const analytics = A();
+    if (analytics) {
+      contracts = analytics.enrichContractRows(contracts, curveData || { records }, spot);
+      calendarPairs = analytics.enrichCalendarPairs(calendarPairs, curveData || { records });
+      applyHydrationQuartileFallback(contracts, front, state.hydration);
+      const steepestPair = steepestCalendar(calendarPairs);
+      applyHydrationForwardFallback(calendarPairs, steepestPair, state.hydration);
+      front = contracts.find(c => c.symbol === front?.symbol) || front;
+    }
+
+    const richestByAnn = richestTenor(contracts);
+    const richest = analytics?.richestTenorByBasisRank(contracts) || richestByAnn;
+    const steepest = steepestCalendar(calendarPairs);
+    const flattest = flattestCalendar(calendarPairs);
     const shape = curveShapeLabel(contracts);
+
+    const crossPeers = CROSS_PEERS.map(spec => {
+      const peer = { ...spec, ...peerMetricFromRecords(records, spec) };
+      const ann = front?.spotAnnualizedCarry;
+      if (peer.kind !== 'credit' && peer.kind !== 'fx' && Number.isFinite(peer.chg) && Number.isFinite(ann)) {
+        peer.deltaVsBtc = peer.chg - ann;
+      }
+      return peer;
+    });
+
+    const frontCalendar = calendarPairs[0] || null;
 
     return {
       assetKey, asset, spot, spotChg: Number.isFinite(spotChg) ? spotChg : null, asOf,
-      contracts, front, forwards, cross: crossAssetStrip(records), richest, steepest, shape,
+      contracts, front, calendarPairs, forwards: calendarPairs,
+      spotCurve: spotCurveVector(contracts), forwardCurve: forwardCurveVector(calendarPairs),
+      cross: crossAssetStrip(records), crossPeers,
+      richest, richestByAnn, steepest, flattest, frontCalendar, shape,
       rollLabel: rollStateLabel(contracts, front), dataNote,
       refMid: Number(state.hydration?.global?.basis_spread || state.hydration?.execution?.basis_spread || state.hydration?.execution?.ref_mid) || null,
       mode: prefs.mode || 'live', view: prefs.view || 'basis',
+      interpretation: buildCrossAssetInterpretation({
+        assetKey, front, crossPeers, steepest, flattest,
+      }),
     };
   }
 
+  function vectorSummary(vec) {
+    if (!vec.length) return '—';
+    const min = Math.min(...vec), max = Math.max(...vec);
+    return `${fmtPct(min, 1)} → ${fmtPct(max, 1)}`;
+  }
+
+  function spotAnnFactor(dte) {
+    return dte > 0 ? 365 / dte : null;
+  }
+
+  function spotAnnDecomposition(c) {
+    const factor = spotAnnFactor(c.dte);
+    if (!Number.isFinite(c.spotBasisPct) || !Number.isFinite(factor)) return '—';
+    return `${fmtPct(c.spotBasisPct, 2)} × ${factor.toFixed(2)}`;
+  }
+
   function renderSummaryCards(model, standalone) {
-    const front = model.front, spot = model.spot;
+    const front = model.front;
+    const spot = model.spot;
     const hi = standalone ? ' bw-card--highlight' : '';
+    const rankMeta = front && Number.isFinite(front.basisPercentile)
+      ? `${fmtPercentile(front.basisPercentile)} · ${quartileRichnessLabel(front.basisQuartile)}`
+      : (front?.insufficientHistory ? 'History building' : '—');
     return `
-      <div class="bw-card${hi}"><span class="bw-card-label">Spot · CF proxy</span><strong class="bw-card-value">${spot > 0 ? '$' + fmtNum(spot, 0) : '—'}</strong><span class="bw-card-meta">${Number.isFinite(model.spotChg) ? fmtPct(model.spotChg) + ' 1d' : '—'}</span></div>
-      <div class="bw-card"><span class="bw-card-label">Front futures</span><strong class="bw-card-value">${front ? '$' + fmtNum(front.price, 0) : '—'}</strong><span class="bw-card-meta">${front ? front.symbol + ' · ' + front.dte + 'd' : '—'}</span></div>
-      <div class="bw-card${hi}"><span class="bw-card-label">Ann. basis</span><strong class="bw-card-value">${front ? fmtPct(front.annBasis) : '—'}</strong><span class="bw-card-meta">${front ? fmtPct(front.pctBasis) + ' vs spot' : '—'}</span></div>
-      <div class="bw-card"><span class="bw-card-label">Abs basis</span><strong class="bw-card-value">${front ? '$' + fmtNum(front.absBasis, 0) : '—'}</strong><span class="bw-card-meta">${model.refMid ? 'Ref mid ' + fmtPct(model.refMid) : '—'}</span></div>
-      <div class="bw-card"><span class="bw-card-label">Curve shape</span><strong class="bw-card-value">${model.shape}</strong><span class="bw-card-meta">${model.rollLabel}</span></div>
-      <div class="bw-card"><span class="bw-card-label">Contracts</span><strong class="bw-card-value">${model.contracts.length || '—'}</strong><span class="bw-card-meta">${String(model.asOf).slice(0, 19)}</span></div>`;
+      <div class="bw-card"><span class="bw-card-label">Spot · CF proxy</span><strong class="bw-card-value">${spot > 0 ? '$' + fmtNum(spot, 0) : '—'}</strong><span class="bw-card-meta">${Number.isFinite(model.spotChg) ? fmtPct(model.spotChg) + ' 1d' : '—'}</span></div>
+      <div class="bw-card"><span class="bw-card-label">Front basis ($)</span><strong class="bw-card-value bw-card-value--secondary">${front ? '$' + fmtNum(front.absBasis, 0) : '—'}</strong><span class="bw-card-meta">${front ? front.symbol + ' · ' + front.dte + 'd' : '—'}</span></div>
+      <div class="bw-card${hi}"><span class="bw-card-label">Front basis % vs spot <button type="button" class="bw-tip" data-bw-tip="basisPct" aria-label="Basis % definition">?</button></span><strong class="bw-card-value bw-card-value--primary">${front ? fmtPct(front.spotBasisPct) : '—'}</strong><span class="bw-card-meta">${front ? interpretationFromPercentile(front.basisPercentile) : '—'}</span></div>
+      <div class="bw-card${hi}"><span class="bw-card-label">Basis % rank <button type="button" class="bw-tip" data-bw-tip="quartileRank" aria-label="Quartile rank">?</button></span><strong class="bw-card-value">${front?.basisQuartile ? 'Q' + front.basisQuartile : '—'}</strong><span class="bw-card-meta">${rankMeta}</span></div>
+      <div class="bw-card"><span class="bw-card-label">Spot curve % (ann.) <button type="button" class="bw-tip" data-bw-tip="annBasis" aria-label="Annualized basis">?</button></span><strong class="bw-card-value">${front ? fmtPct(front.spotAnnualizedCarry) : '—'}</strong><span class="bw-card-meta">${vectorSummary(model.spotCurve)}</span></div>
+      <div class="bw-card"><span class="bw-card-label">Forward curve % (ann.) <button type="button" class="bw-tip" data-bw-tip="forwardCurve" aria-label="Forward curve">?</button></span><strong class="bw-card-value">${model.steepest ? fmtPct(model.steepest.forwardAnnualizedYield) : '—'}</strong><span class="bw-card-meta">${vectorSummary(model.forwardCurve)}</span></div>`;
   }
 
   function renderCallouts(model) {
-    return `<div class="bw-callout-strip">
-      <div class="bw-callout"><span class="bw-callout-label">Richest tenor</span><div class="bw-callout-value">${model.richest?.symbol || '—'}</div><div class="bw-callout-meta">${model.richest ? fmtPct(model.richest.annBasis) + ' ann.' : '—'}</div></div>
-      <div class="bw-callout"><span class="bw-callout-label">Steepest calendar</span><div class="bw-callout-value">${model.steepest ? model.steepest.from + '→' + model.steepest.to : '—'}</div><div class="bw-callout-meta">${model.steepest ? fmtPct(model.steepest.fwd) + ' fwd' : '—'}</div></div>
+    const richestMeta = model.richest
+      ? `${fmtPct(model.richest.spotBasisPct)} basis % · ${Number.isFinite(model.richest.basisPercentile) ? fmtPercentile(model.richest.basisPercentile) : '—'}`
+      : '—';
+    const steepestMeta = model.steepest
+      ? `${fmtPct(model.steepest.forwardAnnualizedYield)} fwd · ${Number.isFinite(model.steepest.forwardPercentile) ? fmtPercentile(model.steepest.forwardPercentile) : '—'}`
+      : '—';
+    const flattestMeta = model.flattest
+      ? `${fmtPct(model.flattest.forwardAnnualizedYield)} fwd · ${Number.isFinite(model.flattest.forwardPercentile) ? fmtPercentile(model.flattest.forwardPercentile) : '—'}`
+      : '—';
+    return `<div class="bw-callout-strip bw-callout-strip--triple">
+      <div class="bw-callout"><span class="bw-callout-label">Richest by basis % rank</span><div class="bw-callout-value">${model.richest?.symbol || '—'}</div><div class="bw-callout-meta">${richestMeta}</div></div>
+      <div class="bw-callout"><span class="bw-callout-label">Steepest calendar</span><div class="bw-callout-value">${model.steepest ? model.steepest.nearSymbol + '→' + model.steepest.farSymbol : '—'}</div><div class="bw-callout-meta">${steepestMeta}</div></div>
+      <div class="bw-callout"><span class="bw-callout-label">Flattest calendar</span><div class="bw-callout-value">${model.flattest ? model.flattest.nearSymbol + '→' + model.flattest.farSymbol : '—'}</div><div class="bw-callout-meta">${flattestMeta}</div></div>
     </div>`;
+  }
+
+  function histRangeCell(c) {
+    if (!c.basisStats || c.basisStats.n < 2) return '—';
+    return `${fmtPct(c.histQ1, 2)} / ${fmtPct(c.histMedian, 2)} / ${fmtPct(c.histQ3, 2)}`;
   }
 
   function renderBasisTable(model) {
@@ -326,41 +595,232 @@
       <tr class="${model.front && c.symbol === model.front.symbol ? 'bw-row-front' : ''}">
         <td>${c.symbol}${c.synthetic ? ' <span title="Synthesized">*</span>' : ''}</td>
         <td>${c.label}</td><td>${c.dte}d</td>
-        <td>$${fmtNum(c.price, 0)}</td><td>${fmtNum(c.absBasis, 0)}</td>
-        <td>${fmtPct(c.pctBasis)}</td>
-        <td class="${heatClass(c.annBasis)}">${fmtPct(c.annBasis)}</td>
+        <td class="bw-col-secondary">$${fmtNum(c.futuresPrice, 0)}</td>
+        <td class="bw-col-secondary">$${fmtNum(c.absBasis, 0)}</td>
+        <td class="bw-col-primary ${c.basisHeatClass || ''}"><strong>${fmtPct(c.spotBasisPct)}</strong></td>
+        <td>${Number.isFinite(c.basisPercentile) ? fmtPercentile(c.basisPercentile) : '—'}</td>
+        <td>${c.basisQuartile ? quartileBadge(c.basisQuartile, quartileRichnessLabel(c.basisQuartile)) : '—'}</td>
+        <td class="bw-col-hist" title="Q1 / Median / Q3">${histRangeCell(c)}</td>
+        <td class="bw-decomp" title="Basis % × (365/DTE)">${spotAnnDecomposition(c)}</td>
+        <td class="${heatClass(c.spotAnnualizedCarry)}" title="${spotAnnDecomposition(c)}">${fmtPct(c.spotAnnualizedCarry)}</td>
         <td>${Number.isFinite(c.pctChg) ? fmtPct(c.pctChg) : '—'}</td>
       </tr>`).join('');
-    return `<div class="bw-table-wrap"><table class="bw-table"><thead><tr><th>Contract</th><th>Expiry</th><th>DTE</th><th>Futures</th><th>Abs</th><th>%</th><th>Ann.</th><th>Chg</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    return `<h4 class="bw-subhead">Spot curve · futures vs spot</h4><p class="bw-methodology-inline">Spot Curve % = Basis % × (365 ÷ DTE) · Quartiles from hydrated history</p><div class="bw-table-wrap"><table class="bw-table"><thead><tr><th>Contract</th><th>Expiry</th><th>DTE</th><th>Futures</th><th>Basis ($)</th><th>Basis %</th><th>Rank</th><th>Quartile</th><th>Hist Q1/Med/Q3</th><th>×365/DTE</th><th>Spot Curve % (ann.)</th><th>Chg</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function renderImpliedTable(model) {
     if (!model.contracts.length) return '<p class="bw-empty">No curve data.</p>';
-    const spotRows = model.contracts.map(c => `<tr><td>${c.symbol}</td><td>${fmtPct(c.annBasis)}</td><td>${c.dte}d</td></tr>`).join('');
-    const fwdRows = model.forwards.map(f => `<tr><td>${f.from} → ${f.to}</td><td>${fmtPct(f.fwd)}</td><td>${fmtNum(f.calendar, 0)}</td><td>${f.days}d</td></tr>`).join('');
+    const spotRows = model.contracts.map(c => `<tr class="${model.front && c.symbol === model.front.symbol ? 'bw-row-front' : ''}"><td>${c.symbol}</td><td>${c.dte}d</td><td class="bw-col-primary"><strong>${fmtPct(c.spotBasisPct)}</strong></td><td>${Number.isFinite(c.basisPercentile) ? fmtPercentile(c.basisPercentile) : '—'}</td><td class="bw-decomp">${spotAnnDecomposition(c)}</td><td class="${heatClass(c.spotAnnualizedCarry)}">${fmtPct(c.spotAnnualizedCarry)}</td></tr>`).join('');
+    const fwdRows = model.calendarPairs.map(p => `<tr><td>${p.nearSymbol} → ${p.farSymbol}</td><td>${p.intervalDays}d</td><td class="${heatClass(p.forwardAnnualizedYield)} ${p.forwardHeatClass || ''}"><strong>${fmtPct(p.forwardAnnualizedYield)}</strong></td><td>${Number.isFinite(p.forwardPercentile) ? fmtPercentile(p.forwardPercentile) : '—'}</td><td>${p.forwardQuartile ? quartileBadge(p.forwardQuartile, quartileRichnessLabel(p.forwardQuartile)) : '—'}</td><td class="bw-col-secondary">$${fmtNum(p.calendarSpread, 0)}</td></tr>`).join('');
     return `<div class="bw-implied-grid">
-      <div class="bw-panel" style="border:none;box-shadow:none"><h4 class="bw-subhead">Spot-implied annualized</h4><div class="bw-table-wrap"><table class="bw-table bw-table--compact"><thead><tr><th>Tenor</th><th>Rate</th><th>DTE</th></tr></thead><tbody>${spotRows}</tbody></table></div></div>
-      <div class="bw-panel" style="border:none;box-shadow:none"><h4 class="bw-subhead">Forward calendar rates</h4><div class="bw-table-wrap"><table class="bw-table bw-table--compact"><thead><tr><th>Leg</th><th>Fwd</th><th>Spread $</th><th>Days</th></tr></thead><tbody>${fwdRows || '<tr><td colspan="4">—</td></tr>'}</tbody></table></div></div>
+      <div class="bw-panel" style="border:none;box-shadow:none"><h4 class="bw-subhead">Spot curve % (ann.)</h4><p class="bw-methodology-inline">Basis % × (365/DTE) — equivalent to ((F/S)−1)×(365/DTE)</p><div class="bw-table-wrap"><table class="bw-table bw-table--compact"><thead><tr><th>Tenor</th><th>DTE</th><th>Basis %</th><th>Rank</th><th>×365/DTE</th><th>Spot Curve %</th></tr></thead><tbody>${spotRows}</tbody></table></div></div>
+      <div class="bw-panel" style="border:none;box-shadow:none"><h4 class="bw-subhead">Forward curve % (ann.)</h4><p class="bw-methodology-inline">Adjacent pairs · ((F_far/F_near)−1)×(365/interval)</p><div class="bw-table-wrap"><table class="bw-table bw-table--compact"><thead><tr><th>Near → Far</th><th>Days Between</th><th>Forward Curve %</th><th>Rank</th><th>Quartile</th><th>Calendar Spread ($)</th></tr></thead><tbody>${fwdRows || '<tr><td colspan="6">—</td></tr>'}</tbody></table></div></div>
     </div>`;
   }
 
   function renderHeatmap(model) {
     if (!model.contracts.length) return '';
-    return `<div class="bw-heatmap">${model.contracts.map(c => `
-      <div class="bw-heat-cell ${heatClass(c.annBasis)}" title="${c.symbol}: ${fmtPct(c.annBasis)} ann.">
+    return `<div class="bw-heatmap" aria-label="Basis % heatmap with quartile context">${model.contracts.map(c => `
+      <div class="bw-heat-cell ${c.basisHeatClass || heatClass(c.spotAnnualizedCarry)}" title="${c.symbol}: ${fmtPct(c.spotBasisPct)} basis % · ${Number.isFinite(c.basisPercentile) ? fmtPercentile(c.basisPercentile) : 'no rank'}">
         <span class="bw-heat-sym">${c.symbol.replace(/\d{2}$/, '')}</span>
-        <span class="bw-heat-val">${fmtPct(c.annBasis, 1)}</span>
-        <span class="bw-heat-dte">${c.dte}d</span>
+        <span class="bw-heat-val bw-heat-val--primary">${fmtPct(c.spotBasisPct, 2)}</span>
+        <span class="bw-heat-val">${fmtPct(c.spotAnnualizedCarry, 1)} ann.</span>
+        <span class="bw-heat-dte">${c.basisQuartile ? 'Q' + c.basisQuartile : '—'} · ${c.dte}d</span>
       </div>`).join('')}</div>`;
   }
 
+  function renderMethodology(model) {
+    const viewNote = model.view === 'implied'
+      ? 'Implied Rate view shows both spot curve (futures vs spot) and forward curve (calendar roll yields between adjacent expiries).'
+      : 'Basis Watch view shows spot curve only — basis $, basis %, and annualized spot-to-tenor carry. Forward/calendar roll yields appear in Implied Rate view.';
+    return `<h4 class="bw-subhead">Methodology</h4>
+      <p><strong>Basis Watch</strong> — CME-style futures vs spot: Basis ($) = F − S; Basis % = (F−S)/S; Spot Curve % (ann.) = ((F/S)−1)×(365/DTE).</p>
+      <p><strong>Implied Rate</strong> — Spot curve table (above) plus forward curve for adjacent calendar pairs: Calendar Spread ($) = F_far − F_near; Forward Curve % (ann.) = ((F_far/F_near)−1)×(365/days between expiries).</p>
+      <p class="bw-methodology-view">${viewNote}</p>
+      <p>Historical quartile ranges and percentile ranks help evaluate whether current basis is rich or cheap for each tenor relative to its own history.</p>`;
+  }
+
   function renderCrossAsset(model) {
-    return model.cross.map(x => `
-      <div class="bw-cross-pill">
-        <span class="bw-cross-label">${x.label}</span>
-        <span class="bw-cross-role">${x.role}</span>
-        <span class="bw-cross-val">${Number.isFinite(x.price) ? fmtNum(x.price, x.price < 10 ? 4 : 2) : '—'}<span class="bw-cross-chg">${Number.isFinite(x.change) ? fmtPct(x.change) : ''}</span></span>
-      </div>`).join('');
+    const front = model.front;
+    const cal = model.frontCalendar || model.steepest;
+    const asOf = String(model.asOf || '').slice(0, 19).replace('T', ' ');
+    const anchor = `
+      <article class="bw-xasset-card bw-xasset-card--anchor">
+        <div class="bw-xasset-card-top">
+          <span class="bw-xasset-symbol">${model.assetKey}</span>
+          <span class="bw-xasset-contract">${front ? front.symbol + ' · ' + front.dte + 'd' : '—'}</span>
+          ${front?.basisQuartile ? quartileBadge(front.basisQuartile, quartileRichnessLabel(front.basisQuartile)) : ''}
+        </div>
+        <div class="bw-xasset-metrics">
+          <div class="bw-xasset-metric">
+            <span class="bw-xasset-metric-label">Basis % <button type="button" class="bw-tip" data-bw-tip="basisPct" aria-label="Basis %">?</button></span>
+            <strong class="bw-xasset-metric-value">${front ? fmtPct(front.spotBasisPct) : '—'}</strong>
+          </div>
+          <div class="bw-xasset-metric">
+            <span class="bw-xasset-metric-label">Spot curve % (ann.) <button type="button" class="bw-tip" data-bw-tip="annBasis" aria-label="Ann. basis">?</button></span>
+            <strong class="bw-xasset-metric-value ${heatClass(front?.spotAnnualizedCarry)}">${front ? fmtPct(front.spotAnnualizedCarry) : '—'}</strong>
+          </div>
+          <div class="bw-xasset-metric">
+            <span class="bw-xasset-metric-label">Calendar fwd % <button type="button" class="bw-tip" data-bw-tip="forwardCurve" aria-label="Forward curve">?</button></span>
+            <strong class="bw-xasset-metric-value">${cal ? fmtPct(cal.forwardAnnualizedYield) : '—'}</strong>
+          </div>
+          <div class="bw-xasset-metric">
+            <span class="bw-xasset-metric-label">Basis rank <button type="button" class="bw-tip" data-bw-tip="quartileRank" aria-label="Quartile">?</button></span>
+            <strong class="bw-xasset-metric-value">${Number.isFinite(front?.basisPercentile) ? fmtPercentile(front.basisPercentile) : '—'}</strong>
+          </div>
+        </div>
+        <p class="bw-xasset-card-note" title="Hover for dollar detail">Basis ($): ${front ? '$' + fmtNum(front.absBasis, 0) : '—'} · Ann.: ${front ? fmtPct(front.spotAnnualizedCarry) : '—'}</p>
+      </article>`;
+
+    const btcCalRow = cal ? `
+      <tr>
+        <td><span class="bw-xasset-peer">${model.assetKey}</span> <span class="bw-xasset-peer-sub">${cal.nearSymbol}→${cal.farSymbol}</span></td>
+        <td class="bw-xasset-role">Calendar roll</td>
+        <td class="bw-xasset-num"><strong>${fmtPct(cal.forwardAnnualizedYield)} fwd</strong></td>
+        <td class="bw-xasset-num">—</td>
+        <td class="bw-xasset-num">—</td>
+        <td>${cal.forwardQuartile ? quartileBadge(cal.forwardQuartile, quartileRichnessLabel(cal.forwardQuartile)) : '—'}</td>
+      </tr>` : '';
+
+    const peerRows = (model.crossPeers || []).map(peer => {
+      const chgCls = Number.isFinite(peer.chg) ? (peer.chg >= 0 ? 'bw-xasset-chg--up' : 'bw-xasset-chg--down') : '';
+      const deltaCls = Number.isFinite(peer.deltaVsBtc)
+        ? (peer.deltaVsBtc >= 0 ? 'bw-xasset-delta--pos' : 'bw-xasset-delta--neg')
+        : '';
+      return `<tr class="${peer.rowClass || ''}">
+        <td><span class="bw-xasset-peer">${peer.label.split(' ')[0]}</span> <span class="bw-xasset-peer-sub">${peer.label.replace(/^[^\s]+\s*/, '')}</span></td>
+        <td class="bw-xasset-role">${peer.role}</td>
+        <td class="bw-xasset-num"><strong>${peer.metric || '—'}</strong></td>
+        <td class="bw-xasset-num ${chgCls}">${Number.isFinite(peer.chg) ? fmtPct(peer.chg) : '—'}</td>
+        <td class="bw-xasset-num ${deltaCls}">${Number.isFinite(peer.deltaVsBtc) ? fmtNum(peer.deltaVsBtc, 1) : '—'}</td>
+        <td>${peer.quartile ? quartileBadge(peer.quartile, quartileRichnessLabel(peer.quartile)) : '—'}</td>
+      </tr>`;
+    }).join('');
+
+    return `<section class="bw-xasset" aria-label="Cross-asset basis context">
+      <header class="bw-xasset-head">
+        <h4 class="bw-xasset-title">Cross-asset basis</h4>
+        <span class="bw-xasset-asof">${asOf ? 'As of ' + asOf + ' UTC' : ''}</span>
+        <button type="button" class="bw-tip" data-bw-tip="crossAssetContext" aria-label="Cross-asset context">?</button>
+      </header>
+      ${anchor}
+      <div class="bw-xasset-table-wrap">
+        <table class="bw-xasset-table">
+          <thead><tr>
+            <th scope="col">Peer</th><th scope="col">Role</th>
+            <th scope="col">Current % <button type="button" class="bw-tip" data-bw-tip="crossAssetMetric" aria-label="Metric">?</button></th>
+            <th scope="col">1d</th><th scope="col">Δ vs BTC</th>
+            <th scope="col">Q (3M) <button type="button" class="bw-tip" data-bw-tip="quartileRank" aria-label="Quartile">?</button></th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="bw-xasset-peer">${model.assetKey}</span> <span class="bw-xasset-peer-sub">${front?.symbol || 'front'}</span></td>
+              <td class="bw-xasset-role">Spot basis %</td>
+              <td class="bw-xasset-num"><strong>${front ? fmtPct(front.spotBasisPct) + ' basis' : '—'}</strong></td>
+              <td class="bw-xasset-num">—</td>
+              <td class="bw-xasset-num">—</td>
+              <td>${front?.basisQuartile ? quartileBadge(front.basisQuartile, quartileRichnessLabel(front.basisQuartile)) : '—'}</td>
+            </tr>
+            ${btcCalRow}
+            ${peerRows}
+          </tbody>
+        </table>
+      </div>
+      <footer class="bw-xasset-interpret">
+        <span class="bw-xasset-interpret-label">Desk read</span>
+        <p class="bw-xasset-interpret-text">${model.interpretation || '—'}</p>
+      </footer>
+    </section>`;
+  }
+
+  function initTooltips(content = TOOLTIP_CONTENT) {
+    if (global._bwTooltipWired) return global._bwTooltipCtl;
+    global._bwTooltipWired = true;
+    const root = document;
+    let popover = document.getElementById('bwTipPopover');
+    if (!popover) {
+      popover = document.createElement('div');
+      popover.id = 'bwTipPopover';
+      popover.className = 'bw-tip-popover';
+      popover.setAttribute('role', 'tooltip');
+      popover.hidden = true;
+      popover.innerHTML = '<button type="button" class="bw-tip-popover-close" aria-label="Close tooltip">×</button><p class="bw-tip-popover-body"></p>';
+      document.body.appendChild(popover);
+    }
+    const bodyEl = popover.querySelector('.bw-tip-popover-body');
+    const closeBtn = popover.querySelector('.bw-tip-popover-close');
+    let backdrop = null;
+    let openTrigger = null;
+    const isCoarse = () => window.matchMedia('(hover: none), (pointer: coarse)').matches;
+
+    function closePopover() {
+      popover.hidden = true;
+      openTrigger?.classList.remove('bw-tip--open');
+      openTrigger?.setAttribute('aria-expanded', 'false');
+      openTrigger = null;
+      backdrop?.remove();
+      backdrop = null;
+    }
+
+    function openPopover(trigger, key) {
+      const text = content[key];
+      if (!text) return;
+      closePopover();
+      bodyEl.textContent = text;
+      popover.hidden = false;
+      trigger.classList.add('bw-tip--open');
+      trigger.setAttribute('aria-expanded', 'true');
+      openTrigger = trigger;
+      backdrop = document.createElement('div');
+      backdrop.className = 'bw-tip-backdrop';
+      backdrop.addEventListener('click', closePopover);
+      document.body.insertBefore(backdrop, popover);
+    }
+
+    closeBtn?.addEventListener('click', closePopover);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopover(); });
+    root.addEventListener('click', e => {
+      const trigger = e.target.closest?.('.bw-tip[data-bw-tip]');
+      if (!trigger || !root.contains(trigger)) return;
+      const key = trigger.dataset.bwTip;
+      if (!content[key]) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (isCoarse()) {
+        if (openTrigger === trigger && !popover.hidden) closePopover();
+        else openPopover(trigger, key);
+      }
+    });
+    root.addEventListener('mouseenter', e => {
+      const trigger = e.target.closest?.('.bw-tip[data-bw-tip]');
+      if (!trigger || isCoarse() || !content[trigger.dataset.bwTip]) return;
+      trigger.setAttribute('title', content[trigger.dataset.bwTip]);
+    }, true);
+    root.addEventListener('mouseleave', e => {
+      const trigger = e.target.closest?.('.bw-tip[data-bw-tip]');
+      if (trigger) trigger.removeAttribute('title');
+    }, true);
+    global._bwTooltipCtl = { close: closePopover };
+    return global._bwTooltipCtl;
+  }
+
+  function drawRateSeries(ctx, pad, plotW, plotH, w, h, dtes, rates, color, yMin, yMax, xOffset = 0, xDenom) {
+    const denom = xDenom || Math.max(...dtes, 1);
+    const yAt = r => pad.t + plotH - ((r - yMin) / (yMax - yMin || 1)) * plotH;
+    const xAt = d => pad.l + xOffset + (d / denom) * plotW;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    dtes.forEach((d, i) => {
+      const x = xAt(d), y = yAt(rates[i]);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    dtes.forEach((d, i) => {
+      ctx.fillStyle = color;
+      ctx.beginPath(); ctx.arc(xAt(d), yAt(rates[i]), 3, 0, Math.PI * 2); ctx.fill();
+    });
   }
 
   function drawBasisChart(model) {
@@ -383,7 +843,57 @@
       ctx.fillText('Curve populates after hydration + Barchart curve JSON', 16, h / 2);
       return;
     }
-    const prices = [model.spot, ...contracts.map(c => c.price)];
+
+    const legend = el('bwChartLegend');
+    if (model.view === 'implied') {
+      if (legend) legend.innerHTML = `
+        <span class="bw-legend-item"><i class="bw-legend-swatch" style="background:var(--bw-chart-curve)"></i>Spot curve % (ann.)</span>
+        <span class="bw-legend-item"><i class="bw-legend-swatch" style="background:var(--bw-chart-front)"></i>Forward curve % (ann.)</span>`;
+      const spotDtes = contracts.map(c => c.dte);
+      const spotRates = contracts.map(c => c.spotAnnualizedCarry ?? 0);
+      const fwdDtes = model.calendarPairs.map(p => (p.nearDte + p.farDte) / 2);
+      const fwdRates = model.calendarPairs.map(p => p.forwardAnnualizedYield ?? 0);
+      const allRates = [...spotRates, ...fwdRates].filter(Number.isFinite);
+      const yMin = Math.min(0, ...allRates) - 1;
+      const yMax = Math.max(...allRates, 1) + 1;
+      const maxDte = Math.max(...spotDtes, ...model.calendarPairs.map(p => p.farDte), 1);
+      const pad = { l: 48, r: 16, t: 18, b: 32 };
+      const plotW = w - pad.l - pad.r, plotH = h - pad.t - pad.b;
+      const yAt = r => pad.t + plotH - ((r - yMin) / (yMax - yMin || 1)) * plotH;
+
+      ctx.strokeStyle = theme.grid;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.t + (plotH * i) / 4;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w - pad.r, y); ctx.stroke();
+      }
+      ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, h - pad.b); ctx.lineTo(w - pad.r, h - pad.b); ctx.stroke();
+
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = theme.muted;
+      const zeroY = yAt(0);
+      ctx.beginPath(); ctx.moveTo(pad.l, zeroY); ctx.lineTo(w - pad.r, zeroY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      drawRateSeries(ctx, pad, plotW, plotH, w, h, spotDtes, spotRates, theme.curve, yMin, yMax, 0, maxDte);
+      drawRateSeries(ctx, pad, plotW, plotH, w, h, fwdDtes, fwdRates, theme.front, yMin, yMax, 0, maxDte);
+
+      ctx.fillStyle = theme.axis;
+      ctx.font = '9px system-ui';
+      ctx.fillText('DTE →', w - pad.r - 36, h - 8);
+      ctx.save();
+      ctx.translate(12, pad.t + plotH / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText('% ann.', 0, 0);
+      ctx.restore();
+      return;
+    }
+
+    if (legend) legend.innerHTML = `
+      <span class="bw-legend-item"><i class="bw-legend-swatch bw-legend-swatch--spot"></i>Spot (CF proxy)</span>
+      <span class="bw-legend-item"><i class="bw-legend-swatch bw-legend-swatch--curve"></i>Futures curve</span>
+      <span class="bw-legend-item"><i class="bw-legend-swatch bw-legend-swatch--front"></i>Front contract</span>`;
+
+    const prices = [model.spot, ...contracts.map(c => c.futuresPrice)];
     const minP = Math.min(...prices) * 0.998, maxP = Math.max(...prices) * 1.002;
     const pad = { l: 52, r: 16, t: 18, b: 32 };
     const plotW = w - pad.l - pad.r, plotH = h - pad.t - pad.b;
@@ -411,12 +921,12 @@
     ctx.strokeStyle = grad;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    contracts.forEach((c, i) => { const x = xAt(i + 1), y = yAt(c.price); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
+    contracts.forEach((c, i) => { const x = xAt(i + 1), y = yAt(c.futuresPrice); if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); });
     ctx.stroke();
     ctx.lineWidth = 1;
 
     contracts.forEach((c, i) => {
-      const x = xAt(i + 1), y = yAt(c.price);
+      const x = xAt(i + 1), y = yAt(c.futuresPrice);
       const isFront = model.front && c.symbol === model.front.symbol;
       ctx.fillStyle = isFront ? theme.front : theme.node;
       ctx.beginPath(); ctx.arc(x, y, isFront ? 5 : 3.5, 0, Math.PI * 2); ctx.fill();
@@ -424,6 +934,87 @@
       ctx.font = '9px system-ui';
       ctx.fillText(c.symbol.replace(/\d{2}$/, ''), x - 10, h - 10);
     });
+  }
+
+  function approxEq(a, b, tol = 0.01) {
+    return Number.isFinite(a) && Number.isFinite(b) && Math.abs(a - b) <= tol;
+  }
+
+  function runBasisWatchValidation() {
+    const results = [];
+    const fail = (name, detail) => { results.push({ name, ok: false, detail }); };
+    const pass = (name, detail) => { results.push({ name, ok: true, detail }); };
+
+    const spot = 100000;
+    const asOf = new Date('2026-06-01T12:00:00Z');
+    const fakeRecords = [
+      { raw_symbol: 'BTM26', latest: { close: 102000 } },
+      { raw_symbol: 'BTU26', latest: { close: 104000 } },
+      { raw_symbol: 'BTZ26', latest: { close: 106000 } },
+    ];
+    const contracts = buildContracts(fakeRecords, spot, asOf);
+    if (contracts.length !== 3) fail('buildContracts count', `expected 3 got ${contracts.length}`);
+    else pass('buildContracts count', '3 contracts');
+
+    const c0 = contracts[0];
+    const expectedAbs = 2000;
+    const expectedPct = 2;
+    const expectedAnn = ((102000 / spot) - 1) * (365 / c0.dte) * 100;
+    if (!approxEq(c0.absBasis, expectedAbs, 0.5)) fail('absBasis', `${c0.absBasis} vs ${expectedAbs}`);
+    else pass('absBasis', `F−S = ${c0.absBasis}`);
+    if (!approxEq(c0.spotBasisPct, expectedPct, 0.01)) fail('spotBasisPct', `${c0.spotBasisPct} vs ${expectedPct}`);
+    else pass('spotBasisPct', `${c0.spotBasisPct}%`);
+    if (!approxEq(c0.spotAnnualizedCarry, expectedAnn, 0.05)) fail('spotAnnualizedCarry', `${c0.spotAnnualizedCarry} vs ${expectedAnn}`);
+    else pass('spotAnnualizedCarry', `${c0.spotAnnualizedCarry}%`);
+
+    const pairs = buildCalendarPairs(contracts);
+    if (pairs.length !== 2) fail('calendarPairs count', `expected 2 got ${pairs.length}`);
+    else pass('calendarPairs count', '2 adjacent pairs');
+
+    const p0 = pairs[0];
+    const interval = daysBetween(contracts[0].expiry, contracts[1].expiry);
+    const expectedFwd = ((104000 / 102000) - 1) * (365 / interval) * 100;
+    const expectedCal = 2000;
+    if (p0.intervalDays !== interval) fail('intervalDays', `${p0.intervalDays} vs ${interval}`);
+    else pass('intervalDays', `${p0.intervalDays}d between expiries`);
+    if (!approxEq(p0.forwardAnnualizedYield, expectedFwd, 0.05)) fail('forwardAnnualizedYield', `${p0.forwardAnnualizedYield} vs ${expectedFwd}`);
+    else pass('forwardAnnualizedYield', `${p0.forwardAnnualizedYield}%`);
+    if (!approxEq(p0.calendarSpread, expectedCal, 0.5)) fail('calendarSpread', `${p0.calendarSpread} vs ${expectedCal}`);
+    else pass('calendarSpread', `$${p0.calendarSpread}`);
+
+    const richest = richestTenor(contracts);
+    const steepest = steepestCalendar(pairs);
+    if (!richest || richest.symbol !== 'BTM26') fail('richestTenor', richest?.symbol);
+    else pass('richestTenor', `${richest.symbol} (${richest.spotAnnualizedCarry}%)`);
+    if (!steepest) fail('steepestCalendar', 'null');
+    else pass('steepestCalendar', `${steepest.nearSymbol}→${steepest.farSymbol}`);
+
+    const flat = flattestCalendar(pairs);
+    if (!flat) fail('flattestCalendar', 'null');
+    else pass('flattestCalendar', `${flat.nearSymbol}→${flat.farSymbol} ${flat.forwardAnnualizedYield}%`);
+
+    const analytics = A();
+    if (analytics) {
+      const series = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      const hiRank = analytics.percentileRank(series, 10);
+      const loRank = analytics.percentileRank(series, 1);
+      if (!(hiRank >= 90)) fail('percentileRank monotonic high', `${hiRank}`);
+      else pass('percentileRank monotonic high', `${hiRank}th for value 10`);
+      if (!(loRank <= 15)) fail('percentileRank monotonic low', `${loRank}`);
+      else pass('percentileRank monotonic low', `${loRank}th for value 1`);
+      const q4 = analytics.quartileFromPercentile(92);
+      const q1 = analytics.quartileFromPercentile(8);
+      if (q4 !== 4 || q1 !== 1) fail('quartileFromPercentile', `q4=${q4} q1=${q1}`);
+      else pass('quartileFromPercentile', 'Q4 for 92nd · Q1 for 8th');
+      const enriched = analytics.enrichContractRows(contracts, { records: fakeRecords }, spot);
+      if (!enriched[0]?.basisStats) fail('enrichContractRows', 'missing stats');
+      else pass('enrichContractRows', `n=${enriched[0].historyN}`);
+    } else {
+      fail('BasisWatchAnalytics', 'module not loaded');
+    }
+
+    const allOk = results.every(r => r.ok);
+    return { ok: allOk, passed: results.filter(r => r.ok).length, failed: results.filter(r => !r.ok).length, results };
   }
 
   function syncControls(model) {
@@ -454,6 +1045,13 @@
       shapeBadge.textContent = `${model.shape} · ${model.rollLabel}`;
     }
 
+    const curveTitle = document.querySelector('.bw-panel-head .bw-panel-title');
+    if (curveTitle && standalone) {
+      curveTitle.textContent = model.view === 'implied'
+        ? 'Spot & forward curve rates'
+        : 'Futures curve vs spot';
+    }
+
     const curveMeta = el('bwCurveMeta');
     if (curveMeta) {
       const front = model.front;
@@ -475,8 +1073,14 @@
         : `${renderHeatmap(model)}${renderBasisTable(model)}`;
     }
 
+    const methodology = el('bwMethodology');
+    if (methodology) methodology.innerHTML = renderMethodology(model);
+
     const cross = el('bwCrossAsset');
-    if (cross) cross.innerHTML = renderCrossAsset(model);
+    if (cross) {
+      cross.innerHTML = renderCrossAsset(model);
+      cross.className = 'bw-xasset-host';
+    }
 
     syncControls(model);
     drawBasisChart(model);
@@ -512,8 +1116,24 @@
 
   function exportCsv(state) {
     const model = state._basisWatchModel || buildModel(state, curveCache || { records: [] });
-    const lines = ['contract,expiry,dte,futures,spot,abs_basis,pct_basis,ann_basis'];
-    model.contracts.forEach(c => lines.push([c.symbol, c.label, c.dte, c.price, model.spot, c.absBasis, c.pctBasis, c.annBasis].join(',')));
+    const lines = [
+      '# WTM BasisWatch export',
+      '# Spot curve: futures vs spot',
+      'section,contract,expiry,dte,futures,spot,basis_dollars,basis_pct,basis_pct_rank,basis_quartile,hist_q1,hist_median,hist_q3,spot_curve_pct_ann',
+    ];
+    model.contracts.forEach(c => lines.push([
+      'spot_curve', c.symbol, c.label, c.dte, c.futuresPrice, model.spot,
+      c.absBasis, c.spotBasisPct, c.basisPercentile, c.basisQuartile,
+      c.histQ1, c.histMedian, c.histQ3, c.spotAnnualizedCarry,
+    ].join(',')));
+    lines.push('');
+    lines.push('# Forward curve: adjacent calendar pairs');
+    lines.push('section,near,far,near_dte,far_dte,interval_days,near_price,far_price,calendar_spread_dollars,forward_curve_pct_ann,forward_pct_rank,forward_quartile');
+    model.calendarPairs.forEach(p => lines.push([
+      'forward_curve', p.nearSymbol, p.farSymbol, p.nearDte, p.farDte, p.intervalDays,
+      p.nearPrice, p.farPrice, p.calendarSpread, p.forwardAnnualizedYield,
+      p.forwardPercentile, p.forwardQuartile,
+    ].join(',')));
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/csv' }));
     a.download = `wtm_basiswatch_${model.assetKey}_${new Date().toISOString().slice(0, 10)}.csv`;
@@ -613,17 +1233,16 @@
     el('btnBwExportCsv')?.addEventListener('click', () => exportCsv(getState()));
     el('btnBwExportPng')?.addEventListener('click', () => exportPng(getState()));
     el('btnBwBarchart')?.addEventListener('click', () => {
-      const m = getState()._basisWatchModel || buildModel(getState(), curveCache || { records: [] });
-      window.open(m.asset.barchartSpread, '_blank', 'noopener');
+      window.open(DESK_LINKS.barchart, '_blank', 'noopener');
     });
     el('btnBwKoyfin')?.addEventListener('click', () => {
-      const m = getState()._basisWatchModel || buildModel(getState(), curveCache || { records: [] });
-      window.open(m.asset.koyfin, '_blank', 'noopener');
+      window.open(DESK_LINKS.koyfin, '_blank', 'noopener');
     });
   }
 
   function init(hooks) {
     initTheme();
+    initTooltips();
     wireControls(hooks.getState, hooks);
     ensureCurveHistory().then(() => refresh(hooks.getState(), hooks));
     window.addEventListener('resize', () => renderPanel(hooks.getState()));
@@ -658,6 +1277,7 @@
       standaloneState.provenance = { dataAsOf: bundle.as_of, hydratedAt: new Date().toISOString() };
     }
 
+    initTooltips();
     wireControls(() => standaloneState, {});
     await ensureCurveHistory();
     await refresh(standaloneState, {});
@@ -675,10 +1295,23 @@
 
   global.WTM_BasisWatch = {
     init, initStandalone, render: renderPanel, refresh, exportCsv, exportPng,
-    buildModel, ensureCurveHistory, popOutUrl, applyTheme, BW_BUILD,
+    buildModel, buildContracts, buildCalendarPairs, ensureCurveHistory, popOutUrl, applyTheme,
+    runBasisWatchValidation, DESK_LINKS, BW_BUILD,
   };
 
   if (document.body?.dataset?.bwLayout === 'standalone') {
-    document.addEventListener('DOMContentLoaded', () => initStandalone());
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(location.search);
+      if (params.get('selftest') === '1') {
+        const report = runBasisWatchValidation();
+        const banner = document.createElement('div');
+        banner.className = report.ok ? 'bw-selftest bw-selftest--ok' : 'bw-selftest bw-selftest--fail';
+        banner.innerHTML = `<strong>Self-test ${report.ok ? 'PASSED' : 'FAILED'}</strong> — ${report.passed}/${report.results.length} checks` +
+          report.results.map(r => `<div class="bw-selftest-row ${r.ok ? 'bw-selftest-row--ok' : 'bw-selftest-row--fail'}">${r.ok ? '✓' : '✗'} ${r.name}: ${r.detail || ''}</div>`).join('');
+        document.body.prepend(banner);
+        if (!report.ok) console.error('BasisWatch self-test failed', report);
+      }
+      initStandalone();
+    });
   }
 })(typeof window !== 'undefined' ? window : globalThis);
