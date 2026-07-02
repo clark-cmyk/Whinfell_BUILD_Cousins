@@ -68,7 +68,7 @@
   let curveCache = null;
   let curveFetchPromise = null;
   let standaloneState = null;
-  const isStandalone = () => document.body?.dataset?.bwLayout === 'standalone';
+  const isStandalone = () => document.body?.dataset?.bwLayout;
 
   function el(id) { return document.getElementById(id); }
 
@@ -1299,7 +1299,7 @@
     runBasisWatchValidation, DESK_LINKS, BW_BUILD,
   };
 
-  if (document.body?.dataset?.bwLayout === 'standalone') {
+  if (document.body?.dataset?.bwLayout) {
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(location.search);
       if (params.get('selftest') === '1') {
