@@ -20,7 +20,12 @@ fi
 
 bash scripts/build_desk_preview.sh
 
-# Pages deploys from gh-pages branch (peaceiris action). Enable once: Settings → Pages → gh-pages / root.
+# Pages serves main/docs/ (static preview). Rebuild copies _desk_preview_out → docs/
+rm -rf docs
+cp -R _desk_preview_out docs
+touch docs/.nojekyll
+
+# Optional: Actions also deploy gh-pages (backup). Primary share URL uses main/docs/.
 if command -v gh >/dev/null 2>&1; then
   if ! gh api repos/clark-cmyk/Whinfell_BUILD_Cousins/pages --silent 2>/dev/null; then
     echo "publish_desk_preview: enabling GitHub Pages (gh-pages branch)…" >&2
@@ -39,16 +44,7 @@ else
   echo "publish_desk_preview: install gh CLI to auto-enable Pages on first publish." >&2
 fi
 
-git add \
-  08_Deliverables/Whinfell_Transmission_Control.html \
-  08_Deliverables/Whinfell_BasisWatch.html \
-  08_Deliverables/basis_watch.css \
-  08_Deliverables/desk_china_ladder_models.js \
-  08_Deliverables/basis_watch_panel.js \
-  08_Deliverables/data_dictionary_meta.json \
-  data/hydration/latest.json \
-  data/barchart/v1/barchart_curve_history.json \
-  data/hydration/hydration_log.json \
+git add docs/ \
   scripts/build_desk_preview.sh \
   scripts/publish_desk_preview.sh \
   .github/workflows/desk-preview-pages.yml \
